@@ -1,0 +1,11 @@
+/// Generate localization files
+flutter pub run easy_localization:generate --source-dir ./assets/translations
+
+/// Generate localization keys
+flutter pub run easy_localization:generate -S assets/translations -f keys -o locale_keys.g.dart
+
+/// Change App Icon After Add Flutter Launcher Icons Package
+flutter pub run flutter_launcher_icons:main
+
+/// Build Apk Split
+flutter build apk --split-per-abi
