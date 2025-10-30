@@ -3,8 +3,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:pillwise_app/app/core/utils/app_validator.dart';
-import 'package:pillwise_app/modules/auth/presentation/controllers/signup_controller.dart';
+import '/app/core/utils/app_validator.dart';
+import '/modules/auth/presentation/controllers/signup_controller.dart';
 
 import '../../../../app/core/constants/app_assets.dart';
 import '../../../../app/core/widgets/app_button_widget.dart';

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:pillwise_app/app/core/constants/app_assets.dart';
-import 'package:pillwise_app/app/core/widgets/app_padding_widget.dart';
-import 'package:pillwise_app/app/core/widgets/app_svg_widget.dart';
+import '/app/core/constants/app_assets.dart';
+import '/app/core/widgets/app_padding_widget.dart';
+import '/app/core/widgets/app_svg_widget.dart';
 
 import '../../data/models/onboarding_item_model.dart';
 

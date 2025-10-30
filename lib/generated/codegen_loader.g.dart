@@ -129,8 +129,8 @@ static const Map<String,dynamic> _en = {
     "copyright": "Saudi Food and Drug Authority ©"
   },
   "welcome": {
-    "welcome_text_app": "Welcome To PillWise",
-    "welcome_description": "track, Scan, and find the right dosage for you"
+    "welcome_text_app": "Welcome To Clinc",
+    "welcome_description": "Please select your language to begin"
   },
   "onboarding": {
     "title1": "Smart medication reminders",

@@ -12,8 +12,8 @@ class AppPaddingWidget extends StatelessWidget {
   });
 
   static final EdgeInsets _defaultPadding = EdgeInsets.symmetric(
-    horizontal: 16.w,
-    vertical: 10.h
+    horizontal: 14.w,
+    vertical: 12.h
   );
 
   @override

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTypography {
-  static TextTheme textTheme = GoogleFonts.tajawalTextTheme(
+  static TextTheme textTheme = GoogleFonts.manropeTextTheme(
       TextTheme(
         // --- للعناوين الكبيرة (مثال: شاشة البداية)
         displayLarge: TextStyle(

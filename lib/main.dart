@@ -1,12 +1,14 @@
+import 'package:clinc_app_t1/app/controllers/settings_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:pillwise_app/app/core/constants/app_constants.dart';
-import 'package:pillwise_app/app/routes/app_pages.dart';
-import 'package:pillwise_app/app/routes/app_routes.dart';
-
+import 'package:get_storage/get_storage.dart';
+import '/app/core/constants/app_constants.dart';
+import '/app/routes/app_pages.dart';
+import '/app/routes/app_routes.dart';
+import 'app/bindings/initial_binding.dart';
 import 'app/core/theme/app_theme.dart';
 import 'generated/codegen_loader.g.dart';
 
@@ -15,6 +17,7 @@ Future<void> main() async {
   await Future.wait([
     EasyLocalization.ensureInitialized(),
     ScreenUtil.ensureScreenSize(),
+    GetStorage.init(),
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -39,17 +42,21 @@ class PillWiseApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SettingsController settingsController =
+        Get.put(SettingsController(), permanent: true);
     return ScreenUtilInit(
-      designSize: const Size(AppConstants.designWidth, AppConstants.designHeight),
+      designSize:
+          const Size(AppConstants.designWidth, AppConstants.designHeight),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
         return GetMaterialApp(
+          initialBinding: InitialBinding(),
           theme: AppTheme.lightTheme,
           // <--- تطبيق الثيم الأبيض
           darkTheme: AppTheme.darkTheme,
           // <--- تطبيق الثيم الأسود
-          themeMode: ThemeMode.light,
+          themeMode: settingsController.themeMode.value,
           // (أو .light أو .dark)
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
@@ -63,3 +70,24 @@ class PillWiseApp extends StatelessWidget {
     );
   }
 }
+
+/*
+Colors
+Grayscale
+#1C1F1E
+#A7A6A5
+#CDCFCE
+#EFF2F1
+#F4F6F5
+#FFFFFF
+Accent Primary
+#66CA98
+#F4A3EC
+#6295E2
+#FF6C52
+Accent Secondary
+#FFF7DC
+#FFDCFB
+#E0EAF9
+#FFE2DC
+ */

@@ -3,12 +3,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:pillwise_app/app/core/constants/app_assets.dart';
-import 'package:pillwise_app/app/core/utils/app_validator.dart';
-import 'package:pillwise_app/app/core/widgets/app_app_bar_widget.dart';
-import 'package:pillwise_app/app/core/widgets/app_scaffold_widget.dart';
-import 'package:pillwise_app/generated/locale_keys.g.dart';
-import 'package:pillwise_app/modules/auth/presentation/controllers/forget_password_controller.dart';
+import '/app/core/constants/app_assets.dart';
+import '/app/core/utils/app_validator.dart';
+import '/app/core/widgets/app_app_bar_widget.dart';
+import '/app/core/widgets/app_scaffold_widget.dart';
+import '/generated/locale_keys.g.dart';
+import '/modules/auth/presentation/controllers/forget_password_controller.dart';
 
 import '../../../../app/core/widgets/app_button_widget.dart';
 import '../../../../app/core/widgets/app_text_filed_widget.dart';

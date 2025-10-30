@@ -1,11 +1,17 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:clinc_app_t1/app/controllers/settings_controller.dart';
+import 'package:clinc_app_t1/app/core/constants/app_constants.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
+import 'package:clinc_app_t1/modules/welcome/presentation/widgets/language_selected_card_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:pillwise_app/app/core/widgets/app_svg_widget.dart';
-import 'package:pillwise_app/app/routes/app_routes.dart';
-import 'package:pillwise_app/generated/locale_keys.g.dart';
+import '../../../../app/core/constants/app_assets.dart';
+import '../../../../app/core/widgets/app_padding_widget.dart';
+import '/app/core/widgets/app_svg_widget.dart';
+import '/app/routes/app_routes.dart';
+import '/generated/locale_keys.g.dart';
 
 import '../controllers/welcome_controller.dart';
 
@@ -14,96 +20,83 @@ class WelcomeScreen extends GetView<WelcomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final SettingsController settingsController =
+        Get.find<SettingsController>();
     return Scaffold(
       body: Stack(
+        alignment: Alignment.center,
         children: [
-          Padding(
-            padding: EdgeInsets.all(14.w),
+          Positioned(
+            top: 0,
+            left: 0,
+            child: AppSvgWidget(
+              assetsUrl: AppAssets.splashVectorIcon,
+              fit: BoxFit.cover,
+              color: Get.theme.primaryColor,
+              height: 90.h,
+            ).fadeInDown(),
+          ),
+          AppPaddingWidget(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const LanguageToggleWidget(),
-                20.verticalSpace,
+                120.verticalSpace,
                 Text(
                   tr(LocaleKeys.welcome_welcome_text_app),
-                  textAlign: TextAlign.center,
-                  style: Get.theme.textTheme.displayLarge?.copyWith(
-                    color: Get.theme.primaryColor,
-                  ),
-                ).fadeIn(),
+                  style: Get.textTheme.displayLarge,
+                ),
                 8.verticalSpace,
                 Text(
                   tr(LocaleKeys.welcome_welcome_description),
-                  textAlign: TextAlign.center,
-                  style: Get.theme.textTheme.bodyMedium?.copyWith(
-                    color: Get.theme.primaryColor,
-                  ),
-                ).fadeInLeft(),
-                20.verticalSpace,
-                ElevatedButton(
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.onboarding);
-                  },
-                  child: Text(
-                    tr(LocaleKeys.core_get_started),
-                  ),
-                ).zoomIn()
+                  style: Get.textTheme.bodyMedium?.copyWith(),
+                ),
+                30.verticalSpace,
+                Obx(() {
+                  String currentLang =
+                      settingsController.locale.value.languageCode;
+
+                  return ListBody(
+                    children: [
+                      LanguageSelectorCardWidget(
+                        languageName: 'Arabic',
+                        imagePath: AppAssets.arFlagIcon,
+                        isSelected: currentLang == AppConstants.arLang,
+                        onTap: () {
+                          // عند الضغط، نطلب من الكونترولر تغيير اللغة
+                          settingsController
+                              .changeLanguage(AppConstants.arLang);
+                          context.setLocale(const Locale(AppConstants.arLang));
+                        },
+                      ),
+                      10.verticalSpace,
+                      LanguageSelectorCardWidget(
+                        languageName: 'English',
+                        imagePath: AppAssets.enFlagIcon,
+                        isSelected: currentLang == AppConstants.enLang,
+                        onTap: () {
+                          // عند الضغط، نطلب من الكونترولر تغيير اللغة
+                          settingsController
+                              .changeLanguage(AppConstants.enLang);
+                          context.setLocale(const Locale(AppConstants.enLang));
+
+                        },
+                      ),
+                    ],
+                  );
+                })
               ],
             ),
           ),
-          Positioned(
-            bottom: 0,
-            child: AppSvgWidget(
-              assetsUrl: 'assets/icons/welcome_wave.svg',
-              color: Get.theme.primaryColor,
-              width: double.maxFinite,
-              height: 260,
-            ).fadeInUp(),
-          ),
+          Align(
+            alignment: AlignmentDirectional.bottomCenter,
+            child: AppPaddingWidget(
+              child: AppButtonWidget(
+                text: tr(LocaleKeys.core_get_started),
+                onPressed: ()=>Get.toNamed(AppRoutes.onboarding),
+              ).fadeInUp(),
+            ),
+          )
         ],
-      ),
-    );
-  }
-}
-
-
-class LanguageToggleWidget extends StatelessWidget {
-  const LanguageToggleWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final currentLocale = context.locale;
-
-    final String targetLanguageCode =
-    (currentLocale == const Locale('ar')) ? 'EN' : 'AR';
-
-    final theme = Get.theme;
-
-    return InkWell(
-      onTap: () {
-        if (currentLocale == const Locale('ar')) {
-          context.setLocale(const Locale('en'));
-        } else {
-          context.setLocale(const Locale('ar'));
-        }
-      },
-      borderRadius: BorderRadius.circular(8.0), // لتأثير الضغطة
-      child: Container(
-        // padding لجعل الزر مريحاً للضغط
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          // نستخدم لون الحدود من الثيم
-          border: Border.all(color: theme.dividerColor.withOpacity(0.5), width: 1.5),
-        ),
-        child: Text(
-          targetLanguageCode, // النص الذي حددناه (AR أو EN)
-          style: theme.textTheme.labelLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-            letterSpacing: 0.5,
-          ),
-        ),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pillwise_app/app/core/widgets/app_padding_widget.dart';
-import 'package:pillwise_app/modules/onboarding/presentation/widgets/onboarding_dot_indicator_widget.dart';
+import '/app/core/widgets/app_padding_widget.dart';
+import '/modules/onboarding/presentation/widgets/onboarding_dot_indicator_widget.dart';
 
 import '../controllers/onboarding_controller.dart';
 

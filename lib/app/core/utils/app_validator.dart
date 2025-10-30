@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart'; // سنستخدمه فقط لـ GetUtils.isEmail
 // 1. استورد ملف الـ keys الذي تم إنشاؤه بواسطة easy_localization
-import 'package:pillwise_app/generated/locale_keys.g.dart';
+import '/generated/locale_keys.g.dart';
 
 /// كلاس "هندسي" يحتوي على جميع دوال التحقق (Validation) في التطبيق.
 /// هذا الكلاس static ولا يمكن إنشاء نسخة منه.

@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
-import 'package:pillwise_app/modules/auth/presentation/screens/signup_screen.dart';
-import 'package:pillwise_app/modules/home/presentation/screens/home_screen.dart';
-import 'package:pillwise_app/modules/splash/presentation/bindings/splash_binding.dart';
-import 'package:pillwise_app/modules/welcome/presentation/bindings/welcome_binding.dart';
-import 'package:pillwise_app/modules/welcome/presentation/screens/welcome_screen.dart';
+import '/modules/auth/presentation/screens/signup_screen.dart';
+import '/modules/home/presentation/screens/home_screen.dart';
+import '/modules/splash/presentation/bindings/splash_binding.dart';
+import '/modules/welcome/presentation/bindings/welcome_binding.dart';
+import '/modules/welcome/presentation/screens/welcome_screen.dart';
 
 import '../../modules/auth/presentation/bindings/forget_password_binding.dart';
 import '../../modules/auth/presentation/bindings/login_binding.dart';
@@ -52,7 +52,6 @@ class AppPages {
       page: () => const ForgetPasswordScreen(),
       binding: ForgetPasswordBinding(), // <-- يستخدم ForgetPasswordBinding
     ),
-
 
     GetPage(
       name: AppRoutes.home,

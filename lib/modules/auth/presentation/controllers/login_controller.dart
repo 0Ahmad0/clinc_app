@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pillwise_app/app/routes/app_routes.dart';
+import '/app/routes/app_routes.dart';
 
 class LoginController extends GetxController{
   final TextEditingController userNameOrEmailController = TextEditingController();
