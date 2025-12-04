@@ -82,7 +82,14 @@
   },
   "home": {
     "home_text": "Home Page",
-    "search_text": "Search here..."
+    "search_text": "Search here...",
+    "main_section": "Main Section",
+    "labs": "Labs",
+    "insurance": "Insurance",
+    "doctors": "Doctors",
+    "clinics": "Clinics",
+    "specialities": "Specialities",
+    "emergency": "Emergency"
   }
 
 }

@@ -24,4 +24,5 @@ class AppColors {
   static const Color success = Color(0xff16B364);
   static const Color info = Color(0xFF2E90FA);
   static const Color warning = Color(0xffEF6820);
+  static const Color transparent = Colors.transparent;
 }

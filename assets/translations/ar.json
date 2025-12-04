@@ -81,7 +81,14 @@
   },
   "home": {
     "home_text": "الرئـيـسـيـة",
-    "search_text": "ابحث هنا..."
+    "search_text": "ابحث هنا...",
+    "main_section": "القسم الرئيسي",
+    "labs": "المخابر",
+    "insurance": "التأمينات",
+    "doctors": "الأطباء",
+    "clinics": "العيادات",
+    "specialities": "التخصصات",
+    "emergency": "الطوارئ"
   }
 
 }

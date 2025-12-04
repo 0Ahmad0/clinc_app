@@ -97,7 +97,14 @@ class CodegenLoader extends AssetLoader{
   },
   "home": {
     "home_text": "الرئـيـسـيـة",
-    "search_text": "ابحث هنا..."
+    "search_text": "ابحث هنا...",
+    "main_section": "القسم الرئيسي",
+    "labs": "المخابر",
+    "insurance": "التأمينات",
+    "doctors": "الأطباء",
+    "clinics": "العيادات",
+    "specialities": "التخصصات",
+    "emergency": "الطوارئ"
   }
 };
 static const Map<String,dynamic> _en = {
@@ -183,7 +190,14 @@ static const Map<String,dynamic> _en = {
   },
   "home": {
     "home_text": "Home Page",
-    "search_text": "Search here..."
+    "search_text": "Search here...",
+    "main_section": "Main Section",
+    "labs": "Labs",
+    "insurance": "Insurance",
+    "doctors": "Doctors",
+    "clinics": "Clinics",
+    "specialities": "Specialities",
+    "emergency": "Emergency"
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};

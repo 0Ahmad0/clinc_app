@@ -1,3 +1,5 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ class HomeAppBarWidget extends StatelessWidget {
       borderSide: BorderSide(color: theme.colorScheme.surface, width: .75),
     );
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
       decoration: BoxDecoration(color: Get.theme.primaryColor),
       width: double.maxFinite,
       child: SafeArea(
@@ -42,9 +44,8 @@ class HomeAppBarWidget extends StatelessWidget {
                       EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
                   border: baseBorder,
                   focusedBorder: baseBorder,
-                  enabledBorder: baseBorder.copyWith(
-                      borderSide: BorderSide.none
-                  ),
+                  enabledBorder:
+                      baseBorder.copyWith(borderSide: BorderSide.none),
                   hintText: tr(LocaleKeys.home_search_text),
                   hintStyle: theme.textTheme.bodyMedium
                       ?.copyWith(color: theme.colorScheme.surface),

@@ -45,6 +45,8 @@ dependencies:
   easy_localization:
   get_storage:
   water_drop_nav_bar:
+  iconsax:
+  carousel_slider:
 
 dev_dependencies:
   flutter_test:

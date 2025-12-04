@@ -77,6 +77,13 @@ abstract class  LocaleKeys {
   static const forgetPassword = 'forgetPassword';
   static const home_home_text = 'home.home_text';
   static const home_search_text = 'home.search_text';
+  static const home_main_section = 'home.main_section';
+  static const home_labs = 'home.labs';
+  static const home_insurance = 'home.insurance';
+  static const home_doctors = 'home.doctors';
+  static const home_clinics = 'home.clinics';
+  static const home_specialities = 'home.specialities';
+  static const home_emergency = 'home.emergency';
   static const home = 'home';
 
 }

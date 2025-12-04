@@ -1,8 +1,15 @@
+import 'package:carousel_slider/carousel_options.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/core/theme/app_theme.dart';
+import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/modules/home/presentation/widgets/home_app_bar_widget.dart';
+import 'package:clinc_app_t1/modules/home/presentation/widgets/main_section_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../../../app/core/widgets/app_padding_widget.dart';
 import '../controllers/home_controller.dart';
 
 class HomeScreen extends GetView<HomeController> {
@@ -11,52 +18,79 @@ class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          HomeAppBarWidget(),
-          Spacer(),
-          TextButton(
-            onPressed: () {
-              Get.snackbar('هنالك خطأ',
-                  "حصل خطأ غير متوقع يرجى التأكد من الانترنت وإعادة المحاولة!",
-                  backgroundColor: AppColors.error.withOpacity(.75),
-                  colorText: Get.theme.scaffoldBackgroundColor,
-                  icon: Icon(
-                    Icons.error_outline,
-                    color: Get.theme.scaffoldBackgroundColor,
-                  ));
-            },
-            child: Text('Show Error'),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {},
+        label: Text('احجز الآن'),
+      ),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            flexibleSpace: HomeAppBarWidget(),
+            toolbarHeight: 110.h,
+            floating: true,
           ),
-          TextButton(
-            onPressed: () {
-              Get.snackbar('تمت العملية بنجاح',
-                  "تم تسجيل بياناتك بنجاح!",
-                  backgroundColor: AppColors.success.withOpacity(.75),
-                  colorText: Get.theme.scaffoldBackgroundColor,
-                  icon: Icon(
-                    Icons.check_circle_outline,
-                    color: Get.theme.scaffoldBackgroundColor,
-                  ));
-
-            },
-            child: Text('Show Sucess'),
+          SliverToBoxAdapter(
+            child: CarouselSlider(
+                items: List.generate(
+                  controller.offersList.length,
+                  (index) {
+                    final offer = controller.offersList[index];
+                    return AppPaddingWidget(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8.r),
+                            child: ColorFiltered(
+                              colorFilter: ColorFilter.mode(
+                                AppColors.black.myOpacity(.6),
+                                BlendMode.darken,
+                              ),
+                              child: Image.network(
+                                offer.image,
+                                fit: BoxFit.cover,
+                                width: double.maxFinite,
+                                height: 150.h,
+                              ),
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                offer.title,
+                                style: Get.textTheme.bodyMedium?.copyWith(
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                             10.verticalSpace,
+                             Visibility(
+                               visible: offer.subTitle != null,
+                               child:  Text(
+                               offer.subTitle ?? '',
+                               style: Get.textTheme.bodyMedium?.copyWith(
+                                 color: AppColors.white,
+                                 fontSize: 20.sp
+                               ),
+                             ),)
+                            ],
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                options: CarouselOptions(
+                  height: 200.h,
+                  viewportFraction: 0.85,
+                  enlargeFactor: 0.2,
+                  autoPlay: true,
+                )),
           ),
-          TextButton(
-            onPressed: () {
-              Get.snackbar('تحذير',
-                  "يرجى إكمال ملئ بياناتك للحصول على التجربة الكاملة!",
-                  backgroundColor: AppColors.warning.withOpacity(.75),
-                  colorText: Get.theme.scaffoldBackgroundColor,
-                  icon: Icon(
-                    Icons.warning_amber_outlined,
-                    color: Get.theme.scaffoldBackgroundColor,
-                  ));
-
-            },
-            child: Text('Show Warning'),
-          ),
-          Spacer(),
+          SliverToBoxAdapter(
+            child: MainSectionWidget(),
+          )
         ],
       ),
     );
