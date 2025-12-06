@@ -47,6 +47,8 @@ dependencies:
   water_drop_nav_bar:
   iconsax:
   carousel_slider:
+  animated_bottom_navigation_bar:
+  skeletonizer:
 
 dev_dependencies:
   flutter_test:
@@ -76,3 +78,7 @@ flutter:
     - assets/icons/
     - assets/lottie/
     - assets/translations/
+  fonts:
+    - family: CustomAppIcon
+      fonts:
+        - asset: assets/fonts/CustomAppIcon.ttf

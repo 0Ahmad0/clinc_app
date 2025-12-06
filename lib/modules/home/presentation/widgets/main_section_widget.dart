@@ -3,6 +3,7 @@ import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/core/theme/app_theme.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/custom_app_icon_icons.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/home/presentation/controllers/home_controller.dart';
@@ -26,7 +27,7 @@ class MainSectionWidget extends GetView<HomeController> {
             tr(LocaleKeys.home_main_section),
             style: Get.textTheme.displayLarge?.copyWith(fontSize: 22.sp),
           ),
-          10.verticalSpace,
+          20.verticalSpace,
           Wrap(
             spacing: 10.w,
             runSpacing: 10.h,
@@ -46,7 +47,7 @@ class MainSectionWidget extends GetView<HomeController> {
                       color: Get.theme.primaryColor.myOpacity(.05),
                       borderRadius: BorderRadius.circular(6.r),
                       border:
-                          Border.all(color: Get.theme.primaryColor, width: .25),
+                          Border.all(color: Get.theme.primaryColor, width: .5),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -54,13 +55,14 @@ class MainSectionWidget extends GetView<HomeController> {
                         Expanded(
                           flex: 2,
                           child: Icon(
-                            Iconsax.alarm,
+                            item.icon,
+                            size: 30.sp,
                             color: Get.theme.primaryColor,
                           ),
                         ),
                         Expanded(
                           child: Text(
-                            item,
+                            item.name,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: Get.textTheme.bodyMedium,

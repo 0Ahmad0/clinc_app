@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 
 import '../../../../app/core/widgets/app_padding_widget.dart';
 import '../controllers/home_controller.dart';
+import '../widgets/carousel_slider_widget.dart';
 
 class HomeScreen extends GetView<HomeController> {
   const HomeScreen({super.key});
@@ -18,75 +19,15 @@ class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        label: Text('احجز الآن'),
-      ),
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            flexibleSpace: HomeAppBarWidget(),
+            flexibleSpace: const HomeAppBarWidget(),
             toolbarHeight: 110.h,
             floating: true,
           ),
           SliverToBoxAdapter(
-            child: CarouselSlider(
-                items: List.generate(
-                  controller.offersList.length,
-                  (index) {
-                    final offer = controller.offersList[index];
-                    return AppPaddingWidget(
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8.r),
-                            child: ColorFiltered(
-                              colorFilter: ColorFilter.mode(
-                                AppColors.black.myOpacity(.6),
-                                BlendMode.darken,
-                              ),
-                              child: Image.network(
-                                offer.image,
-                                fit: BoxFit.cover,
-                                width: double.maxFinite,
-                                height: 150.h,
-                              ),
-                            ),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                offer.title,
-                                style: Get.textTheme.bodyMedium?.copyWith(
-                                  color: AppColors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                             10.verticalSpace,
-                             Visibility(
-                               visible: offer.subTitle != null,
-                               child:  Text(
-                               offer.subTitle ?? '',
-                               style: Get.textTheme.bodyMedium?.copyWith(
-                                 color: AppColors.white,
-                                 fontSize: 20.sp
-                               ),
-                             ),)
-                            ],
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                ),
-                options: CarouselOptions(
-                  height: 200.h,
-                  viewportFraction: 0.85,
-                  enlargeFactor: 0.2,
-                  autoPlay: true,
-                )),
+            child: CarouselSliderWidget(controller: controller),
           ),
           SliverToBoxAdapter(
             child: MainSectionWidget(),
