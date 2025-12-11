@@ -4,15 +4,16 @@ import 'package:clinc_app_t1/modules/home/data/models/offer_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 
-import '../../../../app/core/widgets/custom_app_icon_icons.dart';
+import '../../../../app/core/constants/app_assets.dart';
 
 class HomeController extends GetxController {
   final List<MainHomeItemModel> mainSectionList = [
-    MainHomeItemModel(name: tr(LocaleKeys.home_doctors), icon: CustomAppIcon.doctor_male),
-    MainHomeItemModel(name: tr(LocaleKeys.home_clinics), icon: CustomAppIcon.clinicmedical),
-    MainHomeItemModel(name: tr(LocaleKeys.home_labs), icon: CustomAppIcon.lab),
-    MainHomeItemModel(name: tr(LocaleKeys.home_insurance), icon: CustomAppIcon.insurance_card),
-    MainHomeItemModel(name: tr(LocaleKeys.home_emergency), icon: CustomAppIcon.alertfilled),
+    MainHomeItemModel(name: LocaleKeys.home_doctors, icon: AppAssets.doctorIcon),
+    MainHomeItemModel(name: LocaleKeys.home_clinics, icon: AppAssets.clinicMedicalIcon),
+    MainHomeItemModel(name: LocaleKeys.home_labs, icon: AppAssets.labsIcon),
+    MainHomeItemModel(name: LocaleKeys.home_consultations, icon: AppAssets.consultationsIcon),
+    MainHomeItemModel(name: LocaleKeys.home_insurance, icon: AppAssets.insuranceCardIcon),
+    MainHomeItemModel(name: LocaleKeys.home_emergency, icon: AppAssets.emergencyIcon),
   ];
 
   final List<OfferModel> offersList = [

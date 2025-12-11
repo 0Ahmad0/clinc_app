@@ -99,12 +99,20 @@ class CodegenLoader extends AssetLoader{
     "home_text": "الرئـيـسـيـة",
     "search_text": "ابحث هنا...",
     "main_section": "القسم الرئيسي",
-    "labs": "المخابر",
+    "labs": "المختبرات",
     "insurance": "التأمينات",
     "doctors": "الأطباء",
     "clinics": "العيادات",
     "specialities": "التخصصات",
-    "emergency": "الطوارئ"
+    "emergency": "الطوارئ",
+    "consultations": "الاستشارات"
+  },
+  "navbar": {
+    "book_now": "احجز الآن",
+    "home_text": "الرئيسية",
+    "medical_file_text": "ملفي الطبي",
+    "appointments_text": "حجوزاتي",
+    "settings_text": "الإعدادات"
   }
 };
 static const Map<String,dynamic> _en = {
@@ -197,7 +205,15 @@ static const Map<String,dynamic> _en = {
     "doctors": "Doctors",
     "clinics": "Clinics",
     "specialities": "Specialities",
-    "emergency": "Emergency"
+    "emergency": "Emergency",
+    "consultations": "Consultations"
+  },
+  "navbar": {
+    "book_now": "Book now",
+    "home_text": "Home",
+    "medical_file_text": "Medical file",
+    "appointments_text": "Appointments",
+    "settings_text": "Settings"
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};

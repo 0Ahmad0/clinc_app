@@ -49,10 +49,14 @@ dependencies:
   carousel_slider:
   animated_bottom_navigation_bar:
   skeletonizer:
+  vector_graphics: ^1.1.18
+#  share_plus: ^12.0.1
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  vector_graphics_compiler:
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -78,7 +82,9 @@ flutter:
     - assets/icons/
     - assets/lottie/
     - assets/translations/
-  fonts:
-    - family: CustomAppIcon
-      fonts:
-        - asset: assets/fonts/CustomAppIcon.ttf
+    - path: assets/icons/
+      transformers:
+        - package: vector_graphics_compiler
+
+
+

@@ -89,7 +89,15 @@
     "doctors": "Doctors",
     "clinics": "Clinics",
     "specialities": "Specialities",
-    "emergency": "Emergency"
+    "emergency": "Emergency",
+    "consultations": "Consultations"
+  },
+  "navbar":{
+    "book_now": "Book now",
+    "home_text": "Home",
+    "medical_file_text": "Medical file",
+    "appointments_text": "Appointments",
+    "settings_text": "Settings"
   }
 
 }

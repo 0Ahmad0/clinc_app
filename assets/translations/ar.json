@@ -83,12 +83,20 @@
     "home_text": "الرئـيـسـيـة",
     "search_text": "ابحث هنا...",
     "main_section": "القسم الرئيسي",
-    "labs": "المخابر",
+    "labs": "المختبرات",
     "insurance": "التأمينات",
     "doctors": "الأطباء",
     "clinics": "العيادات",
     "specialities": "التخصصات",
-    "emergency": "الطوارئ"
+    "emergency": "الطوارئ",
+    "consultations": "الاستشارات"
+  },
+  "navbar":{
+    "book_now": "احجز الآن",
+    "home_text": "الرئيسية",
+    "medical_file_text": "ملفي الطبي",
+    "appointments_text": "حجوزاتي",
+    "settings_text": "الإعدادات"
   }
 
 }

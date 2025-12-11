@@ -2,15 +2,20 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:clinc_app_t1/app/core/constants/app_assets.dart';
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/core/theme/app_theme.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
 import 'package:clinc_app_t1/modules/home/presentation/screens/home_screen.dart';
+import 'package:clinc_app_t1/modules/navbar/data/models/nav_item_model.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/screens/settings_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:vector_graphics/vector_graphics.dart';
 import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
 import '../controllers/navbar_controller.dart';
+import '../widgets/navbar_item_widget.dart';
 
 class NavbarScreen extends GetView<NavbarController> {
   const NavbarScreen({super.key});
@@ -23,7 +28,7 @@ class NavbarScreen extends GetView<NavbarController> {
       floatingActionButton: FloatingActionButton.large(
         autofocus: true,
         onPressed: () {},
-        shape: StarBorder.polygon(
+        shape: const StarBorder.polygon(
           pointRounding: .8,
           sides: 5,
           // rotation: 60,
@@ -31,7 +36,10 @@ class NavbarScreen extends GetView<NavbarController> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Iconsax.add_square,size: 26.sp,),
+            Icon(
+              Iconsax.add_square,
+              size: 26.sp,
+            ),
             6.verticalSpace,
             Text(
               'احجز الآن',
@@ -55,22 +63,29 @@ class NavbarScreen extends GetView<NavbarController> {
             ],
           )),
       bottomNavigationBar: Obx(
-        () => AnimatedBottomNavigationBar(
-          icons: [
-            Iconsax.home,
-            Iconsax.lamp,
-            Iconsax.calendar,
-            Iconsax.setting,
-          ],
-          gapWidth: Get.width / 4.5,
-          activeColor: activeColor,
-          inactiveColor: inactiveColor,
-          notchMargin: 4,
+        () => AnimatedBottomNavigationBar.builder(
+          itemCount: controller.navItems.length,
+          tabBuilder: (index, isActive) {
+            final navItem = controller.navItems[index];
+            final String iconPath =
+                isActive ? navItem.filledIconPath : navItem.outlineIconPath;
+            return NavbarItemWidget(
+              isActive: isActive,
+              iconPath: iconPath,
+              activeColor: activeColor,
+              inactiveColor: inactiveColor,
+              navItem: navItem,
+            );
+          },
+          gapWidth: Get.width / 3.5,
           gapLocation: GapLocation.center,
+          height: 50.h,
           notchSmoothness: NotchSmoothness.softEdge,
           activeIndex: controller.selectedIndex.value,
           onTap: controller.changeIndex,
           backgroundColor: Get.theme.colorScheme.surface,
+          splashColor: Get.theme.primaryColor,
+          scaleFactor: .8,
         ),
       ),
     );

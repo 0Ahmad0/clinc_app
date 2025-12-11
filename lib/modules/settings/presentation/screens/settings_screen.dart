@@ -23,42 +23,43 @@ class SettingsScreen extends GetView<SettingsController> {
             SettingsGroupWidget(
               items: [
                 SettingsItemWidget(
-                    titleKey: 'الوضع',
-                    icon: Iconsax.sun,
-                    onTap: (){}
-                ),
+                    titleKey: 'الوضع', icon: Iconsax.sun, onTap: () {}),
                 SettingsItemWidget(
                     titleKey: 'حول التطبيق',
                     icon: Iconsax.information,
-                    onTap: (){}
-                ),
+                    onTap: () {}),
                 SettingsItemWidget(
                     titleKey: 'معلومات الدفع',
                     icon: Iconsax.cards,
-                    onTap: (){}
+                    onTap: () {}),
+                const Divider(
+                  thickness: .1,
                 ),
-                const Divider(thickness: .1,),
                 SettingsItemWidget(
                     titleKey: 'الخصوصية',
                     icon: Icons.privacy_tip_outlined,
-                    onTap: (){}
-                ),
+                    onTap: () {}),
                 SettingsItemWidget(
                     titleKey: 'المساعدة والدعم',
                     icon: Iconsax.support,
-                    onTap: (){}
-                ),
+                    onTap: () {}),
                 SettingsItemWidget(
                     titleKey: 'الاشعارات',
                     icon: Iconsax.notification,
-                    onTap: (){}
+                    onTap: () {}),
+                SettingsItemWidget(
+                    titleKey: 'مشاركة التطبيق',
+                    icon: Iconsax.share,
+                    onTap: () {}),
+                const Divider(
+                  thickness: .1,
+                  color: AppColors.error,
                 ),
                 SettingsItemWidget(
                     titleKey: 'تسجيل الخروج',
                     icon: Iconsax.logout,
                     color: AppColors.error,
-                    onTap: (){}
-                ),
+                    onTap: () {}),
               ],
             ),
           ],

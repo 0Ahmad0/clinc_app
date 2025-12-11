@@ -3,6 +3,10 @@ import 'package:clinc_app_t1/modules/navbar/presentation/screens/navbar_screen.d
 import 'package:clinc_app_t1/modules/settings/presentation/bindings/settings_binding.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/screens/settings_screen.dart';
 import 'package:get/get.dart';
+import '../../modules/notifications/presentation/bindings/notifications_binding.dart';
+import '../../modules/notifications/presentation/screens/notifications_screen.dart';
+import '../../modules/search/presentation/bindings/search_binding.dart';
+import '../../modules/search/presentation/screens/search_screen.dart';
 import '/modules/auth/presentation/screens/signup_screen.dart';
 import '/modules/home/presentation/screens/home_screen.dart';
 import '/modules/splash/presentation/bindings/splash_binding.dart';
@@ -72,6 +76,16 @@ class AppPages {
       name: AppRoutes.settings,
       page: () => const SettingsScreen(),
       binding: SettingsBinding(), // <-- يستخدم ForgetPasswordBinding
+    ),
+    GetPage(
+      name: AppRoutes.search,
+      page: () => const SearchScreen(),
+      binding: SearchBinding(), // <-- يستخدم ForgetPasswordBinding
+    ),
+    GetPage(
+      name: AppRoutes.notifications,
+      page: () => const NotificationsScreen(),
+      binding: NotificationsBinding(), // <-- يستخدم ForgetPasswordBinding
     ),
   ];
 }

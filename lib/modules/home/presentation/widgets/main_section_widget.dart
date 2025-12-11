@@ -3,7 +3,6 @@ import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/core/theme/app_theme.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
-import 'package:clinc_app_t1/app/core/widgets/custom_app_icon_icons.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/home/presentation/controllers/home_controller.dart';
@@ -44,28 +43,37 @@ class MainSectionWidget extends GetView<HomeController> {
                     height: ((Get.width - 48.w) / 3),
                     padding: EdgeInsets.all(10.sp),
                     decoration: BoxDecoration(
-                      color: Get.theme.primaryColor.myOpacity(.05),
+                      color: Get.theme.colorScheme.surface,
                       borderRadius: BorderRadius.circular(6.r),
-                      border:
-                          Border.all(color: Get.theme.primaryColor, width: .5),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.grey.myOpacity(.8),
+                          blurRadius: 6.sp
+                        )
+                      ]
+                      // border:
+                      //     Border.all(color: Get.theme.primaryColor, width: .5),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
                           flex: 2,
-                          child: Icon(
-                            item.icon,
-                            size: 30.sp,
+                          child: AppSvgWidget(
+                            assetsUrl: item.icon,
                             color: Get.theme.primaryColor,
+                            width: 26.w,
+                            height: 26.w,
                           ),
                         ),
                         Expanded(
                           child: Text(
-                            item.name,
+                            tr(item.name),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: Get.textTheme.bodyMedium,
+                            style: Get.textTheme.bodyMedium?.copyWith(
+                              fontSize: 12.sp
+                            ),
                           ),
                         ),
                       ],

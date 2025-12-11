@@ -19,6 +19,8 @@ abstract class AppRoutes {
   // --- ميزة الرئيسية (Home) ---
   static const navbar = '/navbar';
   static const home = '/home';
+  static const search = '/search';
+  static const notifications = '/notifications';
 
   // --- ميزة البروفايل (Profile) ---
   static const profile = '/profile';

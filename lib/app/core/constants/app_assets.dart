@@ -27,7 +27,14 @@ abstract class AppAssets {
   static const String outlineSettingIcon = '$_iconsPath/outline_setting_icon.svg';
   static const String fillCalendarIcon = '$_iconsPath/fill_calendar_icon.svg';
   static const String outlineCalendarIcon = '$_iconsPath/outline_calendar_icon.svg';
+  static const String medicalFileFilledIcon = '$_iconsPath/medical_file_filled.svg';
+  static const String medicalFileOutlineIcon = '$_iconsPath/medical_file_outline.svg';
   static const String doctorIcon = '$_iconsPath/doctor_icon.svg';
+  static const String clinicMedicalIcon = '$_iconsPath/clinic_medical_icon.svg';
+  static const String consultationsIcon = '$_iconsPath/consultations_icon.svg';
+  static const String emergencyIcon = '$_iconsPath/emergency_icon.svg';
+  static const String insuranceCardIcon = '$_iconsPath/insurance_card_icon.svg';
+  static const String labsIcon = '$_iconsPath/labs_icon.svg';
 
   // --- ملفات Lottie (JSON) ---
   static const String  scanDrugAnimation = '$_lottiePath/scan_drug_lottie.json';
