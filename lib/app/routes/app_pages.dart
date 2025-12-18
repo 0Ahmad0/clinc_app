@@ -1,8 +1,14 @@
+import 'package:clinc_app_t1/modules/book_appointments/presentation/screens/book_appointment_screen.dart';
 import 'package:clinc_app_t1/modules/navbar/presentation/bindings/navbar_binding.dart';
 import 'package:clinc_app_t1/modules/navbar/presentation/screens/navbar_screen.dart';
+import 'package:clinc_app_t1/modules/profile/bindings/profile_binding.dart';
+import 'package:clinc_app_t1/modules/profile/views/profile_view.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/bindings/settings_binding.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/screens/settings_screen.dart';
 import 'package:get/get.dart';
+import '../../modules/appointments/presentation/bindings/appointments_binding.dart';
+import '../../modules/appointments/presentation/screens/appointments_screen.dart';
+import '../../modules/book_appointments/presentation/bindings/book_appointment_binding.dart';
 import '../../modules/notifications/presentation/bindings/notifications_binding.dart';
 import '../../modules/notifications/presentation/screens/notifications_screen.dart';
 import '../../modules/search/presentation/bindings/search_binding.dart';
@@ -85,7 +91,22 @@ class AppPages {
     GetPage(
       name: AppRoutes.notifications,
       page: () => const NotificationsScreen(),
-      binding: NotificationsBinding(), // <-- يستخدم ForgetPasswordBinding
+      binding: NotificationsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.appointments,
+      page: () => const AppointmentsScreen(),
+      binding: AppointmentsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.profile,
+      page: () => const ProfileScreen(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.bookAppointments,
+      page: () => const BookAppointmentScreen(),
+      binding: BookAppointmentBinding(),
     ),
   ];
 }

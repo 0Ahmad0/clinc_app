@@ -21,10 +21,8 @@ class HomeScreen extends GetView<HomeController> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            flexibleSpace: const HomeAppBarWidget(),
-            toolbarHeight: 110.h,
-            floating: true,
+          SliverToBoxAdapter(
+            child: HomeAppBarWidget(),
           ),
           SliverToBoxAdapter(
             child: CarouselSliderWidget(controller: controller),

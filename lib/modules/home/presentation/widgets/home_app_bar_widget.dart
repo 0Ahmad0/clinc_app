@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
+import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -36,7 +37,9 @@ class HomeAppBarWidget extends StatelessWidget {
                   /// => tr(LocaleKeys.home_text)
                   tr(LocaleKeys.home_home_text),
                   style: Get.textTheme.displayLarge?.copyWith(
-                      color: Get.theme.colorScheme.surface, fontSize: 30.sp),
+                    color: Get.theme.colorScheme.surface,
+                    fontSize: 30.sp,
+                  ),
                 ),
                 Badge.count(
                   count: 9,
@@ -50,39 +53,41 @@ class HomeAppBarWidget extends StatelessWidget {
                       color: AppColors.white,
                     ),
                   ),
-                )
+                ),
               ],
             ),
             12.verticalSpace,
             TextField(
               readOnly: true,
-              onTap: (){
+              onTap: () {
                 Get.toNamed(AppRoutes.search);
               },
               cursorColor: theme.colorScheme.surface,
               textInputAction: TextInputAction.search,
-              style: theme.textTheme.bodyMedium
-                  ?.copyWith(color: theme.colorScheme.surface),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.surface,
+              ),
               decoration: InputDecoration(
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
-                  border: baseBorder,
-                  focusedBorder: baseBorder,
-                  enabledBorder:
-                      baseBorder.copyWith(borderSide: BorderSide.none),
-                  hintText: tr(LocaleKeys.home_search_text),
-                  hintStyle: theme.textTheme.bodyMedium
-                      ?.copyWith(color: theme.colorScheme.surface),
-                  filled: true,
-                  fillColor: theme.colorScheme.surface.withOpacity(.4),
-                  suffixIcon: IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.search,
-                      color: theme.colorScheme.surface,
-                    ),
-                  )),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 10.h,
+                  horizontal: 10.w,
+                ),
+                border: baseBorder,
+                focusedBorder: baseBorder,
+                enabledBorder: baseBorder.copyWith(borderSide: BorderSide.none),
+                hintText: tr(LocaleKeys.home_search_text),
+                hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.surface,
+                ),
+                filled: true,
+                fillColor: theme.colorScheme.surface.myOpacity(.4),
+                suffixIcon: IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.search, color: theme.colorScheme.surface),
+                ),
+              ),
             ),
+            4.verticalSpace,
           ],
         ),
       ),

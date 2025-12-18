@@ -1,5 +1,9 @@
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/core/utils/dialogs/app_dialog.dart';
+import 'package:clinc_app_t1/app/core/utils/dialogs/widgets/logout_dialog_widgets.dart';
+import 'package:clinc_app_t1/app/core/utils/share_helper.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
+import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/widgets/image_details_section_widget.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/widgets/settings_group_widget.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/widgets/settings_item_widget.dart';
@@ -23,43 +27,53 @@ class SettingsScreen extends GetView<SettingsController> {
             SettingsGroupWidget(
               items: [
                 SettingsItemWidget(
-                    titleKey: 'الوضع', icon: Iconsax.sun, onTap: () {}),
-                SettingsItemWidget(
-                    titleKey: 'حول التطبيق',
-                    icon: Iconsax.information,
-                    onTap: () {}),
-                SettingsItemWidget(
-                    titleKey: 'معلومات الدفع',
-                    icon: Iconsax.cards,
-                    onTap: () {}),
-                const Divider(
-                  thickness: .1,
+                  titleKey: 'الوضع',
+                  icon: Iconsax.sun,
+                  onTap: () {},
                 ),
                 SettingsItemWidget(
-                    titleKey: 'الخصوصية',
-                    icon: Icons.privacy_tip_outlined,
-                    onTap: () {}),
+                  titleKey: 'حول التطبيق',
+                  icon: Iconsax.information,
+                  onTap: () {},
+                ),
                 SettingsItemWidget(
-                    titleKey: 'المساعدة والدعم',
-                    icon: Iconsax.support,
-                    onTap: () {}),
+                  titleKey: 'معلومات الدفع',
+                  icon: Iconsax.cards,
+                  onTap: () {},
+                ),
+                const Divider(thickness: .1),
                 SettingsItemWidget(
-                    titleKey: 'الاشعارات',
-                    icon: Iconsax.notification,
-                    onTap: () {}),
+                  titleKey: 'الخصوصية',
+                  icon: Icons.privacy_tip_outlined,
+                  onTap: () {},
+                ),
                 SettingsItemWidget(
-                    titleKey: 'مشاركة التطبيق',
-                    icon: Iconsax.share,
-                    onTap: () {}),
-                const Divider(
-                  thickness: .1,
+                  titleKey: 'المساعدة والدعم',
+                  icon: Iconsax.support,
+                  onTap: () {},
+                ),
+                SettingsItemWidget(
+                  titleKey: 'الاشعارات',
+                  icon: Iconsax.notification,
+                  onTap: () => Get.toNamed(AppRoutes.notifications),
+                ),
+                SettingsItemWidget(
+                  titleKey: 'مشاركة التطبيق',
+                  icon: Iconsax.share,
+                  onTap: ShareHelper.shareAppWithImage,
+                ),
+                const Divider(thickness: .1, color: AppColors.error),
+                SettingsItemWidget(
+                  titleKey: 'تسجيل الخروج',
+                  icon: Iconsax.logout,
                   color: AppColors.error,
+                  onTap: () {
+                    AppDialog.showAppDialog(
+                      context,
+                      widget: const LogoutDialogWidget(),
+                    );
+                  },
                 ),
-                SettingsItemWidget(
-                    titleKey: 'تسجيل الخروج',
-                    icon: Iconsax.logout,
-                    color: AppColors.error,
-                    onTap: () {}),
               ],
             ),
           ],

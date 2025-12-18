@@ -60,6 +60,7 @@ class PillWiseApp extends StatelessWidget {
           // (أو .light أو .dark)
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
+          // locale: context.locale,
           locale: context.locale,
           defaultTransition: Transition.leftToRightWithFade,
           debugShowCheckedModeBanner: false,

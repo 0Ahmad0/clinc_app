@@ -7,25 +7,27 @@ import 'typography.dart';
 class AppTheme {
   // --- الثيم الأبيض (Light) ---
   static ThemeData get lightTheme {
+    final currentTextTheme = AppTypography.textTheme;
     return ThemeData(
-
       brightness: Brightness.light,
       primaryColor: AppColors.primary,
       scaffoldBackgroundColor: AppColors.lightScaffold,
 
       // تعريف TextTheme وتطبيق اللون الأسود عليه
-      textTheme: AppTypography.textTheme.apply(
+      textTheme: currentTextTheme.apply(
         decorationColor: AppColors.primary,
         bodyColor: AppColors.lightText,
         displayColor: AppColors.lightText,
-
       ),
 
       colorScheme: const ColorScheme.light(
         primary: AppColors.primary,
-        onPrimary: AppColors.white, // لون النص على الخلفية
-        surface: AppColors.lightCard, // لون الكروت
-        onSurface: AppColors.lightText, // لون النص على الكروت
+        onPrimary: AppColors.white,
+        // لون النص على الخلفية
+        surface: AppColors.lightCard,
+        // لون الكروت
+        onSurface: AppColors.lightText,
+        // لون النص على الكروت
         error: AppColors.error,
         onError: AppColors.white,
       ),
@@ -57,14 +59,14 @@ class AppTheme {
 
   // --- الثيم الأسود (Dark) ---
   static ThemeData get darkTheme {
+    final currentTextTheme = AppTypography.textTheme;
     return ThemeData(
-
       brightness: Brightness.dark,
       primaryColor: AppColors.primary,
       scaffoldBackgroundColor: AppColors.darkScaffold,
 
       // تعريف TextTheme وتطبيق اللون الأبيض عليه
-      textTheme: AppTypography.textTheme.apply(
+      textTheme: currentTextTheme.apply(
         decorationColor: AppColors.primary,
         bodyColor: AppColors.darkText,
         displayColor: AppColors.darkText,

@@ -1,49 +1,156 @@
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
+import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import '../../data/models/property_model.dart';
 import '../controllers/search_controller.dart';
 
 class SearchScreen extends GetView<SearchAndFilterController> {
-  const SearchScreen({Key? key}) : super(key: key);
+  const SearchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppAppBarWidget(
-        title: 'البحث',
-
-      ),
+      appBar: const AppAppBarWidget(title: 'البحث المتقدم'),
       body: Column(
         children: <Widget>[
-          // 1. حقل البحث
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onChanged: controller.updateSearchQuery,
-              decoration: InputDecoration(
-                labelText: 'ابحث عن مستشفى أو عيادة...',
-                suffixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-              ),
+            padding: EdgeInsets.all(12.w),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    onChanged: controller.updateSearchQuery,
+                    decoration: InputDecoration(
+                      hintText: 'ابحث عن مستشفى أو عيادة...',
+                      prefixIcon: const Icon(Iconsax.search_normal),
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6.r),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                ),
+                4.horizontalSpace,
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Get.theme.primaryColor.myOpacity(.05),
+                    borderRadius: BorderRadius.circular(6.r),
+                  ),
+                  child: IconButton(
+                    onPressed: controller.toggleFilterBar,
+                    icon: Icon(Icons.tune, color: Get.theme.primaryColor),
+                  ),
+                ),
+              ],
             ),
           ),
 
-          // 2. أدوات التصفية والفرز
-          _buildFilterControls(),
+          Obx(
+            () => controller.isFilterBarVisible.value
+                ? Container(
+                    height: 50.h,
+                    margin: EdgeInsets.only(bottom: 10.h),
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      children: [
+                        Visibility(
+                          visible: controller.hasActiveFilters,
+                          child: GestureDetector(
+                            onTap: () => controller.resetFilters(),
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 4.w),
+                              padding: EdgeInsets.symmetric(horizontal: 12.w),
+                              decoration: BoxDecoration(
+                                color: Colors.red.myOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8.r),
+                                border: Border.all(
+                                  color: Colors.red.myOpacity(0.3),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Iconsax.filter_remove,
+                                    size: 16.sp,
+                                    color: Colors.red,
+                                  ),
+                                  4.horizontalSpace,
+                                  Text(
+                                    "مسح",
+                                    style: Get.textTheme.bodyMedium?.copyWith(
+                                      fontSize: 12.sp,
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        _buildFilterItem(
+                          Icons.location_on,
+                          'المنطقة',
+                          controller.regions,
+                          controller.selectedRegion,
+                          (v) => controller.updateFilter(region: v),
+                        ),
+                        _buildFilterItem(
+                          Icons.verified_user,
+                          'التأمين',
+                          controller.insuranceCompanies,
+                          controller.selectedInsurance,
+                          (v) => controller.updateFilter(insurance: v),
+                        ),
+                        _buildFilterItem(
+                          Icons.wc,
+                          'الجنس',
+                          controller.genders,
+                          controller.selectedGender,
+                          (v) => controller.updateFilter(gender: v),
+                        ),
 
-          // 3. قائمة النتائج المفلترة
+                        _buildFilterItem(
+                          Icons.medical_services,
+                          'التخصص',
+                          controller.specialties,
+                          controller.selectedSpecialty,
+                          (v) => controller.updateFilter(specialty: v),
+                        ),
+                        _buildFilterItem(
+                          Icons.sort,
+                          'الفرز',
+                          ['priceAsc', 'priceDesc', 'distanceAsc'],
+                          controller.sortCriteria,
+                          (v) => controller.updateFilter(sort: v),
+                        ),
+                      ],
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ),
+
+          // 3. قائمة النتائج
           Expanded(
-            // Obx يستمع للتغيرات في controller.filteredHospitals
             child: Obx(() {
               if (controller.filteredHospitals.isEmpty) {
-                return Center(child: Text('لا توجد نتائج مطابقة لمرشحات البحث.'));
+                return const Center(
+                  child: Text('لا توجد نتائج مطابقة لمرشحات البحث.'),
+                );
               }
               return ListView.builder(
                 itemCount: controller.filteredHospitals.length,
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
                 itemBuilder: (context, index) {
-                  final hospital = controller.filteredHospitals[index];
-                  return HospitalCard(hospital: hospital);
+                  return HospitalCard(
+                    hospital: controller.filteredHospitals[index],
+                  );
                 },
               );
             }),
@@ -53,77 +160,132 @@ class SearchScreen extends GetView<SearchAndFilterController> {
     );
   }
 
-  Widget _buildFilterControls() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // مرشح المنطقة
-          Obx(() => DropdownButton<String>(
-            value: controller.selectedRegion.value,
-            onChanged: (String? newValue) {
-              if (newValue != null) {
-                controller.updateRegionFilter(newValue);
-              }
-            },
-            items: Hospital.availableRegions.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value, style: TextStyle(color: Colors.blueGrey)),
-              );
-            }).toList(),
-          )),
-
-          // الفرز حسب السعر أو القرب
-          Obx(() => DropdownButton<String>(
-            value: controller.sortCriteria.value,
-            onChanged: (String? newValue) {
-              if (newValue != null) {
-                controller.updateSortCriteria(newValue);
-              }
-            },
-            items: const [
-              DropdownMenuItem(value: 'priceAsc', child: Text('الأرخص سعراً 💰')),
-              DropdownMenuItem(value: 'distanceAsc', child: Text('الأقرب إليك 📍')),
-            ],
-          )),
-        ],
-      ),
-    );
+  Widget _buildFilterItem(
+    IconData icon,
+    String label,
+    List<String> options,
+    RxString selectedValue,
+    Function(String) onUpdate,
+  ) {
+    return Obx(() {
+      bool isSelected =
+          selectedValue.value != 'الكل' && selectedValue.value != 'priceAsc';
+      return Container(
+        width: 140.w,
+        margin: EdgeInsets.symmetric(horizontal: 4.w),
+        padding: EdgeInsets.symmetric(horizontal: 8.w),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? Get.theme.primaryColor.myOpacity(
+                  0.1,
+                ) // تم تصحيح ميثود الأوباسيتي
+              : Colors.white,
+          borderRadius: BorderRadius.circular(8.r),
+          border: Border.all(
+            color: isSelected ? Get.theme.primaryColor : Colors.grey[300]!,
+          ),
+        ),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            icon: Icon(Icons.keyboard_arrow_down, size: 18.sp),
+            isExpanded: true,
+            padding: EdgeInsets.zero,
+            hint: Row(
+              children: [
+                Icon(
+                  icon,
+                  size: 16.sp,
+                  color: isSelected ? Get.theme.primaryColor : Colors.grey,
+                ),
+                4.horizontalSpace,
+                // استخدام Expanded مع TextOverflow.ellipsis لحل مشكلة المساحة
+                Expanded(
+                  child: Text(
+                    isSelected ? selectedValue.value : label,
+                    style: Get.textTheme.bodySmall?.copyWith(fontSize: 12.sp),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    softWrap: false,
+                  ),
+                ),
+              ],
+            ),
+            items: options
+                .map(
+                  (v) => DropdownMenuItem(
+                    value: v,
+                    child: Text(
+                      v,
+                      style: Get.textTheme.bodyMedium?.copyWith(
+                        fontSize: 12.sp,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                )
+                .toList(),
+            onChanged: (v) => onUpdate(v!),
+          ),
+        ),
+      );
+    });
   }
 }
 
-// بطاقة عرض المستشفى
 class HospitalCard extends StatelessWidget {
   final Hospital hospital;
 
-  const HospitalCard({required this.hospital});
+  const HospitalCard({required this.hospital, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2,
-      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      elevation: 0.5,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.r),
+        side: BorderSide(color: Colors.grey[100]!),
+      ),
+      margin: EdgeInsets.only(bottom: 12.h),
       child: ListTile(
-        leading: Icon(Icons.local_hospital, color: Colors.teal),
-        title: Text(hospital.name, style: TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text(
-          'المنطقة: ${hospital.region}\n'
-              'القرب: ${hospital.distanceKm.toStringAsFixed(1)} كم',
+        contentPadding: EdgeInsets.all(10.w),
+        leading: Container(
+          padding: EdgeInsets.all(10.w),
+          decoration: BoxDecoration(
+            color: Get.theme.primaryColor.myOpacity(0.05),
+            borderRadius: BorderRadius.circular(10.r),
+          ),
+          child: const Icon(Icons.local_hospital, color: Colors.teal),
+        ),
+        title: Text(
+          hospital.name,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 5.h),
+            Text('📍 ${hospital.region}', style: TextStyle(fontSize: 12.sp)),
+            Text(
+              '📏 الأبعد: ${hospital.distanceKm.toStringAsFixed(1)} كم',
+              style: TextStyle(fontSize: 11.sp, color: Colors.grey),
+            ),
+          ],
         ),
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text('SAR ${hospital.consultationFee.toStringAsFixed(0)}',
-                style: TextStyle(color: Colors.green.shade700, fontWeight: FontWeight.bold, fontSize: 16)),
-            Text('استشارة', style: TextStyle(fontSize: 10)),
+            Text(
+              'SAR ${hospital.consultationFee.toStringAsFixed(0)}',
+              style: TextStyle(
+                color: Colors.blue,
+                fontWeight: FontWeight.bold,
+                fontSize: 15.sp,
+              ),
+            ),
+            const Text('استشارة', style: TextStyle(fontSize: 10)),
           ],
         ),
-        onTap: () {
-          // يمكن إضافة منطق الانتقال لصفحة تفاصيل المستشفى هنا
-          Get.snackbar('تفاصيل المستشفى', 'جارٍ الانتقال إلى صفحة ${hospital.name}');
-        },
       ),
     );
   }

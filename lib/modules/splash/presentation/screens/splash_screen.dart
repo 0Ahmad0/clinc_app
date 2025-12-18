@@ -21,7 +21,6 @@ class SplashScreen extends StatelessWidget {
         alignment: Alignment.center,
         fit: StackFit.expand,
         children: [
-
           Positioned(
             top: 0,
             left: 0,
@@ -36,8 +35,8 @@ class SplashScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  AppAssets.appLogo,
+                AppSvgWidget(
+                  assetsUrl: AppAssets.appLogoIcon,
                   width: 50.w,
                   height: 50.w,
                 ).pulse(infinite: true),
@@ -51,7 +50,7 @@ class SplashScreen extends StatelessWidget {
               style: Get.textTheme.bodySmall?.copyWith(fontSize: 10.sp),
               textAlign: TextAlign.center,
             ),
-          )
+          ),
         ],
       ),
     );

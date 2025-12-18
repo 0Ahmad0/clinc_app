@@ -26,6 +26,7 @@ class SettingsAppController extends GetxController {
     Locale newLocale = Locale(languageCode);
 
     Get.updateLocale(newLocale);
+    print(locale.value);
     locale.value = newLocale; // تحديث المتغير التفاعلي
 
     // 2. حفظ الاختيار

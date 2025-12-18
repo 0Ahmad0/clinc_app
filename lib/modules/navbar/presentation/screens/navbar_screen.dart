@@ -4,6 +4,8 @@ import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/core/theme/app_theme.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
+import 'package:clinc_app_t1/app/routes/app_routes.dart';
+import 'package:clinc_app_t1/modules/appointments/presentation/screens/appointments_screen.dart';
 import 'package:clinc_app_t1/modules/home/presentation/screens/home_screen.dart';
 import 'package:clinc_app_t1/modules/navbar/data/models/nav_item_model.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/screens/settings_screen.dart';
@@ -13,7 +15,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:vector_graphics/vector_graphics.dart';
-import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
 import '../controllers/navbar_controller.dart';
 import '../widgets/navbar_item_widget.dart';
 
@@ -27,7 +28,7 @@ class NavbarScreen extends GetView<NavbarController> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.large(
         autofocus: true,
-        onPressed: () {},
+        onPressed: ()=> Get.toNamed(AppRoutes.bookAppointments),
         shape: const StarBorder.polygon(
           pointRounding: .8,
           sides: 5,
@@ -58,7 +59,7 @@ class NavbarScreen extends GetView<NavbarController> {
             children: const [
               HomeScreen(),
               Scaffold(),
-              Scaffold(),
+              AppointmentsScreen(),
               SettingsScreen()
             ],
           )),

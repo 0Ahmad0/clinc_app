@@ -21,6 +21,8 @@ abstract class AppRoutes {
   static const home = '/home';
   static const search = '/search';
   static const notifications = '/notifications';
+  static const appointments = '/appointments';
+  static const bookAppointments = '/book_appointments';
 
   // --- ميزة البروفايل (Profile) ---
   static const profile = '/profile';

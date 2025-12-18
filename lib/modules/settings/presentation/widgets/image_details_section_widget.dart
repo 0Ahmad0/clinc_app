@@ -1,5 +1,6 @@
 import 'package:clinc_app_t1/app/controllers/settings_app_controller.dart';
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,26 +37,29 @@ class ImageDetailsSectionWidget extends GetView<SettingsController> {
           style: Get.textTheme.bodyMedium,
         ),
         10.verticalSpace,
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-          decoration: BoxDecoration(
-              color: Get.theme.primaryColor,
-              borderRadius: BorderRadius.circular(24.r)),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Iconsax.personalcard,
-                color: AppColors.white,
-                size: 16.sp,
-              ),
-              6.horizontalSpace,
-              Text(
-                'تغيير المعلومات',
-                style: Get.textTheme.bodyMedium?.copyWith(
-                    color: Get.theme.colorScheme.surface, fontSize: 12.sp),
-              ),
-            ],
+        GestureDetector(
+          onTap: ()=> Get.toNamed(AppRoutes.profile),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+            decoration: BoxDecoration(
+                color: Get.theme.primaryColor,
+                borderRadius: BorderRadius.circular(24.r)),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Iconsax.edit,
+                  color: AppColors.white,
+                  size: 16.sp,
+                ),
+                6.horizontalSpace,
+                Text(
+                  'تغيير المعلومات',
+                  style: Get.textTheme.bodyMedium?.copyWith(
+                      color: Get.theme.colorScheme.surface, fontSize: 12.sp),
+                ),
+              ],
+            ),
           ),
         )
       ],

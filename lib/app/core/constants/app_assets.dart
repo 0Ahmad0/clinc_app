@@ -8,12 +8,13 @@ abstract class AppAssets {
   static const String _lottiePath = 'assets/lottie';
 
   // --- الصور (PNG / JPG) ---
-  static const String appLogo = '$_imagesPath/app_logo.png';
+  static const String appLogoPNG = '$_imagesPath/logo.png';
   static const String loginLogo = '$_imagesPath/login_logo.png';
   static const String signupLogo = '$_imagesPath/signup_logo.png';
   static const String forgetPasswordLogo = '$_imagesPath/forget_password_logo.png';
 
   // --- الأيقونات (SVG) ---
+  static const String appLogoIcon = '$_iconsPath/app_logo.svg';
   static const String splashHeartIcon = '$_iconsPath/splash_heart_icon.svg';
   static const String welcomeWaveIcon = '$_iconsPath/welcome_wave.svg';
   static const String splashVectorIcon = '$_iconsPath/splash_vector.svg';
@@ -35,6 +36,15 @@ abstract class AppAssets {
   static const String emergencyIcon = '$_iconsPath/emergency_icon.svg';
   static const String insuranceCardIcon = '$_iconsPath/insurance_card_icon.svg';
   static const String labsIcon = '$_iconsPath/labs_icon.svg';
+  static const String shapeDialogStarsIcon = '$_iconsPath/shape_dialog_stars.svg';
+  static const String coverShapeIcon = '$_iconsPath/cover_shape_icon.svg';
+  static const String noInternetConnectionIcon = '$_iconsPath/no_internet_connection.svg';
+  static const String lockIcon = '$_iconsPath/lock.svg';
+  static const String emailSendIcon = '$_iconsPath/email_send.svg';
+  static const checkCircleIcon = '$_iconsPath/check_circle.svg';
+  static const waitingIcon = '$_iconsPath/waiting.svg';
+  static const rejectedCircleIcon = '$_iconsPath/rejected_circle.svg';
+
 
   // --- ملفات Lottie (JSON) ---
   static const String  scanDrugAnimation = '$_lottiePath/scan_drug_lottie.json';
