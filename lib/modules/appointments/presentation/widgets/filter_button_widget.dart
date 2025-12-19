@@ -51,7 +51,7 @@ class FilterButtonWidget extends StatelessWidget {
             4.horizontalSpace,
             Text(
               list[index].name,
-              style: Get.textTheme.bodyMedium?.copyWith(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontSize: 12.sp,
                 color: _currentIndex == index
                     ? AppColors.white
@@ -61,7 +61,7 @@ class FilterButtonWidget extends StatelessWidget {
             4.horizontalSpace,
             Text(
               '(${totalCount ?? 0})',
-              style: Get.textTheme.bodyMedium?.copyWith(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: _currentIndex == index
                     ? AppColors.white
                     : AppColors.grey,

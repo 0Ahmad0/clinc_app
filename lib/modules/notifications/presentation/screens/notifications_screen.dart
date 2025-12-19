@@ -27,7 +27,7 @@ class NotificationsScreen extends GetView<NotificationsController> {
           Text(
             'لا يوجد إشعارات بعد',
             textAlign: TextAlign.center,
-            style: Get.textTheme.bodyMedium?.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontSize: 16.sp
             ),
           ),

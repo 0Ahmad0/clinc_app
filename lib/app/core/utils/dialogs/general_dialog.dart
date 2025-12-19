@@ -96,7 +96,7 @@ class GeneralAppDialog extends StatelessWidget {
                 Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: Get.textTheme.bodyMedium?.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -107,7 +107,7 @@ class GeneralAppDialog extends StatelessWidget {
                       onPressed: okOnTap ?? () => Get.back(),
                       child: Text(
                         okText ?? '',
-                        style: Get.textTheme.bodyMedium?.copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: generalColor ?? okColor!,
                           fontSize: 12.sp,
                         ),
@@ -117,7 +117,7 @@ class GeneralAppDialog extends StatelessWidget {
                       onPressed: cancelOnTap ?? () => Get.back(),
                       child: Text(
                         cancelText ?? '',
-                        style: Get.textTheme.bodySmall?.copyWith(
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: cancelColor,
                           fontSize: 12.sp,
                         ),

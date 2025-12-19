@@ -4,10 +4,12 @@ import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_text_filed_widget.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
+import 'package:clinc_app_t1/modules/auth/presentation/controllers/auth_controller.dart';
 import 'package:clinc_app_t1/modules/profile/controllers/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 import '../../../app/core/utils/dialogs/app_bottom_sheet.dart';
 import '../../../app/core/utils/dialogs/app_dialog.dart';
@@ -20,6 +22,7 @@ class ProfileScreen extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
+    final authController = Get.find<AuthController>();
     return Scaffold(
       body: SingleChildScrollView(
         child: AppPaddingWidget(
@@ -85,8 +88,18 @@ class ProfileScreen extends GetView<ProfileController> {
                     ),
                   ],
                 ),
-                10.verticalSpace,
+                20.verticalSpace,
+                Obx(() => AppTextFormFieldWidget(
+                  labelText: authController.labelText,
+                  controller: authController.idTextController,
+                  prefixIcon: Iconsax.personalcard,
+                  keyboardType: TextInputType.number,
+                  hintText: authController.hintText,
+                  validator: authController.validateInput,
+                )),
+                8.verticalSpace,
                 AppTextFormFieldWidget(
+                  prefixIcon: Iconsax.user,
                   controller: controller.fullNameController,
                   hintText: 'الاسم كاملا',
                   keyboardType: TextInputType.name,
@@ -94,6 +107,7 @@ class ProfileScreen extends GetView<ProfileController> {
                 ),
                 8.verticalSpace,
                 AppTextFormFieldWidget(
+                  prefixIcon: Iconsax.link,
                   controller: controller.usernameController,
                   hintText: 'اسم المستخدم',
                   keyboardType: TextInputType.name,
@@ -101,6 +115,7 @@ class ProfileScreen extends GetView<ProfileController> {
                 ),
                 8.verticalSpace,
                 AppTextFormFieldWidget(
+                  prefixIcon: Iconsax.message,
                   controller: controller.emailController,
                   hintText: 'البريد الالكتروني',
                   keyboardType: TextInputType.emailAddress,
@@ -108,6 +123,7 @@ class ProfileScreen extends GetView<ProfileController> {
                 ),
                 8.verticalSpace,
                 AppTextFormFieldWidget(
+                  prefixIcon: Iconsax.mobile,
                   controller: controller.phoneController,
                   hintText: 'رقم الهاتف',
                   keyboardType: TextInputType.phone,
@@ -118,7 +134,7 @@ class ProfileScreen extends GetView<ProfileController> {
                   text: 'حفظ التغييرات',
                   onPressed: controller.editProfile,
                 ),
-                16.verticalSpace,
+                10.verticalSpace,
                 AppButtonWidget(
                   text: 'حذف حسابي',
                   onPressed: () {

@@ -46,7 +46,7 @@ class OfferItemWidget extends StatelessWidget {
                   alignment: Alignment.center,
                   child: Text(
                     offer.title,
-                    style: Get.textTheme.bodyMedium?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppColors.white,
                       fontWeight: FontWeight.bold,
                     ),
@@ -59,7 +59,7 @@ class OfferItemWidget extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Text(
                       offer.subTitle ?? '',
-                      style: Get.textTheme.bodyMedium?.copyWith(
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppColors.white, fontSize: 20.sp),
                     ),
                   ),

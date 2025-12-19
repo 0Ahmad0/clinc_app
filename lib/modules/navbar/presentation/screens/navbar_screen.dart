@@ -44,7 +44,7 @@ class NavbarScreen extends GetView<NavbarController> {
             6.verticalSpace,
             Text(
               'احجز الآن',
-              style: Get.textTheme.bodySmall?.copyWith(
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontSize: 9.sp,
                   color: AppColors.white,
                   fontWeight: FontWeight.bold),

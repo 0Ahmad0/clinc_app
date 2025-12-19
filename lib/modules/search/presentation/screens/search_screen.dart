@@ -83,7 +83,7 @@ class SearchScreen extends GetView<SearchAndFilterController> {
                                   4.horizontalSpace,
                                   Text(
                                     "مسح",
-                                    style: Get.textTheme.bodyMedium?.copyWith(
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                       fontSize: 12.sp,
                                       color: Colors.red,
                                       fontWeight: FontWeight.bold,
@@ -170,63 +170,67 @@ class SearchScreen extends GetView<SearchAndFilterController> {
     return Obx(() {
       bool isSelected =
           selectedValue.value != 'الكل' && selectedValue.value != 'priceAsc';
-      return Container(
-        width: 140.w,
-        margin: EdgeInsets.symmetric(horizontal: 4.w),
-        padding: EdgeInsets.symmetric(horizontal: 8.w),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? Get.theme.primaryColor.myOpacity(
-                  0.1,
-                ) // تم تصحيح ميثود الأوباسيتي
-              : Colors.white,
-          borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(
-            color: isSelected ? Get.theme.primaryColor : Colors.grey[300]!,
-          ),
-        ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            icon: Icon(Icons.keyboard_arrow_down, size: 18.sp),
-            isExpanded: true,
-            padding: EdgeInsets.zero,
-            hint: Row(
-              children: [
-                Icon(
-                  icon,
-                  size: 16.sp,
-                  color: isSelected ? Get.theme.primaryColor : Colors.grey,
-                ),
-                4.horizontalSpace,
-                // استخدام Expanded مع TextOverflow.ellipsis لحل مشكلة المساحة
-                Expanded(
-                  child: Text(
-                    isSelected ? selectedValue.value : label,
-                    style: Get.textTheme.bodySmall?.copyWith(fontSize: 12.sp),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    softWrap: false,
-                  ),
-                ),
-              ],
+      return Builder(
+        builder: (context) {
+          return Container(
+            width: 140.w,
+            margin: EdgeInsets.symmetric(horizontal: 4.w),
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? Get.theme.primaryColor.myOpacity(
+                      0.1,
+                    ) // تم تصحيح ميثود الأوباسيتي
+                  : Colors.white,
+              borderRadius: BorderRadius.circular(8.r),
+              border: Border.all(
+                color: isSelected ? Get.theme.primaryColor : Colors.grey[300]!,
+              ),
             ),
-            items: options
-                .map(
-                  (v) => DropdownMenuItem(
-                    value: v,
-                    child: Text(
-                      v,
-                      style: Get.textTheme.bodyMedium?.copyWith(
-                        fontSize: 12.sp,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                icon: Icon(Icons.keyboard_arrow_down, size: 18.sp),
+                isExpanded: true,
+                padding: EdgeInsets.zero,
+                hint: Row(
+                  children: [
+                    Icon(
+                      icon,
+                      size: 16.sp,
+                      color: isSelected ? Get.theme.primaryColor : Colors.grey,
                     ),
-                  ),
-                )
-                .toList(),
-            onChanged: (v) => onUpdate(v!),
-          ),
-        ),
+                    4.horizontalSpace,
+                    // استخدام Expanded مع TextOverflow.ellipsis لحل مشكلة المساحة
+                    Expanded(
+                      child: Text(
+                        isSelected ? selectedValue.value : label,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12.sp),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        softWrap: false,
+                      ),
+                    ),
+                  ],
+                ),
+                items: options
+                    .map(
+                      (v) => DropdownMenuItem(
+                        value: v,
+                        child: Text(
+                          v,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontSize: 12.sp,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (v) => onUpdate(v!),
+              ),
+            ),
+          );
+        }
       );
     });
   }

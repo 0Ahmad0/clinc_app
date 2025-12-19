@@ -31,7 +31,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
               },
             ),
             const OnboardingBottomControlsWidget(),
-            _buildSkipButton()
+            _buildSkipButton(),
           ],
         ),
       ),
@@ -40,18 +40,22 @@ class OnboardingScreen extends GetView<OnboardingController> {
 
   // هذه الدالة بسيطة جداً (3-5 أسطر)، لا بأس بتركها هنا
   Widget _buildSkipButton() {
-    return Align(
-      alignment: AlignmentDirectional.topEnd,
-      child: TextButton(
-        onPressed: controller.skip,
-        child: Text(
-          tr(LocaleKeys.core_skip),
-          style: Get.textTheme.bodyMedium?.copyWith(
-            color: Get.theme.primaryColor,
-            fontWeight: FontWeight.bold
+    return Builder(
+      builder: (context) {
+        return Align(
+          alignment: AlignmentDirectional.topEnd,
+          child: TextButton(
+            onPressed: controller.skip,
+            child: Text(
+              tr(LocaleKeys.core_skip),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Get.theme.primaryColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

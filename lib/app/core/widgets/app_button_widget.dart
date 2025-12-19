@@ -2,27 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-/// الزر الأساسي المعبأ (ElevatedButton) للتطبيق
 class AppButtonWidget extends StatelessWidget {
-  /// النص الذي سيظهر على الزر
   final String text;
 
-  /// الدالة التي ستنفذ عند الضغط
   final VoidCallback? onPressed;
 
-  /// (اختياري) أيقونة تظهر قبل النص
   final Widget? icon;
 
-  /// (اختياري) هل الزر في حالة تحميل؟
   final bool isLoading;
 
-  /// (اختياري) هل الزر يملأ العرض؟
   final bool isFullWidth;
 
-  /// (اختياري) لتغيير لون الخلفية (مثل زر "حذف" أحمر)
   final Color? backgroundColor;
 
-  /// (اختياري) لتغيير لون النص/الأيقونة
   final Color? foregroundColor;
 
   const AppButtonWidget({
@@ -31,22 +23,21 @@ class AppButtonWidget extends StatelessWidget {
     required this.onPressed,
     this.icon,
     this.isLoading = false,
-    this.isFullWidth = true, // الافتراضي أن الزر يملأ العرض
+    this.isFullWidth = true,
     this.backgroundColor,
     this.foregroundColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    // 1. تحديد الستايل
-    // هذا الستايل سيأخذ الستايل الأساسي من الثيم (AppTheme)
-    // ويضيف عليه التعديلات (مثل لون خلفية مختلف)
     final style = ElevatedButton.styleFrom(
       backgroundColor: backgroundColor,
       foregroundColor: foregroundColor,
+      textStyle: Theme.of(context).textTheme.displayLarge?.copyWith(
+        fontSize: 16.sp
+      )
     );
 
-    // 2. بناء الزر
     final button = ElevatedButton(
       onPressed: isLoading ? null : onPressed,
       style: style,
@@ -86,14 +77,18 @@ class AppButtonWidget extends StatelessWidget {
       return Text(text);
     }
     // إذا كان هناك أيقونة، اعرضها بجانب النص
-    return Row(
-      mainAxisSize: MainAxisSize.min, // ليجعل الزر يتوسط إذا لم يكن (isFullWidth)
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        icon!,
-        10.horizontalSpace, // مسافة متجاوبة
-        Text(text),
-      ],
+    return Builder(
+      builder: (context) {
+        return Row(
+          mainAxisSize: MainAxisSize.min, // ليجعل الزر يتوسط إذا لم يكن (isFullWidth)
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            icon!,
+            10.horizontalSpace, // مسافة متجاوبة
+            Text(text),
+          ],
+        );
+      }
     );
   }
 }

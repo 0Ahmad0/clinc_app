@@ -11,6 +11,7 @@ import '/app/routes/app_routes.dart';
 import 'app/bindings/initial_binding.dart';
 import 'app/core/theme/app_theme.dart';
 import 'generated/codegen_loader.g.dart';
+import 'modules/settings/presentation/controllers/settings_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,20 +19,22 @@ Future<void> main() async {
     EasyLocalization.ensureInitialized(),
     ScreenUtil.ensureScreenSize(),
     GetStorage.init(),
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]),
   ]);
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  Get.put(SettingsAppController(), permanent: true);
   runApp(
     EasyLocalization(
       supportedLocales: const [
         Locale(AppConstants.arLang),
         Locale(AppConstants.enLang),
       ],
+      startLocale: Locale(AppConstants.arLang),
+      fallbackLocale: const Locale(AppConstants.arLang),
       path: AppConstants.translationPath,
       assetLoader: const CodegenLoader(),
-      fallbackLocale: const Locale(AppConstants.arLang),
       child: const PillWiseApp(),
     ),
   );
@@ -42,30 +45,44 @@ class PillWiseApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SettingsAppController settingsController =
-        Get.put(SettingsAppController(), permanent: true);
     return ScreenUtilInit(
-      designSize:
-          const Size(AppConstants.designWidth, AppConstants.designHeight),
+      designSize: const Size(
+        AppConstants.designWidth,
+        AppConstants.designHeight,
+      ),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return GetMaterialApp(
-          initialBinding: InitialBinding(),
-          theme: AppTheme.lightTheme,
-          // <--- تطبيق الثيم الأبيض
-          darkTheme: AppTheme.darkTheme,
-          // <--- تطبيق الثيم الأسود
-          themeMode:ThemeMode.light,
-          // (أو .light أو .dark)
-          localizationsDelegates: context.localizationDelegates,
-          supportedLocales: context.supportedLocales,
-          // locale: context.locale,
-          locale: context.locale,
-          defaultTransition: Transition.leftToRightWithFade,
-          debugShowCheckedModeBanner: false,
-          getPages: AppPages.routes,
-          initialRoute: AppRoutes.initial,
+        return GetBuilder<SettingsAppController>(
+          id: 'app_localization',
+          builder: (settingsController) {
+            final String langCode = settingsController.currentLocale.languageCode;
+            return GetMaterialApp(
+              initialBinding: InitialBinding(),
+              theme: AppTheme.lightTheme(langCode),
+              darkTheme: AppTheme.darkTheme(langCode),
+              themeMode: settingsController.themeMode,
+              locale: context.locale,
+              supportedLocales: context.supportedLocales,
+              localizationsDelegates: [
+                ...context.localizationDelegates,
+                DefaultMaterialLocalizations.delegate,
+                DefaultWidgetsLocalizations.delegate,
+              ],
+              defaultTransition: Transition.leftToRightWithFade,
+              debugShowCheckedModeBanner: false,
+              getPages: AppPages.routes,
+              initialRoute: AppRoutes.initial,
+              builder: (context, child) {
+                return MediaQuery(
+                  data: MediaQuery.of(
+                    context,
+                  ).copyWith(textScaler: TextScaler.linear(1.0)),
+                  child: child!,
+                );
+              },
+            );
+          },
         );
       },
     );

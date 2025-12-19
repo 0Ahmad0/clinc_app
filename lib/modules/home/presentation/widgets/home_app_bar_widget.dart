@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../app/controllers/settings_app_controller.dart';
 import '../../../../app/core/theme/app_colors.dart';
 
 class HomeAppBarWidget extends StatelessWidget {
@@ -34,9 +35,8 @@ class HomeAppBarWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  /// => tr(LocaleKeys.home_text)
                   tr(LocaleKeys.home_home_text),
-                  style: Get.textTheme.displayLarge?.copyWith(
+                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
                     color: Get.theme.colorScheme.surface,
                     fontSize: 30.sp,
                   ),
@@ -48,9 +48,9 @@ class HomeAppBarWidget extends StatelessWidget {
                     onPressed: () {
                       Get.toNamed(AppRoutes.notifications);
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Iconsax.notification5,
-                      color: AppColors.white,
+                      color: Get.theme.cardColor,
                     ),
                   ),
                 ),
@@ -88,9 +88,73 @@ class HomeAppBarWidget extends StatelessWidget {
               ),
             ),
             4.verticalSpace,
+            ThemeSwitchWidget(),
+            4.verticalSpace,
           ],
         ),
       ),
+    );
+  }
+}
+
+class ThemeSwitchWidget extends StatelessWidget {
+  const ThemeSwitchWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<SettingsAppController>(
+      // نستخدم نفس id التحديث لضمان تغيير حالة السويتش عند الضغط
+      id: 'app_localization',
+      builder: (controller) {
+        final isDarkMode = controller.themeMode == ThemeMode.dark;
+
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor, // لون الخلفية حسب الثيم
+            borderRadius: BorderRadius.circular(12.r),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // النص والأيقونة
+              Row(
+                children: [
+                  Icon(
+                    isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  12.horizontalSpace,
+                  Text(
+                    // يمكنك استبدال هذا بـ tr(LocaleKeys.settings_dark_mode)
+                    isDarkMode ? "الوضع الداكن" : "الوضع الفاتح",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ],
+              ),
+
+              // السويتش
+              Switch.adaptive(
+                value: isDarkMode,
+                activeColor: Theme.of(context).primaryColor,
+                onChanged: (bool value) {
+                  // هنا يتم استدعاء دالة تغيير الثيم التي كتبناها سابقاً
+                  controller.changeTheme(
+                    value ? ThemeMode.dark : ThemeMode.light,
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -1,6 +1,8 @@
+import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class AppTextFormFieldWidget extends StatefulWidget {
   final TextEditingController? controller;
@@ -100,8 +102,8 @@ class _AppTextFormFieldWidgetState extends State<AppTextFormFieldWidget> {
             : null,
         filled: true,
         fillColor: theme.inputDecorationTheme.fillColor ??
-            theme.colorScheme.surface.withOpacity(0.5),
-        contentPadding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+            theme.colorScheme.surface.myOpacity(0.5),
+        contentPadding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 10.w),
         enabledBorder: baseBorder,
         focusedBorder: baseBorder.copyWith(
           borderSide: BorderSide(color: theme.primaryColor, width: 1),
@@ -119,8 +121,8 @@ class _AppTextFormFieldWidgetState extends State<AppTextFormFieldWidget> {
   Widget _buildVisibilityToggleIcon(ThemeData theme) {
     return IconButton(
       icon: Icon(
-        _isObscure ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-        color: theme.iconTheme.color?.withOpacity(0.7),
+        _isObscure ? Iconsax.eye_slash : Iconsax.eye,
+        color: theme.iconTheme.color?.myOpacity(0.75),
       ),
       onPressed: () {
         setState(() {

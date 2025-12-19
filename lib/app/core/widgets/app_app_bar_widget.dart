@@ -26,19 +26,31 @@ class AppAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
     Widget? leadingWidget;
     if (showBackButton) {
-      leadingWidget = IconButton(
+      leadingWidget = IconButton.outlined(
+        color: Theme.of(context).cardColor,
+        style: IconButton.styleFrom(
+          side: BorderSide(color: Theme.of(context).cardColor, width: .75),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadiusGeometry.circular(10.r),
+          ),
+        ),
         icon:
             leadingIcon ??
-            Icon(isRTL ? Icons.arrow_forward_ios : Icons.arrow_back_ios),
+            Icon(
+              isRTL ? Icons.keyboard_arrow_right : Icons.keyboard_arrow_left,
+            ),
         onPressed: onBackPress ?? () => Get.back(),
         tooltip: MaterialLocalizations.of(context).backButtonTooltip,
       );
     }
 
     return AppBar(
-      title: Text(title ?? '', style: Get.textTheme.labelMedium?.copyWith(
-        fontSize: 16.sp,
-      )),
+      title: Text(
+        title ?? '',
+        style: Theme.of(
+          context,
+        ).textTheme.labelMedium?.copyWith(fontSize: 16.sp),
+      ),
       centerTitle: centerTitle,
       automaticallyImplyLeading: false,
       leading: leadingWidget,

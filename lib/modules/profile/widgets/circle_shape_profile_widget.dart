@@ -34,7 +34,7 @@ class CircleShapeProfileWidget extends StatelessWidget {
           ),
         ),
         4.verticalSpace,
-        Text(title, style: Get.textTheme.bodyMedium?.copyWith(
+        Text(title, style: Theme.of(context).textTheme.bodyMedium?.copyWith(
           fontSize: 12.sp
         )),
       ],

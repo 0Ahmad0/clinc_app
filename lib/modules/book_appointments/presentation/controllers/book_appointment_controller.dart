@@ -36,6 +36,11 @@ class BookAppointmentController extends GetxController {
     '05:00 PM',
     '05:30 PM',
   ].obs;
+  List<String> get morningTimes =>
+      availableTimes.where((time) => time.contains('AM')).toList();
+
+  List<String> get eveningTimes =>
+      availableTimes.where((time) => time.contains('PM')).toList();
 
   final List<String> ageRanges = [
     '18 - 25',

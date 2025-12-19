@@ -1,4 +1,6 @@
+import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class DateTimeLineWidget extends StatelessWidget {
@@ -16,19 +18,17 @@ class DateTimeLineWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EasyDateTimeLinePicker(
-      timelineOptions: TimelineOptions(
-
-        padding: EdgeInsets.zero
-      ),
+      timelineOptions: TimelineOptions(padding: EdgeInsets.zero),
       monthYearPickerOptions: MonthYearPickerOptions(
         cancelText: 'إلغاء',
         confirmText: 'تحديد',
-
+        cancelTextStyle: Theme.of(context).textTheme.bodyMedium,
+        confirmTextStyle: Theme.of(context).textTheme.bodyMedium,
       ),
       controller: controller,
-      firstDate: DateTime(2025, 1, 1),
+      firstDate: DateTime.now(),
       focusedDate: selectedDate,
-      lastDate: DateTime(2030, 3, 18),
+      lastDate: DateTime(2026),
       locale: Locale('ar'),
       onDateChange: onDateChange,
     );

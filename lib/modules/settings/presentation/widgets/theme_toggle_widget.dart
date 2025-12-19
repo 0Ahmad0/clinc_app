@@ -28,7 +28,7 @@ class ThemeToggleWidget extends GetView<SettingsController> {
         children: [
           Text(
             'الوضع النهاري',
-            style: Get.textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           4.horizontalSpace,
           AnimatedSwitcher(

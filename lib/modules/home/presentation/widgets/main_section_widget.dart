@@ -24,7 +24,7 @@ class MainSectionWidget extends GetView<HomeController> {
         children: [
           Text(
             tr(LocaleKeys.home_main_section),
-            style: Get.textTheme.displayLarge?.copyWith(fontSize: 22.sp),
+            style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 22.sp),
           ),
           20.verticalSpace,
           Wrap(
@@ -71,7 +71,7 @@ class MainSectionWidget extends GetView<HomeController> {
                             tr(item.name),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: Get.textTheme.bodyMedium?.copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontSize: 12.sp
                             ),
                           ),

@@ -64,14 +64,14 @@ class MyAppointmentWidget extends StatelessWidget {
               leading: AppSvgWidget(assetsUrl: AppAssets.appLogoIcon),
               title: Text(
                 'الطلب رقم',
-                style: Get.textTheme.bodyMedium?.copyWith(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               subtitle: Text(
                 '#AF1250H',
-                style: Get.textTheme.bodyMedium?.copyWith(fontSize: 12.sp),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 12.sp),
               ),
               trailing: Icon(Icons.keyboard_arrow_left_sharp),
             ),
@@ -84,11 +84,11 @@ class MyAppointmentWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text('السعر :', style: Get.textTheme.bodyMedium),
+                      Text('السعر :', style: Theme.of(context).textTheme.bodyMedium),
                       2.horizontalSpace,
                       Text(
                         '${1000}\$',
-                        style: Get.textTheme.bodyMedium?.copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppColors.error,
                           fontSize: 12.sp,
                           fontWeight: FontWeight.bold,
@@ -120,7 +120,7 @@ class MyAppointmentWidget extends StatelessWidget {
                         4.horizontalSpace,
                         Text(
                           getStatusText(appointment.status),
-                          style: Get.textTheme.bodyMedium?.copyWith(
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: getStatusColor(appointment.status),
                             fontSize: 12.sp,
                           ),

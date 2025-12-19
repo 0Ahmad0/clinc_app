@@ -35,7 +35,7 @@ class TimeChipWidget extends StatelessWidget {
         ),
         child: Text(
           time.trNumbers(),
-          style: Get.textTheme.bodyMedium?.copyWith(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: isSelected ? AppColors.white : null,
             fontWeight: isSelected ? FontWeight.bold : null,
           ),

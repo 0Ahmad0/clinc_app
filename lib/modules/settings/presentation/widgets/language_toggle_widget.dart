@@ -22,7 +22,7 @@ class LanguageToggleWidget extends GetView<SettingsController> {
         children: [
           Text(
             'العربية',
-            style: Get.textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           4.horizontalSpace,
           Icon(

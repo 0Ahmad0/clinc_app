@@ -29,12 +29,12 @@ class ImageDetailsSectionWidget extends GetView<SettingsController> {
         8.verticalSpace,
         Text(
           'Ahlam Alharir',
-          style: Get.textTheme.displayLarge?.copyWith(fontSize: 24.sp),
+          style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 24.sp),
         ),
         2.verticalSpace,
         Text(
           'ahlam@gmail.com',
-          style: Get.textTheme.bodyMedium,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
         10.verticalSpace,
         GestureDetector(
@@ -55,7 +55,7 @@ class ImageDetailsSectionWidget extends GetView<SettingsController> {
                 6.horizontalSpace,
                 Text(
                   'تغيير المعلومات',
-                  style: Get.textTheme.bodyMedium?.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Get.theme.colorScheme.surface, fontSize: 12.sp),
                 ),
               ],

@@ -19,11 +19,13 @@ class AvailableTimeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final morningTimes = availableTimes.where((t) => t.contains('AM')).toList();
+    final eveningTimes = availableTimes.where((t) => t.contains('PM')).toList();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('الأوقات المتاحة', style: Get.textTheme.labelMedium?.copyWith(
-          fontSize: 18.sp
+        Text('الأوقات الصباحية', style: Theme.of(context).textTheme.labelMedium?.copyWith(
+          fontSize: 16.sp
         )),
         14.verticalSpace,
         Wrap(
@@ -31,7 +33,7 @@ class AvailableTimeWidget extends StatelessWidget {
           alignment: WrapAlignment.center,
           spacing: 10.w,
           runSpacing: 10.h,
-          children: availableTimes.map((time) {
+          children: morningTimes.map((time) {
             final isSelected = time == selectedTime;
             return TimeChipWidget(
               time: time,
@@ -40,6 +42,26 @@ class AvailableTimeWidget extends StatelessWidget {
             );
           }).toList(),
         ),
+        14.verticalSpace,
+        Text('الأوقات المسائية', style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            fontSize: 16.sp
+        )),
+        12.verticalSpace,
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.start,
+          alignment: WrapAlignment.center,
+          spacing: 10.w,
+          runSpacing: 10.h,
+          children: eveningTimes.map((time) {
+            final isSelected = time == selectedTime;
+            return TimeChipWidget(
+              time: time,
+              isSelected: isSelected,
+              onTap: onTap,
+            );
+          }).toList(),
+        ),
+
       ],
     );
   }

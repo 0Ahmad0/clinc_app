@@ -1,25 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import '../constants/app_constants.dart';
 import 'app_colors.dart';
 import 'typography.dart';
 
 class AppTheme {
+  static String? getFontFamily(String languageCode) {
+    if (languageCode == AppConstants.arLang) {
+      return GoogleFonts.cairo().fontFamily;
+    } else {
+      return GoogleFonts.poppins().fontFamily;
+    }
+  }
+
   // --- الثيم الأبيض (Light) ---
-  static ThemeData get lightTheme {
-    final currentTextTheme = AppTypography.textTheme;
+  static ThemeData lightTheme(String languageCode) {
     return ThemeData(
       brightness: Brightness.light,
       primaryColor: AppColors.primary,
       scaffoldBackgroundColor: AppColors.lightScaffold,
+      fontFamily: getFontFamily(languageCode),
 
       // تعريف TextTheme وتطبيق اللون الأسود عليه
-      textTheme: currentTextTheme.apply(
-        decorationColor: AppColors.primary,
-        bodyColor: AppColors.lightText,
-        displayColor: AppColors.lightText,
+      textTheme: TextTheme(
+        displayLarge: TextStyle(
+          fontSize: 32.sp,
+          fontWeight: FontWeight.bold,
+          color: AppColors.lightText,
+        ),
+        headlineMedium: TextStyle(
+          fontSize: 24.sp,
+          fontWeight: FontWeight.w600,
+          color: AppColors.lightText,
+        ),
+        bodyLarge: TextStyle(
+          fontSize: 16.sp,
+          fontWeight: FontWeight.normal,
+          color: AppColors.lightText,
+        ),
+        bodyMedium: TextStyle(
+          fontSize: 14.sp,
+          fontWeight: FontWeight.normal,
+          color: AppColors.lightText,
+        ),
+        labelLarge: TextStyle(
+          fontSize: 16.sp,
+          fontWeight: FontWeight.bold,
+          color: AppColors.white,
+        ),
       ),
 
+      // textTheme: currentTextTheme.apply(
+      //   decorationColor: AppColors.primary,
+      //   bodyColor: AppColors.lightText,
+      //   displayColor: AppColors.lightText,
+      // ),
       colorScheme: const ColorScheme.light(
         primary: AppColors.primary,
         onPrimary: AppColors.white,
@@ -32,14 +69,16 @@ class AppTheme {
         onError: AppColors.white,
       ),
 
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         elevation: 0,
-        backgroundColor: AppColors.lightScaffold,
+        backgroundColor: AppColors.primary,
+
         iconTheme: IconThemeData(color: AppColors.lightText),
         titleTextStyle: TextStyle(
           color: AppColors.lightText,
           fontSize: 20,
           fontWeight: FontWeight.bold,
+          fontFamily: getFontFamily(languageCode),
         ),
       ),
 
@@ -47,7 +86,7 @@ class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.white,
-          textStyle: AppTypography.textTheme.labelLarge,
+          textStyle: AppTypography.labelLarge(),
           minimumSize: const Size(double.maxFinite, 54),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.r),
@@ -58,20 +97,47 @@ class AppTheme {
   }
 
   // --- الثيم الأسود (Dark) ---
-  static ThemeData get darkTheme {
-    final currentTextTheme = AppTypography.textTheme;
+  static ThemeData darkTheme(String languageCode) {
     return ThemeData(
       brightness: Brightness.dark,
       primaryColor: AppColors.primary,
       scaffoldBackgroundColor: AppColors.darkScaffold,
-
+      fontFamily: getFontFamily(languageCode),
       // تعريف TextTheme وتطبيق اللون الأبيض عليه
-      textTheme: currentTextTheme.apply(
-        decorationColor: AppColors.primary,
-        bodyColor: AppColors.darkText,
-        displayColor: AppColors.darkText,
+      textTheme: TextTheme(
+        displayLarge: TextStyle(
+          fontSize: 32.sp,
+          fontWeight: FontWeight.bold,
+          color: AppColors.darkText,
+        ),
+        headlineMedium: TextStyle(
+          fontSize: 24.sp,
+          fontWeight: FontWeight.w600,
+          color: AppColors.darkText,
+        ),
+        bodyLarge: TextStyle(
+          fontSize: 16.sp,
+          fontWeight: FontWeight.normal,
+          color: AppColors.darkText,
+        ),
+        bodyMedium: TextStyle(
+          fontSize: 14.sp,
+          fontWeight: FontWeight.normal,
+          color: AppColors.darkText,
+        ),
+        labelLarge: TextStyle(
+          fontSize: 16.sp,
+          fontWeight: FontWeight.bold,
+          color: AppColors.white,
+        ),
       ),
 
+      // textTheme: currentTextTheme.apply(
+      //
+      //   decorationColor: AppColors.primary,
+      //   bodyColor: AppColors.darkText,
+      //   displayColor: AppColors.darkText,
+      // ),
       colorScheme: const ColorScheme.dark(
         primary: AppColors.primary,
         onPrimary: AppColors.white,
@@ -81,14 +147,15 @@ class AppTheme {
         onError: AppColors.white,
       ),
 
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         elevation: 0,
-        backgroundColor: AppColors.darkScaffold,
+        backgroundColor: AppColors.primary,
         iconTheme: IconThemeData(color: AppColors.darkText),
         titleTextStyle: TextStyle(
           color: AppColors.darkText,
           fontSize: 20,
           fontWeight: FontWeight.bold,
+          fontFamily: getFontFamily(languageCode),
         ),
       ),
 
@@ -96,7 +163,7 @@ class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.white,
-          textStyle: AppTypography.textTheme.labelLarge,
+          textStyle: AppTypography.labelLarge(),
           minimumSize: const Size(double.maxFinite, 54),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.r),

@@ -47,7 +47,7 @@ class SplashScreen extends StatelessWidget {
             bottom: 4.h,
             child: Text(
               tr(LocaleKeys.splash_copyright),
-              style: Get.textTheme.bodySmall?.copyWith(fontSize: 10.sp),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 10.sp),
               textAlign: TextAlign.center,
             ),
           ),

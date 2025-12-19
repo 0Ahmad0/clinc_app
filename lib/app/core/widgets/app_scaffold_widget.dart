@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class AppScaffoldWidget extends StatelessWidget {
   final PreferredSizeWidget? appBar;
   final Widget? body;
@@ -8,6 +9,7 @@ class AppScaffoldWidget extends StatelessWidget {
   final Color? backgroundColor;
 
   final bool applyBodyPadding;
+  final bool resizeToAvoidBottomInset;
 
   const AppScaffoldWidget({
     super.key,
@@ -17,22 +19,22 @@ class AppScaffoldWidget extends StatelessWidget {
     this.bottomNavigationBar,
     this.backgroundColor,
     this.applyBodyPadding = true,
+    this.resizeToAvoidBottomInset = true,
   });
 
   static final EdgeInsets _defaultPadding = EdgeInsets.symmetric(
-      horizontal: 14.w,
+    horizontal: 14.w,
   );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       appBar: appBar,
       body: applyBodyPadding
-          ? Padding(
-        padding: _defaultPadding,
-        child: body,
-      )
-          : body, // أو عرض الـ body بدون حشوة
+          ? Padding(padding: _defaultPadding, child: body)
+          : body,
+      // أو عرض الـ body بدون حشوة
       floatingActionButton: floatingActionButton,
       bottomNavigationBar: bottomNavigationBar,
       backgroundColor: backgroundColor,

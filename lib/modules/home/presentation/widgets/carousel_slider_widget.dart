@@ -26,7 +26,7 @@ class CarouselSliderWidget extends StatelessWidget {
         AppPaddingWidget(
           child: Text(
             'عروضنا',
-            style: Get.textTheme.displayLarge
+            style: Theme.of(context).textTheme.displayLarge
                 ?.copyWith(color: Get.theme.primaryColor, fontSize: 22.sp),
           ),
         ),

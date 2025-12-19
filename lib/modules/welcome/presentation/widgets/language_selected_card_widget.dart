@@ -43,7 +43,7 @@ class LanguageSelectorCardWidget extends StatelessWidget {
             10.horizontalSpace,
             Text(
               languageName,
-              style: Get.textTheme.bodyMedium?.copyWith(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontWeight: isSelected ? FontWeight.bold : null,
               ),
             ),

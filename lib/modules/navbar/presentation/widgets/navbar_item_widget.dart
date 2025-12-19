@@ -38,7 +38,7 @@ class NavbarItemWidget extends StatelessWidget {
         Flexible(
             child: Text(
           tr(navItem.label),
-          style: Get.textTheme.bodySmall?.copyWith(
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
             fontSize: 10.sp,
             fontWeight: isActive ? FontWeight.bold : null,
             color: isActive ? activeColor : inactiveColor,

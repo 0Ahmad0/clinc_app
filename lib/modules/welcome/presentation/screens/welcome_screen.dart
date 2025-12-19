@@ -20,84 +20,77 @@ class WelcomeScreen extends GetView<WelcomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final SettingsAppController settingsController =
-        Get.find<SettingsAppController>();
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            child: AppSvgWidget(
-              assetsUrl: AppAssets.splashVectorIcon,
-              fit: BoxFit.cover,
-              color: Get.theme.primaryColor,
-              height: 90.h,
-            ).fadeInDown(),
-          ),
-          AppPaddingWidget(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                120.verticalSpace,
-                Text(
-                  tr(LocaleKeys.welcome_welcome_text_app),
-                  style: Get.textTheme.displayLarge,
-                ),
-                10.verticalSpace,
-                Text(
-                  tr(LocaleKeys.welcome_welcome_description),
-                  style: Get.textTheme.bodyMedium?.copyWith(),
-                ),
-                30.verticalSpace,
-                Obx(() {
-                  String currentLang =
-                      settingsController.locale.value.languageCode;
+      body: GetBuilder<SettingsAppController>(
+        id: 'language_dependent',
+        builder: (settingsController) {
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              Positioned(
+                top: 0,
+                left: 0,
+                child: AppSvgWidget(
+                  assetsUrl: AppAssets.splashVectorIcon,
+                  fit: BoxFit.cover,
+                  color: Get.theme.primaryColor,
+                  height: 90.h,
+                ).fadeInDown(),
+              ),
+              AppPaddingWidget(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    120.verticalSpace,
+                    Text(
+                      tr(LocaleKeys.welcome_welcome_text_app),
+                      style: Theme.of(context).textTheme.displayLarge,
+                    ),
+                    10.verticalSpace,
+                    Text(
+                      tr(LocaleKeys.welcome_welcome_description),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(),
+                    ),
+                    30.verticalSpace,
 
-                  return ListBody(
-                    children: [
-                      LanguageSelectorCardWidget(
-                        /// => tr(LocaleKeys.core_ar)
-                        languageName: tr(LocaleKeys.core_ar),
-                        imagePath: AppAssets.arFlagIcon,
-                        isSelected: currentLang == AppConstants.arLang,
-                        onTap: () {
-                          // عند الضغط، نطلب من الكونترولر تغيير اللغة
-                          settingsController
-                              .changeLanguage(AppConstants.arLang);
-                          context.setLocale(const Locale(AppConstants.arLang));
-                        },
-                      ),
-                      10.verticalSpace,
-                      LanguageSelectorCardWidget(
-                        languageName: tr(LocaleKeys.core_en),
-                        imagePath: AppAssets.enFlagIcon,
-                        isSelected: currentLang == AppConstants.enLang,
-                        onTap: () {
-                          // عند الضغط، نطلب من الكونترولر تغيير اللغة
-                          settingsController
-                              .changeLanguage(AppConstants.enLang);
-                          context.setLocale(const Locale(AppConstants.enLang));
-
-                        },
-                      ),
-                    ],
-                  );
-                })
-              ],
-            ),
-          ),
-          Align(
-            alignment: AlignmentDirectional.bottomCenter,
-            child: AppPaddingWidget(
-              child: AppButtonWidget(
-                text: tr(LocaleKeys.core_get_started),
-                onPressed: ()=>Get.toNamed(AppRoutes.onboarding),
-              ).fadeInUp(),
-            ),
-          )
-        ],
+                    ListBody(
+                      children: [
+                        LanguageSelectorCardWidget(
+                          languageName: tr(LocaleKeys.core_ar),
+                          imagePath: AppAssets.arFlagIcon,
+                          isSelected: settingsController.isArabic(),
+                          onTap: () => settingsController.changeLanguage(
+                            context,
+                            AppConstants.arLang,
+                          ),
+                        ),
+                        10.verticalSpace,
+                        LanguageSelectorCardWidget(
+                          languageName: tr(LocaleKeys.core_en),
+                          imagePath: AppAssets.enFlagIcon,
+                          isSelected: settingsController.isEnglish(),
+                          onTap: () => settingsController.changeLanguage(
+                            context,
+                            AppConstants.enLang,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Align(
+                alignment: AlignmentDirectional.bottomCenter,
+                child: AppPaddingWidget(
+                  child: AppButtonWidget(
+                    text: tr(LocaleKeys.core_get_started),
+                    onPressed: () => Get.toNamed(AppRoutes.onboarding),
+                  ).fadeInUp(),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

@@ -39,7 +39,7 @@ class SettingsItemWidget extends StatelessWidget {
       ),
       title: Text(
         tr(titleKey), // <-- استخدام الترجمة
-        style: Get.textTheme.bodyMedium?.copyWith(
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
           color: effectiveColor,
         ),
       ),

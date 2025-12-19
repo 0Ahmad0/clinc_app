@@ -54,7 +54,7 @@ class OnboardingPageWidget extends StatelessWidget {
           // 2. النص العريض (العنوان)
           Text(
             tr(item.title),
-            style: Get.textTheme.headlineMedium, // <-- من الثيم
+            style: Theme.of(context).textTheme.headlineMedium, // <-- من الثيم
             textAlign: TextAlign.center,
           ).slideDown(),
           8.verticalSpace, // مسافة متجاوبة
@@ -62,9 +62,9 @@ class OnboardingPageWidget extends StatelessWidget {
           // 3. النص العادي (الوصف)
           Text(
             tr(item.subtitle),
-            style: Get.textTheme.bodyMedium?.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontSize: 12.sp,
-              color: Get.textTheme.bodyMedium?.color?.withOpacity(.8)
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(.8)
             ), // <-- من الثيم
             textAlign: TextAlign.center,
           ).slideUp(),

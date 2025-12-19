@@ -28,7 +28,7 @@ class AppTextButtonWidget extends StatelessWidget {
       style: TextButton.styleFrom(
         padding: EdgeInsets.zero,
         foregroundColor: effectiveColor, // 3. تطبيق اللون
-        textStyle: Get.textTheme.bodyMedium,
+        textStyle: Theme.of(context).textTheme.bodyMedium,
       ),
       child: isLoading
           ? _buildLoading(effectiveColor) // 4. عرض مؤشر تحميل
