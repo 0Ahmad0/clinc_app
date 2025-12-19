@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class AppColors {
   // --- اللون الأساسي ---
   // static const Color primary = Color(0xFF00A9A9);
-  // static const Color primary = Color(0xFF254EDB);
-  static const Color primary = Color(0xFF015862);
+  static const Color primary = Color(0xFF254EDB);
+  // static const Color primary = Color(0xFF015862);
 
   // --- ألوان الثيم الأبيض (Light) ---
   static const Color lightScaffold = Color(0xFFFAF9F6); // خلفية التطبيق

@@ -23,6 +23,8 @@ abstract class AppRoutes {
   static const notifications = '/notifications';
   static const appointments = '/appointments';
   static const bookAppointments = '/book_appointments';
+  static const myAppointmentDetails = '/my_appointment_details';
+  static const clinicDetails = '/clinic_details';
 
   // --- ميزة البروفايل (Profile) ---
   static const profile = '/profile';

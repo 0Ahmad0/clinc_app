@@ -9,6 +9,10 @@ import 'package:get/get.dart';
 import '../../modules/appointments/presentation/bindings/appointments_binding.dart';
 import '../../modules/appointments/presentation/screens/appointments_screen.dart';
 import '../../modules/book_appointments/presentation/bindings/book_appointment_binding.dart';
+import '../../modules/clinc_details/presentation/bindings/clinic_details_binding.dart';
+import '../../modules/clinc_details/presentation/screens/clinic_details_screen.dart';
+import '../../modules/my_appointment_details/presentation/bindings/my_appointment_details_binding.dart';
+import '../../modules/my_appointment_details/presentation/screens/my_appointment_details_screen.dart';
 import '../../modules/notifications/presentation/bindings/notifications_binding.dart';
 import '../../modules/notifications/presentation/screens/notifications_screen.dart';
 import '../../modules/search/presentation/bindings/search_binding.dart';
@@ -107,6 +111,16 @@ class AppPages {
       name: AppRoutes.bookAppointments,
       page: () => const BookAppointmentScreen(),
       binding: BookAppointmentBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.myAppointmentDetails,
+      page: () => const MyAppointmentDetailsScreen(),
+      binding: MyAppointmentDetailsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.clinicDetails,
+      page: () => const ClinicDetailsScreen(),
+      binding: ClinicDetailsBinding(),
     ),
   ];
 }

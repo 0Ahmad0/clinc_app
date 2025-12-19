@@ -1,5 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:clinc_app_t1/app/core/constants/app_assets.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
@@ -31,30 +34,41 @@ class HomeAppBarWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  tr(LocaleKeys.home_home_text),
-                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                    color: Get.theme.colorScheme.surface,
-                    fontSize: 30.sp,
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: AppCachedImageWidget(
+                imageUrl:
+                    'https://tse1.mm.bing.net/th/id/OIP.lj2NFJ7HSEsDqn7er7BuDAHaHa?cb=ucfimg2&ucfimg=1&w=626&h=626&rs=1&pid=ImgDetMain&o=7&rm=3',
+                width: 48.sp,
+                height: 48.sp,
+                clipRadius: 100.r,
+              ),
+              title: Text(
+                'مرحبا,أهلا بك  🎉',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: AppColors.white,
+                ),
+              ),
+              subtitle: Padding(
+                padding: EdgeInsets.only(top: 6.h),
+                child: Text(
+                  'أحلام',
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontSize: 18.sp,
+                    color: AppColors.white,
                   ),
                 ),
-                Badge.count(
-                  count: 9,
-                  offset: const Offset(5, 5),
-                  child: IconButton(
-                    onPressed: () {
-                      Get.toNamed(AppRoutes.notifications);
-                    },
-                    icon: Icon(
-                      Iconsax.notification5,
-                      color: Get.theme.cardColor,
-                    ),
-                  ),
+              ),
+              trailing: Badge.count(
+                count: 9,
+                offset: const Offset(6, 6),
+                child: IconButton(
+                  onPressed: () {
+                    Get.toNamed(AppRoutes.notifications);
+                  },
+                  icon: Icon(Iconsax.notification, color: Get.theme.cardColor),
                 ),
-              ],
+              ),
             ),
             12.verticalSpace,
             TextField(
@@ -87,8 +101,6 @@ class HomeAppBarWidget extends StatelessWidget {
                 ),
               ),
             ),
-            4.verticalSpace,
-            ThemeSwitchWidget(),
             4.verticalSpace,
           ],
         ),

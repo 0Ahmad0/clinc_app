@@ -1,5 +1,8 @@
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
+import 'package:clinc_app_t1/app/routes/app_routes.dart';
+import 'package:clinc_app_t1/modules/clinc_details/presentation/screens/ClinicDetailsScreen.dart';
+import 'package:clinc_app_t1/modules/search/presentation/widgets/clinic_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -18,35 +21,37 @@ class SearchScreen extends GetView<SearchAndFilterController> {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.all(12.w),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    onChanged: controller.updateSearchQuery,
-                    decoration: InputDecoration(
-                      hintText: 'ابحث عن مستشفى أو عيادة...',
-                      prefixIcon: const Icon(Iconsax.search_normal),
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6.r),
-                        borderSide: BorderSide.none,
+            child: IntrinsicHeight(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      onChanged: controller.updateSearchQuery,
+                      decoration: InputDecoration(
+                        hintText: 'ابحث عن مستشفى أو عيادة...',
+                        prefixIcon: const Icon(Iconsax.search_normal),
+                        filled: true,
+                        fillColor: Colors.grey[100],
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(6.r),
+                          borderSide: BorderSide.none,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                4.horizontalSpace,
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Get.theme.primaryColor.myOpacity(.05),
-                    borderRadius: BorderRadius.circular(6.r),
+                  4.horizontalSpace,
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Get.theme.primaryColor.myOpacity(.05),
+                      borderRadius: BorderRadius.circular(6.r),
+                    ),
+                    child: IconButton(
+                      onPressed: controller.toggleFilterBar,
+                      icon: Icon(Icons.tune, color: Get.theme.primaryColor),
+                    ),
                   ),
-                  child: IconButton(
-                    onPressed: controller.toggleFilterBar,
-                    icon: Icon(Icons.tune, color: Get.theme.primaryColor),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
 
@@ -243,6 +248,14 @@ class HospitalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // تمرير المستشفى لصفحة التفاصيل إذا لزم الأمر
+        Get.to(ClinicAppDetailsScreen(),arguments: hospital);
+        // Get.toNamed(AppRoutes.clinicDetails, arguments: hospital);
+      },
+      child: ClinicCardWidget(hospital: hospital), // استدعاء الكارت الجديد
+    );
     return Card(
       elevation: 0.5,
       shape: RoundedRectangleBorder(
@@ -251,6 +264,8 @@ class HospitalCard extends StatelessWidget {
       ),
       margin: EdgeInsets.only(bottom: 12.h),
       child: ListTile(
+        onTap: ()=>Get.toNamed(AppRoutes.clinicDetails),
+
         contentPadding: EdgeInsets.all(10.w),
         leading: Container(
           padding: EdgeInsets.all(10.w),

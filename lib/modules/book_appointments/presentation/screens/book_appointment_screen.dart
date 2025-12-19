@@ -1,8 +1,11 @@
 import 'package:clinc_app_t1/app/core/constants/app_constants.dart';
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/core/utils/dialogs/app_dialog.dart';
+import 'package:clinc_app_t1/app/core/utils/dialogs/general_dialog.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_text_filed_widget.dart';
 import 'package:clinc_app_t1/app/extension/localization_extension.dart';
+import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/modules/book_appointments/presentation/widgets/available_time_widget.dart';
 import 'package:clinc_app_t1/modules/book_appointments/presentation/widgets/date_time_line_widget.dart';
 import 'package:clinc_app_t1/modules/book_appointments/presentation/controllers/book_appointment_controller.dart';
@@ -13,6 +16,9 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/core/widgets/app_app_bar_widget.dart';
+import '../../../../app/core/widgets/app_button_widget.dart';
+import '../../../../app/routes/app_routes.dart';
+import '../widgets/success_book_appointment_widget.dart';
 
 class BookAppointmentScreen extends GetView<BookAppointmentController> {
   const BookAppointmentScreen({super.key});
@@ -135,16 +141,46 @@ class BookAppointmentScreen extends GetView<BookAppointmentController> {
               AppTextFormFieldWidget(
                 controller: controller.problemController,
                 maxLines: 5,
-                hintText: 'اكتب بوضوح واختصار المشكلة التي تواجهها مع ذكر أي مرض عضوي أو مزمن أو وراثي أو أي معلومة تعتقد انها مهمة',
+                hintText:
+                    'اكتب بوضوح واختصار المشكلة التي تواجهها مع ذكر أي مرض عضوي أو مزمن أو وراثي أو أي معلومة تعتقد انها مهمة',
               ),
             ],
           ),
         ),
       ),
-      // زر "Set Appointment" في أسفل الشاشة
+      bottomNavigationBar: _buildBottomBar(Theme.of(context).primaryColor),
     );
   }
 
+  Widget _buildBottomBar(Color primary) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.myOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
+      child: Builder(
+        builder: (context) {
+          return AppButtonWidget(
+            onPressed: () {
+              AppDialog.showAppDialog(
+                context,
+                widget: SuccessBookAppointmentWidget(),
+                barrierColor: Theme.of(context).primaryColor
+              );
+            },
+            text: 'احجز موعد الآن',
+          );
+        },
+      ),
+    );
+  }
 }
 
 class _GenderButton extends StatelessWidget {

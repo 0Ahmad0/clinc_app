@@ -1,9 +1,9 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:animate_gradient/animate_gradient.dart';
 import 'package:clinc_app_t1/app/core/constants/app_assets.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
+import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/modules/appointments/data/models/order_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,92 +46,96 @@ class MyAppointmentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ZoomIn(
       key: UniqueKey(),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Get.theme.scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(14.r),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.black.myOpacity(.04),
-              offset: Offset(0, 4.sp),
-              blurRadius: 20.sp,
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            ListTile(
-              leading: AppSvgWidget(assetsUrl: AppAssets.appLogoIcon),
-              title: Text(
-                'الطلب رقم',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w600,
-                ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14.r),
+        onTap: ()=>Get.toNamed(AppRoutes.myAppointmentDetails),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Get.theme.scaffoldBackgroundColor,
+            borderRadius: BorderRadius.circular(14.r),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.black.myOpacity(.04),
+                offset: Offset(0, 4.sp),
+                blurRadius: 20.sp,
               ),
-              subtitle: Text(
-                '#AF1250H',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 12.sp),
-              ),
-              trailing: Icon(Icons.keyboard_arrow_left_sharp),
-            ),
-            const DashedDividerWidget(height: .5, dashSpacing: 6),
-            AppPaddingWidget(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text('السعر :', style: Theme.of(context).textTheme.bodyMedium),
-                      2.horizontalSpace,
-                      Text(
-                        '${1000}\$',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.error,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+            ],
+          ),
+          child: Column(
+            children: [
+              ListTile(
+                leading: AppSvgWidget(assetsUrl: AppAssets.appLogoIcon),
+                title: Text(
+                  'الطلب رقم',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600,
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 12.w,
-                      vertical: 4.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: getStatusColor(appointment.status).myOpacity(.1),
-                      borderRadius: BorderRadius.circular(6.r),
-                      border: Border.all(
-                        color: getStatusColor(appointment.status).myOpacity(.8),
-                        width: .5,
-                      ),
-                    ),
-                    child: Row(
+                ),
+                subtitle: Text(
+                  '#AF1250H',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 12.sp),
+                ),
+                trailing: Icon(Icons.keyboard_arrow_left_sharp),
+              ),
+              const DashedDividerWidget(height: .5, dashSpacing: 6),
+              AppPaddingWidget(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        AppSvgWidget(
-                          assetsUrl: getStatusIcon(appointment.status),
-                          width: 14.sp,
-                          height: 14.sp,
-                          color: getStatusColor(appointment.status),
-                        ),
-                        4.horizontalSpace,
+                        Text('السعر :', style: Theme.of(context).textTheme.bodyMedium),
+                        2.horizontalSpace,
                         Text(
-                          getStatusText(appointment.status),
+                          '${1000}\$',
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: getStatusColor(appointment.status),
+                            color: AppColors.error,
                             fontSize: 12.sp,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ],
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 4.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: getStatusColor(appointment.status).myOpacity(.1),
+                        borderRadius: BorderRadius.circular(6.r),
+                        border: Border.all(
+                          color: getStatusColor(appointment.status).myOpacity(.8),
+                          width: .5,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          AppSvgWidget(
+                            assetsUrl: getStatusIcon(appointment.status),
+                            width: 14.sp,
+                            height: 14.sp,
+                            color: getStatusColor(appointment.status),
+                          ),
+                          4.horizontalSpace,
+                          Text(
+                            getStatusText(appointment.status),
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: getStatusColor(appointment.status),
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

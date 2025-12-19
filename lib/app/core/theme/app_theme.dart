@@ -75,9 +75,8 @@ class AppTheme {
 
         iconTheme: IconThemeData(color: AppColors.lightText),
         titleTextStyle: TextStyle(
-          color: AppColors.lightText,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
+          color: AppColors.white,
+          fontSize: 16.sp,
           fontFamily: getFontFamily(languageCode),
         ),
       ),

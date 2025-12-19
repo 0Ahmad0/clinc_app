@@ -44,6 +44,7 @@ abstract class AppAssets {
   static const checkCircleIcon = '$_iconsPath/check_circle.svg';
   static const waitingIcon = '$_iconsPath/waiting.svg';
   static const rejectedCircleIcon = '$_iconsPath/rejected_circle.svg';
+  static const homeBackgroundTopIcon = '$_iconsPath/home_bacground_top.svg';
 
 
   // --- ملفات Lottie (JSON) ---

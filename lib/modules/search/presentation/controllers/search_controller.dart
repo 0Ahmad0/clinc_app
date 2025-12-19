@@ -1,39 +1,27 @@
 import 'package:get/get.dart';
-import '../../data/models/property_model.dart'; // تأكد من أن موديل Hospital يحتوي على الحقول المطلوبة
+import '../../data/models/property_model.dart';
 
 class SearchAndFilterController extends GetxController {
+  // استخدام البيانات الوهمية كبداية
   final _allHospitals = Hospital.mockHospitals.obs;
   var filteredHospitals = <Hospital>[].obs;
 
-  // حالة البحث والتصفية
+  // متغيرات البحث والواجهة
   var currentSearchQuery = ''.obs;
   var isFilterBarVisible = true.obs;
 
-  // متغيرات الفلترة الجديدة
+  // متغيرات الفلترة النشطة
   var selectedRegion = 'الكل'.obs;
-  var selectedGender = 'الكل'.obs;
+  var selectedGender = 'الكل'.obs; // (ملاحظة: الموديل الحالي لا يحتوي على جنس الطبيب، يمكن إضافته لاحقاً)
   var selectedInsurance = 'الكل'.obs;
   var selectedSpecialty = 'الكل'.obs;
   var selectedWorkTime = 'الكل'.obs;
   var sortCriteria = 'priceAsc'.obs;
 
-  // القوائم (البيانات)
-  final List<String> regions = [
-    'الكل',
-    'الرياض',
-    'جدة',
-    'الدمام',
-    'أبها',
-    'تبوك',
-  ];
+  // --- القوائم الثابتة للفلترة ---
+  final List<String> regions = ['الكل', 'الرياض', 'جدة', 'الدمام', 'أبها', 'تبوك'];
   final List<String> genders = ['الكل', 'ذكر', 'أنثى'];
-  final List<String> specialties = [
-    'الكل',
-    'أذن وحنجرة',
-    'عيون',
-    'باطنية',
-    'أسنان',
-  ];
+  final List<String> specialties = ['الكل', 'أسنان', 'جلدية', 'عيون', 'باطنية', 'أذن وحنجرة', 'ليزر'];
   final List<String> workTimes = ['الكل', 'صباحي', 'مسائي'];
   final List<String> insuranceCompanies = [
     'الكل',
@@ -47,19 +35,19 @@ class SearchAndFilterController extends GetxController {
 
   @override
   void onInit() {
-    applyFiltersAndSort();
     super.onInit();
+    // تحميل البيانات الأولية
+    applyFiltersAndSort();
   }
 
-  void toggleFilterBar() =>
-      isFilterBarVisible.value = !isFilterBarVisible.value;
+  void toggleFilterBar() => isFilterBarVisible.value = !isFilterBarVisible.value;
 
   void updateSearchQuery(String query) {
     currentSearchQuery.value = query;
     applyFiltersAndSort();
   }
 
-  // دوال تحديث الفلاتر
+  // دالة واحدة لتحديث أي فلتر
   void updateFilter({
     String? region,
     String? gender,
@@ -74,6 +62,7 @@ class SearchAndFilterController extends GetxController {
     if (specialty != null) selectedSpecialty.value = specialty;
     if (workTime != null) selectedWorkTime.value = workTime;
     if (sort != null) sortCriteria.value = sort;
+
     applyFiltersAndSort();
   }
 
@@ -84,6 +73,7 @@ class SearchAndFilterController extends GetxController {
     selectedSpecialty.value = 'الكل';
     selectedWorkTime.value = 'الكل';
     sortCriteria.value = 'priceAsc';
+    currentSearchQuery.value = '';
 
     applyFiltersAndSort();
   }
@@ -93,48 +83,52 @@ class SearchAndFilterController extends GetxController {
         selectedGender.value != 'الكل' ||
         selectedInsurance.value != 'الكل' ||
         selectedSpecialty.value != 'الكل' ||
-        selectedWorkTime.value != 'الكل' ||
-        sortCriteria.value != 'priceAsc';
+        selectedWorkTime.value != 'الكل';
   }
 
+  // --- المنطق الأساسي للفلترة ---
   void applyFiltersAndSort() {
     List<Hospital> results = _allHospitals.toList();
 
-    // 1. التصفية حسب نص البحث
+    // 1. البحث بالنص (الاسم)
     if (currentSearchQuery.value.isNotEmpty) {
       results = results
-          .where(
-            (h) => h.name.toLowerCase().contains(
-              currentSearchQuery.value.toLowerCase(),
-            ),
-          )
+          .where((h) => h.name.toLowerCase().contains(currentSearchQuery.value.toLowerCase()))
           .toList();
     }
 
-    // 2. التصفية حسب المنطقة
+    // 2. الفلترة حسب المنطقة
     if (selectedRegion.value != 'الكل') {
       results = results.where((h) => h.region == selectedRegion.value).toList();
     }
 
-    // 3. التصفية حسب الجنس (يفترض وجود حقل gender في الموديل)
-    // if (selectedGender.value != 'الكل') {
-    //   results = results.where((h) => h.doctorGender == selectedGender.value).toList();
-    // }
+    // 3. الفلترة حسب التخصص (بحث داخل قائمة التخصصات)
+    if (selectedSpecialty.value != 'الكل') {
+      results = results.where((h) => h.specialties.contains(selectedSpecialty.value)).toList();
+    }
 
-    // 4. التصفية حسب التأمين (يفترض وجود قائمة insurances في الموديل)
-    // if (selectedInsurance.value != 'الكل') {
-    //   results = results.where((h) => h.supportedInsurances.contains(selectedInsurance.value)).toList();
-    // }
+    // 4. الفلترة حسب شركة التأمين (بحث داخل قائمة التأمين)
+    if (selectedInsurance.value != 'الكل') {
+      results = results.where((h) => h.supportedInsurances.contains(selectedInsurance.value)).toList();
+    }
 
-    // 5. الفرز
+    // 5. الفلترة حسب وقت الدوام
+    if (selectedWorkTime.value != 'الكل') {
+      results = results.where((h) => h.workTime == selectedWorkTime.value).toList();
+    }
+
+    // 6. الترتيب (Sorting)
     results.sort((a, b) {
-      if (sortCriteria.value == 'priceAsc')
-        return a.consultationFee.compareTo(b.consultationFee);
-      if (sortCriteria.value == 'priceDesc')
-        return b.consultationFee.compareTo(a.consultationFee);
-      if (sortCriteria.value == 'distanceAsc')
-        return a.distanceKm.compareTo(b.distanceKm);
-      return 0;
+      switch (sortCriteria.value) {
+        case 'priceAsc':
+          return a.consultationFee.compareTo(b.consultationFee); // الأقل سعراً
+        case 'priceDesc':
+          return b.consultationFee.compareTo(a.consultationFee); // الأعلى سعراً
+        case 'distanceAsc':
+          return a.distanceKm.compareTo(b.distanceKm); // الأقرب
+        default:
+          return 0;
+      }
     });
 
     filteredHospitals.value = results;

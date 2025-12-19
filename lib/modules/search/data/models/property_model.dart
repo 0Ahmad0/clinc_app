@@ -1,10 +1,15 @@
-// lib/models/hospital_model.dart
 class Hospital {
   final String id;
   final String name;
-  final String region; // المنطقة (مثل الرياض، جدة)
-  final double consultationFee; // سعر الاستشارة
-  final double distanceKm; // القرب بالكيلومتر
+  final String region;
+  final double consultationFee;
+  final double distanceKm;
+  final String imageUrl;
+  final double rating;
+  final List<String> specialties;      // قائمة التخصصات للفلترة
+  final List<String> supportedInsurances; // قائمة شركات التأمين
+  final String workTime;              // صباحي، مسائي، أو كلاهما
+  final bool isOpen;                  // هل العيادة مفتوحة الآن؟
 
   Hospital({
     required this.id,
@@ -12,18 +17,70 @@ class Hospital {
     required this.region,
     required this.consultationFee,
     required this.distanceKm,
+    required this.imageUrl,
+    required this.rating,
+    required this.specialties,
+    required this.supportedInsurances,
+    required this.workTime,
+    required this.isOpen,
   });
 
-  // بيانات وهمية (Mock Data) للاختبار
-  static List<Hospital> mockHospitals = [
-    Hospital(id: '1', name: 'مستشفى الأمل', region: 'الرياض', consultationFee: 150.0, distanceKm: 5.2),
-    Hospital(id: '2', name: 'مركز الشفاء', region: 'جدة', consultationFee: 200.0, distanceKm: 1.5),
-    Hospital(id: '3', name: 'عيادة النور', region: 'الرياض', consultationFee: 80.0, distanceKm: 12.0),
-    Hospital(id: '4', name: 'المستشفى التخصصي', region: 'الدمام', consultationFee: 350.0, distanceKm: 3.1),
-    Hospital(id: '5', name: 'مركز صحة العائلة', region: 'جدة', consultationFee: 120.0, distanceKm: 8.5),
-    Hospital(id: '6', name: 'مستشفى الحياة', region: 'مكة المكرمة', consultationFee: 180.0, distanceKm: 4.9),
-  ];
+  // خاصية مساعدة للـ UI: هل يقبل أي تأمين؟
+  bool get isInsuranceAccepted => supportedInsurances.isNotEmpty;
 
-  // قائمة المناطق المتاحة (مناطق السعودية)
-  static List<String> availableRegions = ['الكل', 'الرياض', 'جدة', 'الدمام', 'مكة المكرمة'];
+  // --- بيانات وهمية للتجربة (Mock Data) ---
+  static List<Hospital> mockHospitals = [
+    Hospital(
+      id: '1',
+      name: 'مجمع عيادات النخبة',
+      region: 'الرياض',
+      consultationFee: 150,
+      distanceKm: 2.5,
+      imageUrl: 'https://img.saudigerman.com/wp-content/uploads/2023/07/18105443/VML_1038-1536x1024.jpeg',
+      rating: 4.8,
+      specialties: ['أسنان', 'جلدية', 'ليزر'],
+      supportedInsurances: ['بوبا العربية (Bupa Arabia)', 'التعاونية (Tawuniya)'],
+      workTime: 'صباحي',
+      isOpen: true,
+    ),
+    Hospital(
+      id: '2',
+      name: 'مستشفى د. سليمان الحبيب',
+      region: 'جدة',
+      consultationFee: 300,
+      distanceKm: 12.0,
+      imageUrl: 'https://hmg.com/en/MediaCenter/News/PublishingImages/2021/November/HMG-News-2021-11-21-1.jpg',
+      rating: 4.9,
+      specialties: ['باطنية', 'عيون', 'أذن وحنجرة'],
+      supportedInsurances: ['ميدغلف (MEDGULF)'],
+      workTime: 'مسائي',
+      isOpen: false,
+    ),
+    Hospital(
+      id: '3',
+      name: 'عيادات السمو الطبية',
+      region: 'الدمام',
+      consultationFee: 100,
+      distanceKm: 5.5,
+      imageUrl: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
+      rating: 4.2,
+      specialties: ['أسنان', 'عيون'],
+      supportedInsurances: [], // لا يقبل التأمين
+      workTime: 'صباحي',
+      isOpen: true,
+    ),
+    Hospital(
+      id: '4',
+      name: 'مجمع العناية المتكاملة',
+      region: 'الرياض',
+      consultationFee: 200,
+      distanceKm: 8.0,
+      imageUrl: 'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
+      rating: 4.5,
+      specialties: ['باطنية', 'جلدية'],
+      supportedInsurances: ['الراجحي التكافلي (Al Rajhi Takaful)', 'ولاء للتأمين (Walaa)'],
+      workTime: 'مسائي',
+      isOpen: true,
+    ),
+  ];
 }
