@@ -33,8 +33,10 @@ dependencies:
   path_provider:
   easy_date_timeline:
   image_picker:
-#  fluttertoast:
-  readmore: 
+  fluttertoast:
+  readmore:
+  url_launcher:
+
 
 
 dev_dependencies:

@@ -6,15 +6,21 @@ import 'package:clinc_app_t1/modules/profile/views/profile_view.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/bindings/settings_binding.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/screens/settings_screen.dart';
 import 'package:get/get.dart';
+import '../../modules/about_app/presentation/bindings/about_app_binding.dart';
+import '../../modules/about_app/presentation/screens/about_app_screen.dart';
 import '../../modules/appointments/presentation/bindings/appointments_binding.dart';
 import '../../modules/appointments/presentation/screens/appointments_screen.dart';
 import '../../modules/book_appointments/presentation/bindings/book_appointment_binding.dart';
 import '../../modules/clinc_details/presentation/bindings/clinic_details_binding.dart';
 import '../../modules/clinc_details/presentation/screens/clinic_details_screen.dart';
+import '../../modules/contact/presentation/bindings/contact_binding.dart';
+import '../../modules/contact/presentation/screens/contact_screen.dart';
 import '../../modules/my_appointment_details/presentation/bindings/my_appointment_details_binding.dart';
 import '../../modules/my_appointment_details/presentation/screens/my_appointment_details_screen.dart';
 import '../../modules/notifications/presentation/bindings/notifications_binding.dart';
 import '../../modules/notifications/presentation/screens/notifications_screen.dart';
+import '../../modules/privacy_policy/presentation/bindings/privacy_policy_binding.dart';
+import '../../modules/privacy_policy/presentation/screens/privacy_policy_screen.dart';
 import '../../modules/search/presentation/bindings/search_binding.dart';
 import '../../modules/search/presentation/screens/search_screen.dart';
 import '/modules/auth/presentation/screens/signup_screen.dart';
@@ -121,6 +127,21 @@ class AppPages {
       name: AppRoutes.clinicDetails,
       page: () => const ClinicDetailsScreen(),
       binding: ClinicDetailsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.contact,
+      page: () => const ContactScreen(),
+      binding: ContactBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.aboutApp,
+      page: () => const AboutAppScreen(),
+      binding: AboutAppBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.privacyPolicy,
+      page: () => const PrivacyPolicyScreen(),
+      binding: PrivacyPolicyBinding(),
     ),
   ];
 }

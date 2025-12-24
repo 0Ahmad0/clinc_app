@@ -34,7 +34,7 @@ class SettingsScreen extends GetView<SettingsController> {
                 SettingsItemWidget(
                   titleKey: 'حول التطبيق',
                   icon: Iconsax.information,
-                  onTap: () {},
+                  route: AppRoutes.aboutApp,
                 ),
                 SettingsItemWidget(
                   titleKey: 'معلومات الدفع',
@@ -45,17 +45,17 @@ class SettingsScreen extends GetView<SettingsController> {
                 SettingsItemWidget(
                   titleKey: 'الخصوصية',
                   icon: Icons.privacy_tip_outlined,
-                  onTap: () {},
+                  route: AppRoutes.privacyPolicy,
                 ),
                 SettingsItemWidget(
                   titleKey: 'المساعدة والدعم',
                   icon: Iconsax.support,
-                  onTap: () {},
+                  route: AppRoutes.contact,
                 ),
                 SettingsItemWidget(
                   titleKey: 'الاشعارات',
                   icon: Iconsax.notification,
-                  onTap: () => Get.toNamed(AppRoutes.notifications),
+                  route:AppRoutes.notifications,
                 ),
                 SettingsItemWidget(
                   titleKey: 'مشاركة التطبيق',

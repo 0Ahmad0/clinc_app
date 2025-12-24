@@ -45,10 +45,7 @@ class AppAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     }
 
     return AppBar(
-      title: Text(
-        title ?? '',
-
-      ),
+      title: Text(title ?? ''),
       centerTitle: centerTitle,
       automaticallyImplyLeading: false,
       leading: leadingWidget,

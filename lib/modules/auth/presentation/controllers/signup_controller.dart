@@ -14,8 +14,16 @@ class SignupController extends GetxController {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
+  RxBool isAgreed = false.obs;
+
+  void toggleAgreement(bool? value) {
+    if (value != null) {
+      isAgreed.value = value;
+    }
+  }
+
   Future<void> processSignup() async {
-    final isValid = formKey.currentState!.validate();
+    final isValid = formKey.currentState!.validate() && isAgreed.value;
 
     if (!isValid) {
       Get.snackbar("خطأ", "الرجاء التأكد من جميع الحقول المدخلة");
