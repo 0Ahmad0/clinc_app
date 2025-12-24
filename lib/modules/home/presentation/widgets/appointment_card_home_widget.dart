@@ -33,8 +33,8 @@ class AppointmentCardWidget extends StatelessWidget {
           Text(
             'الحجوزات النشطة',
             style: Theme.of(context).textTheme.displayLarge?.copyWith(
-              color: Get.theme.primaryColor,
-              fontSize: 22.sp,
+                fontSize: 18.sp,
+                color: Theme.of(context).primaryColor
             ),
           ),
           10.verticalSpace,

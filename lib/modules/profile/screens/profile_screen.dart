@@ -1,5 +1,6 @@
 import 'package:clinc_app_t1/app/core/constants/app_assets.dart';
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_text_filed_widget.dart';
@@ -24,13 +25,13 @@ class ProfileScreen extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     final authController = Get.find<AuthController>();
     return Scaffold(
+      appBar: AppAppBarWidget(title: 'الملف الشخصي'),
       body: SingleChildScrollView(
         child: AppPaddingWidget(
           child: Form(
             key: controller.profileFormKey,
             child: Column(
               children: [
-                70.verticalSpace,
                 Stack(
                   clipBehavior: Clip.none,
                   children: [
@@ -41,7 +42,7 @@ class ProfileScreen extends GetView<ProfileController> {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.black.withOpacity(.16),
+                            color: AppColors.black.myOpacity(.16),
                             blurRadius: 16.sp,
                             spreadRadius: 0,
                             offset: Offset.zero,
@@ -51,8 +52,9 @@ class ProfileScreen extends GetView<ProfileController> {
                       child: Obx(
                         () => controller.selectedImage.value == null
                             ? CircleAvatar(
-                                backgroundColor: AppColors.success
-                                    .myOpacity(.25),
+                                backgroundColor: AppColors.success.myOpacity(
+                                  .25,
+                                ),
                                 radius: 60.sp,
                                 child: AppSvgWidget(
                                   assetsUrl: AppAssets.doctorIcon,
@@ -61,8 +63,9 @@ class ProfileScreen extends GetView<ProfileController> {
                                 ),
                               )
                             : CircleAvatar(
-                                backgroundColor: AppColors.success
-                                    .withOpacity(.25),
+                                backgroundColor: AppColors.success.withOpacity(
+                                  .25,
+                                ),
                                 radius: 60.sp,
                                 backgroundImage: FileImage(
                                   controller.selectedImage.value!,
@@ -71,7 +74,8 @@ class ProfileScreen extends GetView<ProfileController> {
                       ),
                     ),
                     PositionedDirectional(
-                      bottom: 0,
+                      bottom: 4.h,
+                      start: 4.w,
                       child: CircleAvatar(
                         backgroundColor: AppColors.primary,
                         child: IconButton(
@@ -89,14 +93,16 @@ class ProfileScreen extends GetView<ProfileController> {
                   ],
                 ),
                 20.verticalSpace,
-                Obx(() => AppTextFormFieldWidget(
-                  labelText: authController.labelText,
-                  controller: authController.idTextController,
-                  prefixIcon: Iconsax.personalcard,
-                  keyboardType: TextInputType.number,
-                  hintText: authController.hintText,
-                  validator: authController.validateInput,
-                )),
+                Obx(
+                  () => AppTextFormFieldWidget(
+                    labelText: authController.labelText,
+                    controller: authController.idTextController,
+                    prefixIcon: Iconsax.personalcard,
+                    keyboardType: TextInputType.number,
+                    hintText: authController.hintText,
+                    validator: authController.validateInput,
+                  ),
+                ),
                 8.verticalSpace,
                 AppTextFormFieldWidget(
                   prefixIcon: Iconsax.user,
@@ -135,12 +141,19 @@ class ProfileScreen extends GetView<ProfileController> {
                   onPressed: controller.editProfile,
                 ),
                 10.verticalSpace,
-                AppButtonWidget(
+
+                AppOutlineButtonWidget(
                   text: 'حذف حسابي',
+                  icon: Icon(Iconsax.profile_delete,size: 24.sp,),
                   onPressed: () {
-                    AppDialog.showAppDialog(context,widget: const DeleteAccountDialogWidget());
+                    AppDialog.showAppDialog(
+                      context,
+                      widget: const DeleteAccountDialogWidget(),
+                    );
                   },
-                  backgroundColor: AppColors.error,
+                  borderColor: AppColors.error,
+                  foregroundColor: AppColors.error,
+                  backgroundColor: AppColors.error.myOpacity(.025),
                 ),
               ],
             ),

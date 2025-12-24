@@ -24,13 +24,15 @@ class MainSectionWidget extends GetView<HomeController> {
         children: [
           Text(
             tr(LocaleKeys.home_main_section),
-            style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 22.sp),
+            style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                fontSize: 18.sp,
+              color: Theme.of(context).primaryColor
+            ),
           ),
           20.verticalSpace,
           Wrap(
             spacing: 10.w,
             runSpacing: 10.h,
-            alignment: WrapAlignment.center,
             children: List.generate(
               controller.mainSectionList.length,
               (index) {
@@ -83,6 +85,7 @@ class MainSectionWidget extends GetView<HomeController> {
               },
             ),
           ),
+          50.verticalSpace,
         ],
       ),
     );

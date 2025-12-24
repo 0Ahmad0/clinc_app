@@ -2,7 +2,6 @@ import 'package:clinc_app_t1/modules/book_appointments/presentation/screens/book
 import 'package:clinc_app_t1/modules/navbar/presentation/bindings/navbar_binding.dart';
 import 'package:clinc_app_t1/modules/navbar/presentation/screens/navbar_screen.dart';
 import 'package:clinc_app_t1/modules/profile/bindings/profile_binding.dart';
-import 'package:clinc_app_t1/modules/profile/views/profile_view.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/bindings/settings_binding.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/screens/settings_screen.dart';
 import 'package:get/get.dart';
@@ -19,8 +18,11 @@ import '../../modules/my_appointment_details/presentation/bindings/my_appointmen
 import '../../modules/my_appointment_details/presentation/screens/my_appointment_details_screen.dart';
 import '../../modules/notifications/presentation/bindings/notifications_binding.dart';
 import '../../modules/notifications/presentation/screens/notifications_screen.dart';
+import '../../modules/payment/presentation/bindings/payment_binding.dart';
+import '../../modules/payment/presentation/screens/payment_screen.dart';
 import '../../modules/privacy_policy/presentation/bindings/privacy_policy_binding.dart';
 import '../../modules/privacy_policy/presentation/screens/privacy_policy_screen.dart';
+import '../../modules/profile/screens/profile_screen.dart';
 import '../../modules/search/presentation/bindings/search_binding.dart';
 import '../../modules/search/presentation/screens/search_screen.dart';
 import '/modules/auth/presentation/screens/signup_screen.dart';
@@ -142,6 +144,11 @@ class AppPages {
       name: AppRoutes.privacyPolicy,
       page: () => const PrivacyPolicyScreen(),
       binding: PrivacyPolicyBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.payment,
+      page: () => const PaymentScreen(),
+      binding: PaymentBinding(),
     ),
   ];
 }

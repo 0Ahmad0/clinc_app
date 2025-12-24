@@ -92,6 +92,20 @@ class AppTheme {
           ),
         ),
       ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          backgroundColor: AppColors.transparent,
+          foregroundColor: AppColors.transparent,
+          textStyle: AppTypography.labelLarge(),
+          minimumSize: const Size(double.maxFinite, 54),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.r),
+            side: BorderSide(
+              width: .75
+            )
+          ),
+        ),
+      ),
     );
   }
 

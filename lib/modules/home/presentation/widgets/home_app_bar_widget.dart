@@ -44,7 +44,7 @@ class HomeAppBarWidget extends StatelessWidget {
                 clipRadius: 100.r,
               ),
               title: Text(
-                'مرحبا,أهلا بك  🎉',
+                'مرحبا,أهلا بك',
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: AppColors.white,
                 ),

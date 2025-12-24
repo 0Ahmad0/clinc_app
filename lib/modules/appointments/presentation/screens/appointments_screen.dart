@@ -50,6 +50,9 @@ class AppointmentsScreen extends GetView<AppointmentsController> {
                     .length, // ✅ العدد الصحيح حسب الفلتر
               ),
             ),
+            SliverToBoxAdapter(
+              child: 40.verticalSpace,
+            )
           ],
         ),
       ),

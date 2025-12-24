@@ -39,7 +39,7 @@ class SettingsScreen extends GetView<SettingsController> {
                 SettingsItemWidget(
                   titleKey: 'معلومات الدفع',
                   icon: Iconsax.cards,
-                  onTap: () {},
+                  route: AppRoutes.payment,
                 ),
                 const Divider(thickness: .1),
                 SettingsItemWidget(
@@ -74,6 +74,7 @@ class SettingsScreen extends GetView<SettingsController> {
                     );
                   },
                 ),
+                40.verticalSpace,
               ],
             ),
           ],

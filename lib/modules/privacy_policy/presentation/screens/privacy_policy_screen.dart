@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/modules/privacy_policy/presentation/controllers/privacy_policy_controller.dart';
@@ -15,16 +16,31 @@ class PrivacyPolicyScreen extends GetView<PrivacyPolicyController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          BuildSliverAppBar(),
-          SliverToBoxAdapter(
-            child: AppPaddingWidget(
+      appBar: AppAppBarWidget(
+        title: 'الخصوصية والشروط',
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.bottomCenter,
+              children: [
+                _buildHeroHeader(),
+                Positioned(
+                  bottom: -120.h,
+                  right: 0,
+                  left: 0,
+                  child: AppPaddingWidget(child: _buildIntroCard()),
+                ),
+              ],
+            ),
+            AppPaddingWidget(
               padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  14.verticalSpace,
+                  120.verticalSpace,
                   BuildSectionLableWidget(title: "أولاً: سياسة الخصوصية"),
                   14.verticalSpace,
                   BuildPrivacyListWidget(),
@@ -41,16 +57,119 @@ class PrivacyPolicyScreen extends GetView<PrivacyPolicyController> {
                   14.verticalSpace,
                   _buildFooter(),
                   10.verticalSpace,
-
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+  // 1. Hero Header (الجزء العلوي مع الشعار)
+  Widget _buildHeroHeader() {
+    return Builder(
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 50.h),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Theme.of(context).primaryColor,
+                Theme.of(context).primaryColor.myOpacity(.4),
+              ],
+              end: Alignment.bottomCenter,
+              begin: Alignment.topCenter,
+            ),
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(24.r)),
+          ),
+          child: Builder(
+            builder: (context) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(12.sp),
+                    decoration: BoxDecoration(
+                      color: AppColors.white.myOpacity(0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Iconsax.flash,
+                      size: 40.sp,
+                      color: AppColors.white,
+                    ),
+                  ),
+                  8.verticalSpace,
+                  Text(
+                    "نصون ثقتك",
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.white,
+                    ),
+                  ),
+                  12.verticalSpace,
+                  Text(
+                    "بياناتك في أمان، وحقوقك محفوظة 🛡️",
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontSize: 14.sp,
+                      color: AppColors.white,
+                    ),
+                  ),
+                  10.verticalSpace,
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
 
+  // 2. Introduction Card (بطاقة التعريف والرؤية)
+  Widget _buildIntroCard() {
+    return Builder(
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(25),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(20.r),
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).primaryColor.myOpacity(0.08),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              Text(
+                "خصوصيتك هي أولويتنا القصوى",
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+              10.verticalSpace,
+              Text(
+                'نؤمن بأن الثقة هي أساس الرعاية الصحية. تهدف هذه السياسة إلى توضيح آلية جمع البيانات واستخدامها بمنتهى الشفافية، لضمان تجربة آمنة وموثوقة تتوافق مع الأنظمة المعتمدة.',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontSize: 12.sp,
+                  height: 1.8,
+                  color: AppColors.grey,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
   Widget _buildDisclaimerCard() {
     return Container(
       width: double.infinity,
@@ -159,19 +278,19 @@ class PrivacyPolicyScreen extends GetView<PrivacyPolicyController> {
                 color: Colors.blue.myOpacity(0.1),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.alternate_email_outlined, color: Colors.blue),
+              child: const Icon(
+                Icons.alternate_email_outlined,
+                color: Colors.blue,
+              ),
             ),
             title: const Text("البريد الإلكتروني"),
             subtitle: const Text("support@hajzsaree.com"),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.r),
-
             ),
             onTap: () => controller.launchLink("mailto:support@hajzsaree.com"),
           ),
-          Divider(
-            color: Colors.grey.myOpacity(0.1),
-          ),
+          Divider(color: Colors.grey.myOpacity(0.1)),
           ListTile(
             dense: true,
             leading: Container(
@@ -184,7 +303,6 @@ class PrivacyPolicyScreen extends GetView<PrivacyPolicyController> {
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.r),
-
             ),
             title: const Text("الموقع الإلكتروني"),
             subtitle: const Text("www.hajzsaree.com"),
@@ -201,10 +319,13 @@ class PrivacyPolicyScreen extends GetView<PrivacyPolicyController> {
         return Center(
           child: Text(
             "آخر تحديث: ديسمبر 2025",
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey, fontSize: 12.sp),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Colors.grey,
+              fontSize: 12.sp,
+            ),
           ),
         );
-      }
+      },
     );
   }
 }
@@ -314,6 +435,8 @@ class BuildSliverAppBar extends StatelessWidget {
         ),
         background: Container(
           decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(24.r)),
             gradient: LinearGradient(
               colors: [
                 Theme.of(context).cardColor.myOpacity(.4),

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import '../../../../app/core/widgets/app_padding_widget.dart';
 import '../controllers/contact_controller.dart';
 
 class ContactScreen extends GetView<ContactController> {
@@ -19,19 +20,29 @@ class ContactScreen extends GetView<ContactController> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _buildHeader(),
-            Transform.translate(
-              offset: const Offset(0, -40), // لرفع البطاقات قليلاً فوق الخلفية
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  children: [
-                    _buildContactCards(),
-                    const SizedBox(height: 30),
-                    _buildFormSection(),
-                    const SizedBox(height: 30),
-                  ],
+            Stack(
+              clipBehavior: Clip.none,
+              alignment: AlignmentGeometry.bottomCenter,
+              children: [
+                _buildHeader(),
+                Positioned(
+                  bottom: -120.h,
+                  right: 0,
+                  left: 0,
+                  child: AppPaddingWidget(child: _buildIntroCard()),
                 ),
+              ],
+            ),
+
+            AppPaddingWidget(
+              child: Column(
+                children: [
+                  120.verticalSpace,
+                  _buildContactCards(),
+                  20.verticalSpace,
+                  _buildFormSection(),
+                  20.verticalSpace,
+                ],
               ),
             ),
           ],
@@ -40,11 +51,54 @@ class ContactScreen extends GetView<ContactController> {
     );
   }
 
+  Widget _buildIntroCard() {
+    return Builder(
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(25),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(20.r),
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).primaryColor.myOpacity(0.08),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              Text(
+                "بوابتك الرقمية للصحة",
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+              10.verticalSpace,
+              Text(
+                "حجز سريع هي بوابتك الرقمية الأسهل للوصول إلى نخبة الأطباء في المملكة. جئنا لنختصر لك الانتظار ونرتقي بتجربتك الصحية لتواكب رؤية 2030، حيث تجتمع السرعة، الدقة، والأمان في مكان واحد.",
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontSize: 12.sp,
+                  height: 1.8,
+                  color: AppColors.grey,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildHeader() {
     return Builder(
       builder: (context) {
         return Container(
-          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
+          padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 50.h),
           width: double.infinity,
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -57,17 +111,44 @@ class ContactScreen extends GetView<ContactController> {
             ),
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(24.r)),
           ),
-          child: Column(
-            children: [
-              Text(
-                "نحرص على صحتك وراحتك. إذا كان لديك أي استفسار، ملاحظة، أو واجهت مشكلة في استخدام التطبيق، فريق الدعم جاهز لمساعدتك.",
-                textAlign: TextAlign.center,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: AppColors.white),
-              ),
-              40.verticalSpace,
-            ],
+          child: Builder(
+            builder: (context) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(12.sp),
+                    decoration: BoxDecoration(
+                      color: AppColors.white.myOpacity(0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Iconsax.support,
+                      size: 40.sp,
+                      color: AppColors.white,
+                    ),
+                  ),
+                  8.verticalSpace,
+                  Text(
+                    "دعنا نساعدك",
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.white,
+                    ),
+                  ),
+                  12.verticalSpace,
+                  Text(
+                    "نحن هنا لأجلك ❤️",
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontSize: 14.sp,
+                      color: AppColors.white,
+                    ),
+                  ),
+                  10.verticalSpace,
+                ],
+              );
+            },
           ),
         );
       },
@@ -218,7 +299,7 @@ class ContactScreen extends GetView<ContactController> {
                   AppButtonWidget(
                     text: 'إرسال رسالة',
                     onPressed: controller.submitForm,
-                    icon: Icon(Iconsax.send_2,size: 20.sp,),
+                    icon: Icon(Iconsax.send_2, size: 20.sp),
                   ),
                 ],
               ),

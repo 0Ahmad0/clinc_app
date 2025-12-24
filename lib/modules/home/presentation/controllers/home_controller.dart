@@ -11,7 +11,7 @@ class HomeController extends GetxController {
     MainHomeItemModel(name: LocaleKeys.home_doctors, icon: AppAssets.doctorIcon),
     MainHomeItemModel(name: LocaleKeys.home_clinics, icon: AppAssets.clinicMedicalIcon),
     MainHomeItemModel(name: LocaleKeys.home_labs, icon: AppAssets.labsIcon),
-    MainHomeItemModel(name: LocaleKeys.home_consultations, icon: AppAssets.consultationsIcon),
+    // MainHomeItemModel(name: LocaleKeys.home_consultations, icon: AppAssets.consultationsIcon),
     MainHomeItemModel(name: LocaleKeys.home_insurance, icon: AppAssets.insuranceCardIcon),
     MainHomeItemModel(name: LocaleKeys.home_emergency, icon: AppAssets.emergencyIcon),
   ];

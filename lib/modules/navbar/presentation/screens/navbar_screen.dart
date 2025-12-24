@@ -28,7 +28,7 @@ class NavbarScreen extends GetView<NavbarController> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.large(
         autofocus: true,
-        onPressed: ()=> Get.toNamed(AppRoutes.bookAppointments),
+        onPressed: () => Get.toNamed(AppRoutes.search),
         shape: const StarBorder.polygon(
           pointRounding: .8,
           sides: 5,
@@ -37,39 +37,41 @@ class NavbarScreen extends GetView<NavbarController> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Iconsax.add_square,
-              size: 26.sp,
-            ),
+            Icon(Iconsax.add_square, size: 26.sp),
             6.verticalSpace,
             Text(
               'احجز الآن',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontSize: 9.sp,
-                  color: AppColors.white,
-                  fontWeight: FontWeight.bold),
+                fontSize: 9.sp,
+                color: AppColors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
       ),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterDocked,
-      body: Obx(() => IndexedStack(
-            index: controller.selectedIndex.value,
-            children: const [
-              HomeScreen(),
-              Scaffold(),
-              AppointmentsScreen(),
-              SettingsScreen()
-            ],
-          )),
+      body: Obx(
+        () => IndexedStack(
+          index: controller.selectedIndex.value,
+          children: const [
+            HomeScreen(),
+            Scaffold(),
+            AppointmentsScreen(),
+            SettingsScreen(),
+          ],
+        ),
+      ),
       bottomNavigationBar: Obx(
         () => AnimatedBottomNavigationBar.builder(
+
           itemCount: controller.navItems.length,
           tabBuilder: (index, isActive) {
             final navItem = controller.navItems[index];
-            final String iconPath =
-                isActive ? navItem.filledIconPath : navItem.outlineIconPath;
+            final String iconPath = isActive
+                ? navItem.filledIconPath
+                : navItem.outlineIconPath;
             return NavbarItemWidget(
               isActive: isActive,
               iconPath: iconPath,
