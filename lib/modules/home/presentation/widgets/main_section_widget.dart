@@ -25,65 +25,64 @@ class MainSectionWidget extends GetView<HomeController> {
           Text(
             tr(LocaleKeys.home_main_section),
             style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                fontSize: 18.sp,
-              color: Theme.of(context).primaryColor
+              fontSize: 18.sp,
+              color: Theme.of(context).primaryColor,
             ),
           ),
           20.verticalSpace,
           Wrap(
             spacing: 10.w,
             runSpacing: 10.h,
-            children: List.generate(
-              controller.mainSectionList.length,
-              (index) {
-                final item = controller.mainSectionList[index];
-                return InkWell(
-                  onTap: () {},
-                  borderRadius: BorderRadius.circular(6.r),
-                  child: Container(
-                    width: ((Get.width - 48.w) / 3),
-                    height: ((Get.width - 48.w) / 3),
-                    padding: EdgeInsets.all(10.sp),
-                    decoration: BoxDecoration(
-                      color: Get.theme.colorScheme.surface,
-                      borderRadius: BorderRadius.circular(6.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.grey.myOpacity(.8),
-                          blurRadius: 6.sp
-                        )
-                      ]
-                      // border:
-                      //     Border.all(color: Get.theme.primaryColor, width: .5),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: AppSvgWidget(
-                            assetsUrl: item.icon,
-                            color: Get.theme.primaryColor,
-                            width: 26.w,
-                            height: 26.w,
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            tr(item.name),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontSize: 12.sp
-                            ),
-                          ),
-                        ),
-                      ],
+            children: List.generate(controller.mainSectionList.length, (index) {
+              final item = controller.mainSectionList[index];
+              return InkWell(
+                onTap: () {},
+                borderRadius: BorderRadius.circular(6.r),
+                child: Container(
+                  width: ((Get.width - 48.w) / 3),
+                  height: ((Get.width - 48.w) / 3),
+                  padding: EdgeInsets.all(10.sp),
+                  decoration: BoxDecoration(
+                    color: AppColors.grey.myOpacity(.1),
+                    borderRadius: BorderRadius.circular(6.r),
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //     color: AppColors.grey.myOpacity(.25),
+                    //     blurRadius: 12.sp,
+                    //   ),
+                    // ],
+                    border: Border.all(
+                      color: AppColors.grey.myOpacity(.7),
+                      width: .5,
                     ),
                   ),
-                );
-              },
-            ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: AppSvgWidget(
+                          assetsUrl: item.icon,
+                          color: Get.theme.primaryColor,
+                          width: 26.w,
+                          height: 26.w,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          tr(item.name),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.copyWith(fontSize: 12.sp),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
           ),
           50.verticalSpace,
         ],

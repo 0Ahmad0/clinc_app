@@ -21,7 +21,7 @@ class NotificationsScreen extends GetView<NotificationsController> {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.done_all, color: Theme.of(context).primaryColor),
+            icon: Icon(Icons.done_all, color: Theme.of(context).cardColor),
           ),
         ],
       ),
