@@ -13,9 +13,9 @@ class NavbarController extends GetxController {
       filledIconPath: AppAssets.fillHomeIcon,
     ),
     NavItem(
-      label: LocaleKeys.navbar_medical_file_text,
-      outlineIconPath: AppAssets.medicalFileOutlineIcon,
-      filledIconPath: AppAssets.medicalFileFilledIcon,
+      label: LocaleKeys.navbar_doctors_text,
+      outlineIconPath: AppAssets.outlineDoctorIcon,
+      filledIconPath: AppAssets.fillDoctorIcon,
     ),
     NavItem(
       label: LocaleKeys.navbar_appointments_text,

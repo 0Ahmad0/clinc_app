@@ -6,6 +6,7 @@ import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/modules/appointments/presentation/screens/appointments_screen.dart';
+import 'package:clinc_app_t1/modules/doctors/presentation/screens/doctors_screen.dart';
 import 'package:clinc_app_t1/modules/home/presentation/screens/home_screen.dart';
 import 'package:clinc_app_t1/modules/navbar/data/models/nav_item_model.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/screens/settings_screen.dart';
@@ -26,8 +27,8 @@ class NavbarScreen extends GetView<NavbarController> {
     final activeColor = Get.theme.primaryColor;
     final inactiveColor = Get.theme.disabledColor;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton.large(
-        autofocus: true,
         onPressed: () => Get.toNamed(AppRoutes.search),
         shape: const StarBorder.polygon(
           pointRounding: .8,
@@ -57,7 +58,7 @@ class NavbarScreen extends GetView<NavbarController> {
           index: controller.selectedIndex.value,
           children: const [
             HomeScreen(),
-            Scaffold(),
+            DoctorsScreen(),
             AppointmentsScreen(),
             SettingsScreen(),
           ],

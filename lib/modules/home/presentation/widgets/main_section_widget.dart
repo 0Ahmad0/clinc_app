@@ -35,6 +35,7 @@ class MainSectionWidget extends GetView<HomeController> {
             runSpacing: 10.h,
             children: List.generate(controller.mainSectionList.length, (index) {
               final item = controller.mainSectionList[index];
+              final isChatBot = index == controller.mainSectionList.length - 1;
               return InkWell(
                 onTap: () {},
                 borderRadius: BorderRadius.circular(6.r),
@@ -43,7 +44,9 @@ class MainSectionWidget extends GetView<HomeController> {
                   height: ((Get.width - 48.w) / 3),
                   padding: EdgeInsets.all(10.sp),
                   decoration: BoxDecoration(
-                    color: AppColors.grey.myOpacity(.1),
+                    color: isChatBot
+                        ? Theme.of(context).primaryColor
+                        : AppColors.grey.myOpacity(.1),
                     borderRadius: BorderRadius.circular(6.r),
                     // boxShadow: [
                     //   BoxShadow(
@@ -52,7 +55,9 @@ class MainSectionWidget extends GetView<HomeController> {
                     //   ),
                     // ],
                     border: Border.all(
-                      color: AppColors.grey.myOpacity(.7),
+                      color: isChatBot
+                          ? Theme.of(context).primaryColor.myOpacity(.7)
+                          : AppColors.grey.myOpacity(.7),
                       width: .5,
                     ),
                   ),
@@ -63,7 +68,9 @@ class MainSectionWidget extends GetView<HomeController> {
                         flex: 2,
                         child: AppSvgWidget(
                           assetsUrl: item.icon,
-                          color: Get.theme.primaryColor,
+                          color: isChatBot
+                              ? AppColors.white
+                              : Theme.of(context).primaryColor,
                           width: 26.w,
                           height: 26.w,
                         ),
@@ -75,7 +82,11 @@ class MainSectionWidget extends GetView<HomeController> {
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(
                             context,
-                          ).textTheme.bodyMedium?.copyWith(fontSize: 12.sp),
+                          ).textTheme.bodyMedium?.copyWith(fontSize: 12.sp,
+                            color: isChatBot
+                                ? AppColors.white
+                                : null,
+                          ),
                         ),
                       ),
                     ],

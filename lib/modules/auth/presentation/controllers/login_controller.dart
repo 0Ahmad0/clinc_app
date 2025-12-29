@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 class LoginController extends GetxController {
 
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController usernameOrEmail = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
 
@@ -37,6 +38,7 @@ class LoginController extends GetxController {
   @override
   void onClose() {
     passwordController.dispose();
+    usernameOrEmail.dispose();
     super.onClose();
   }
 }

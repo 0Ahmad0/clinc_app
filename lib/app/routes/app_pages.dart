@@ -10,10 +10,18 @@ import '../../modules/about_app/presentation/screens/about_app_screen.dart';
 import '../../modules/appointments/presentation/bindings/appointments_binding.dart';
 import '../../modules/appointments/presentation/screens/appointments_screen.dart';
 import '../../modules/book_appointments/presentation/bindings/book_appointment_binding.dart';
+import '../../modules/chatbot/presentation/bindings/chatbot_binding.dart';
+import '../../modules/chatbot/presentation/screens/chatbot_screen.dart';
 import '../../modules/clinc_details/presentation/bindings/clinic_details_binding.dart';
 import '../../modules/clinc_details/presentation/screens/clinic_details_screen.dart';
 import '../../modules/contact/presentation/bindings/contact_binding.dart';
 import '../../modules/contact/presentation/screens/contact_screen.dart';
+import '../../modules/doctors/presentation/bindings/doctors_binding.dart';
+import '../../modules/doctors/presentation/screens/doctors_screen.dart';
+import '../../modules/insurance/presentation/bindings/insurance_binding.dart';
+import '../../modules/insurance/presentation/screens/insurance_screen.dart';
+import '../../modules/labs/presentation/bindings/labs_binding.dart';
+import '../../modules/labs/presentation/screens/labs_screen.dart';
 import '../../modules/my_appointment_details/presentation/bindings/my_appointment_details_binding.dart';
 import '../../modules/my_appointment_details/presentation/screens/my_appointment_details_screen.dart';
 import '../../modules/notifications/presentation/bindings/notifications_binding.dart';
@@ -149,6 +157,26 @@ class AppPages {
       name: AppRoutes.payment,
       page: () => const PaymentScreen(),
       binding: PaymentBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.doctors,
+      page: () => const DoctorsScreen(),
+      binding: DoctorsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.chatbot,
+      page: () => const ChatbotScreen(),
+      binding: ChatbotBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.labs,
+      page: () => const LabsScreen(),
+      binding: LabsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.insurance,
+      page: () => const InsuranceScreen(),
+      binding: InsuranceBinding(),
     ),
   ];
 }

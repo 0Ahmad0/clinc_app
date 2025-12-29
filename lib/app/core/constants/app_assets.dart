@@ -28,6 +28,8 @@ abstract class AppAssets {
   static const String outlineSettingIcon = '$_iconsPath/outline_setting_icon.svg';
   static const String fillCalendarIcon = '$_iconsPath/fill_calendar_icon.svg';
   static const String outlineCalendarIcon = '$_iconsPath/outline_calendar_icon.svg';
+  static const String fillDoctorIcon = '$_iconsPath/fill_doctor_icon.svg';
+  static const String outlineDoctorIcon = '$_iconsPath/outline_doctor_icon.svg';
   static const String medicalFileFilledIcon = '$_iconsPath/medical_file_filled.svg';
   static const String medicalFileOutlineIcon = '$_iconsPath/medical_file_outline.svg';
   static const String doctorIcon = '$_iconsPath/doctor_icon.svg';
@@ -45,6 +47,7 @@ abstract class AppAssets {
   static const waitingIcon = '$_iconsPath/waiting.svg';
   static const rejectedCircleIcon = '$_iconsPath/rejected_circle.svg';
   static const homeBackgroundTopIcon = '$_iconsPath/home_bacground_top.svg';
+  static const chatBotIcon = '$_iconsPath/chat_bot_icon.svg';
 
 
   // --- ملفات Lottie (JSON) ---

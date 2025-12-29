@@ -23,6 +23,10 @@ abstract class AppRoutes {
   static const bookAppointments = '/book_appointments';
   static const myAppointmentDetails = '/my_appointment_details';
   static const clinicDetails = '/clinic_details';
+  static const doctors = '/doctors';
+  static const chatbot = '/chatbot';
+  static const labs = '/labs';
+  static const insurance = '/insurance';
 
 
   // --- ميزة البروفايل (Profile) ---

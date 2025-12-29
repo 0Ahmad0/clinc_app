@@ -27,7 +27,7 @@ class LoginScreen extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    final authController = Get.find<AuthController>();
+    // final authController = Get.find<AuthController>();
     return AppScaffoldWidget(
       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).primaryColor,
@@ -38,12 +38,11 @@ class LoginScreen extends GetView<LoginController> {
             ContainerShapeWidget(
               child: SingleChildScrollView(
                 child: Form(
-                 key: controller.formKey,
+                  key: controller.formKey,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       40.verticalSpace,
-
 
                       Text(
                         tr(LocaleKeys.login_welcome_back),
@@ -54,46 +53,54 @@ class LoginScreen extends GetView<LoginController> {
                         tr(LocaleKeys.login_description),
                         style: Theme.of(context).textTheme.bodyMedium,
                       ).fadeIn(),
-                      Obx(() => Row(
-                        children: [
-                          Flexible(
-                            child: RadioListTile<UserCategory>(
-                              contentPadding: EdgeInsets.zero,
-                              title: const Text('مواطن'),
-                              value: UserCategory.citizen,
-                              groupValue: authController.selectedCategory.value,
-                              onChanged: authController.changeCategory,
-                            ),
-                          ),
-                          Flexible(
-                            child: RadioListTile<UserCategory>(
-                              contentPadding: EdgeInsets.zero,
-                              title: const Text('مقيم'),
-                              value: UserCategory.resident,
-                              groupValue: authController.selectedCategory.value,
-                              onChanged: authController.changeCategory,
-                            ),
-                          ),
-                          Flexible(
-                            child: RadioListTile<UserCategory>(
-                              contentPadding: EdgeInsets.zero,
-                              title: const Text('زائر'),
-                              value: UserCategory.visitor,
-                              groupValue: authController.selectedCategory.value,
-                              onChanged: authController.changeCategory,
-                            ),
-                          ),
-                        ],
-                      )),
-
-                      Obx(() => AppTextFormFieldWidget(
-                        labelText: authController.labelText,
-                        controller: authController.idTextController,
+                      // Obx(() => Row(
+                      //   children: [
+                      //     Flexible(
+                      //       child: RadioListTile<UserCategory>(
+                      //         contentPadding: EdgeInsets.zero,
+                      //         title: const Text('مواطن'),
+                      //         value: UserCategory.citizen,
+                      //         groupValue: authController.selectedCategory.value,
+                      //         onChanged: authController.changeCategory,
+                      //       ),
+                      //     ),
+                      //     Flexible(
+                      //       child: RadioListTile<UserCategory>(
+                      //         contentPadding: EdgeInsets.zero,
+                      //         title: const Text('مقيم'),
+                      //         value: UserCategory.resident,
+                      //         groupValue: authController.selectedCategory.value,
+                      //         onChanged: authController.changeCategory,
+                      //       ),
+                      //     ),
+                      //     Flexible(
+                      //       child: RadioListTile<UserCategory>(
+                      //         contentPadding: EdgeInsets.zero,
+                      //         title: const Text('زائر'),
+                      //         value: UserCategory.visitor,
+                      //         groupValue: authController.selectedCategory.value,
+                      //         onChanged: authController.changeCategory,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // )),
+                      //
+                      // Obx(() => AppTextFormFieldWidget(
+                      //   labelText: authController.labelText,
+                      //   controller: authController.idTextController,
+                      //   prefixIcon: Iconsax.personalcard,
+                      //   keyboardType: TextInputType.number,
+                      //   hintText: authController.hintText,
+                      //   validator: authController.validateInput,
+                      // )),
+                      14.verticalSpace,
+                      AppTextFormFieldWidget(
                         prefixIcon: Iconsax.personalcard,
-                        keyboardType: TextInputType.number,
-                        hintText: authController.hintText,
-                        validator: authController.validateInput,
-                      )),
+                        controller: controller.usernameOrEmail,
+                        hintText: tr(LocaleKeys.login_email_or_user_name),
+                        labelText: tr(LocaleKeys.login_email_or_user_name),
+                        validator: AppValidator.validateEmailOrUsername,
+                      ).fadeIn(),
 
                       14.verticalSpace,
                       AppTextFormFieldWidget(

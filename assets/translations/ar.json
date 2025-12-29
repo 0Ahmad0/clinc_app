@@ -89,11 +89,13 @@
     "clinics": "العيادات",
     "specialities": "التخصصات",
     "emergency": "الطوارئ",
-    "consultations": "الاستشارات"
+    "consultations": "الاستشارات",
+    "chatbot": "اسالني"
   },
   "navbar":{
     "book_now": "احجز الآن",
     "home_text": "الرئيسية",
+    "doctors_text": "الأطباء",
     "medical_file_text": "ملفي الطبي",
     "appointments_text": "حجوزاتي",
     "settings_text": "الإعدادات"

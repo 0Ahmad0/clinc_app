@@ -105,11 +105,13 @@ class CodegenLoader extends AssetLoader{
     "clinics": "العيادات",
     "specialities": "التخصصات",
     "emergency": "الطوارئ",
-    "consultations": "الاستشارات"
+    "consultations": "الاستشارات",
+    "chatbot": "اسالني"
   },
   "navbar": {
     "book_now": "احجز الآن",
     "home_text": "الرئيسية",
+    "doctors_text": "الأطباء",
     "medical_file_text": "ملفي الطبي",
     "appointments_text": "حجوزاتي",
     "settings_text": "الإعدادات"
@@ -206,12 +208,14 @@ static const Map<String,dynamic> _en = {
     "clinics": "Clinics",
     "specialities": "Specialities",
     "emergency": "Emergency",
-    "consultations": "Consultations"
+    "consultations": "Consultations",
+    "chatbot": "Ask Me"
   },
   "navbar": {
     "book_now": "Book now",
     "home_text": "Home",
     "medical_file_text": "Medical file",
+    "doctors_text": "Doctors",
     "appointments_text": "Appointments",
     "settings_text": "Settings"
   }

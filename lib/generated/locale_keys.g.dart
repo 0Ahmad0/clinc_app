@@ -85,9 +85,11 @@ abstract class  LocaleKeys {
   static const home_specialities = 'home.specialities';
   static const home_emergency = 'home.emergency';
   static const home_consultations = 'home.consultations';
+  static const home_chatbot = 'home.chatbot';
   static const home = 'home';
   static const navbar_book_now = 'navbar.book_now';
   static const navbar_home_text = 'navbar.home_text';
+  static const navbar_doctors_text = 'navbar.doctors_text';
   static const navbar_medical_file_text = 'navbar.medical_file_text';
   static const navbar_appointments_text = 'navbar.appointments_text';
   static const navbar_settings_text = 'navbar.settings_text';

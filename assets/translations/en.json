@@ -90,12 +90,14 @@
     "clinics": "Clinics",
     "specialities": "Specialities",
     "emergency": "Emergency",
-    "consultations": "Consultations"
+    "consultations": "Consultations",
+    "chatbot": "Ask Me"
   },
   "navbar":{
     "book_now": "Book now",
     "home_text": "Home",
     "medical_file_text": "Medical file",
+    "doctors_text": "Doctors",
     "appointments_text": "Appointments",
     "settings_text": "Settings"
   }
