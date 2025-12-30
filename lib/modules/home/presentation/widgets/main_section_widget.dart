@@ -37,7 +37,7 @@ class MainSectionWidget extends GetView<HomeController> {
               final item = controller.mainSectionList[index];
               final isChatBot = index == controller.mainSectionList.length - 1;
               return InkWell(
-                onTap: () {},
+                onTap: ()=> Get.toNamed(item.route),
                 borderRadius: BorderRadius.circular(6.r),
                 child: Container(
                   width: ((Get.width - 48.w) / 3),

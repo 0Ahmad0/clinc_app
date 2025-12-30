@@ -24,7 +24,7 @@ class HomeController extends GetxController {
     MainHomeItemModel(
       name: LocaleKeys.home_insurance,
       icon: AppAssets.insuranceCardIcon,
-      route: AppRoutes.search,
+      route: AppRoutes.insurance,
     ),
     MainHomeItemModel(
       name: LocaleKeys.home_chatbot,

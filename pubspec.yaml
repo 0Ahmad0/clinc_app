@@ -36,7 +36,7 @@ dependencies:
   fluttertoast:
   readmore:
   url_launcher:
-
+  chat_bubbles:
 
 
 dev_dependencies:
