@@ -1,11 +1,17 @@
 import 'dart:io';
 
 import 'package:chat_bubbles/bubbles/bubble_normal_image.dart';
+import 'package:chat_bubbles/bubbles/bubble_special_one.dart';
 import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
+import 'package:chat_bubbles/bubbles/bubble_special_two.dart';
+import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_text_filed_widget.dart';
+import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/modules/chatbot/presentation/controllers/chatbot_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 import '../../data/models/chat_message_model.dart';
 
@@ -15,7 +21,6 @@ class ChatbotScreen extends GetView<ChatbotController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FB), // خلفية رمادية فاتحة جداً
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -45,7 +50,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
                 ),
               ],
             ),
-            SizedBox(width: 10.w),
+            10.horizontalSpace,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -78,7 +83,6 @@ class ChatbotScreen extends GetView<ChatbotController> {
       ),
       body: Column(
         children: [
-          // 1. قائمة الرسائل
           Expanded(
             child: Obx(
               () => ListView.builder(
@@ -118,7 +122,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
 
           // 3. الردود السريعة (Quick Replies)
           Container(
-            height: 50.h,
+            height: 40.h,
             margin: EdgeInsets.only(bottom: 5.h),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -129,25 +133,25 @@ class ChatbotScreen extends GetView<ChatbotController> {
                   onTap: () =>
                       controller.sendMessage(controller.quickReplies[index]),
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 5.w),
+                    margin: EdgeInsets.symmetric(horizontal: 4.w),
                     padding: EdgeInsets.symmetric(
-                      horizontal: 15.w,
+                      horizontal: 12.w,
                       vertical: 8.h,
                     ),
                     decoration: BoxDecoration(
-                      color: Get.theme.primaryColor.withOpacity(0.1),
+                      color: Get.theme.primaryColor.myOpacity(0.1),
                       borderRadius: BorderRadius.circular(20.r),
                       border: Border.all(
-                        color: Get.theme.primaryColor.withOpacity(0.3),
+                        color: Get.theme.primaryColor.myOpacity(0.3),
                       ),
                     ),
                     child: Center(
                       child: Text(
                         controller.quickReplies[index],
-                        style: TextStyle(
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Get.theme.primaryColor,
+                          fontSize: 10.sp,
                           fontWeight: FontWeight.bold,
-                          fontSize: 12.sp,
                         ),
                       ),
                     ),
@@ -166,13 +170,15 @@ class ChatbotScreen extends GetView<ChatbotController> {
 
   // ويدجت الفقاعة (باستخدام مكتبة chat_bubbles)
   Widget _buildMessageBubble(BuildContext context, ChatMessage msg) {
-    // إذا كانت صورة
     if (msg.isImage) {
       return BubbleNormalImage(
         id: 'id001',
         image: _buildImageWidget(msg.imagePath!),
         color: Colors.transparent,
         tail: true,
+        seen: false,
+        sent: false,
+        delivered: true,
         isSender: msg.isSender,
       );
     }
@@ -182,80 +188,52 @@ class ChatbotScreen extends GetView<ChatbotController> {
       text: msg.text,
       color: msg.isSender ? Get.theme.primaryColor : Colors.white,
       tail: true,
+      seen: false,
+      sent: false,
+      delivered: true,
       textStyle: TextStyle(
         color: msg.isSender ? Colors.white : Colors.black87,
-        fontSize: 16,
+        fontSize: 12.sp,
+        height: 1.8,
       ),
       isSender: msg.isSender,
     );
   }
 
   Widget _buildImageWidget(String path) {
-    // هنا نعرض الصورة، إذا كان المسار ملف محلي نعرضه
-    return Image.file(File(path), width: 200, height: 200, fit: BoxFit.cover);
+    return Image.file(
+      File(path),
+      width: 300.w,
+      height: 300.h,
+      fit: BoxFit.cover,
+    );
   }
 
-  // منطقة الإدخال السفلية
   Widget _buildInputArea(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
+      padding: EdgeInsets.symmetric(vertical: 10.h),
+      decoration: BoxDecoration(color: AppColors.white),
+      child: Row(
+        children: [
+          IconButton(
+            icon: Icon(Iconsax.send_2, color: Get.theme.primaryColor),
+            onPressed: () =>
+                controller.sendMessage(controller.textController.text),
+          ),
+
+          Expanded(
+            child: AppTextFormFieldWidget(
+              controller: controller.textController,
+              hintText: "اكتب استشارتك الطبية...",
+              onFieldSubmitted: controller.sendMessage,
+            ),
+          ),
+          4.horizontalSpace,
+          IconButton(
+            onPressed: controller.sendImage,
+            icon: Icon(Icons.camera_alt_rounded, color: Get.theme.primaryColor),
           ),
         ],
-      ),
-      child: SafeArea(
-        child: Row(
-          children: [
-            // زر الصور
-            IconButton(
-              onPressed: controller.sendImage,
-              icon: Icon(
-                Icons.camera_alt_rounded,
-                color: Get.theme.primaryColor,
-              ),
-            ),
-            // حقل النص
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF0F2F5),
-                  borderRadius: BorderRadius.circular(25.r),
-                ),
-                child: TextField(
-                  controller: controller.textController,
-                  decoration: const InputDecoration(
-                    hintText: "اكتب استشارتك الطبية...",
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(vertical: 10),
-                  ),
-                  onSubmitted: (val) => controller.sendMessage(val),
-                ),
-              ),
-            ),
-            SizedBox(width: 8.w),
-            // زر الإرسال
-            CircleAvatar(
-              backgroundColor: Get.theme.primaryColor,
-              radius: 22.r,
-              child: IconButton(
-                icon: const Icon(
-                  Icons.send_rounded,
-                  color: Colors.white,
-                  size: 20,
-                ),
-                onPressed: () =>
-                    controller.sendMessage(controller.textController.text),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

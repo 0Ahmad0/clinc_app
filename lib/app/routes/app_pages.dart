@@ -9,6 +9,8 @@ import '../../modules/about_app/presentation/bindings/about_app_binding.dart';
 import '../../modules/about_app/presentation/screens/about_app_screen.dart';
 import '../../modules/appointments/presentation/bindings/appointments_binding.dart';
 import '../../modules/appointments/presentation/screens/appointments_screen.dart';
+import '../../modules/auth/presentation/bindings/change_password_binding.dart';
+import '../../modules/auth/presentation/screens/change_password_screen.dart';
 import '../../modules/book_appointments/presentation/bindings/book_appointment_binding.dart';
 import '../../modules/chatbot/presentation/bindings/chatbot_binding.dart';
 import '../../modules/chatbot/presentation/screens/chatbot_screen.dart';
@@ -85,6 +87,11 @@ class AppPages {
       name: AppRoutes.forgetPassword,
       page: () => const ForgetPasswordScreen(),
       binding: ForgetPasswordBinding(), // <-- يستخدم ForgetPasswordBinding
+    ),
+    GetPage(
+      name: AppRoutes.changePassword,
+      page: () => const ChangePasswordScreen(),
+      binding: ChangePasswordBinding(), // <-- يستخدم ForgetPasswordBinding
     ),
 
     GetPage(

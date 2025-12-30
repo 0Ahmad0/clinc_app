@@ -1,3 +1,8 @@
+import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_scaffold_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_text_button_widget.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart'; // تأكد من المسار
 import 'package:clinc_app_t1/modules/labs/presentation/controllers/labs_controller.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../app/core/constants/app_constants.dart';
 import '../../data/models/lab_test_model.dart';
 
 class LabsScreen extends GetView<LabsController> {
@@ -12,65 +18,50 @@ class LabsScreen extends GetView<LabsController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FD),
-      appBar: AppBar(
-        title: const Text("المختبرات والتحاليل"),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+    return AppScaffoldWidget(
+      appBar: AppAppBarWidget(title: 'المختبرات والتحاليل'),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. شريط البحث
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'ابحث عن تحليل (مثل: فيتامين د)',
-                  prefixIcon: const Icon(Iconsax.search_normal),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                    borderSide: BorderSide.none,
-                  ),
+            20.verticalSpace,
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'ابحث عن تحليل (مثل: فيتامين د)',
+                prefixIcon: const Icon(Iconsax.search_normal),
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                  borderSide: BorderSide.none,
                 ),
               ),
             ),
             20.verticalSpace,
-
-            // 2. قسم الباقات المميزة (أهم شي للبيع)
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "باقات الفحص الشامل ⭐",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "باقات الفحص الشامل ⭐",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Text(
-                    "عرض الكل",
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: Get.theme.primaryColor,
-                    ),
+                ),
+                Text(
+                  "عرض الكل",
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: Get.theme.primaryColor,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             12.verticalSpace,
             SizedBox(
               height: 160.h,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 itemCount: controller.allTests.where((t) => t.isPackage).length,
                 itemBuilder: (context, index) {
                   final package = controller.allTests
@@ -83,12 +74,10 @@ class LabsScreen extends GetView<LabsController> {
 
             24.verticalSpace,
 
-            // 3. التصنيفات (Chips)
             SizedBox(
               height: 40.h,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 itemCount: controller.categories.length,
                 itemBuilder: (context, index) {
                   return Obx(() {
@@ -96,17 +85,18 @@ class LabsScreen extends GetView<LabsController> {
                     final isSelected = controller.selectedCategory.value == cat;
                     return GestureDetector(
                       onTap: () => controller.changeCategory(cat),
-                      child: Container(
-                        margin: EdgeInsets.only(left: 10.w),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 16.w,
-                          vertical: 8.h,
+                      child: AnimatedContainer(
+                        duration: const Duration(
+                          milliseconds: AppConstants.defaultDuration,
                         ),
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.symmetric(horizontal: 4.w),
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
                         decoration: BoxDecoration(
                           color: isSelected
                               ? Get.theme.primaryColor
                               : Colors.white,
-                          borderRadius: BorderRadius.circular(20.r),
+                          borderRadius: BorderRadius.circular(12.r),
                           border: Border.all(
                             color: isSelected
                                 ? Get.theme.primaryColor
@@ -117,8 +107,8 @@ class LabsScreen extends GetView<LabsController> {
                           cat,
                           style: TextStyle(
                             color: isSelected ? Colors.white : Colors.black87,
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.bold,
+                            fontSize: isSelected ? 12.sp : 10.sp,
+                            fontWeight: isSelected ? FontWeight.bold : null,
                           ),
                         ),
                       ),
@@ -131,20 +121,17 @@ class LabsScreen extends GetView<LabsController> {
             20.verticalSpace,
 
             // 4. قائمة التحاليل حسب التصنيف
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Obx(() {
-                final list = controller.filteredTests;
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: list.length,
-                  itemBuilder: (context, index) {
-                    return _buildLabTestItem(context, list[index]);
-                  },
-                );
-              }),
-            ),
+            Obx(() {
+              final list = controller.filteredTests;
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: list.length,
+                itemBuilder: (context, index) {
+                  return _buildLabTestItem(context, list[index]);
+                },
+              );
+            }),
             20.verticalSpace,
           ],
         ),
@@ -275,12 +262,12 @@ class LabsScreen extends GetView<LabsController> {
             width: 50.w,
             decoration: BoxDecoration(
               color: test.isPackage
-                  ? Colors.purple.withOpacity(0.1)
-                  : Colors.teal.withOpacity(0.1),
+                  ? Colors.purple.myOpacity(0.1)
+                  : Colors.teal.myOpacity(0.1),
               borderRadius: BorderRadius.circular(10.r),
             ),
             child: Icon(
-              test.isPackage ? Iconsax.box : Iconsax.flag,
+              test.isPackage ? Iconsax.box : Icons.medication_outlined,
               color: test.isPackage ? Colors.purple : Colors.teal,
             ),
           ),
@@ -315,20 +302,21 @@ class LabsScreen extends GetView<LabsController> {
               ],
             ),
           ),
-          // زر الحجز
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Get.theme.primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.r),
+          2.horizontalSpace,
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 20.w,
+                vertical: 10.h
               ),
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 0),
-              minimumSize: Size(0, 32.h),
-            ),
-            child: Text(
-              "حجز",
-              style: TextStyle(fontSize: 12.sp, color: Colors.white),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadiusGeometry.circular(4.r),
+              ),
+              child: Text('حجز',style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: AppColors.white,
+              ),),
             ),
           ),
         ],

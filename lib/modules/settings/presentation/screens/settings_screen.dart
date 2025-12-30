@@ -5,8 +5,10 @@ import 'package:clinc_app_t1/app/core/utils/share_helper.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/widgets/image_details_section_widget.dart';
+import 'package:clinc_app_t1/modules/settings/presentation/widgets/language_toggle_widget.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/widgets/settings_group_widget.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/widgets/settings_item_widget.dart';
+import 'package:clinc_app_t1/modules/settings/presentation/widgets/theme_toggle_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -29,7 +31,12 @@ class SettingsScreen extends GetView<SettingsController> {
                 SettingsItemWidget(
                   titleKey: 'الوضع',
                   icon: Iconsax.sun,
-                  onTap: () {},
+                  trailing: ThemeToggleWidget(),
+                ),
+                SettingsItemWidget(
+                  titleKey: 'اللغة',
+                  icon: Iconsax.language_square,
+                  trailing: LanguageToggleWidget(),
                 ),
                 SettingsItemWidget(
                   titleKey: 'حول التطبيق',

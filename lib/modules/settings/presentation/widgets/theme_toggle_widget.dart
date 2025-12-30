@@ -10,6 +10,34 @@ class ThemeToggleWidget extends GetView<SettingsController> {
 
   @override
   Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          'الوضع النهاري',
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        4.horizontalSpace,
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 400),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return RotationTransition(
+              turns: Tween<double>(begin: 0.5, end: 1.0).animate(animation),
+              child: ScaleTransition(
+                scale: animation,
+                child: child,
+              ),
+            );
+          },
+          child: Icon(
+            // key: ValueKey<bool>(isDark), // <-- مهم جداً
+            Iconsax.moon,
+            color: Get.theme.primaryColor, // لون مميز
+          ),
+        ),
+      ],
+    );
+
     return Obx(() {
       // bool isDark;
       // if (controller.themeMode.value == ThemeMode.system) {

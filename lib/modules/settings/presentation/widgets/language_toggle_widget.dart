@@ -8,6 +8,21 @@ class LanguageToggleWidget extends GetView<SettingsController> {
 
   @override
   Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          'العربية',
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        4.horizontalSpace,
+        Icon(
+          Icons.language,
+          color: Get.theme.primaryColor,
+        ),
+      ],
+    );
+
     return Obx(() {
 
       // final String currentLangCode = controller.locale.value.languageCode;

@@ -13,6 +13,7 @@ abstract class AppRoutes {
   static const login = '/login';
   static const signup = '/signup';
   static const forgetPassword = '/forgot-password';
+  static const changePassword = '/change-password';
 
   // --- ميزة الرئيسية (Home) ---
   static const navbar = '/navbar';

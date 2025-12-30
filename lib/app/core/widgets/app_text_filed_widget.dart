@@ -14,7 +14,7 @@ class AppTextFormFieldWidget extends StatefulWidget {
   final TextInputAction? textInputAction;
   final FocusNode? currentFocusNode;
   final FocusNode? nextFocusNode;
-  final VoidCallback? onFieldSubmitted;
+  final Function(String)? onFieldSubmitted;
   final IconData? prefixIcon;
   final int maxLines;
   final bool enabled;
@@ -82,7 +82,7 @@ class _AppTextFormFieldWidgetState extends State<AppTextFormFieldWidget> {
             widget.currentFocusNode != null) {
           widget.currentFocusNode!.unfocus();
         }
-        widget.onFieldSubmitted?.call();
+        widget.onFieldSubmitted?.call(value);
       },
       decoration: InputDecoration(
         errorMaxLines: 2,

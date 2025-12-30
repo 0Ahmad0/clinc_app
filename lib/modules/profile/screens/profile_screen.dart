@@ -15,6 +15,8 @@ import 'package:iconsax/iconsax.dart';
 import '../../../app/core/utils/dialogs/app_bottom_sheet.dart';
 import '../../../app/core/utils/dialogs/app_dialog.dart';
 import '../../../app/core/widgets/app_button_widget.dart';
+import '../../../app/core/widgets/app_text_button_widget.dart';
+import '../../../app/routes/app_routes.dart';
 import '../widgets/bottom_sheet_profile_widget.dart';
 import '../widgets/delete_account_dialog_widget.dart';
 
@@ -23,7 +25,7 @@ class ProfileScreen extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-    final authController = Get.find<AuthController>();
+    // final authController = Get.find<AuthController>();
     return Scaffold(
       appBar: AppAppBarWidget(title: 'الملف الشخصي'),
       body: SingleChildScrollView(
@@ -93,16 +95,16 @@ class ProfileScreen extends GetView<ProfileController> {
                   ],
                 ),
                 20.verticalSpace,
-                Obx(
-                  () => AppTextFormFieldWidget(
-                    labelText: authController.labelText,
-                    controller: authController.idTextController,
-                    prefixIcon: Iconsax.personalcard,
-                    keyboardType: TextInputType.number,
-                    hintText: authController.hintText,
-                    validator: authController.validateInput,
-                  ),
-                ),
+                // Obx(
+                //   () => AppTextFormFieldWidget(
+                //     labelText: authController.labelText,
+                //     controller: authController.idTextController,
+                //     prefixIcon: Iconsax.personalcard,
+                //     keyboardType: TextInputType.number,
+                //     hintText: authController.hintText,
+                //     validator: authController.validateInput,
+                //   ),
+                // ),
                 8.verticalSpace,
                 AppTextFormFieldWidget(
                   prefixIcon: Iconsax.user,
@@ -135,7 +137,13 @@ class ProfileScreen extends GetView<ProfileController> {
                   keyboardType: TextInputType.phone,
                   validator: controller.validatePhone,
                 ),
-                16.verticalSpace,
+                6.verticalSpace,
+                AppTextButtonWidget(
+                  onPressed: () =>
+                      Get.toNamed(AppRoutes.changePassword),
+                  text: 'تغيير كلمة المرور؟',
+                ),
+                6.verticalSpace,
                 AppButtonWidget(
                   text: 'حفظ التغييرات',
                   onPressed: controller.editProfile,
