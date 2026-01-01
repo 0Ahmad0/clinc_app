@@ -17,8 +17,9 @@ class DoctorsScreen extends GetView<DoctorsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // استخدام المفتاح الهرمي للعنوان
-      appBar: AppAppBarWidget(title: tr(LocaleKeys.doctors_title)),
+      appBar: AppAppBarWidget(title: tr(LocaleKeys.doctors_title),
+      showBackButton: false,
+      ),
       body: Column(
         children: <Widget>[
           // 1. شريط البحث وزر الفلتر

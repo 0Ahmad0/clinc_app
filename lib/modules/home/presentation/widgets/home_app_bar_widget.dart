@@ -109,64 +109,64 @@ class HomeAppBarWidget extends StatelessWidget {
   }
 }
 
-class ThemeSwitchWidget extends StatelessWidget {
-  const ThemeSwitchWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return GetBuilder<SettingsAppController>(
-      // نستخدم نفس id التحديث لضمان تغيير حالة السويتش عند الضغط
-      id: 'app_localization',
-      builder: (controller) {
-        final isDarkMode = controller.themeMode == ThemeMode.dark;
-
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardColor, // لون الخلفية حسب الثيم
-            borderRadius: BorderRadius.circular(12.r),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.myOpacity(0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // النص والأيقونة
-              Row(
-                children: [
-                  Icon(
-                    isDarkMode ? Icons.dark_mode : Icons.light_mode,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  12.horizontalSpace,
-                  Text(
-                    // يمكنك استبدال هذا بـ tr(LocaleKeys.settings_dark_mode)
-                    isDarkMode ? "الوضع الداكن" : "الوضع الفاتح",
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ],
-              ),
-
-              // السويتش
-              Switch.adaptive(
-                value: isDarkMode,
-                activeColor: Theme.of(context).primaryColor,
-                onChanged: (bool value) {
-                  // هنا يتم استدعاء دالة تغيير الثيم التي كتبناها سابقاً
-                  controller.changeTheme(
-                    value ? ThemeMode.dark : ThemeMode.light,
-                  );
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
+// class ThemeSwitchWidget extends StatelessWidget {
+//   const ThemeSwitchWidget({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return GetBuilder<SettingsAppController>(
+//       // نستخدم نفس id التحديث لضمان تغيير حالة السويتش عند الضغط
+//       id: 'app_localization',
+//       builder: (controller) {
+//         final isDarkMode = controller.themeMode == ThemeMode.dark;
+//
+//         return Container(
+//           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+//           decoration: BoxDecoration(
+//             color: Theme.of(context).cardColor, // لون الخلفية حسب الثيم
+//             borderRadius: BorderRadius.circular(12.r),
+//             boxShadow: [
+//               BoxShadow(
+//                 color: Colors.black.myOpacity(0.05),
+//                 blurRadius: 10,
+//                 offset: const Offset(0, 5),
+//               ),
+//             ],
+//           ),
+//           child: Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             children: [
+//               // النص والأيقونة
+//               Row(
+//                 children: [
+//                   Icon(
+//                     isDarkMode ? Icons.dark_mode : Icons.light_mode,
+//                     color: Theme.of(context).primaryColor,
+//                   ),
+//                   12.horizontalSpace,
+//                   Text(
+//                     // يمكنك استبدال هذا بـ tr(LocaleKeys.setting_dark_mode)
+//                     isDarkMode ? "الوضع الداكن" : "الوضع الفاتح",
+//                     style: Theme.of(context).textTheme.bodyLarge,
+//                   ),
+//                 ],
+//               ),
+//
+//               // السويتش
+//               Switch.adaptive(
+//                 value: isDarkMode,
+//                 activeColor: Theme.of(context).primaryColor,
+//                 onChanged: (bool value) {
+//                   // هنا يتم استدعاء دالة تغيير الثيم التي كتبناها سابقاً
+//                   controller.changeTheme(
+//                     value ? ThemeMode.dark : ThemeMode.light,
+//                   );
+//                 },
+//               ),
+//             ],
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }

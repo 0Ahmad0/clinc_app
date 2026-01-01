@@ -94,6 +94,21 @@ abstract class  LocaleKeys {
   static const navbar_appointments_text = 'navbar.appointments_text';
   static const navbar_settings_text = 'navbar.settings_text';
   static const navbar = 'navbar';
+  static const profile_title = 'profile.title';
+  static const profile_pick_image_title = 'profile.pick_image_title';
+  static const profile_camera = 'profile.camera';
+  static const profile_gallery = 'profile.gallery';
+  static const profile_delete_image = 'profile.delete_image';
+  static const profile_full_name = 'profile.full_name';
+  static const profile_username = 'profile.username';
+  static const profile_email = 'profile.email';
+  static const profile_phone = 'profile.phone';
+  static const profile_change_password = 'profile.change_password';
+  static const profile_save_changes = 'profile.save_changes';
+  static const profile_delete_account = 'profile.delete_account';
+  static const profile_delete_dialog_title = 'profile.delete_dialog_title';
+  static const profile_delete_dialog_confirm = 'profile.delete_dialog_confirm';
+  static const profile = 'profile';
   static const about_app_title = 'about_app.title';
   static const about_app_hero_title = 'about_app.hero_title';
   static const about_app_hero_subtitle = 'about_app.hero_subtitle';
@@ -206,5 +221,20 @@ abstract class  LocaleKeys {
   static const doctor_details = 'doctor_details';
   static const insurance_title = 'insurance.title';
   static const insurance = 'insurance';
+  static const setting_edit_profile = 'setting.edit_profile';
+  static const setting_theme_mode = 'setting.theme_mode';
+  static const setting_language = 'setting.language';
+  static const setting_about_app = 'setting.about_app';
+  static const setting_payment_info = 'setting.payment_info';
+  static const setting_privacy = 'setting.privacy';
+  static const setting_help_support = 'setting.help_support';
+  static const setting_notifications = 'setting.notifications';
+  static const setting_share_app = 'setting.share_app';
+  static const setting_logout = 'setting.logout';
+  static const setting_mode_light = 'setting.mode_light';
+  static const setting_mode_dark = 'setting.mode_dark';
+  static const setting_lang_ar = 'setting.lang_ar';
+  static const setting_lang_en = 'setting.lang_en';
+  static const setting = 'setting';
 
 }

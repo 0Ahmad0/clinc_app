@@ -100,23 +100,19 @@ class AppTheme {
           minimumSize: const Size(double.maxFinite, 54),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.r),
-            side: BorderSide(
-              width: .75
-            )
+            side: BorderSide(width: .75),
           ),
         ),
       ),
     );
   }
 
-  // --- الثيم الأسود (Dark) ---
   static ThemeData darkTheme(String languageCode) {
     return ThemeData(
       brightness: Brightness.dark,
       primaryColor: AppColors.primary,
       scaffoldBackgroundColor: AppColors.darkScaffold,
       fontFamily: getFontFamily(languageCode),
-      // تعريف TextTheme وتطبيق اللون الأبيض عليه
       textTheme: TextTheme(
         displayLarge: TextStyle(
           fontSize: 32.sp,

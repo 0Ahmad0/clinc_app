@@ -8,68 +8,54 @@ class SettingsAppController extends GetxController {
   static SettingsAppController get instance => Get.find();
 
   final GetStorage _storage = GetStorage();
-
-  // 1. إعادة تعريف المتغير والـ Getter (هذا ما كان يسبب الخطأ)
-  late Rx<Locale> _currentLocale;
-
-  // هذا هو الـ getter الذي كان يطلبه الـ main.dart
-  Locale get currentLocale => _currentLocale.value;
+  final String _keyTheme = 'isDarkMode';
 
   late Rx<ThemeMode> _themeMode;
+
   ThemeMode get themeMode => _themeMode.value;
+
+  bool get isDarkMode => _themeMode.value == ThemeMode.dark;
 
   @override
   void onInit() {
     super.onInit();
-    _initializeSettings();
+    _loadTheme();
   }
 
-  void _initializeSettings() {
-    // تهيئة اللغة (نحاول قراءتها من EasyLocalization أو الجهاز)
-    // ملاحظة: في بداية التشغيل قد تكون القيمة غير متوفرة بعد، لذا نضع قيمة افتراضية
-    String startLang = _storage.read('language') ?? AppConstants.arLang;
-    _currentLocale = Locale(startLang).obs;
-
-    // تهيئة الثيم
-    final isDark = _storage.read('isDarkMode') ?? false;
+  void _loadTheme() {
+    bool isDark = _storage.read(_keyTheme) ?? false;
     _themeMode = (isDark ? ThemeMode.dark : ThemeMode.light).obs;
+
     Get.changeThemeMode(_themeMode.value);
   }
 
-  Future<void> changeLanguage(BuildContext context, String languageCode) async {
-    if (languageCode == _currentLocale.value.languageCode) return;
+  void toggleTheme(bool isDark) {
+    _themeMode.value = isDark ? ThemeMode.dark : ThemeMode.light;
 
-    try {
-      final newLocale = Locale(languageCode);
+    _storage.write(_keyTheme, isDark);
 
-      // 1. تحديث EasyLocalization
-      await context.setLocale(newLocale);
+    Get.changeThemeMode(_themeMode.value);
 
-      // 2. تحديث GetX
-      Get.updateLocale(newLocale);
-
-      // 3. تحديث المتغير المحلي وتخزينه
-      _currentLocale.value = newLocale;
-      await _storage.write('language', languageCode);
-
-      // 4. تحديث الواجهة (سيقوم بإعادة بناء الثيم في main.dart)
-      update(['app_localization', 'language_dependent']);
-
-    } catch (e) {
-      Get.snackbar('Error', 'Failed to change language: $e');
-    }
+    update();
   }
 
-  Future<void> changeTheme(ThemeMode newThemeMode) async {
-    if (newThemeMode == _themeMode.value) return;
+  Future<void> changeLanguage(BuildContext context, String langCode) async {
+    if (context.locale.languageCode == langCode) return;
 
-    await _storage.write('isDarkMode', newThemeMode == ThemeMode.dark);
-    _themeMode.value = newThemeMode;
-    Get.changeThemeMode(newThemeMode);
-
-    update(['app_localization']);
+    final newLocale = Locale(langCode);
+    await context.setLocale(newLocale);
+    Get.updateLocale(newLocale);
   }
 
-  bool isArabic() => _currentLocale.value.languageCode == AppConstants.arLang;
-  bool isEnglish() => _currentLocale.value.languageCode == AppConstants.enLang;
+  Future<void> toggleLanguage(BuildContext context) async {
+    bool isArabic = context.locale.languageCode == AppConstants.arLang;
+
+    Locale newLocale = isArabic
+        ? const Locale(AppConstants.enLang)
+        : const Locale(AppConstants.arLang);
+
+    await context.setLocale(newLocale);
+
+    Get.updateLocale(newLocale);
+  }
 }

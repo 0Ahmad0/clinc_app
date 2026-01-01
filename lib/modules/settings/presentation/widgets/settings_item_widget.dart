@@ -7,35 +7,41 @@ import 'package:get/get.dart';
 class SettingsItemWidget extends StatelessWidget {
   final String titleKey;
   final String? route;
-
   final IconData icon;
-
   final VoidCallback? onTap;
-
   final Widget? trailing;
-
   final Color? color;
+  final bool removePadding;
 
   const SettingsItemWidget({
     super.key,
     required this.titleKey,
     required this.icon,
-     this.onTap,
+    this.onTap,
     this.trailing,
     this.color,
     this.route,
+    this.removePadding = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final effectiveColor = color ?? Get.theme.colorScheme.onSurface;
+    final effectiveColor = color ?? Theme.of(context).colorScheme.onSurface;
 
     return ListTile(
+      contentPadding: removePadding ? EdgeInsetsDirectional.only(
+        end: 6.w,
+        start: 14.w
+      ) : null,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-      onTap: onTap ?? ()=>Get.toNamed(route??''),
-      leading: Icon(icon, color: effectiveColor),
+      onTap:
+          onTap ??
+          () {
+            if (route != null) Get.toNamed(route!);
+          },
+      leading: Icon(icon, color: effectiveColor, size: 24.sp),
       title: Text(
-        tr(titleKey), // <-- استخدام الترجمة
+        tr(titleKey),
         style: Theme.of(
           context,
         ).textTheme.bodyMedium?.copyWith(color: effectiveColor),
@@ -43,10 +49,10 @@ class SettingsItemWidget extends StatelessWidget {
       trailing:
           trailing ??
           Icon(
-            Get.locale?.languageCode == AppConstants.enLang
-                ? Icons.arrow_back_ios
-                : Icons.arrow_forward_ios,
-            size: 14.sp,
+            context.locale.languageCode == AppConstants.arLang
+                ? Icons.arrow_forward_ios
+                : Icons.arrow_back_ios,
+            size: 15.sp,
             color: effectiveColor,
           ),
     );

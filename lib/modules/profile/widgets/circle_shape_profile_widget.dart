@@ -2,7 +2,6 @@ import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 class CircleShapeProfileWidget extends StatelessWidget {
   const CircleShapeProfileWidget({
@@ -30,13 +29,16 @@ class CircleShapeProfileWidget extends StatelessWidget {
               color: AppColors.primary.myOpacity(.05),
               border: Border.all(color: AppColors.primary, width: .8),
             ),
-            child: Icon(icon),
+            child: Icon(icon, color: AppColors.primary, size: 24.sp),
           ),
         ),
         4.verticalSpace,
-        Text(title, style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-          fontSize: 12.sp
-        )),
+        Text(
+          title,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            fontSize: 12.sp,
+          ),
+        ),
       ],
     );
   }

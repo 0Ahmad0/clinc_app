@@ -12,7 +12,7 @@ class AppointmentsScreen extends GetView<AppointmentsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppAppBarWidget(title: 'حجوزاتي'),
+      appBar: AppAppBarWidget(title: 'حجوزاتي', showBackButton: false),
       body: Obx(
         () => CustomScrollView(
           slivers: [
@@ -50,9 +50,7 @@ class AppointmentsScreen extends GetView<AppointmentsController> {
                     .length, // ✅ العدد الصحيح حسب الفلتر
               ),
             ),
-            SliverToBoxAdapter(
-              child: 40.verticalSpace,
-            )
+            SliverToBoxAdapter(child: 40.verticalSpace),
           ],
         ),
       ),

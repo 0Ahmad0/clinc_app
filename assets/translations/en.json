@@ -35,8 +35,8 @@
     "copyright": "Saudi Food and Drug Authority ©"
   },
   "welcome": {
-    "welcome_text_app": "Welcome To Clinc",
-    "welcome_description": "Please select your language to begin"
+    "welcome_text_app": "Welcome To Our App",
+    "welcome_description": "Your Digital Gateway to Health"
   },
   "onboarding": {
     "title1": "Smart medication reminders",
@@ -99,6 +99,22 @@
     "doctors_text": "Doctors",
     "appointments_text": "Appointments",
     "settings_text": "Settings"
+  },
+  "profile": {
+    "title": "Profile",
+    "pick_image_title": "Choose your photo from",
+    "camera": "Camera",
+    "gallery": "Gallery",
+    "delete_image": "Delete Photo",
+    "full_name": "Full Name",
+    "username": "Username",
+    "email": "Email",
+    "phone": "Phone Number",
+    "change_password": "Change Password?",
+    "save_changes": "Save Changes",
+    "delete_account": "Delete My Account",
+    "delete_dialog_title": "Do you really want to delete your account ☹️!",
+    "delete_dialog_confirm": "Delete Account"
   },
   "about_app": {
     "title": "About the App",
@@ -219,5 +235,21 @@
   },
   "insurance": {
     "title": "Insurance"
+  },
+  "setting": {
+    "edit_profile": "Edit Profile",
+    "theme_mode": "Theme",
+    "language": "Language",
+    "about_app": "About the App",
+    "payment_info": "Payment Information",
+    "privacy": "Privacy",
+    "help_support": "Help & Support",
+    "notifications": "Notifications",
+    "share_app": "Share App",
+    "logout": "Log Out",
+    "mode_light": "Light",
+    "mode_dark": "Dark",
+    "lang_ar": "Arabic",
+    "lang_en": "English"
   }
 }

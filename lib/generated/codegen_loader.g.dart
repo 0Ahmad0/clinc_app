@@ -51,8 +51,8 @@ class CodegenLoader extends AssetLoader{
     "copyright": "© هيئة الغذاء والدواء السعودية"
   },
   "welcome": {
-    "welcome_text_app": "أهلاً بك في عيادات",
-    "welcome_description": "تتبع، امسح، واعثر على الجرعة المناسبة لك"
+    "welcome_text_app": "أهلاً بك في تطبيقنا",
+    "welcome_description": "بوابتك الرقمية للصحة"
   },
   "onboarding": {
     "title1": "تذكيرات ذكية بالدواء",
@@ -115,6 +115,22 @@ class CodegenLoader extends AssetLoader{
     "medical_file_text": "ملفي الطبي",
     "appointments_text": "حجوزاتي",
     "settings_text": "الإعدادات"
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "pick_image_title": "اختر صورتك من",
+    "camera": "الكاميرا",
+    "gallery": "المعرض",
+    "delete_image": "حذف الصورة",
+    "full_name": "الاسم كاملا",
+    "username": "اسم المستخدم",
+    "email": "البريد الالكتروني",
+    "phone": "رقم الهاتف",
+    "change_password": "تغيير كلمة المرور؟",
+    "save_changes": "حفظ التغييرات",
+    "delete_account": "حذف حسابي",
+    "delete_dialog_title": "هل تريد بالفعل حذف حسابك ☹️ !",
+    "delete_dialog_confirm": "حذف الحساب"
   },
   "about_app": {
     "title": "حول التطبيق",
@@ -235,6 +251,22 @@ class CodegenLoader extends AssetLoader{
   },
   "insurance": {
     "title": "التأمينات"
+  },
+  "setting": {
+    "edit_profile": "تغيير المعلومات",
+    "theme_mode": "الثيم",
+    "language": "اللغة",
+    "about_app": "حول التطبيق",
+    "payment_info": "معلومات الدفع",
+    "privacy": "الخصوصية",
+    "help_support": "المساعدة والدعم",
+    "notifications": "الاشعارات",
+    "share_app": "مشاركة التطبيق",
+    "logout": "تسجيل الخروج",
+    "mode_light": "نهاري",
+    "mode_dark": "ليلي",
+    "lang_ar": "العربية",
+    "lang_en": "الانجليزية"
   }
 };
 static const Map<String,dynamic> _en = {
@@ -274,8 +306,8 @@ static const Map<String,dynamic> _en = {
     "copyright": "Saudi Food and Drug Authority ©"
   },
   "welcome": {
-    "welcome_text_app": "Welcome To Clinc",
-    "welcome_description": "Please select your language to begin"
+    "welcome_text_app": "Welcome To Our App",
+    "welcome_description": "Your Digital Gateway to Health"
   },
   "onboarding": {
     "title1": "Smart medication reminders",
@@ -338,6 +370,22 @@ static const Map<String,dynamic> _en = {
     "doctors_text": "Doctors",
     "appointments_text": "Appointments",
     "settings_text": "Settings"
+  },
+  "profile": {
+    "title": "Profile",
+    "pick_image_title": "Choose your photo from",
+    "camera": "Camera",
+    "gallery": "Gallery",
+    "delete_image": "Delete Photo",
+    "full_name": "Full Name",
+    "username": "Username",
+    "email": "Email",
+    "phone": "Phone Number",
+    "change_password": "Change Password?",
+    "save_changes": "Save Changes",
+    "delete_account": "Delete My Account",
+    "delete_dialog_title": "Do you really want to delete your account ☹️!",
+    "delete_dialog_confirm": "Delete Account"
   },
   "about_app": {
     "title": "About the App",
@@ -458,6 +506,22 @@ static const Map<String,dynamic> _en = {
   },
   "insurance": {
     "title": "Insurance"
+  },
+  "setting": {
+    "edit_profile": "Edit Profile",
+    "theme_mode": "Theme",
+    "language": "Language",
+    "about_app": "About the App",
+    "payment_info": "Payment Information",
+    "privacy": "Privacy",
+    "help_support": "Help & Support",
+    "notifications": "Notifications",
+    "share_app": "Share App",
+    "logout": "Log Out",
+    "mode_light": "Light",
+    "mode_dark": "Dark",
+    "lang_ar": "Arabic",
+    "lang_en": "English"
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};

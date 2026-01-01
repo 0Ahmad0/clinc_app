@@ -56,11 +56,10 @@ class PillWiseApp extends StatelessWidget {
         return GetBuilder<SettingsAppController>(
           id: 'app_localization',
           builder: (settingsController) {
-            final String langCode = settingsController.currentLocale.languageCode;
             return GetMaterialApp(
               initialBinding: InitialBinding(),
-              theme: AppTheme.lightTheme(langCode),
-              darkTheme: AppTheme.darkTheme(langCode),
+              theme: AppTheme.lightTheme(context.locale.languageCode),
+              darkTheme: AppTheme.darkTheme(context.locale.languageCode),
               themeMode: settingsController.themeMode,
               locale: context.locale,
               supportedLocales: context.supportedLocales,

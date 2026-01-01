@@ -33,8 +33,8 @@ class AppointmentCardWidget extends StatelessWidget {
           Text(
             'الحجوزات النشطة',
             style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                fontSize: 18.sp,
-                color: Theme.of(context).primaryColor
+              fontSize: 18.sp,
+              color: Theme.of(context).primaryColor,
             ),
           ),
           10.verticalSpace,
@@ -65,17 +65,23 @@ class AppointmentCardWidget extends StatelessWidget {
                   title: Text(
                     doctorName,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontSize: 18.sp,
+                      fontSize: 16.sp,
                       color: AppColors.white,
                     ),
                   ),
-                  subtitle: Text(
-                    specialty,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyMedium?.copyWith(color: AppColors.white),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  subtitle: Padding(
+                    padding: EdgeInsets.only(
+                      top: 4.h
+                    ),
+                    child: Text(
+                      specialty,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: AppColors.white,
+                        fontSize: 12.sp,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
                 DecoratedBox(
