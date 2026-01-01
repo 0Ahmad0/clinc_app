@@ -41,7 +41,6 @@ class HomeScreen extends GetView<HomeController> {
             ),
           ),
           SliverToBoxAdapter(child: MainSectionWidget()),
-
         ],
       ),
     );

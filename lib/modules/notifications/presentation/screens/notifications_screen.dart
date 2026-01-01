@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
+import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/modules/notifications/presentation/widgets/empty_notification_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -107,14 +108,14 @@ class _NotificationItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isUnread ? 0.05 : 0.01),
+            color: Colors.black.myOpacity(isUnread ? 0.05 : 0.01),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
         border: isUnread
             ? Border.all(
-                color: Theme.of(context).primaryColor.withOpacity(0.1),
+                color: Theme.of(context).primaryColor.myOpacity(0.1),
                 width: 1,
               )
             : null,

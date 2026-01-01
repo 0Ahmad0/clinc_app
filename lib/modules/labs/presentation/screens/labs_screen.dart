@@ -151,7 +151,7 @@ class LabsScreen extends GetView<LabsController> {
         gradient: LinearGradient(
           colors: [
             Get.theme.primaryColor,
-            Get.theme.primaryColor.withOpacity(0.7),
+            Get.theme.primaryColor.myOpacity(0.7),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -159,7 +159,7 @@ class LabsScreen extends GetView<LabsController> {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Get.theme.primaryColor.withOpacity(0.3),
+            color: Get.theme.primaryColor.myOpacity(0.3),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -174,7 +174,7 @@ class LabsScreen extends GetView<LabsController> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.myOpacity(0.2),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Text(
@@ -202,7 +202,7 @@ class LabsScreen extends GetView<LabsController> {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.myOpacity(0.9),
               fontSize: 11.sp,
               height: 1.4,
             ),

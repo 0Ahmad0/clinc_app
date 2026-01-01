@@ -1,5 +1,4 @@
 {
-
   "validation": {
     "emptyField": "This field is required",
     "name_empty": "Please enter your name",
@@ -93,13 +92,132 @@
     "consultations": "Consultations",
     "chatbot": "Ask Me"
   },
-  "navbar":{
+  "navbar": {
     "book_now": "Book now",
     "home_text": "Home",
     "medical_file_text": "Medical file",
     "doctors_text": "Doctors",
     "appointments_text": "Appointments",
     "settings_text": "Settings"
+  },
+  "about_app": {
+    "title": "About the App",
+    "hero_title": "Fast Booking",
+    "hero_subtitle": "Your doctor at the tap of a button ⚡",
+    "intro_title": "Your Digital Gateway to Healthcare",
+    "intro_desc": "Fast Booking is your easiest digital gateway to connect with elite doctors across the Kingdom. We are here to shorten your wait time and elevate your healthcare experience to align with Vision 2030, where speed, accuracy, and security meet in one place.",
+    "features_section_title": "✨ What Sets Us Apart?",
+    "feature_smart_booking": "Smart Booking",
+    "feature_smart_booking_desc": "Your appointment is confirmed in seconds.",
+    "feature_precise_search": "Precise Search",
+    "feature_precise_search_desc": "Find your ideal doctor by specialty and location.",
+    "feature_auto_reminder": "Auto Reminders",
+    "feature_auto_reminder_desc": "We take care of your appointment and always remind you.",
+    "feature_simplicity": "Simplicity",
+    "feature_simplicity_desc": "An easy-to-use interface that puts your health at your fingertips.",
+    "slogan": "Your time matters... Your health is our goal",
+    "version": "Version 1.0.0"
+  },
+  "contact_us": {
+    "title": "Help & Support",
+    "hero_title": "Let us help you",
+    "hero_subtitle": "We are here for you ❤️",
+    "call_us": "Call Us",
+    "whatsapp": "WhatsApp",
+    "instant_chat": "Instant Chat",
+    "email": "Email",
+    "working_hours": "Working Hours",
+    "working_hours_details": "Saturday - Thursday: 8:00 AM - 10:00 PM\nFriday: 2:00 PM - 10:00 PM",
+    "form_title": "Send us a message",
+    "form_desc": "You can contact us directly by filling out the form below",
+    "label_full_name": "Full Name",
+    "hint_full_name": "Enter your full name",
+    "label_phone": "Phone Number",
+    "label_subject": "Subject",
+    "hint_subject": "Message subject",
+    "label_message": "Message",
+    "hint_message": "Type your message here...",
+    "btn_send": "Send Message",
+    "intro_title": "Your Digital Health Gateway",
+    "intro_desc": "Fast Booking is your easiest digital gateway to access top-tier doctors in the Kingdom. We exist to shorten your wait time and elevate your healthcare experience in line with Vision 2030, where speed, accuracy, and security meet in one place.",
+    "label_email": "Email Address"
+  },
+  "privacy_policy": {
+    "title": "Privacy & Terms",
+    "hero_title": "We value your trust",
+    "hero_subtitle": "Your data is safe, your rights are protected 🛡️",
+    "intro_title": "Your privacy is our top priority",
+    "intro_desc": "We believe trust is the foundation of healthcare. This policy aims to clearly explain how we collect and use your data with complete transparency, to ensure a safe and reliable experience that complies with approved regulations.",
+    "section_1_title": "First: Privacy Policy",
+    "section_2_title": "Second: Medical Disclaimer",
+    "section_3_title": "Third: Contact Us",
+    "warning_title": "Important Notice",
+    "disclaimer_purpose": "Purpose: A technical intermediary for scheduling appointments and facilitating communication.",
+    "disclaimer_advice": "Not Medical Advice: Content is not a substitute for in-person consultation.",
+    "disclaimer_emergency": "Emergency: Please go directly to a hospital in case of emergencies.",
+    "disclaimer_liability": "Liability: Full medical responsibility lies with the doctor/clinic.",
+    "website": "Website",
+    "last_update": "Last updated: December 2025",
+    "privacy_item_1_title": "1. Information We Collect",
+    "privacy_item_1_content": "• User Data: Name, phone number, email address.\n• Medical Data: Appointment communications, uploaded medical history (for doctor's review only).\n• Geographic Location: To identify clinics near you (with your consent).",
+    "privacy_item_2_title": "2. How We Use Your Data",
+    "privacy_item_2_content": "• To organize and book appointments between patients and clinics.\n• To send appointment reminders.\n• To improve service quality and user experience.",
+    "privacy_item_3_title": "3. Data Sharing",
+    "privacy_item_3_content": "• We do not sell your data to any advertising parties.\n• Your medical data is shared only with the clinic you choose to book with.",
+    "privacy_item_4_title": "4. Data Security",
+    "privacy_item_4_content": "We use advanced encryption technologies to protect your medical records and personal information from unauthorized access.",
+    "privacy_item_5_title": "5. Account Deletion",
+    "privacy_item_5_content": "Users have the right to delete their account and data at any time through the app settings."
+  },
+  "doctors": {
+    "title": "Find Doctors",
+    "search_hint": "Search by doctor name...",
+    "filter_reset": "Reset",
+    "filter_specialty": "Specialty",
+    "filter_region": "Region",
+    "filter_rating": "Rating",
+    "filter_gender": "Gender",
+    "filter_all": "All",
+    "no_results": "No doctors match the search",
+    "currency": "SAR",
+    "gender_male": "Male",
+    "gender_female": "Female"
+  },
+  "chatbot": {
+    "title": "Medical Assistant",
+    "status_online": "Available now for answering",
+    "typing_indicator": "Typing... 🩺",
+    "input_hint": "Type your medical consultation..."
+  },
+  "clinic_app_details": {
+    "rating_count": "Rating",
+    "distance_away": "Away",
+    "km": "km",
+    "about_clinic": "About the Clinic",
+    "about_description": "We provide comprehensive medical care using the latest technologies. Our team of Saudi and international consultants is ready to serve you around the clock. We accept most insurance companies.",
+    "available_specialties": "Available Specialties",
+    "elite_doctors": "Elite Doctors",
+    "view_all": "View All",
+    "call_clinic": "Call the Clinic",
+    "book_btn": "Book"
+  },
+  "doctor_details": {
+    "app_bar_title": "Ear, Nose and Throat",
+    "about_doctor": "About the Doctor",
+    "about_bio": "Dr. Sara Al-Ali is a specialist consultant in ear, nose and throat diseases, currently working at Al-Amal Hospital. She has extensive experience spanning over 10 years in diagnosing and treating complex cases.",
+    "clinic_location": "Clinic Location",
+    "address": "King Fahd Road, Al-Olya District, Riyadh 12345, Kingdom of Saudi Arabia",
+    "reviews_title": "Reviews",
+    "hospital_label": "Hospital",
+    "hospital_name": "Al-Amal Hospital",
+    "working_hours": "Working Hours",
+    "book_now": "Book an Appointment Now",
+    "location_title": "Clinic Location",
+    "time_label": "Working Hours",
+    "book_btn": "Book an Appointment Now",
+    "about_desc": "Dr. Sara Al-Ali is a specialist consultant in ear, nose and throat diseases, currently working at Al-Amal Hospital. She has extensive experience spanning over 10 years in diagnosing and treating complex cases."
+  },
+  "insurance": {
+    "title": "Insurance"
   }
-
 }

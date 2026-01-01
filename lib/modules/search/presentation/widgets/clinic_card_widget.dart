@@ -1,3 +1,4 @@
+import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart'; // لتناسق الأحجام
 import 'package:get/get.dart'; // للألوان والـ Theme
@@ -20,7 +21,7 @@ class ClinicCardWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.myOpacity(0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -143,7 +144,7 @@ class ClinicCardWidget extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                             decoration: BoxDecoration(
-                              color: Colors.green.withOpacity(0.1),
+                              color: Colors.green.myOpacity(0.1),
                               borderRadius: BorderRadius.circular(6.r),
                             ),
                             child: Text(
@@ -163,7 +164,7 @@ class ClinicCardWidget extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                             decoration: BoxDecoration(
-                              color: Colors.blue.withOpacity(0.1),
+                              color: Colors.blue.myOpacity(0.1),
                               borderRadius: BorderRadius.circular(6.r),
                             ),
                             child: Text(

@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -64,7 +65,7 @@ class OnboardingPageWidget extends StatelessWidget {
             tr(item.subtitle),
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontSize: 12.sp,
-              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(.8)
+              color: Theme.of(context).textTheme.bodyMedium?.color!.myOpacity(.825)
             ), // <-- من الثيم
             textAlign: TextAlign.center,
           ).slideUp(),

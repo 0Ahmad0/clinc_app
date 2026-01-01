@@ -65,7 +65,7 @@ class ProfileScreen extends GetView<ProfileController> {
                                 ),
                               )
                             : CircleAvatar(
-                                backgroundColor: AppColors.success.withOpacity(
+                                backgroundColor: AppColors.success.myOpacity(
                                   .25,
                                 ),
                                 radius: 60.sp,

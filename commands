@@ -9,3 +9,8 @@ flutter pub run flutter_launcher_icons:main
 
 /// Build Apk Split
 flutter build apk --split-per-abi
+
+
+/// Build Apk And Send Telegram Using CodeMagic
+git tag v1.0.0
+git push origin --tags
