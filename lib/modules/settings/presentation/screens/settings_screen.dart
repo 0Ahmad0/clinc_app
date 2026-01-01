@@ -88,6 +88,8 @@ class SettingsScreen extends GetView<SettingsController> {
                 ],
               ),
             ),
+            10.verticalSpace,
+
           ],
         ),
       ),
