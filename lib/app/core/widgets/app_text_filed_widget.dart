@@ -17,6 +17,7 @@ class AppTextFormFieldWidget extends StatefulWidget {
   final Function(String)? onFieldSubmitted;
   final IconData? prefixIcon;
   final int maxLines;
+  final int? maxLength;
   final bool enabled;
   final bool autofocus;
 
@@ -36,6 +37,7 @@ class AppTextFormFieldWidget extends StatefulWidget {
     this.maxLines = 1,
     this.enabled = true,
     this.autofocus = false,
+    this.maxLength,
   });
 
   @override
@@ -63,6 +65,7 @@ class _AppTextFormFieldWidgetState extends State<AppTextFormFieldWidget> {
     );
 
     return TextFormField(
+      maxLength: widget.maxLength,
       autofocus: widget.autofocus,
       controller: widget.controller,
       focusNode: widget.currentFocusNode,
@@ -88,20 +91,15 @@ class _AppTextFormFieldWidgetState extends State<AppTextFormFieldWidget> {
         errorMaxLines: 2,
         labelText: widget.labelText,
         hintText: widget.hintText,
-        hintStyle: theme.textTheme.bodyMedium?.copyWith(
-          color: theme.hintColor,
-        ),
+        hintStyle: theme.textTheme.bodyMedium?.copyWith(color: theme.hintColor),
         labelStyle: theme.textTheme.bodyMedium,
-        prefixIcon: widget.prefixIcon != null
-            ? Icon(
-                widget.prefixIcon,
-              )
-            : null,
+        prefixIcon: widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
         suffixIcon: widget.isPassword
             ? _buildVisibilityToggleIcon(theme) // <-- هنا تظهر العين
             : null,
         filled: true,
-        fillColor: theme.inputDecorationTheme.fillColor ??
+        fillColor:
+            theme.inputDecorationTheme.fillColor ??
             theme.colorScheme.surface.myOpacity(0.5),
         contentPadding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 10.w),
         enabledBorder: baseBorder,

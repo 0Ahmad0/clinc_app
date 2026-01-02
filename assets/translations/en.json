@@ -252,7 +252,7 @@
     "lang_ar": "Arabic",
     "lang_en": "English"
   },
-  "search":{
+  "search": {
     "search_title": "Advanced Search",
     "search_hint": "Search for a hospital or clinic...",
     "filter_reset": "Clear",
@@ -270,5 +270,47 @@
     "sar": "SAR",
     "consultation": "Consultation",
     "distance_km": "km"
+  },
+  "payment": {
+    "settings_title": "Manage Cards",
+    "settings_saved_cards": "Saved Cards",
+    "settings_add_card": "Add New Card",
+    "settings_card_holder": "Cardholder Name",
+    "settings_card_number": "Card Number",
+    "settings_expiry": "Expiry Date",
+    "settings_cvv": "CVV (Card Verification Value)",
+    "settings_save_btn": "Save Card",
+    "settings_no_cards": "No saved cards at the moment",
+    "pay_method_online_title": "Online Payment",
+    "pay_method_mada": "Mada",
+    "pay_method_visa": "Visa",
+    "pay_method_mastercard": "Mastercard",
+    "pay_method_wallets_title": "Digital Wallets",
+    "pay_method_apple_pay": "Apple Pay",
+    "pay_method_stc_pay": "STC Pay",
+    "pay_method_installments_title": "Installments (Buy Now, Pay Later)",
+    "pay_method_tabby": "Tabby",
+    "pay_method_tamara": "Tamara",
+    "pay_installment_desc": "Split your bill into easy, interest-free payments.",
+    "pay_method_clinic_title": "Payment at Clinic",
+    "pay_method_cash": "Cash Payment",
+    "pay_method_pos": "Point of Sale (POS)",
+    "pay_method_insurance_title": "Payment via Insurance",
+    "pay_method_insurance_desc": "Pay only the copay amount after automatic approval.",
+    "pay_validation_required": "This field is required",
+    "pay_validation_number_invalid": "Invalid card number",
+    "pay_validation_date_invalid": "Invalid date (month/year)",
+    "pay_validation_cvv_invalid": "Invalid CVV code"
+  },
+  "notifications": {
+    "screen_title": "Notifications",
+    "mark_all_read": "Mark All as Read",
+    "empty_title": "No notifications yet",
+    "empty_desc": "We'll notify you as soon as something new happens!",
+    "label_today": "Today",
+    "label_yesterday": "Yesterday",
+    "type_appointment": "Appointment",
+    "type_offer": "Offer",
+    "type_system": "System"
   }
 }

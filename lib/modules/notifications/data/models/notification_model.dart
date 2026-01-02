@@ -1,9 +1,11 @@
+enum NotificationType { appointment, offer, system }
+
 class NotificationModel {
   final String title;
   final String body;
   final DateTime time;
-  final bool isRead;
-  final String type; // 'appointment', 'offer', 'system'
+  bool isRead;
+  final NotificationType type;
 
   NotificationModel({
     required this.title,

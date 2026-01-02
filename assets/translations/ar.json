@@ -92,6 +92,7 @@
     "consultations": "الاستشارات",
     "chatbot": "اسالني"
   },
+
   "navbar": {
     "book_now": "احجز الآن",
     "home_text": "الرئيسية",
@@ -252,26 +253,67 @@
     "lang_ar": "العربية",
     "lang_en": "الانجليزية"
   },
-"search":{
-  "search_title": "البحث المتقدم",
-  "search_hint": "ابحث عن مستشفى أو عيادة...",
-  "filter_reset": "مسح",
-  "filter_region": "المنطقة",
-  "filter_insurance": "التأمين",
-  "filter_gender": "الجنس",
-  "filter_specialty": "التخصص",
-  "filter_sort": "الفرز",
-  "sort_price_asc": "الأقل سعراً",
-  "sort_price_desc": "الأعلى سعراً",
-  "sort_distance": "الأقرب",
-  "no_results": "لا توجد نتائج مطابقة لمرشحات البحث.",
-  "open_now": "مفتوح الآن",
-  "accepts_insurance": "يقبل التأمين",
-  "sar": "ر.س",
-  "consultation": "استشارة",
-  "distance_km": "كم"
-}
-
+  "search": {
+    "search_title": "البحث المتقدم",
+    "search_hint": "ابحث عن مستشفى أو عيادة...",
+    "filter_reset": "مسح",
+    "filter_region": "المنطقة",
+    "filter_insurance": "التأمين",
+    "filter_gender": "الجنس",
+    "filter_specialty": "التخصص",
+    "filter_sort": "الفرز",
+    "sort_price_asc": "الأقل سعراً",
+    "sort_price_desc": "الأعلى سعراً",
+    "sort_distance": "الأقرب",
+    "no_results": "لا توجد نتائج مطابقة لمرشحات البحث.",
+    "open_now": "مفتوح الآن",
+    "accepts_insurance": "يقبل التأمين",
+    "sar": "ر.س",
+    "consultation": "استشارة",
+    "distance_km": "كم"
+  },
+  "payment": {
+    "settings_title": "إدارة البطاقات",
+    "settings_saved_cards": "البطاقات المحفوظة",
+    "settings_add_card": "إضافة بطاقة جديدة",
+    "settings_card_holder": "اسم حامل البطاقة",
+    "settings_card_number": "رقم البطاقة",
+    "settings_expiry": "تاريخ الانتهاء",
+    "settings_cvv": "رمز التحقق (CVV)",
+    "settings_save_btn": "حفظ البطاقة",
+    "settings_no_cards": "لا توجد بطاقات محفوظة حالياً",
+    "pay_method_online_title": "دفع إلكتروني",
+    "pay_method_mada": "مدى",
+    "pay_method_visa": "فيزا",
+    "pay_method_mastercard": "ماستركارد",
+    "pay_method_wallets_title": "المحافظ الرقمية",
+    "pay_method_apple_pay": "Apple Pay",
+    "pay_method_stc_pay": "STC Pay",
+    "pay_method_installments_title": "تقسيط (اشترِ الآن وادفع لاحقاً)",
+    "pay_method_tabby": "تابي (Tabby)",
+    "pay_method_tamara": "تمارا (Tamara)",
+    "pay_installment_desc": "قسم فاتورتك على دفعات ميسرة بدون فوائد.",
+    "pay_method_clinic_title": "الدفع في العيادة",
+    "pay_method_cash": "دفع نقدي (كاش)",
+    "pay_method_pos": "نقاط البيع (POS)",
+    "pay_method_insurance_title": "الدفع عبر التأمين",
+    "pay_method_insurance_desc": "ادفع مبلغ التحمل فقط (Copay) بعد الموافقة الآلية.",
+    "pay_validation_required": "هذا الحقل مطلوب",
+    "pay_validation_number_invalid": "رقم البطاقة غير صالح",
+    "pay_validation_date_invalid": "تاريخ غير صالح (شهر/سنة)",
+    "pay_validation_cvv_invalid": "رمز CVV غير صالح"
+  },
+  "notifications": {
+    "screen_title": "الإشعارات",
+    "mark_all_read": "تحديد الكل كمقروء",
+    "empty_title": "لا يوجد إشعارات بعد",
+    "empty_desc": "سنخبرك بأي جديد فور حدوثه!",
+    "label_today": "اليوم",
+    "label_yesterday": "البارحة",
+    "type_appointment": "موعد",
+    "type_offer": "عرض",
+    "type_system": "نظام"
+  }
 }
 
 
