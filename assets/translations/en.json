@@ -251,5 +251,24 @@
     "mode_dark": "Dark",
     "lang_ar": "Arabic",
     "lang_en": "English"
+  },
+  "search":{
+    "search_title": "Advanced Search",
+    "search_hint": "Search for a hospital or clinic...",
+    "filter_reset": "Clear",
+    "filter_region": "Region",
+    "filter_insurance": "Insurance",
+    "filter_gender": "Gender",
+    "filter_specialty": "Specialty",
+    "filter_sort": "Sort by",
+    "sort_price_asc": "Lowest Price",
+    "sort_price_desc": "Highest Price",
+    "sort_distance": "Nearest",
+    "no_results": "No results match your search filters.",
+    "open_now": "Open Now",
+    "accepts_insurance": "Accepts Insurance",
+    "sar": "SAR",
+    "consultation": "Consultation",
+    "distance_km": "km"
   }
 }

@@ -236,5 +236,23 @@ abstract class  LocaleKeys {
   static const setting_lang_ar = 'setting.lang_ar';
   static const setting_lang_en = 'setting.lang_en';
   static const setting = 'setting';
+  static const search_search_title = 'search.search_title';
+  static const search_search_hint = 'search.search_hint';
+  static const search_filter_reset = 'search.filter_reset';
+  static const search_filter_region = 'search.filter_region';
+  static const search_filter_insurance = 'search.filter_insurance';
+  static const search_filter_gender = 'search.filter_gender';
+  static const search_filter_specialty = 'search.filter_specialty';
+  static const search_filter_sort = 'search.filter_sort';
+  static const search_sort_price_asc = 'search.sort_price_asc';
+  static const search_sort_price_desc = 'search.sort_price_desc';
+  static const search_sort_distance = 'search.sort_distance';
+  static const search_no_results = 'search.no_results';
+  static const search_open_now = 'search.open_now';
+  static const search_accepts_insurance = 'search.accepts_insurance';
+  static const search_sar = 'search.sar';
+  static const search_consultation = 'search.consultation';
+  static const search_distance_km = 'search.distance_km';
+  static const search = 'search';
 
 }

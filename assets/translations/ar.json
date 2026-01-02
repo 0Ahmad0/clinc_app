@@ -251,7 +251,26 @@
     "mode_dark": "ليلي",
     "lang_ar": "العربية",
     "lang_en": "الانجليزية"
-  }
+  },
+"search":{
+  "search_title": "البحث المتقدم",
+  "search_hint": "ابحث عن مستشفى أو عيادة...",
+  "filter_reset": "مسح",
+  "filter_region": "المنطقة",
+  "filter_insurance": "التأمين",
+  "filter_gender": "الجنس",
+  "filter_specialty": "التخصص",
+  "filter_sort": "الفرز",
+  "sort_price_asc": "الأقل سعراً",
+  "sort_price_desc": "الأعلى سعراً",
+  "sort_distance": "الأقرب",
+  "no_results": "لا توجد نتائج مطابقة لمرشحات البحث.",
+  "open_now": "مفتوح الآن",
+  "accepts_insurance": "يقبل التأمين",
+  "sar": "ر.س",
+  "consultation": "استشارة",
+  "distance_km": "كم"
+}
 
 }
 

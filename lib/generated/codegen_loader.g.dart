@@ -267,6 +267,25 @@ class CodegenLoader extends AssetLoader{
     "mode_dark": "ليلي",
     "lang_ar": "العربية",
     "lang_en": "الانجليزية"
+  },
+  "search": {
+    "search_title": "البحث المتقدم",
+    "search_hint": "ابحث عن مستشفى أو عيادة...",
+    "filter_reset": "مسح",
+    "filter_region": "المنطقة",
+    "filter_insurance": "التأمين",
+    "filter_gender": "الجنس",
+    "filter_specialty": "التخصص",
+    "filter_sort": "الفرز",
+    "sort_price_asc": "الأقل سعراً",
+    "sort_price_desc": "الأعلى سعراً",
+    "sort_distance": "الأقرب",
+    "no_results": "لا توجد نتائج مطابقة لمرشحات البحث.",
+    "open_now": "مفتوح الآن",
+    "accepts_insurance": "يقبل التأمين",
+    "sar": "ر.س",
+    "consultation": "استشارة",
+    "distance_km": "كم"
   }
 };
 static const Map<String,dynamic> _en = {
@@ -522,6 +541,25 @@ static const Map<String,dynamic> _en = {
     "mode_dark": "Dark",
     "lang_ar": "Arabic",
     "lang_en": "English"
+  },
+  "search": {
+    "search_title": "Advanced Search",
+    "search_hint": "Search for a hospital or clinic...",
+    "filter_reset": "Clear",
+    "filter_region": "Region",
+    "filter_insurance": "Insurance",
+    "filter_gender": "Gender",
+    "filter_specialty": "Specialty",
+    "filter_sort": "Sort by",
+    "sort_price_asc": "Lowest Price",
+    "sort_price_desc": "Highest Price",
+    "sort_distance": "Nearest",
+    "no_results": "No results match your search filters.",
+    "open_now": "Open Now",
+    "accepts_insurance": "Accepts Insurance",
+    "sar": "SAR",
+    "consultation": "Consultation",
+    "distance_km": "km"
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
