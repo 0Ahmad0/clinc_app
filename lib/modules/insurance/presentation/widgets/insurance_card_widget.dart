@@ -16,9 +16,8 @@ class InsuranceCard extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(8.w),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(color: Colors.grey.shade100),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.myOpacity(0.08),
@@ -66,7 +65,6 @@ class InsuranceCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 10.sp,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
               ),
               textAlign: TextAlign.center,
             ),
