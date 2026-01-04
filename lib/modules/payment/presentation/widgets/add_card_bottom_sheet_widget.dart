@@ -17,7 +17,7 @@ class AddCardBottomSheet extends GetView<PaymentController> {
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
       ),
       child: SingleChildScrollView(

@@ -21,7 +21,7 @@ class SearchInputField extends StatelessWidget {
         hintText: tr(LocaleKeys.search_search_hint),
         prefixIcon: const Icon(Iconsax.search_normal),
         filled: true,
-        fillColor: Colors.grey[100],
+        fillColor: Theme.of(context).cardColor,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.r),
           borderSide: BorderSide.none,

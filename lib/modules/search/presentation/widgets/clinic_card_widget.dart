@@ -17,7 +17,7 @@ class ClinicCardWidget extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(

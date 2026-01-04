@@ -28,7 +28,7 @@ class DateTimeLineWidget extends StatelessWidget {
       controller: controller,
       firstDate: DateTime.now(),
       focusedDate: selectedDate,
-      lastDate: DateTime(2026),
+      lastDate: DateTime(2030),
       locale: Locale('ar'),
       onDateChange: onDateChange,
     );

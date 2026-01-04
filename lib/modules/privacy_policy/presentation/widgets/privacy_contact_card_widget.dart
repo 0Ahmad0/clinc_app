@@ -16,7 +16,7 @@ class PrivacyContactCard extends StatelessWidget {
     return Container(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(

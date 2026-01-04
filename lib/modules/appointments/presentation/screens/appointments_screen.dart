@@ -1,8 +1,11 @@
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/appointments/presentation/controllers/appointments_controller.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
 import '../widgets/filter_button_widget.dart';
 import '../widgets/my_appointment_widget.dart';
 
@@ -12,42 +15,45 @@ class AppointmentsScreen extends GetView<AppointmentsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppAppBarWidget(title: 'حجوزاتي', showBackButton: false),
+      appBar: AppAppBarWidget(
+        title: tr(LocaleKeys.appointments_screen_title),
+        showBackButton: false,
+      ),
       body: Obx(
-        () => CustomScrollView(
+            () => CustomScrollView(
           slivers: [
             SliverToBoxAdapter(child: 10.verticalSpace),
+
+            // شريط الفلاتر
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 30.h,
+                height: 40.h, // ارتفاع مناسب
                 child: ListView.separated(
                   padding: EdgeInsets.symmetric(horizontal: 14.w),
                   scrollDirection: Axis.horizontal,
+                  itemCount: controller.quotationsFilterList.length,
+                  separatorBuilder: (_, __) => 8.horizontalSpace,
                   itemBuilder: (context, index) => FilterButtonWidget(
                     onTap: () => controller.changeFilter(index),
                     currentIndex: controller.currentFilterIndex.value,
                     index: index,
-                    list: controller.quotationsFilterList,
-                    totalCount: controller.getCountByFilterIndex(
-                      index,
-                    ), // ✅ العدد الصحيح هنا
+                    item: controller.quotationsFilterList[index],
+                    totalCount: controller.getCountByFilterIndex(index),
                   ),
-                  separatorBuilder: (_, __) => 4.horizontalSpace,
-                  itemCount: controller.quotationsFilterList.length,
                 ),
               ),
             ),
+
+            // قائمة الحجوزات
             SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 16.h),
               sliver: SliverList.separated(
-                separatorBuilder: (_, __) => 10.verticalSpace,
+                separatorBuilder: (_, __) => 12.verticalSpace,
+                itemCount: controller.filteredOrders.length,
                 itemBuilder: (context, index) {
                   final order = controller.filteredOrders[index];
                   return MyAppointmentWidget(appointment: order);
                 },
-                itemCount: controller
-                    .filteredOrders
-                    .length, // ✅ العدد الصحيح حسب الفلتر
               ),
             ),
             SliverToBoxAdapter(child: 40.verticalSpace),

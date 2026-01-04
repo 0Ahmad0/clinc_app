@@ -96,17 +96,21 @@ class CodegenLoader extends AssetLoader{
     "description": "أدخل بريدك الالكتروني لإعادة تعيين كلمة مرورك"
   },
   "home": {
-    "home_text": "الرئـيـسـيـة",
-    "search_text": "ابحث هنا...",
-    "main_section": "القسم الرئيسي",
-    "labs": "المختبرات",
-    "insurance": "التأمينات",
-    "doctors": "الأطباء",
-    "clinics": "العيادات",
-    "specialities": "التخصصات",
-    "emergency": "الطوارئ",
-    "consultations": "الاستشارات",
-    "chatbot": "اسالني"
+    "app_bar": {
+      "welcome": "مرحباً، أهلاً بك",
+      "search_hint": "ابحث عن طبيب، عيادة..."
+    },
+    "sections": {
+      "offers": "عروضنا",
+      "active_appointments": "الحجوزات النشطة",
+      "main_services": "خدماتنا الرئيسية"
+    },
+    "services": {
+      "clinics": "العيادات",
+      "labs": "المختبرات",
+      "insurance": "التأمين",
+      "chatbot": "المساعد الطبي"
+    }
   },
   "navbar": {
     "book_now": "احجز الآن",
@@ -328,6 +332,65 @@ class CodegenLoader extends AssetLoader{
     "type_appointment": "موعد",
     "type_offer": "عرض",
     "type_system": "نظام"
+  },
+  "checkout": {
+    "title": "إتمام الدفع",
+    "summary_title": "ملخص الحجز",
+    "summary_service": "سعر الكشفية",
+    "summary_vat": "ضريبة القيمة المضافة (15%)",
+    "summary_total": "الإجمالي",
+    "payment_method_title": "طريقة الدفع",
+    "pay_btn": "دفع",
+    "success_msg": "تمت عملية الدفع بنجاح",
+    "select_method_error": "يرجى اختيار طريقة دفع"
+  },
+  "labs": {
+    "title": "المختبرات والتحاليل",
+    "search_hint": "ابحث عن تحليل (مثل: فيتامين د)",
+    "packages_title": "باقات الفحص الشامل ⭐",
+    "view_all": "عرض الكل",
+    "book_btn": "حجز",
+    "add_to_cart": "إضافة",
+    "package_count": "تحليل",
+    "currency": "ر.س",
+    "cart_total": "المجموع",
+    "checkout": "إتمام الطلب",
+    "test_conditions": "شروط التحليل",
+    "sample_type": "نوع العينة",
+    "fasting_required": "يتطلب صيام",
+    "yes": "نعم",
+    "no": "لا"
+  },
+  "booking": {
+    "title": "حجز موعد",
+    "morning_times": "الأوقات الصباحية",
+    "evening_times": "الأوقات المسائية",
+    "patient_name_label": "اسم المراجع",
+    "patient_name_hint": "الاسم الكامل للمراجع",
+    "patient_age_label": "عمر المراجع",
+    "patient_gender_label": "جنس المراجع",
+    "gender_male": "ذكر",
+    "gender_female": "أنثى",
+    "female_status_label": "الحالة الصحية (اختياري)",
+    "is_pregnant": "هل أنتِ حامل؟",
+    "is_breastfeeding": "هل أنتِ مرضع؟",
+    "problem_label": "ما يشكو منه المراجع",
+    "problem_hint": "اكتب بوضوح واختصار المشكلة التي تواجهها...",
+    "btn_book_now": "احجز موعد الآن",
+    "validation_error": "الرجاء ملء جميع الحقول المطلوبة"
+  },
+  "appointments": {
+    "screen_title": "حجوزاتي",
+    "filter_all": "الكل",
+    "filter_accepted": "المقبولة",
+    "filter_pending": "الجارية",
+    "filter_rejected": "المرفوضة",
+    "order_id": "الطلب رقم",
+    "price_label": "السعر :",
+    "status_accepted": "تم قبول الطلب",
+    "status_pending": "قيد الانتظار",
+    "status_rejected": "تم رفض الطلب",
+    "currency": "\$"
   }
 };
 static const Map<String,dynamic> _en = {
@@ -412,17 +475,21 @@ static const Map<String,dynamic> _en = {
     "description": "Enter your email below to reset your password"
   },
   "home": {
-    "home_text": "Home Page",
-    "search_text": "Search here...",
-    "main_section": "Main Section",
-    "labs": "Labs",
-    "insurance": "Insurance",
-    "doctors": "Doctors",
-    "clinics": "Clinics",
-    "specialities": "Specialities",
-    "emergency": "Emergency",
-    "consultations": "Consultations",
-    "chatbot": "Ask Me"
+    "app_bar": {
+      "welcome": "Welcome",
+      "search_hint": "Search for a doctor, clinic..."
+    },
+    "sections": {
+      "offers": "Our Offers",
+      "active_appointments": "Active Bookings",
+      "main_services": "Main Services"
+    },
+    "services": {
+      "clinics": "Clinics",
+      "labs": "Labs",
+      "insurance": "Insurance",
+      "chatbot": "Medical Assistant"
+    }
   },
   "navbar": {
     "book_now": "Book now",
@@ -644,6 +711,65 @@ static const Map<String,dynamic> _en = {
     "type_appointment": "Appointment",
     "type_offer": "Offer",
     "type_system": "System"
+  },
+  "checkout": {
+    "title": "Complete Payment",
+    "summary_title": "Booking Summary",
+    "summary_service": "Consultation Fee",
+    "summary_vat": "VAT (15%)",
+    "summary_total": "Total",
+    "payment_method_title": "Payment Method",
+    "pay_btn": "Pay",
+    "success_msg": "Payment Successful",
+    "select_method_error": "Please select a payment method"
+  },
+  "labs": {
+    "title": "Labs & Tests",
+    "search_hint": "Search for a test (e.g., Vitamin D)",
+    "packages_title": "⭐ Comprehensive Check-up Packages",
+    "view_all": "View All",
+    "book_btn": "Book",
+    "add_to_cart": "Add",
+    "package_count": "test",
+    "currency": "SAR",
+    "cart_total": "Total",
+    "checkout": "Checkout",
+    "test_conditions": "Test Conditions",
+    "sample_type": "Sample Type",
+    "fasting_required": "Fasting Required",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "booking": {
+    "title": "Book Appointment",
+    "morning_times": "Morning Times",
+    "evening_times": "Evening Times",
+    "patient_name_label": "Patient Name",
+    "patient_name_hint": "Patient's full name",
+    "patient_age_label": "Patient Age",
+    "patient_gender_label": "Patient Gender",
+    "gender_male": "Male",
+    "gender_female": "Female",
+    "female_status_label": "Health Status (Optional)",
+    "is_pregnant": "Are you pregnant?",
+    "is_breastfeeding": "Are you breastfeeding?",
+    "problem_label": "Patient's Complaint",
+    "problem_hint": "Describe the issue clearly and concisely...",
+    "btn_book_now": "Book Appointment Now",
+    "validation_error": "Please fill all required fields"
+  },
+  "appointments": {
+    "screen_title": "My Bookings",
+    "filter_all": "All",
+    "filter_accepted": "Accepted",
+    "filter_pending": "In Progress",
+    "filter_rejected": "Rejected",
+    "order_id": "Order #",
+    "price_label": "Price: ",
+    "status_accepted": "Accepted",
+    "status_pending": "Pending",
+    "status_rejected": "Rejected",
+    "currency": "\$"
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};

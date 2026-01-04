@@ -17,7 +17,7 @@ class DoctorBottomBar extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(
             color: AppColors.black.myOpacity(0.05),

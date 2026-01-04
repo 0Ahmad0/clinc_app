@@ -19,7 +19,9 @@ class NotificationItemWidget extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(16.sp),
       decoration: BoxDecoration(
-        color: isUnread ? Colors.white : const Color(0xFFFAFAFA),
+        // color: isUnread ? Colors.white : const Color(0xFFFAFAFA),
+        color: isUnread ? Theme.of(context).cardColor : Theme.of(context).cardColor.myOpacity(.3),
+
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(

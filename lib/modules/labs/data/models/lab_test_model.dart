@@ -1,10 +1,12 @@
 class LabTest {
   final String title;
-  final String category; // مثلاً: فيتامينات، وظائف حيوية
-  final String description; // شرح بسيط (للكشف عن..)
+  final String category;
+  final String description;
   final double price;
-  final bool isPackage; // هل هو باقة أم تحليل مفرد؟
-  final int? numberOfTests; // لو باقة، كم تحليل فيها؟
+  final bool isPackage;
+  final int numberOfTests;
+  final String sampleType; // دم، بول، مسحة
+  final bool isFastingRequired; // هل يحتاج صيام
 
   LabTest({
     required this.title,
@@ -12,6 +14,8 @@ class LabTest {
     required this.description,
     required this.price,
     this.isPackage = false,
-    this.numberOfTests,
+    this.numberOfTests = 1,
+    this.sampleType = "عينة دم",
+    this.isFastingRequired = false,
   });
 }

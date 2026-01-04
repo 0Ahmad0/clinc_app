@@ -24,7 +24,7 @@ class FeatureCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(12.sp),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(18.r),
         border: Border.all(color: AppColors.grey.myOpacity(0.1), width: .75),
         boxShadow: [

@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/doctors/presentation/controllers/doctors_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -17,20 +18,22 @@ class DoctorsScreen extends GetView<DoctorsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppAppBarWidget(title: tr(LocaleKeys.doctors_title),
-      showBackButton: false,
+      appBar: AppAppBarWidget(
+        title: tr(LocaleKeys.doctors_title),
+        showBackButton: false,
       ),
       body: Column(
         children: <Widget>[
           // 1. شريط البحث وزر الفلتر
-          Row(
-            children: [
-              Expanded(child: DoctorsSearchBar(controller: controller)),
-              8.horizontalSpace,
-              DoctorsFilterButton(controller: controller),
-            ],
+          AppPaddingWidget(
+            child: Row(
+              children: [
+                Expanded(child: DoctorsSearchBar(controller: controller)),
+                8.horizontalSpace,
+                DoctorsFilterButton(controller: controller),
+              ],
+            ),
           ),
-
           // 2. شريط الفلاتر الأفقي
           DoctorsFilterList(controller: controller),
 

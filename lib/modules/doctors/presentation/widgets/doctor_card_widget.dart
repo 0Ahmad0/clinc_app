@@ -19,7 +19,7 @@ class DoctorCard extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
@@ -36,7 +36,7 @@ class DoctorCard extends StatelessWidget {
             width: 70.w,
             height: 70.w,
             decoration: BoxDecoration(
-              color: Colors.grey[100],
+              color: Theme.of(context).disabledColor.myOpacity(.2),
               borderRadius: BorderRadius.circular(12.r),
               image: doctor.imageUrl.isNotEmpty
                   ? DecorationImage(

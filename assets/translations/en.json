@@ -80,17 +80,21 @@
     "description": "Enter your email below to reset your password"
   },
   "home": {
-    "home_text": "Home Page",
-    "search_text": "Search here...",
-    "main_section": "Main Section",
-    "labs": "Labs",
-    "insurance": "Insurance",
-    "doctors": "Doctors",
-    "clinics": "Clinics",
-    "specialities": "Specialities",
-    "emergency": "Emergency",
-    "consultations": "Consultations",
-    "chatbot": "Ask Me"
+    "app_bar": {
+      "welcome": "Welcome",
+      "search_hint": "Search for a doctor, clinic..."
+    },
+    "sections": {
+      "offers": "Our Offers",
+      "active_appointments": "Active Bookings",
+      "main_services": "Main Services"
+    },
+    "services": {
+      "clinics": "Clinics",
+      "labs": "Labs",
+      "insurance": "Insurance",
+      "chatbot": "Medical Assistant"
+    }
   },
   "navbar": {
     "book_now": "Book now",
@@ -312,5 +316,64 @@
     "type_appointment": "Appointment",
     "type_offer": "Offer",
     "type_system": "System"
+  },
+  "checkout": {
+    "title": "Complete Payment",
+    "summary_title": "Booking Summary",
+    "summary_service": "Consultation Fee",
+    "summary_vat": "VAT (15%)",
+    "summary_total": "Total",
+    "payment_method_title": "Payment Method",
+    "pay_btn": "Pay",
+    "success_msg": "Payment Successful",
+    "select_method_error": "Please select a payment method"
+  },
+  "labs": {
+    "title": "Labs & Tests",
+    "search_hint": "Search for a test (e.g., Vitamin D)",
+    "packages_title": "⭐ Comprehensive Check-up Packages",
+    "view_all": "View All",
+    "book_btn": "Book",
+    "add_to_cart": "Add",
+    "package_count": "test",
+    "currency": "SAR",
+    "cart_total": "Total",
+    "checkout": "Checkout",
+    "test_conditions": "Test Conditions",
+    "sample_type": "Sample Type",
+    "fasting_required": "Fasting Required",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "booking": {
+    "title": "Book Appointment",
+    "morning_times": "Morning Times",
+    "evening_times": "Evening Times",
+    "patient_name_label": "Patient Name",
+    "patient_name_hint": "Patient's full name",
+    "patient_age_label": "Patient Age",
+    "patient_gender_label": "Patient Gender",
+    "gender_male": "Male",
+    "gender_female": "Female",
+    "female_status_label": "Health Status (Optional)",
+    "is_pregnant": "Are you pregnant?",
+    "is_breastfeeding": "Are you breastfeeding?",
+    "problem_label": "Patient's Complaint",
+    "problem_hint": "Describe the issue clearly and concisely...",
+    "btn_book_now": "Book Appointment Now",
+    "validation_error": "Please fill all required fields"
+  },
+  "appointments": {
+    "screen_title": "My Bookings",
+    "filter_all": "All",
+    "filter_accepted": "Accepted",
+    "filter_pending": "In Progress",
+    "filter_rejected": "Rejected",
+    "order_id": "Order #",
+    "price_label": "Price: ",
+    "status_accepted": "Accepted",
+    "status_pending": "Pending",
+    "status_rejected": "Rejected",
+    "currency": "\\$"
   }
 }

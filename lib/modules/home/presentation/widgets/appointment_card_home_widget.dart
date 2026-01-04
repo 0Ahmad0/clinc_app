@@ -1,12 +1,12 @@
+import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-
-import '../../../../app/core/theme/app_colors.dart';
-import '../../../../app/core/widgets/app_padding_widget.dart';
+import 'package:iconsax/iconsax.dart';
 
 class AppointmentCardWidget extends StatelessWidget {
   final String doctorName;
@@ -26,74 +26,93 @@ class AppointmentCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return AppPaddingWidget(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'الحجوزات النشطة',
-            style: Theme.of(context).textTheme.displayLarge?.copyWith(
+            tr(LocaleKeys.home_sections_active_appointments),
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
               fontSize: 18.sp,
-              color: Theme.of(context).primaryColor,
             ),
           ),
-          10.verticalSpace,
+          12.verticalSpace,
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.w),
             decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(14.r),
+              color: theme.primaryColor,
+              borderRadius: BorderRadius.circular(16.r),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.blue.myOpacity(0.3),
+                  color: theme.primaryColor.withOpacity(0.3),
                   blurRadius: 15,
-                  offset: const Offset(0, 10),
+                  offset: const Offset(0, 8),
                 ),
               ],
             ),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               children: [
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: AppCachedImageWidget(
-                    imageUrl: imageUrl,
-                    width: 50.sp,
-                    height: 50.sp,
-                    clipRadius: 14.r,
-                  ),
-                  title: Text(
-                    doctorName,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontSize: 16.sp,
-                      color: AppColors.white,
+                Row(
+                  children: [
+                    AppCachedImageWidget(
+                      imageUrl: imageUrl,
+                      width: 50.sp,
+                      height: 50.sp,
+                      clipRadius: 12.r,
                     ),
-                  ),
-                  subtitle: Padding(
-                    padding: EdgeInsets.only(
-                      top: 4.h
-                    ),
-                    child: Text(
-                      specialty,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.white,
-                        fontSize: 12.sp,
+                    12.horizontalSpace,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            doctorName,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            specialty,
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.8),
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                        ],
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
+                    Container(
+                      padding: EdgeInsets.all(8.sp),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Iconsax.video, color: Colors.white, size: 20.sp),
+                    ),
+                  ],
                 ),
-                DecoratedBox(
+                16.verticalSpace,
+                Container(
+                  padding: EdgeInsets.all(12.w),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.myOpacity(.5),
-                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.black.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildScheduleItem(Icons.calendar_today_outlined, date),
-                      4.horizontalSpace,
-                      _buildScheduleItem(Icons.access_time_rounded, time),
+                      Icon(Iconsax.calendar_1, color: Colors.white, size: 18.sp),
+                      6.horizontalSpace,
+                      Text(date, style: TextStyle(color: Colors.white, fontSize: 12.sp)),
+                      12.horizontalSpace,
+                      Icon(Iconsax.clock, color: Colors.white, size: 18.sp),
+                      6.horizontalSpace,
+                      Text(time, style: TextStyle(color: Colors.white, fontSize: 12.sp)),
                     ],
                   ),
                 ),
@@ -101,35 +120,6 @@ class AppointmentCardWidget extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  // دالة مساعدة لبناء عنصر التاريخ والوقت
-  Widget _buildScheduleItem(IconData icon, String text) {
-    return Flexible(
-      child: ListTile(
-        dense: true,
-        contentPadding: EdgeInsets.zero,
-        leading: Container(
-          padding: const EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            color: Colors.white.myOpacity(0.15), // خلفية شفافة للأيقونة
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(icon, color: Colors.white, size: 16),
-        ),
-        title: Builder(
-          builder: (context) {
-            return Text(
-              text,
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                color: AppColors.white,
-                fontSize: 10.sp,
-              ),
-            );
-          },
-        ),
       ),
     );
   }

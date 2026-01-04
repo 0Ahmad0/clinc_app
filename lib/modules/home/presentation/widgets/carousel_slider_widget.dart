@@ -1,54 +1,43 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
-import 'package:clinc_app_t1/modules/home/data/models/offer_model.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
+import 'package:clinc_app_t1/modules/home/presentation/controllers/home_controller.dart';
+import 'package:clinc_app_t1/modules/home/presentation/widgets/offer_item_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-
-import '../../../../app/core/theme/app_colors.dart';
-import '../../../../app/core/widgets/app_padding_widget.dart';
-import '../controllers/home_controller.dart';
-import 'offer_item_widget.dart';
 
 class CarouselSliderWidget extends StatelessWidget {
-  const CarouselSliderWidget({
-    super.key,
-    required this.controller,
-  });
-
   final HomeController controller;
+  const CarouselSliderWidget({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        4.verticalSpace,
         AppPaddingWidget(
           child: Text(
-            'عروضنا',
-            style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                fontSize: 18.sp,
-                color: Theme.of(context).primaryColor
+            tr(LocaleKeys.home_sections_offers),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: 18.sp,
             ),
           ),
         ),
+        12.verticalSpace,
         CarouselSlider(
-            items: List.generate(
-              controller.offersList.length,
-              (index) {
-                final offer = controller.offersList[index];
-                return OfferItemWidget(offer: offer);
-              },
-            ),
-            options: CarouselOptions(
-                height: 120.h,
-                enlargeCenterPage: true,
-                viewportFraction: 0.9,
-                enlargeFactor: 0.15,
-                autoPlay: true,
-                autoPlayCurve: Curves.easeInOut
-                // autoPlay: true,
-                ))
+          items: controller.offersList.map((offer) => OfferItemWidget(offer: offer)).toList(),
+          options: CarouselOptions(
+            height: 140.h,
+            enlargeCenterPage: true,
+            viewportFraction: 0.9, // ليظهر جزء من الكارد التالي
+            autoPlay: true,
+            autoPlayInterval: const Duration(seconds: 4),
+            autoPlayCurve: Curves.fastOutSlowIn,
+          ),
+        ),
       ],
     );
   }

@@ -23,7 +23,7 @@ class ExpandableCard extends StatelessWidget {
     return Card(
       clipBehavior: Clip.hardEdge,
       elevation: 0,
-      color: AppColors.white,
+      color: Theme.of(context).cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.r),
         side: BorderSide(color: AppColors.grey.myOpacity(.2)),

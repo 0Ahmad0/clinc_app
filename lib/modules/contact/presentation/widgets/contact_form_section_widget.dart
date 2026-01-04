@@ -34,7 +34,7 @@ class ContactFormSection extends StatelessWidget {
         Container(
           padding: EdgeInsets.all(18.sp),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(

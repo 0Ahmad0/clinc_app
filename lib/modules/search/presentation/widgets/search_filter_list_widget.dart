@@ -11,106 +11,110 @@ import 'package:iconsax/iconsax.dart';
 
 class SearchFilterList extends StatelessWidget {
   final SearchAndFilterController controller;
+
   const SearchFilterList({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => controller.isFilterBarVisible.value
-          ? Container(
-              height: 50.h,
-              margin: EdgeInsets.only(bottom: 10.h),
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                children: [
-                  // زر المسح
-                  if (controller.hasActiveFilters)
-                    GestureDetector(
-                      onTap: () => controller.resetFilters(),
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 4.w),
-                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                        decoration: BoxDecoration(
-                          color: Colors.red.myOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8.r),
-                          border: Border.all(color: Colors.red.myOpacity(0.3)),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(Iconsax.filter_remove,
-                                size: 16.sp, color: Colors.red),
-                            4.horizontalSpace,
-                            Text(
-                              tr(LocaleKeys.search_filter_reset),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    fontSize: 12.sp,
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
+      () => Visibility(
+        visible: controller.isFilterBarVisible.value,
+        child: Container(
+          height: 42.h,
+          margin: EdgeInsets.only(bottom: 10.h),
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.symmetric(horizontal: 12.w),
+            children: [
+              // زر المسح
+              if (controller.hasActiveFilters)
+                GestureDetector(
+                  onTap: () => controller.resetFilters(),
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 4.w),
+                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                    decoration: BoxDecoration(
+                      color: Colors.red.myOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8.r),
+                      border: Border.all(color: Colors.red.myOpacity(0.3)),
                     ),
-
-                  // المنطقة
-                  _buildFilterItem(
-                    context,
-                    Icons.location_on,
-                    tr(LocaleKeys.search_filter_region),
-                    controller.regions,
-                    controller.selectedRegion,
-                    (v) => controller.updateFilter(region: v),
-                  ),
-
-                  // التأمين (يختفي إذا جئنا من صفحة التأمين)
-                  if (!controller.isInsuranceFilterHidden.value)
-                    _buildFilterItem(
-                      context,
-                      Icons.verified_user,
-                      tr(LocaleKeys.search_filter_insurance),
-                      controller.insuranceCompanies,
-                      controller.selectedInsurance,
-                      (v) => controller.updateFilter(insurance: v),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Iconsax.filter_remove,
+                          size: 16.sp,
+                          color: Colors.red,
+                        ),
+                        4.horizontalSpace,
+                        Text(
+                          tr(LocaleKeys.search_filter_reset),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                fontSize: 12.sp,
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                      ],
                     ),
-
-                  // التخصص
-                  _buildFilterItem(
-                    context,
-                    Icons.medical_services,
-                    tr(LocaleKeys.search_filter_specialty),
-                    controller.specialties,
-                    controller.selectedSpecialty,
-                    (v) => controller.updateFilter(specialty: v),
                   ),
+                ),
 
-                  // الجنس
-                  _buildFilterItem(
-                    context,
-                    Icons.wc,
-                    tr(LocaleKeys.search_filter_gender),
-                    controller.genders,
-                    controller.selectedGender,
-                    (v) => controller.updateFilter(gender: v),
-                  ),
-
-                  // الفرز
-                  _buildFilterItem(
-                    context,
-                    Icons.sort,
-                    tr(LocaleKeys.search_filter_sort),
-                    ['priceAsc', 'priceDesc', 'distanceAsc'], // Keys for logic
-                    controller.sortCriteria,
-                    (v) => controller.updateFilter(sort: v),
-                  ),
-                ],
+              // المنطقة
+              _buildFilterItem(
+                context,
+                Icons.location_on,
+                tr(LocaleKeys.search_filter_region),
+                controller.regions,
+                controller.selectedRegion,
+                (v) => controller.updateFilter(region: v),
               ),
-            )
-          : const SizedBox.shrink(),
+
+              // التأمين (يختفي إذا جئنا من صفحة التأمين)
+              if (!controller.isInsuranceFilterHidden.value)
+                _buildFilterItem(
+                  context,
+                  Icons.verified_user,
+                  tr(LocaleKeys.search_filter_insurance),
+                  controller.insuranceCompanies,
+                  controller.selectedInsurance,
+                  (v) => controller.updateFilter(insurance: v),
+                ),
+
+              // التخصص
+              _buildFilterItem(
+                context,
+                Icons.medical_services,
+                tr(LocaleKeys.search_filter_specialty),
+                controller.specialties,
+                controller.selectedSpecialty,
+                (v) => controller.updateFilter(specialty: v),
+              ),
+
+              // الجنس
+              _buildFilterItem(
+                context,
+                Icons.wc,
+                tr(LocaleKeys.search_filter_gender),
+                controller.genders,
+                controller.selectedGender,
+                (v) => controller.updateFilter(gender: v),
+              ),
+
+              // الفرز
+              _buildFilterItem(
+                context,
+                Icons.sort,
+                tr(LocaleKeys.search_filter_sort),
+                ['priceAsc', 'priceDesc', 'distanceAsc'],
+                // Keys for logic
+                controller.sortCriteria,
+                (v) => controller.updateFilter(sort: v),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -132,12 +136,12 @@ class SearchFilterList extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context).primaryColor.myOpacity(0.1)
-              : Colors.white,
+              : Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(8.r),
           border: Border.all(
             color: isSelected
                 ? Theme.of(context).primaryColor
-                : Colors.grey[300]!,
+                : Theme.of(context).disabledColor,
           ),
         ),
         child: DropdownButtonHideUnderline(
@@ -158,10 +162,9 @@ class SearchFilterList extends StatelessWidget {
                 Expanded(
                   child: Text(
                     isSelected ? selectedValue.value : label,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(fontSize: 12.sp),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(fontSize: 12.sp),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
@@ -171,18 +174,20 @@ class SearchFilterList extends StatelessWidget {
             items: options.map((v) {
               // ترجمة خيارات الفرز للعرض فقط
               String display = v;
-              if (v == 'priceAsc') display = tr(LocaleKeys.search_sort_price_asc);
-              if (v == 'priceDesc') display = tr(LocaleKeys.search_sort_price_desc);
-              if (v == 'distanceAsc') display = tr(LocaleKeys.search_sort_distance);
+              if (v == 'priceAsc')
+                display = tr(LocaleKeys.search_sort_price_asc);
+              if (v == 'priceDesc')
+                display = tr(LocaleKeys.search_sort_price_desc);
+              if (v == 'distanceAsc')
+                display = tr(LocaleKeys.search_sort_distance);
 
               return DropdownMenuItem(
                 value: v,
                 child: Text(
                   display,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(fontSize: 12.sp),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontSize: 12.sp),
                   overflow: TextOverflow.ellipsis,
                 ),
               );

@@ -17,7 +17,7 @@ class DoctorsFilterList extends StatelessWidget {
     return Obx(() => Visibility(
           visible: controller.isFilterBarVisible.value,
           child: Container(
-            height: 45.h,
+            height: 42.h,
             margin: EdgeInsets.only(bottom: 10.h),
             child: ListView(
               scrollDirection: Axis.horizontal,
@@ -94,57 +94,77 @@ class DoctorsFilterList extends StatelessWidget {
   }
 
   Widget _buildFilterItem(
-    BuildContext context,
-    IconData icon,
-    String label,
-    List<String> options,
-    RxString selectedValue,
-    Function(String) onUpdate,
-  ) {
+      BuildContext context,
+      IconData icon,
+      String label,
+      List<String> options,
+      RxString selectedValue,
+      Function(String) onUpdate,
+      ) {
     return Obx(() {
-      // نتحقق إذا القيمة المختارة ليست "الكل" 
-      bool isSelected = selectedValue.value != tr(LocaleKeys.doctors_filter_all) && selectedValue.value != 'الكل';
-      
+      bool isSelected =
+          selectedValue.value != 'الكل' && selectedValue.value != 'priceAsc';
       return Container(
+        width: 140.w,
         margin: EdgeInsets.symmetric(horizontal: 4.w),
-        padding: EdgeInsets.symmetric(horizontal: 10.w),
+        padding: EdgeInsets.symmetric(horizontal: 8.w),
         decoration: BoxDecoration(
           color: isSelected
-              ? Get.theme.primaryColor.myOpacity(0.1)
-              : Colors.white,
+              ? Theme.of(context).primaryColor.myOpacity(0.1)
+              : Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(8.r),
           border: Border.all(
-            color: isSelected ? Get.theme.primaryColor : Colors.grey[300]!,
+            color: isSelected
+                ? Theme.of(context).primaryColor
+                : Theme.of(context).disabledColor,
           ),
         ),
         child: DropdownButtonHideUnderline(
           child: DropdownButton<String>(
-            value: options.contains(selectedValue.value)
-                ? selectedValue.value
-                : null,
-            icon: Icon(Icons.keyboard_arrow_down,
-                size: 16.sp,
-                color: isSelected ? Get.theme.primaryColor : Colors.grey),
+            icon: Icon(Icons.keyboard_arrow_down, size: 18.sp),
+            isExpanded: true,
+            padding: EdgeInsets.zero,
             hint: Row(
               children: [
-                Icon(icon,
-                    size: 16.sp,
-                    color: isSelected ? Get.theme.primaryColor : Colors.grey),
+                Icon(
+                  icon,
+                  size: 16.sp,
+                  color: isSelected
+                      ? Theme.of(context).primaryColor
+                      : Colors.grey,
+                ),
                 4.horizontalSpace,
-                Text(
-                  isSelected ? selectedValue.value : label,
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: isSelected ? Get.theme.primaryColor : Colors.black87,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                Expanded(
+                  child: Text(
+                    isSelected ? selectedValue.value : label,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(fontSize: 12.sp),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
               ],
             ),
-            items: options.map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value, style: TextStyle(fontSize: 12.sp)),
+            items: options.map((v) {
+              // ترجمة خيارات الفرز للعرض فقط
+              String display = v;
+              if (v == 'priceAsc')
+                display = tr(LocaleKeys.search_sort_price_asc);
+              if (v == 'priceDesc')
+                display = tr(LocaleKeys.search_sort_price_desc);
+              if (v == 'distanceAsc')
+                display = tr(LocaleKeys.search_sort_distance);
+
+              return DropdownMenuItem(
+                value: v,
+                child: Text(
+                  display,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontSize: 12.sp),
+                  overflow: TextOverflow.ellipsis,
+                ),
               );
             }).toList(),
             onChanged: (v) => onUpdate(v!),
