@@ -1,4 +1,7 @@
+import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
+import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -11,16 +14,26 @@ class InsuranceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Get.toNamed(AppRoutes.search,arguments: {
+            'name': insurance['name']!,
+            'show': true
+
+        });
+      },
       borderRadius: BorderRadius.circular(16.r),
       child: Container(
         padding: EdgeInsets.all(8.w),
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(16.r),
+          border: Border.all(
+            color: AppColors.grey.myOpacity(.5),
+            width: .25
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.myOpacity(0.08),
+              color: Colors.grey.myOpacity(0.1),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -32,28 +45,10 @@ class InsuranceCard extends StatelessWidget {
             Expanded(
               child: Container(
                 padding: EdgeInsets.all(4.w),
-                child: Image.network(
-                  insurance['logo']!,
+                child: AppCachedImageWidget(
+                  imageUrl: insurance['logo']!,
                   fit: BoxFit.contain,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Icon(
-                      Icons.shield_outlined,
-                      color: Get.theme.primaryColor.myOpacity(0.5),
-                      size: 30.sp,
-                    );
-                  },
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                            : null,
-                      ),
-                    );
-                  },
+
                 ),
               ),
             ),
@@ -62,10 +57,7 @@ class InsuranceCard extends StatelessWidget {
               insurance['name']!,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 10.sp,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
           ],

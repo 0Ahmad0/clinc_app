@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_scaffold_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/search/presentation/controllers/search_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -16,13 +17,18 @@ class SearchScreen extends GetView<SearchAndFilterController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppAppBarWidget(title: tr(LocaleKeys.search_search_title)),
+    final args = Get.arguments as Map;
+    final name = args['name'];
+    final isShow = args['show'] ?? false;
+
+    return AppScaffoldWidget(
+      appBar: AppAppBarWidget(
+        title: isShow ? name : tr(LocaleKeys.search_search_title),
+      ),
       body: Column(
         children: <Widget>[
-          // 1. شريط البحث وزر الإعدادات
-          Padding(
-            padding: EdgeInsets.all(12.w),
+          Visibility(
+            visible: !isShow,
             child: Row(
               children: [
                 Expanded(child: SearchInputField(controller: controller)),
@@ -32,10 +38,10 @@ class SearchScreen extends GetView<SearchAndFilterController> {
             ),
           ),
 
-          // 2. شريط الفلاتر الأفقي
-          SearchFilterList(controller: controller),
+          Visibility(
+              visible: !isShow,
+              child: SearchFilterList(controller: controller)),
 
-          // 3. قائمة النتائج
           Expanded(child: SearchResultsList(controller: controller)),
         ],
       ),
