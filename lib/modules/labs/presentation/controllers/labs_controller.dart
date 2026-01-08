@@ -72,8 +72,44 @@ class LabsController extends GetxController {
     if (selectedCategory.value == 'الكل') return allTests;
     return allTests.where((t) => t.category == selectedCategory.value).toList();
   }
+  var fabPosition = Offset.zero.obs;
+
+  void updateFabPosition(Offset newPos) {
+    fabPosition.value = newPos;
+  }
+
+  // --- Drag Logic (نفس الموجود في Home) ---
+  final RxBool isDragging = false.obs;
+
+  // تهيئة الموقع المبدئي
+  void setInitialPosition(Size screenSize) {
+    // 72 هو هامش تقريبي (56 للزر + 16 هامش)
+    fabPosition.value = Offset(20, screenSize.height - 150);
+  }
+
+  // تحديث الموقع أثناء السحب
+  void updatePosition(DragUpdateDetails details, Size screenSize) {
+    double dx = fabPosition.value.dx + details.delta.dx;
+    double dy = fabPosition.value.dy + details.delta.dy;
+
+    // Clamp لمنع الخروج (56 هو حجم الزر)
+    dx = dx.clamp(0.0, screenSize.width - 56);
+    dy = dy.clamp(0.0, screenSize.height - 56);
+
+    fabPosition.value = Offset(dx, dy);
+  }
+
+  void startDragging() => isDragging.value = true;
+  void stopDragging() => isDragging.value = false;
+
+
 
   void changeCategory(String cat) => selectedCategory.value = cat;
+
+
+  void removeFromCart(LabTest test) => cartItems.remove(test);
+
+
 
   void addToCart(LabTest test) {
     if (!cartItems.contains(test)) {
@@ -108,9 +144,6 @@ class LabsController extends GetxController {
     Get.snackbar("قريباً", "سيتم تفعيل الدفع قريباً");
   }
 
-  void removeFromCart(LabTest test) {
-    cartItems.remove(test);
-  }
 
   void clearCart() {
     cartItems.clear();

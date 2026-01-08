@@ -6,129 +6,99 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-
 import '../screens/labs_cart_screen.dart';
 
-class DraggableCartButton extends StatefulWidget {
-  const DraggableCartButton({super.key});
+class DraggableCartButtonWidget extends GetView<LabsController> {
+  final BoxConstraints constraints;
 
-  @override
-  State<DraggableCartButton> createState() => _DraggableCartButtonState();
-}
-
-class _DraggableCartButtonState extends State<DraggableCartButton> {
-  late Offset position;
-
-  // تقدير عرض وارتفاع الزر لحساب الحدود بدقة
-  // جعلته عريضاً ليناسب طلبك "على امتدادها" نوعاً ما
-  final double buttonWidth = 180.w;
-  final double buttonHeight = 60.h;
-
-  @override
-  void initState() {
-    super.initState();
-    // تحديد الموقع المبدئي: أسفل المنتصف
-    position = Offset(
-      (Get.width - buttonWidth) / 2, // توسيط أفقي
-      Get.height - 120.h, // أسفل الشاشة بمسافة مناسبة
-    );
-  }
+  const DraggableCartButtonWidget({super.key, required this.constraints});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<LabsController>();
+    if (controller.fabPosition.value == Offset.zero) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        controller.setInitialPosition(
+          Size(constraints.maxWidth, constraints.maxHeight),
+        );
+      });
+    }
 
-    return Positioned(
-      left: position.dx,
-      top: position.dy,
-      child: Draggable(
-        feedback: _buildCartButton(controller, isDragging: true),
-        childWhenDragging: Container(), // نخفي الزر الأصلي أثناء السحب
-        onDraggableCanceled: (Velocity velocity, Offset offset) {
-          setState(() {
-            // هنا السحر لمنع الخروج من الشاشة
-            // نستخدم clamp لحصر القيمة بين (أقل هامش) و (عرض الشاشة - عرض الزر - هامش)
+    return Obx(() {
+      if (controller.cartItems.isEmpty) {
+        return const SizedBox.shrink();
+      }
 
-            double safeLeft = 20.w; // هامش يسار
-            double safeRight = Get.width - buttonWidth - 20.w; // هامش يمين
-
-            double safeTop = 100.h; // هامش علوي (تحت الهيدر)
-            double safeBottom = Get.height - buttonHeight - 50.h; // هامش سفلي
-
-            double newX = offset.dx.clamp(safeLeft, safeRight);
-            double newY = offset.dy.clamp(safeTop, safeBottom);
-
-            position = Offset(newX, newY);
-          });
-        },
+      return AnimatedPositioned(
+        duration: const Duration(milliseconds: 0),
+        left: controller.fabPosition.value.dx,
+        top: controller.fabPosition.value.dy,
         child: GestureDetector(
-          onTap: () {
-            Get.to(
-              () => const LabsCartScreen(),
-              transition: Transition.downToUp,
-            );
-          },
-          child: _buildCartButton(controller),
+          onPanStart: (_) => controller.startDragging(),
+          onPanUpdate: (details) => controller.updatePosition(
+            details,
+            Size(constraints.maxWidth, constraints.maxHeight),
+          ),
+          onPanEnd: (_) => controller.stopDragging(),
+          child: _buildFabBody(),
         ),
-      ),
-    );
+      );
+    });
   }
 
-  Widget _buildCartButton(
-    LabsController controller, {
-    bool isDragging = false,
-  }) {
-    return Material(
-      color: Colors.transparent,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        constraints: BoxConstraints(
-          minWidth: buttonWidth,
-          minHeight: buttonHeight,
-        ),
-        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-        // تكبير الحشوة
-        decoration: BoxDecoration(
-          color: AppColors.black.withOpacity(isDragging ? 0.9 : 1),
-          borderRadius: BorderRadius.circular(40.r), // تدوير أكبر للحواف
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.4),
-              blurRadius: isDragging ? 20 : 12,
-              offset: const Offset(0, 8),
-              spreadRadius: 2,
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // أيقونة السلة
-            Icon(Iconsax.shopping_cart, color: Colors.white, size: 28.sp),
-            // تكبير الأيقونة
-            12.horizontalSpace,
+  Widget _buildFabBody() {
+    return Obx(() {
+      final isDragging = controller.isDragging.value;
 
-            // العداد والنص
-            Obx(
-              () => Text(
-                "${controller.cartItems.length} ${tr(LocaleKeys.labs_package_count)}",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.sp, // تكبير الخط
-                ),
+      return InkWell(
+        onTap: (){
+          Get.to(
+                () => const LabsCartScreen(),
+            transition: Transition.downToUp,
+          );
+        },
+        child: Container(
+          width: isDragging ? 60.w : null,
+          height: 60.h,
+          padding: EdgeInsets.symmetric(horizontal: isDragging ? 0 : 20.w),
+          decoration: BoxDecoration(
+            color: AppColors.primary.withOpacity(isDragging ? 0.8 : 1),
+            borderRadius: BorderRadius.circular(24.r),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
               ),
-            ),
-
-            const Spacer(),
-            // لدفع السهم للنهاية إذا كان الزر عريضاً
-
-            // سهم صغير للدلالة على الانتقال
-            Icon(Icons.arrow_forward_ios, color: Colors.white70, size: 16.sp),
-          ],
+            ],
+          ),
+          // محتوى الزر (يتغير عند السحب)
+          child: isDragging
+              ? Center(
+                  child: Icon(
+                    Iconsax.shopping_cart,
+                    color: Colors.white,
+                    size: 24.sp,
+                  ),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Iconsax.shopping_cart, color: Colors.white, size: 24.sp),
+                    8.horizontalSpace,
+                    Text(
+                      "${controller.cartItems.length} ${tr(LocaleKeys.labs_package_count)}",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                    8.horizontalSpace,
+                    Icon(Iconsax.arrow_left, color: Colors.white, size: 24.sp),
+                  ],
+                ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

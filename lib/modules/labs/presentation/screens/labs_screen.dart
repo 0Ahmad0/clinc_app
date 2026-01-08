@@ -8,7 +8,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../widgets/draggable_cart_button_widget.dart';
-import '../widgets/labs_cart_floating_button_widget.dart';
 import '../widgets/labs_category_filter_widget.dart';
 import '../widgets/labs_packages_header_widget.dart';
 import '../widgets/labs_packages_list_widget.dart';
@@ -22,25 +21,30 @@ class LabsScreen extends GetView<LabsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppAppBarWidget(title: tr(LocaleKeys.labs_title)),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const LabsSearchBar(),
-                const LabsPackagesHeader(),
-                const LabsPackagesList(),
-                const LabsCategoryFilter(),
-                const LabsTestsList(),
-                80.verticalSpace,
-              ],
-            ),
-          ),
-          Obx(() => controller.cartItems.isNotEmpty
-              ? const DraggableCartButton()
-              : const SizedBox.shrink()),
-        ],
+      // LayoutBuilder ضروري لتمرير حدود الشاشة (Constraints) للزر
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
+            children: [
+              // 1. المحتوى
+              SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const LabsSearchBar(),
+                    const LabsPackagesHeader(),
+                    const LabsPackagesList(),
+                    const LabsCategoryFilter(),
+                    const LabsTestsList(),
+                  ],
+                ),
+              ),
+
+              // 2. الزر العائم القابل للسحب (بنفس منطق Home)
+              DraggableCartButtonWidget(constraints: constraints),
+            ],
+          );
+        },
       ),
     );
   }
