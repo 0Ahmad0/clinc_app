@@ -30,7 +30,7 @@ class _DraggableCartButtonState extends State<DraggableCartButton> {
     // تحديد الموقع المبدئي: أسفل المنتصف
     position = Offset(
       (Get.width - buttonWidth) / 2, // توسيط أفقي
-      Get.height - 120.h,            // أسفل الشاشة بمسافة مناسبة
+      Get.height - 120.h, // أسفل الشاشة بمسافة مناسبة
     );
   }
 
@@ -64,7 +64,7 @@ class _DraggableCartButtonState extends State<DraggableCartButton> {
         child: GestureDetector(
           onTap: () {
             Get.to(
-                  () => const LabsCartScreen(),
+              () => const LabsCartScreen(),
               transition: Transition.downToUp,
             );
           },
@@ -74,16 +74,20 @@ class _DraggableCartButtonState extends State<DraggableCartButton> {
     );
   }
 
-  Widget _buildCartButton(LabsController controller, {bool isDragging = false}) {
+  Widget _buildCartButton(
+    LabsController controller, {
+    bool isDragging = false,
+  }) {
     return Material(
       color: Colors.transparent,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         constraints: BoxConstraints(
-            minWidth: buttonWidth,
-            minHeight: buttonHeight
+          minWidth: buttonWidth,
+          minHeight: buttonHeight,
         ),
-        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h), // تكبير الحشوة
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+        // تكبير الحشوة
         decoration: BoxDecoration(
           color: AppColors.black.withOpacity(isDragging ? 0.9 : 1),
           borderRadius: BorderRadius.circular(40.r), // تدوير أكبر للحواف
@@ -101,20 +105,24 @@ class _DraggableCartButtonState extends State<DraggableCartButton> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // أيقونة السلة
-            Icon(Iconsax.shopping_cart, color: Colors.white, size: 28.sp), // تكبير الأيقونة
+            Icon(Iconsax.shopping_cart, color: Colors.white, size: 28.sp),
+            // تكبير الأيقونة
             12.horizontalSpace,
 
             // العداد والنص
-            Obx(() => Text(
-              "${controller.cartItems.length} ${tr(LocaleKeys.labs_package_count)}",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16.sp, // تكبير الخط
+            Obx(
+              () => Text(
+                "${controller.cartItems.length} ${tr(LocaleKeys.labs_package_count)}",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.sp, // تكبير الخط
+                ),
               ),
-            )),
+            ),
 
-            const Spacer(), // لدفع السهم للنهاية إذا كان الزر عريضاً
+            const Spacer(),
+            // لدفع السهم للنهاية إذا كان الزر عريضاً
 
             // سهم صغير للدلالة على الانتقال
             Icon(Icons.arrow_forward_ios, color: Colors.white70, size: 16.sp),
