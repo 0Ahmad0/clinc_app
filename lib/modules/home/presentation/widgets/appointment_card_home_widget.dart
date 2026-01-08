@@ -76,6 +76,7 @@ class AppointmentCardWidget extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+                          4.verticalSpace,
                           Text(
                             specialty,
                             style: TextStyle(
