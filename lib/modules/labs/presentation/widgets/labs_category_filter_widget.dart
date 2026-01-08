@@ -15,8 +15,12 @@ class LabsCategoryFilter extends GetView<LabsController> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 42.h,
+      height: 60.h,
       child: ListView.builder(
+        padding: EdgeInsets.symmetric(
+          horizontal: 10.w,
+          vertical: 10.h
+        ),
         scrollDirection: Axis.horizontal,
         itemCount: controller.categories.length,
         itemBuilder: (context, index) {

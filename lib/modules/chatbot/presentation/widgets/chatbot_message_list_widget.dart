@@ -53,13 +53,13 @@ class ChatbotMessageList extends StatelessWidget {
 
     return BubbleSpecialThree(
       text: msg.text,
-      color: msg.isSender ? Get.theme.primaryColor : Colors.white,
+      color: msg.isSender ? Get.theme.primaryColor : Theme.of(context).cardColor,
       tail: true,
       seen: false,
       sent: false,
       delivered: true,
       textStyle: TextStyle(
-        color: msg.isSender ? Colors.white : Colors.black87,
+        color: msg.isSender ? AppColors.white : null,
         fontSize: 12.sp,
         height: 1.8,
       ),

@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_scaffold_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/search/presentation/controllers/search_controller.dart';
@@ -17,11 +18,11 @@ class SearchScreen extends GetView<SearchAndFilterController> {
 
   @override
   Widget build(BuildContext context) {
-    final args = Get.arguments as Map;
-    final name = args['name'];
+    final args = Get.arguments ?? {};
+    final name = args['name'] ?? '';
     final isShow = args['show'] ?? false;
 
-    return AppScaffoldWidget(
+    return Scaffold(
       appBar: AppAppBarWidget(
         title: isShow ? name : tr(LocaleKeys.search_search_title),
       ),
@@ -29,15 +30,16 @@ class SearchScreen extends GetView<SearchAndFilterController> {
         children: <Widget>[
           Visibility(
             visible: !isShow,
-            child: Row(
-              children: [
-                Expanded(child: SearchInputField(controller: controller)),
-                4.horizontalSpace,
-                SearchFilterToggleButton(controller: controller),
-              ],
+            child: AppPaddingWidget(
+              child: Row(
+                children: [
+                  Expanded(child: SearchInputField(controller: controller)),
+                  4.horizontalSpace,
+                  SearchFilterToggleButton(controller: controller),
+                ],
+              ),
             ),
           ),
-
           Visibility(
               visible: !isShow,
               child: SearchFilterList(controller: controller)),

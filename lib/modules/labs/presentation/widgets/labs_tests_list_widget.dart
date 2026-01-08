@@ -19,6 +19,10 @@ class LabsTestsList extends GetView<LabsController> {
     return Obx(() {
       final list = controller.filteredTests;
       return ListView.builder(
+        padding: EdgeInsets.symmetric(
+          horizontal: 10.w,
+          vertical: 10.h
+        ),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: list.length,

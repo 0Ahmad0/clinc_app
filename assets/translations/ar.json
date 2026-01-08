@@ -344,7 +344,14 @@
     "sample_type": "نوع العينة",
     "fasting_required": "يتطلب صيام",
     "yes": "نعم",
-    "no": "لا"
+    "no": "لا",
+    "cart_title": "سلة التحاليل",
+    "cart_empty_title": "السلة فارغة",
+    "cart_empty_desc": "لم تقم بإضافة أي تحاليل بعد",
+    "cart_delete_item": "حذف",
+    "cart_confirm_order": "تأكيد الطلب",
+    "cart_summary": "ملخص الفاتورة",
+    "cart_total_price": "الإجمالي الكلي"
   },
   "booking": {
     "title": "حجز موعد",

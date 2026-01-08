@@ -23,7 +23,7 @@ class SearchResultsList extends StatelessWidget {
       }
       return ListView.builder(
         itemCount: controller.filteredHospitals.length,
-        padding: EdgeInsets.symmetric(horizontal: 12.w),
+        padding: EdgeInsets.symmetric(horizontal: 12.w,vertical: 10.h),
         itemBuilder: (context, index) {
           final hospital = controller.filteredHospitals[index];
           return GestureDetector(

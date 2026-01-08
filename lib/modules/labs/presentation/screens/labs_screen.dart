@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../widgets/draggable_cart_button_widget.dart';
 import '../widgets/labs_cart_floating_button_widget.dart';
 import '../widgets/labs_category_filter_widget.dart';
 import '../widgets/labs_packages_header_widget.dart';
@@ -19,30 +20,27 @@ class LabsScreen extends GetView<LabsController> {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffoldWidget(
+    return Scaffold(
       appBar: AppAppBarWidget(title: tr(LocaleKeys.labs_title)),
-      floatingActionButton: Obx(
-        () => controller.cartItems.isNotEmpty
-            ? const LabsCartFloatingButton()
-            : const SizedBox.shrink(),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            20.verticalSpace,
-            const LabsSearchBar(),
-            20.verticalSpace,
-            const LabsPackagesHeader(),
-            12.verticalSpace,
-            const LabsPackagesList(),
-            24.verticalSpace,
-            const LabsCategoryFilter(),
-            20.verticalSpace,
-            const LabsTestsList(),
-            80.verticalSpace,
-          ],
-        ),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const LabsSearchBar(),
+                const LabsPackagesHeader(),
+                const LabsPackagesList(),
+                const LabsCategoryFilter(),
+                const LabsTestsList(),
+                80.verticalSpace,
+              ],
+            ),
+          ),
+          Obx(() => controller.cartItems.isNotEmpty
+              ? const DraggableCartButton()
+              : const SizedBox.shrink()),
+        ],
       ),
     );
   }

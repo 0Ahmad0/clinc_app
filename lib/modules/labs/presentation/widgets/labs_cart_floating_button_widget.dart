@@ -14,64 +14,67 @@ class LabsCartFloatingButton extends GetView<LabsController> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-      margin: EdgeInsets.only(bottom: 10.h),
-      decoration: BoxDecoration(
-        color: AppColors.black, // لون داكن للزر
-        borderRadius: BorderRadius.circular(30.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: EdgeInsets.all(6.w),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+        margin: EdgeInsets.only(bottom: 10.h),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor, // لون داكن للزر
+          borderRadius: BorderRadius.circular(30.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
             ),
-            child: Text(
-              "${controller.cartItems.length}",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 12.sp,
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: EdgeInsets.all(6.w),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: Text(
+                "${controller.cartItems.length}",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12.sp,
+                ),
               ),
             ),
-          ),
-          10.horizontalSpace,
-          Text(
-            "${tr(LocaleKeys.labs_cart_total)}: ${controller.cartTotal} ${tr(LocaleKeys.labs_currency)}",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14.sp,
-              fontWeight: FontWeight.bold,
+            10.horizontalSpace,
+            Text(
+              "${tr(LocaleKeys.labs_cart_total)}: ${controller.cartTotal} ${tr(LocaleKeys.labs_currency)}",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          10.horizontalSpace,
-          VerticalDivider(color: Colors.white.withOpacity(0.3), width: 1),
-          10.horizontalSpace,
-          GestureDetector(
-            onTap: controller.proceedToCheckout,
-            child: Row(
-              children: [
-                Text(
-                  tr(LocaleKeys.labs_checkout),
-                  style: TextStyle(color: Colors.white, fontSize: 14.sp),
-                ),
-                4.horizontalSpace,
-                Icon(Icons.arrow_forward_ios, color: Colors.white, size: 12.sp),
-              ],
+            10.horizontalSpace,
+            VerticalDivider(color: Colors.white.withOpacity(0.3), width: 1),
+            10.horizontalSpace,
+            GestureDetector(
+              onTap: controller.proceedToCheckout,
+              child: Row(
+                children: [
+                  Text(
+                    tr(LocaleKeys.labs_checkout),
+                    style: TextStyle(color: Colors.white, fontSize: 14.sp),
+                  ),
+                  4.horizontalSpace,
+                  Icon(Icons.arrow_forward_ios, color: Colors.white, size: 12.sp),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

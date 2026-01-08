@@ -107,4 +107,12 @@ class LabsController extends GetxController {
     // );
     Get.snackbar("قريباً", "سيتم تفعيل الدفع قريباً");
   }
+
+  void removeFromCart(LabTest test) {
+    cartItems.remove(test);
+  }
+
+  void clearCart() {
+    cartItems.clear();
+  }
 }

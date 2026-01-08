@@ -21,7 +21,7 @@ class ChatbotInputArea extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10.h),
-      decoration: BoxDecoration(color: AppColors.white),
+      decoration: BoxDecoration(color: Theme.of(context).cardColor),
       child: Row(
         children: [
           IconButton(

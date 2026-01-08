@@ -359,7 +359,14 @@ class CodegenLoader extends AssetLoader{
     "sample_type": "نوع العينة",
     "fasting_required": "يتطلب صيام",
     "yes": "نعم",
-    "no": "لا"
+    "no": "لا",
+    "cart_title": "سلة التحاليل",
+    "cart_empty_title": "السلة فارغة",
+    "cart_empty_desc": "لم تقم بإضافة أي تحاليل بعد",
+    "cart_delete_item": "حذف",
+    "cart_confirm_order": "تأكيد الطلب",
+    "cart_summary": "ملخص الفاتورة",
+    "cart_total_price": "الإجمالي الكلي"
   },
   "booking": {
     "title": "حجز موعد",
@@ -738,7 +745,14 @@ static const Map<String,dynamic> _en = {
     "sample_type": "Sample Type",
     "fasting_required": "Fasting Required",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "cart_title": "Analyses Cart",
+    "cart_empty_title": "Cart is Empty",
+    "cart_empty_desc": "You haven't added any analyses yet",
+    "cart_delete_item": "Delete",
+    "cart_confirm_order": "Confirm Order",
+    "cart_summary": "Invoice Summary",
+    "cart_total_price": "Total Amount"
   },
   "booking": {
     "title": "Book Appointment",

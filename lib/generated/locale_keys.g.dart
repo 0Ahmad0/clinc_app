@@ -320,6 +320,13 @@ abstract class  LocaleKeys {
   static const labs_fasting_required = 'labs.fasting_required';
   static const labs_yes = 'labs.yes';
   static const labs_no = 'labs.no';
+  static const labs_cart_title = 'labs.cart_title';
+  static const labs_cart_empty_title = 'labs.cart_empty_title';
+  static const labs_cart_empty_desc = 'labs.cart_empty_desc';
+  static const labs_cart_delete_item = 'labs.cart_delete_item';
+  static const labs_cart_confirm_order = 'labs.cart_confirm_order';
+  static const labs_cart_summary = 'labs.cart_summary';
+  static const labs_cart_total_price = 'labs.cart_total_price';
   static const labs = 'labs';
   static const booking_title = 'booking.title';
   static const booking_morning_times = 'booking.morning_times';

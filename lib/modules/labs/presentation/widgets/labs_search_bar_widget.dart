@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/labs/data/models/lab_test_model.dart';
@@ -14,15 +15,17 @@ class LabsSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: tr(LocaleKeys.labs_search_hint),
-        prefixIcon: const Icon(Iconsax.search_normal),
-        filled: true,
-        fillColor: Theme.of(context).cardColor, // استخدام لون الكارد من الثيم
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
-          borderSide: BorderSide.none,
+    return AppPaddingWidget(
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: tr(LocaleKeys.labs_search_hint),
+          prefixIcon: const Icon(Iconsax.search_normal),
+          filled: true,
+          fillColor: Theme.of(context).cardColor, // استخدام لون الكارد من الثيم
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12.r),
+            borderSide: BorderSide.none,
+          ),
         ),
       ),
     );
