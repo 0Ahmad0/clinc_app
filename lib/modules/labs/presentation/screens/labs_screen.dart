@@ -21,26 +21,24 @@ class LabsScreen extends GetView<LabsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppAppBarWidget(title: tr(LocaleKeys.labs_title)),
-      // LayoutBuilder ضروري لتمرير حدود الشاشة (Constraints) للزر
       body: LayoutBuilder(
         builder: (context, constraints) {
           return Stack(
             children: [
-              // 1. المحتوى
-              SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const LabsSearchBar(),
-                    const LabsPackagesHeader(),
-                    const LabsPackagesList(),
-                    const LabsCategoryFilter(),
-                    const LabsTestsList(),
-                  ],
-                ),
+              CustomScrollView(
+                slivers: [
+                  const SliverToBoxAdapter(child: LabsSearchBar()),
+
+                  const SliverToBoxAdapter(child: LabsPackagesHeader()),
+
+                  const SliverToBoxAdapter(child: LabsPackagesList()),
+
+                  const SliverToBoxAdapter(child: LabsCategoryFilter()),
+
+                  const LabsTestsList(),
+                ],
               ),
 
-              // 2. الزر العائم القابل للسحب (بنفس منطق Home)
               DraggableCartButtonWidget(constraints: constraints),
             ],
           );
