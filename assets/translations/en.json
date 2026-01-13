@@ -368,6 +368,19 @@
     "profile_contact": "Contact Us",
     "call_now": "Call Now"
   },
+  "labs_profile": {
+    "location_title": "Laboratory Location",
+    "view_map": "View on Map",
+    "reviews_title": "Customer Reviews",
+    "add_review": "Add Your Review",
+    "no_reviews": "No reviews yet, be the first to review!",
+    "offers_title": "Available Offers & Coupons 🔥",
+    "copy_coupon": "Copy Code",
+    "coupon_copied": "Code copied successfully",
+    "write_review_hint": "Write your experience here...",
+    "submit_review": "Post Review",
+    "share_msg": "Check out this excellent laboratory: "
+  },
   "booking": {
     "title": "Book Appointment",
     "morning_times": "Morning Times",

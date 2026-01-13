@@ -384,6 +384,19 @@ class CodegenLoader extends AssetLoader{
     "profile_contact": "تواصل معنا",
     "call_now": "اتصال"
   },
+  "labs_profile": {
+    "location_title": "موقع المختبر",
+    "view_map": "عرض على الخريطة",
+    "reviews_title": "تقييمات المراجعين",
+    "add_review": "أضف تقييمك",
+    "no_reviews": "لا توجد تقييمات بعد، كن أول من يقيم!",
+    "offers_title": "العروض والكوبونات المتاحة 🔥",
+    "copy_coupon": "نسخ الكود",
+    "coupon_copied": "تم نسخ الكود بنجاح",
+    "write_review_hint": "اكتب تجربتك هنا...",
+    "submit_review": "نشر التقييم",
+    "share_msg": "انظر لهذا المختبر المميز: "
+  },
   "booking": {
     "title": "حجز موعد",
     "morning_times": "الأوقات الصباحية",
@@ -785,6 +798,19 @@ static const Map<String,dynamic> _en = {
     "profile_location": "Location",
     "profile_contact": "Contact Us",
     "call_now": "Call Now"
+  },
+  "labs_profile": {
+    "location_title": "Laboratory Location",
+    "view_map": "View on Map",
+    "reviews_title": "Customer Reviews",
+    "add_review": "Add Your Review",
+    "no_reviews": "No reviews yet, be the first to review!",
+    "offers_title": "Available Offers & Coupons 🔥",
+    "copy_coupon": "Copy Code",
+    "coupon_copied": "Code copied successfully",
+    "write_review_hint": "Write your experience here...",
+    "submit_review": "Post Review",
+    "share_msg": "Check out this excellent laboratory: "
   },
   "booking": {
     "title": "Book Appointment",

@@ -2,10 +2,13 @@ import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../app/data/offer_model.dart';
+import '../../../../app/data/review_model.dart';
 import '../../data/models/lab_model.dart';
 
 class LabsController extends GetxController {
   // بيانات وهمية
+// بيانات وهمية محدثة
   final List<LabModel> _allLabs = [
     LabModel(
       id: '1',
@@ -15,9 +18,32 @@ class LabsController extends GetxController {
       rating: 4.8,
       isOpen: true,
       category: 'تحاليل شاملة',
-      description: 'مختبرات رائدة تقدم كافة أنواع التحاليل الطبية بأحدث الأجهزة.',
+      description: 'مختبرات رائدة تقدم كافة أنواع التحاليل الطبية بأحدث الأجهزة ودقة عالية في النتائج.',
       services: ['فحص شامل', 'فيتامينات', 'هرمونات', 'فحص زواج'],
       phoneNumber: '920000000',
+      // --- الحقول الجديدة ---
+      latitude: 24.7136,
+      longitude: 46.6753,
+      offers: [
+        LabOfferModel(title: "باقة الفحص الشامل", code: "BORJ2024", discount: "20%"),
+        LabOfferModel(title: "فحص فيتامين د", code: "VITD50", discount: "50%"),
+      ],
+      reviews: [
+        ReviewModel(
+          userName: "محمد علي",
+          userImage: "https://i.pravatar.cc/150?img=11",
+          rating: 5.0,
+          comment: "خدمة سريعة وممتازة، النتائج وصلتني عالجوال.",
+          date: "منذ يومين",
+        ),
+        ReviewModel(
+          userName: "سارة أحمد",
+          userImage: "https://i.pravatar.cc/150?img=5",
+          rating: 4.5,
+          comment: "المكان نظيف جداً والموظفين محترمين.",
+          date: "منذ أسبوع",
+        ),
+      ],
     ),
     LabModel(
       id: '2',
@@ -27,13 +53,24 @@ class LabsController extends GetxController {
       rating: 4.5,
       isOpen: false,
       category: 'أشعة',
-      description: 'مركز متخصص في جميع أنواع الأشعة التشخيصية.',
+      description: 'مركز متخصص في جميع أنواع الأشعة التشخيصية (MRI, CT) بإشراف استشاريين.',
       services: ['MRI', 'CT Scan', 'X-Ray', 'Ultrasound'],
       phoneNumber: '012345678',
+      // --- الحقول الجديدة ---
+      latitude: 21.5433,
+      longitude: 39.1728,
+      offers: [], // لا يوجد عروض لهذا المخبر
+      reviews: [
+        ReviewModel(
+          userName: "خالد عمر",
+          userImage: "https://i.pravatar.cc/150?img=60",
+          rating: 4.0,
+          comment: "جهاز الرنين المغناطيسي حديث، لكن الانتظار طويل قليلاً.",
+          date: "منذ شهر",
+        ),
+      ],
     ),
-    // أضف المزيد...
   ];
-
   // المتغيرات المراقبة
   var filteredLabs = <LabModel>[].obs;
   var selectedFilter = 0.obs;
