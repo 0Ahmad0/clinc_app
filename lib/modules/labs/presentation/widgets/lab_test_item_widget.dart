@@ -2,7 +2,7 @@ import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/labs/data/models/lab_test_model.dart';
-import 'package:clinc_app_t1/modules/labs/presentation/controllers/labs_controller.dart';
+import 'package:clinc_app_t1/modules/labs/presentation/controllers/labs_test_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -79,7 +79,7 @@ class LabTestItem extends StatelessWidget {
           ),
           8.horizontalSpace,
           GestureDetector(
-            onTap: () => Get.find<LabsController>().addToCart(test),
+            onTap: () => Get.find<LabsTestController>().addToCart(test),
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
               decoration: BoxDecoration(

@@ -352,6 +352,22 @@
     "cart_summary": "Invoice Summary",
     "cart_total_price": "Total Amount"
   },
+  "labs_page": {
+    "title": "Medical Laboratories",
+    "search_hint": "Search for a laboratory...",
+    "filter_all": "All",
+    "filter_analysis": "Comprehensive Analysis",
+    "filter_radiology": "Radiology",
+    "filter_pathology": "Pathology",
+    "status_open": "Open Now",
+    "status_closed": "Closed",
+    "book_btn": "Book Appointment",
+    "profile_about": "About the Laboratory",
+    "profile_services": "Available Services",
+    "profile_location": "Location",
+    "profile_contact": "Contact Us",
+    "call_now": "Call Now"
+  },
   "booking": {
     "title": "Book Appointment",
     "morning_times": "Morning Times",

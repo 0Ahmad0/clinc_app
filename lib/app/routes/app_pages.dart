@@ -1,4 +1,6 @@
 import 'package:clinc_app_t1/modules/book_appointments/presentation/screens/book_appointment_screen.dart';
+import 'package:clinc_app_t1/modules/labs/presentation/screens/lab_profile_screen.dart';
+import 'package:clinc_app_t1/modules/labs/presentation/screens/labs_screen.dart';
 import 'package:clinc_app_t1/modules/navbar/presentation/bindings/navbar_binding.dart';
 import 'package:clinc_app_t1/modules/navbar/presentation/screens/navbar_screen.dart';
 import 'package:clinc_app_t1/modules/profile/bindings/profile_binding.dart';
@@ -23,7 +25,7 @@ import '../../modules/doctors/presentation/screens/doctors_screen.dart';
 import '../../modules/insurance/presentation/bindings/insurance_binding.dart';
 import '../../modules/insurance/presentation/screens/insurance_screen.dart';
 import '../../modules/labs/presentation/bindings/labs_binding.dart';
-import '../../modules/labs/presentation/screens/labs_screen.dart';
+import '../../modules/labs/presentation/screens/labs_test_screen.dart';
 import '../../modules/my_appointment_details/presentation/bindings/my_appointment_details_binding.dart';
 import '../../modules/my_appointment_details/presentation/screens/my_appointment_details_screen.dart';
 import '../../modules/notifications/presentation/bindings/notifications_binding.dart';
@@ -178,6 +180,16 @@ class AppPages {
     GetPage(
       name: AppRoutes.labs,
       page: () => const LabsScreen(),
+      binding: LabsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.labsTest,
+      page: () => const LabsTestScreen(),
+      binding: LabsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.labProfile,
+      page: () => const LabProfileScreen(),
       binding: LabsBinding(),
     ),
     GetPage(

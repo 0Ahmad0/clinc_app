@@ -368,6 +368,22 @@ class CodegenLoader extends AssetLoader{
     "cart_summary": "ملخص الفاتورة",
     "cart_total_price": "الإجمالي الكلي"
   },
+  "labs_page": {
+    "title": "المختبرات الطبية",
+    "search_hint": "ابحث عن مختبر...",
+    "filter_all": "الكل",
+    "filter_analysis": "تحاليل شاملة",
+    "filter_radiology": "أشعة",
+    "filter_pathology": "أنسجة",
+    "status_open": "مفتوح الآن",
+    "status_closed": "مغلق",
+    "book_btn": "حجز موعد",
+    "profile_about": "عن المختبر",
+    "profile_services": "الخدمات المتاحة",
+    "profile_location": "الموقع",
+    "profile_contact": "تواصل معنا",
+    "call_now": "اتصال"
+  },
   "booking": {
     "title": "حجز موعد",
     "morning_times": "الأوقات الصباحية",
@@ -753,6 +769,22 @@ static const Map<String,dynamic> _en = {
     "cart_confirm_order": "Confirm Order",
     "cart_summary": "Invoice Summary",
     "cart_total_price": "Total Amount"
+  },
+  "labs_page": {
+    "title": "Medical Laboratories",
+    "search_hint": "Search for a laboratory...",
+    "filter_all": "All",
+    "filter_analysis": "Comprehensive Analysis",
+    "filter_radiology": "Radiology",
+    "filter_pathology": "Pathology",
+    "status_open": "Open Now",
+    "status_closed": "Closed",
+    "book_btn": "Book Appointment",
+    "profile_about": "About the Laboratory",
+    "profile_services": "Available Services",
+    "profile_location": "Location",
+    "profile_contact": "Contact Us",
+    "call_now": "Call Now"
   },
   "booking": {
     "title": "Book Appointment",

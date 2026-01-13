@@ -16,39 +16,42 @@ class ThemeToggleWidget extends GetView<SettingsAppController> {
     return Obx(() {
       final isDark = controller.isDarkMode;
 
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // النص (يتغير حسب الثيم)
-          Text(
-            isDark
-                ? tr(LocaleKeys.setting_mode_dark)
-                : tr(LocaleKeys.setting_mode_light),
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          8.horizontalSpace,
-
-          IconButton(
-            onPressed: () {
-              controller.toggleTheme(!isDark);
-            },
-            icon: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              transitionBuilder: (child, anim) => RotationTransition(
-                turns: child.key == ValueKey('icon1')
-                    ? Tween<double>(begin: 1, end: 0.75).animate(anim)
-                    : Tween<double>(begin: 0.75, end: 1).animate(anim),
-                child: ScaleTransition(scale: anim, child: child),
+      return InkWell(
+        borderRadius: BorderRadius.circular(8.r),
+        onTap: (){
+          controller.toggleTheme(!isDark);
+        },
+        child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // النص (يتغير حسب الثيم)
+              Text(
+                isDark
+                    ? tr(LocaleKeys.setting_mode_dark)
+                    : tr(LocaleKeys.setting_mode_light),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
-              child: Icon(
-                isDark ? Iconsax.moon : Iconsax.sun_1,
-                key: ValueKey(isDark ? 'icon1' : 'icon2'),
-                color: Theme.of(context).primaryColor,
-                size: 24.sp,
-              ),
-            ),
+              6.horizontalSpace,
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (child, anim) => RotationTransition(
+                  turns: child.key == ValueKey('icon1')
+                      ? Tween<double>(begin: 1, end: 0.75).animate(anim)
+                      : Tween<double>(begin: 0.75, end: 1).animate(anim),
+                  child: ScaleTransition(scale: anim, child: child),
+                ),
+                child: Icon(
+                  isDark ? Iconsax.moon : Iconsax.sun_1,
+                  key: ValueKey(isDark ? 'icon1' : 'icon2'),
+                  color: Theme.of(context).primaryColor,
+                  size: 24.sp,
+                ),
+              )
+            ],
           ),
-        ],
+        ),
       );
     });
   }

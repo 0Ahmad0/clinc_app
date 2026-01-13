@@ -27,6 +27,8 @@ abstract class AppRoutes {
   static const doctors = '/doctors';
   static const chatbot = '/chatbot';
   static const labs = '/labs';
+  static const labsTest = '/labs_test';
+  static const labProfile = '/lab_profile';
   static const insurance = '/insurance';
 
 

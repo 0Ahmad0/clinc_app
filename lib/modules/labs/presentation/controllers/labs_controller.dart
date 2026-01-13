@@ -1,151 +1,87 @@
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
-import 'package:clinc_app_t1/modules/labs/data/models/lab_test_model.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../app/routes/app_routes.dart';
-import '../../../payment/presentation/screens/check_out_screen.dart';
+import '../../data/models/lab_model.dart';
 
 class LabsController extends GetxController {
-  // القائمة الكاملة (بيانات وهمية محسنة)
-  final allTests = <LabTest>[
-    LabTest(
-      title: "صورة الدم الكاملة (CBC)",
-      category: "وظائف حيوية",
-      description: "للكشف عن فقر الدم والالتهابات",
-      price: 80,
-      isFastingRequired: false,
+  // بيانات وهمية
+  final List<LabModel> _allLabs = [
+    LabModel(
+      id: '1',
+      name: 'مختبرات البرج الطبية',
+      imageUrl: 'https://img.freepik.com/free-photo/laboratory-interior_1098-13411.jpg',
+      address: 'شارع الملك فهد، الرياض',
+      rating: 4.8,
+      isOpen: true,
+      category: 'تحاليل شاملة',
+      description: 'مختبرات رائدة تقدم كافة أنواع التحاليل الطبية بأحدث الأجهزة.',
+      services: ['فحص شامل', 'فيتامينات', 'هرمونات', 'فحص زواج'],
+      phoneNumber: '920000000',
     ),
-    LabTest(
-      title: "وظائف الكلى الشاملة",
-      category: "وظائف حيوية",
-      description: "يوريا، كرياتينين، أملاح الدم",
-      price: 120,
-      isFastingRequired: true,
+    LabModel(
+      id: '2',
+      name: 'مركز الأشعة المتطور',
+      imageUrl: 'https://img.freepik.com/free-photo/ct-scan-room-hospital_1170-2228.jpg',
+      address: 'حي الورود، جدة',
+      rating: 4.5,
+      isOpen: false,
+      category: 'أشعة',
+      description: 'مركز متخصص في جميع أنواع الأشعة التشخيصية.',
+      services: ['MRI', 'CT Scan', 'X-Ray', 'Ultrasound'],
+      phoneNumber: '012345678',
     ),
-    LabTest(
-      title: "فيتامين د (Vitamin D)",
-      category: "فيتامينات",
-      description: "للكشف عن آلام العظام والخمول",
-      price: 199,
-      sampleType: "عينة دم",
-    ),
-
-    // باقات
-    LabTest(
-      title: "باقة الفحص الشامل (الفضية)",
-      category: "باقات",
-      description: "تشمل صورة الدم، السكر، الكوليسترول، وظائف الكلى والكبد",
-      price: 499,
-      isPackage: true,
-      numberOfTests: 12,
-      isFastingRequired: true,
-    ),
-    LabTest(
-      title: "باقة صحة الرجل",
-      category: "باقات",
-      description: "فحوصات شاملة + البروستاتا والفيتامينات",
-      price: 650,
-      isPackage: true,
-      numberOfTests: 15,
-      isFastingRequired: true,
-    ),
-  ].obs;
-
-  var selectedCategory = 'الكل'.obs;
-  final categories = [
-    'الكل',
-    'باقات',
-    'فيتامينات',
-    'وظائف حيوية',
-    'سكري',
-    'غدد',
+    // أضف المزيد...
   ];
 
-  // السلة
-  var cartItems = <LabTest>[].obs;
+  // المتغيرات المراقبة
+  var filteredLabs = <LabModel>[].obs;
+  var selectedFilter = 0.obs;
+  var searchQuery = ''.obs;
 
-  double get cartTotal => cartItems.fold(0, (sum, item) => sum + item.price);
+  // قائمة الفلاتر
+  final List<String> filterLabels = [
+    LocaleKeys.labs_page_filter_all,
+    LocaleKeys.labs_page_filter_analysis,
+    LocaleKeys.labs_page_filter_radiology,
+    LocaleKeys.labs_page_filter_pathology,
+  ];
 
-  List<LabTest> get filteredTests {
-    if (selectedCategory.value == 'الكل') return allTests;
-    return allTests.where((t) => t.category == selectedCategory.value).toList();
-  }
-  var fabPosition = Offset.zero.obs;
-
-  void updateFabPosition(Offset newPos) {
-    fabPosition.value = newPos;
-  }
-
-  // --- Drag Logic (نفس الموجود في Home) ---
-  final RxBool isDragging = false.obs;
-
-  // تهيئة الموقع المبدئي
-  void setInitialPosition(Size screenSize) {
-    // 72 هو هامش تقريبي (56 للزر + 16 هامش)
-    fabPosition.value = Offset(20, screenSize.height - 150);
+  @override
+  void onInit() {
+    super.onInit();
+    filteredLabs.assignAll(_allLabs);
   }
 
-  // تحديث الموقع أثناء السحب
-  void updatePosition(DragUpdateDetails details, Size screenSize) {
-    double dx = fabPosition.value.dx + details.delta.dx;
-    double dy = fabPosition.value.dy + details.delta.dy;
+  // منطق الفلترة والبحث
+  void filterLabs() {
+    String query = searchQuery.value.toLowerCase();
+    String category = selectedFilter.value == 0 ? '' : _getCategoryByIndex(selectedFilter.value);
 
-    // Clamp لمنع الخروج (56 هو حجم الزر)
-    dx = dx.clamp(0.0, screenSize.width - 56);
-    dy = dy.clamp(0.0, screenSize.height - 56);
-
-    fabPosition.value = Offset(dx, dy);
+    filteredLabs.assignAll(_allLabs.where((lab) {
+      bool matchesSearch = lab.name.toLowerCase().contains(query);
+      bool matchesCategory = category.isEmpty || lab.category == category;
+      return matchesSearch && matchesCategory;
+    }).toList());
   }
 
-  void startDragging() => isDragging.value = true;
-  void stopDragging() => isDragging.value = false;
+  void updateSearch(String val) {
+    searchQuery.value = val;
+    filterLabs();
+  }
 
+  void changeFilter(int index) {
+    selectedFilter.value = index;
+    filterLabs();
+  }
 
-
-  void changeCategory(String cat) => selectedCategory.value = cat;
-
-
-  void removeFromCart(LabTest test) => cartItems.remove(test);
-
-
-
-  void addToCart(LabTest test) {
-    if (!cartItems.contains(test)) {
-      cartItems.add(test);
-      Get.snackbar(
-        "تم الإضافة",
-        "${test.title} أضيفت للسلة",
-        backgroundColor: Colors.green.withOpacity(0.1),
-        colorText: Colors.green,
-        duration: const Duration(seconds: 1),
-      );
-    } else {
-      Get.snackbar(
-        "تنبيه",
-        "هذا العنصر موجود بالفعل",
-        backgroundColor: Colors.orange.withOpacity(0.1),
-        colorText: Colors.orange,
-        duration: const Duration(seconds: 1),
-      );
+  // دالة مساعدة لربط الإندكس بنوع المخبر (يمكن تحسينها باستخدام Enum)
+  String _getCategoryByIndex(int index) {
+    switch (index) {
+      case 1: return 'تحاليل شاملة';
+      case 2: return 'أشعة';
+      case 3: return 'أنسجة';
+      default: return '';
     }
-  }
-
-  void proceedToCheckout() {
-    Get.to(
-      CheckoutScreen(),
-      arguments: {'total': cartTotal, 'items': cartItems},
-    );
-    // هنا نتوجه لصفحة الدفع مع تمرير السلة
-    // Get.toNamed(AppRoutes.checkout,
-    // arguments: {'total': cartTotal, 'items': cartItems}
-    // );
-    Get.snackbar("قريباً", "سيتم تفعيل الدفع قريباً");
-  }
-
-
-  void clearCart() {
-    cartItems.clear();
   }
 }

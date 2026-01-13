@@ -1,11 +1,11 @@
-import 'package:clinc_app_t1/modules/labs/presentation/controllers/labs_controller.dart';
+import 'package:clinc_app_t1/modules/labs/presentation/controllers/labs_test_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'lab_test_item_widget.dart';
 
-class LabsTestsList extends GetView<LabsController> {
+class LabsTestsList extends GetView<LabsTestController> {
   const LabsTestsList({super.key});
 
   @override
