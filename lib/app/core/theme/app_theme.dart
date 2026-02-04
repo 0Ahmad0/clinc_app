@@ -22,7 +22,6 @@ class AppTheme {
       primaryColor: AppColors.primary,
       scaffoldBackgroundColor: AppColors.lightScaffold,
       fontFamily: getFontFamily(languageCode),
-
       // تعريف TextTheme وتطبيق اللون الأسود عليه
       textTheme: TextTheme(
         displayLarge: TextStyle(

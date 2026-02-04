@@ -28,11 +28,26 @@ class CodegenLoader extends AssetLoader{
     "phone_invalid": "صيغة الرقم غير صحيحة (مثال: 0512345678)",
     "password_empty": "الرجاء إدخال كلمة المرور",
     "password_short": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
-    "password_complex": "كلمة المرور يجب أن تحتوي على حرف واحد ورقم واحد على الأقل",
+    "password_uppercase": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل",
+    "password_lowercase": "يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل",
+    "password_digit": "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل",
+    "password_special": "يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل (!@#/%^&*)",
+    "password_strong": "كلمة المرور ضعيفة. يجب أن تحتوي على حرف كبير، حرف صغير، رقم، ورمز خاص",
     "confirmPassword_empty": "الرجاء تأكيد كلمة المرور",
     "confirmPassword_noMatch": "كلمتا المرور غير متطابقتين",
     "emailOrUsername_empty": "الرجاء إدخال البريد الإلكتروني أو اسم المستخدم",
     "emailOrUsername_invalid": "الصيغة المدخلة غير صالحة"
+  },
+  "password_validation": {
+    "requirements_title": "متطلبات كلمة المرور:",
+    "met_status": "شروط مستوفاة:",
+    "of": "من",
+    "req_length": "8 أحرف على الأقل",
+    "req_upper": "حرف كبير (A-Z)",
+    "req_lower": "حرف صغير (a-z)",
+    "req_digit": "رقم واحد (0-9)",
+    "req_special": "رمز خاص (!@#\\u0024%)",
+    "req_no_spaces": "بدون مسافات"
   },
   "core": {
     "yes": "نعم",
@@ -55,12 +70,12 @@ class CodegenLoader extends AssetLoader{
     "welcome_description": "بوابتك الرقمية للصحة"
   },
   "onboarding": {
-    "title1": "تذكيرات ذكية بالدواء",
-    "sub_title1": "لا تفوّت أي جرعة بعد اليوم. احصل على تنبيهات دقيقة ومباشرة لمواعيد دوائك وابق على اطلاع بجدولك الصحي.",
-    "title2": "مسح سهل للوصفات الطبية",
-    "sub_title2": "انضم إلى الدراسات أو سجل حضورك الصحي بسهولة. فقط امسح رمز الاستجابة السريعة (QR) وستكون جاهزًا في ثوانٍ.",
-    "title3": "رؤى صحية مخصصة",
-    "sub_title3": "افهم صحتك بشكل أعمق. احصل على نصائح وإحصائيات مخصصة بناءً على بياناتك وتقدمك اليومي."
+    "title1": "نخبة الأطباء بين يديك",
+    "sub_title1": "وصول سريع لأكفأ الاستشاريين في كافة التخصصات. جودة طبية نضعها بين يديك لضمان أفضل تجربة علاجية.",
+    "title2": "موعدك بضغطة زر",
+    "sub_title2": "اختر الوقت الذي يناسبك واحجز موعدك فوراً بدون مكالمات. سنرسل لك تنبيهات ذكية لتذكيرك بموعدك قبل بدئه.",
+    "title3": "نحن معك في كل خطوة",
+    "sub_title3": "اطمئن.. خصوصيتك وسجلاتك الطبية في أيدٍ أمينة ومشفرة بالكامل. هدفنا أن نكون رفيقك الدائم في رحلة تعافيك، لتبقى صحتك دائماً بأمان ومعك أينما كنت."
   },
   "login": {
     "welcome_back": "أهلاً بعودتك! 👋",
@@ -73,7 +88,8 @@ class CodegenLoader extends AssetLoader{
     "continue_with_apple": "آبل",
     "continue_with_google": "جوجل",
     "do_not_have_account": "ليس لديك حساب؟ ",
-    "signup": "إنشاء حساب"
+    "signup": "إنشاء حساب",
+    "visitor_login": "الدخول كزائر"
   },
   "signup": {
     "welcome": "أهلاً بك! 💊",
@@ -88,7 +104,8 @@ class CodegenLoader extends AssetLoader{
     "continue_with_apple": "آبل",
     "continue_with_google": "جوجل",
     "hava_account": "لديك حساب بالفعل؟ ",
-    "login": "تسجيل الدخول"
+    "login": "تسجيل الدخول",
+    "visitor_register": "التسجيل كزائر"
   },
   "forgetPassword": {
     "email": "البريد الالكتروني",
@@ -426,7 +443,7 @@ class CodegenLoader extends AssetLoader{
     "status_accepted": "تم قبول الطلب",
     "status_pending": "قيد الانتظار",
     "status_rejected": "تم رفض الطلب",
-    "currency": "\$"
+    "currency": "ريال"
   }
 };
 static const Map<String,dynamic> _en = {
@@ -434,20 +451,35 @@ static const Map<String,dynamic> _en = {
     "emptyField": "This field is required",
     "name_empty": "Please enter your name",
     "name_short": "Name is too short",
-    "username_empty": "Please enter a username",
+    "username_empty": "Please enter username",
     "username_short": "Username must be at least 4 characters",
-    "username_invalid": "Username contains invalid characters (use letters, numbers, and _ only)",
-    "email_empty": "Please enter your email",
-    "email_invalid": "Email format is incorrect",
-    "phone_empty": "Please enter your phone number",
-    "phone_invalid": "Phone format is incorrect (e.g., 0512345678)",
-    "password_empty": "Please enter a password",
+    "username_invalid": "Username contains invalid symbols (use letters, numbers, and _ only)",
+    "email_empty": "Please enter email",
+    "email_invalid": "Invalid email format",
+    "phone_empty": "Please enter phone number",
+    "phone_invalid": "Invalid phone number format (example: 0512345678)",
+    "password_empty": "Please enter password",
     "password_short": "Password must be at least 8 characters",
-    "password_complex": "Password must contain at least one letter and one number",
-    "confirmPassword_empty": "Please confirm your password",
+    "password_uppercase": "Password must contain at least one uppercase letter",
+    "password_lowercase": "Password must contain at least one lowercase letter",
+    "password_digit": "Password must contain at least one digit",
+    "password_special": "Password must contain at least one special character (!@#/%^&*)",
+    "password_strong": "Weak password. Must contain uppercase, lowercase, digit, and special character",
+    "confirmPassword_empty": "Please confirm password",
     "confirmPassword_noMatch": "Passwords do not match",
-    "emailOrUsername_empty": "Please enter your email or username",
-    "emailOrUsername_invalid": "The input format is invalid"
+    "emailOrUsername_empty": "Please enter email or username",
+    "emailOrUsername_invalid": "Invalid input format"
+  },
+  "password_validation": {
+    "requirements_title": "Password Requirements:",
+    "met_status": "Requirements met:",
+    "of": "of",
+    "req_length": "At least 8 characters",
+    "req_upper": "Uppercase (A-Z)",
+    "req_lower": "Lowercase (a-z)",
+    "req_digit": "One digit (0-9)",
+    "req_special": "Special character (!@#\\u0024%)",
+    "req_no_spaces": "No spaces"
   },
   "core": {
     "yes": "Yes",
@@ -470,12 +502,12 @@ static const Map<String,dynamic> _en = {
     "welcome_description": "Your Digital Gateway to Health"
   },
   "onboarding": {
-    "title1": "Smart medication reminders",
-    "sub_title1": "Don't miss a dose again. Get accurate and direct alerts for your medication times and stay up-to-date with your health schedule.",
-    "title2": "Easy prescription scanning",
-    "sub_title2": "Join studies or register your health attendance easily. Just scan the QR code and you'll be ready to go in seconds.",
-    "title3": "Personalised health insights",
-    "sub_title3": "Understand your health more deeply. Receive personalized tips and statistics based on your data and daily progress."
+    "title1": "Elite Doctors at Your Fingertips",
+    "sub_title1": "Quick access to the most qualified consultants in all specialties. Medical quality we put at your fingertips to ensure the best treatment experience.",
+    "title2": "Your Appointment in One Click",
+    "sub_title2": "Choose the time that suits you and book your appointment instantly without phone calls. We'll send you smart notifications to remind you before your appointment starts.",
+    "title3": "We're With You Every Step",
+    "sub_title3": "Rest assured.. Your privacy and medical records are in safe, fully encrypted hands. Our goal is to be your permanent companion in your recovery journey, so your health always remains safe and with you wherever you are."
   },
   "login": {
     "welcome_back": "Hi, Welcome Back! 👋",
@@ -488,7 +520,8 @@ static const Map<String,dynamic> _en = {
     "continue_with_apple": "Apple",
     "continue_with_google": "Google",
     "do_not_have_account": "Don’t have an account ? ",
-    "signup": "Sign Up"
+    "signup": "Sign Up",
+    "visitor_register": "Login as Visitor"
   },
   "signup": {
     "welcome": "Welcome! 💊",
@@ -503,7 +536,8 @@ static const Map<String,dynamic> _en = {
     "continue_with_apple": "Apple",
     "continue_with_google": "Google",
     "hava_account": "Already have an account? ",
-    "login": "Login"
+    "login": "Login",
+    "visitor_register": "Register as Visitor"
   },
   "forgetPassword": {
     "email": "Email",
@@ -841,7 +875,7 @@ static const Map<String,dynamic> _en = {
     "status_accepted": "Accepted",
     "status_pending": "Pending",
     "status_rejected": "Rejected",
-    "currency": "\$"
+    "currency": "SAR"
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};

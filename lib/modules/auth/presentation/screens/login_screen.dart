@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:clinc_app_t1/app/controllers/settings_app_controller.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
 import 'package:clinc_app_t1/modules/auth/presentation/controllers/auth_controller.dart';
+import 'package:clinc_app_t1/modules/auth/presentation/widgets/password_field_with_strength_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -110,8 +111,13 @@ class LoginScreen extends GetView<LoginController> {
                         hintText: tr(LocaleKeys.login_password),
                         labelText: tr(LocaleKeys.login_password),
                         textInputAction: TextInputAction.send,
-                        validator: AppValidator.validatePassword,
+                        validator: (value) => AppValidator.validatePassword(
+                          value,
+                          showDetailedErrors: false,
+                        ),
                       ).fadeIn(),
+                      10.verticalSpace,
+                      PasswordFieldWithStrengthWidget(controller: controller),
                       10.verticalSpace,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -125,6 +131,7 @@ class LoginScreen extends GetView<LoginController> {
                             () => Row(
                               children: [
                                 Checkbox(
+                                  side: BorderSide(width: .7),
                                   visualDensity: VisualDensity.compact,
                                   value: controller.rememberMe.value,
                                   onChanged: controller.toggleRememberMe,
@@ -170,6 +177,11 @@ class LoginScreen extends GetView<LoginController> {
                           ),
                         ),
                       ).fadeIn(),
+                      AppTextButtonWidget(
+                        onPressed: () => Get.toNamed(AppRoutes.navbar),
+                        text: tr(LocaleKeys.login_visitor_login),
+                      ).fadeIn(),
+
                       12.verticalSpace,
                       Stack(
                         alignment: Alignment.center,

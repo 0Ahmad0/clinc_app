@@ -22,7 +22,6 @@ class OnboardingPageWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // 1. مربع الصورة (Lottie)
           Stack(
             clipBehavior: Clip.none,
             children: [
@@ -55,7 +54,9 @@ class OnboardingPageWidget extends StatelessWidget {
           // 2. النص العريض (العنوان)
           Text(
             tr(item.title),
-            style: Theme.of(context).textTheme.headlineMedium, // <-- من الثيم
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              fontSize: 20.sp
+            ), // <-- من الثيم
             textAlign: TextAlign.center,
           ).slideDown(),
           8.verticalSpace, // مسافة متجاوبة
@@ -65,7 +66,8 @@ class OnboardingPageWidget extends StatelessWidget {
             tr(item.subtitle),
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontSize: 12.sp,
-              color: Theme.of(context).textTheme.bodyMedium?.color!.myOpacity(.825)
+              color: Theme.of(context).textTheme.bodyMedium?.color!.myOpacity(.825),
+              height: 1.6
             ), // <-- من الثيم
             textAlign: TextAlign.center,
           ).slideUp(),

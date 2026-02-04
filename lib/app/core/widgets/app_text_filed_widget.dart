@@ -15,8 +15,10 @@ class AppTextFormFieldWidget extends StatefulWidget {
   final FocusNode? currentFocusNode;
   final FocusNode? nextFocusNode;
   final Function(String)? onFieldSubmitted;
+  final Function(String)? onChanged;
   final IconData? prefixIcon;
   final int maxLines;
+  final int? errorMaxLines;
   final int? maxLength;
   final bool enabled;
   final bool autofocus;
@@ -35,9 +37,11 @@ class AppTextFormFieldWidget extends StatefulWidget {
     this.onFieldSubmitted,
     this.prefixIcon,
     this.maxLines = 1,
+    this.errorMaxLines,
     this.enabled = true,
     this.autofocus = false,
     this.maxLength,
+    this.onChanged,
   });
 
   @override
@@ -65,6 +69,7 @@ class _AppTextFormFieldWidgetState extends State<AppTextFormFieldWidget> {
     );
 
     return TextFormField(
+      onChanged: widget.onChanged,
       maxLength: widget.maxLength,
       autofocus: widget.autofocus,
       controller: widget.controller,
@@ -88,7 +93,7 @@ class _AppTextFormFieldWidgetState extends State<AppTextFormFieldWidget> {
         widget.onFieldSubmitted?.call(value);
       },
       decoration: InputDecoration(
-        errorMaxLines: 2,
+        errorMaxLines: widget.errorMaxLines ?? 2,
         labelText: widget.labelText,
         hintText: widget.hintText,
         hintStyle: theme.textTheme.bodyMedium?.copyWith(color: theme.hintColor),
