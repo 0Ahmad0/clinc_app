@@ -116,8 +116,8 @@ class LoginScreen extends GetView<LoginController> {
                           showDetailedErrors: false,
                         ),
                       ).fadeIn(),
-                      10.verticalSpace,
-                      PasswordFieldWithStrengthWidget(controller: controller),
+                      // 10.verticalSpace,
+                      // PasswordFieldWithStrengthWidget(controller: controller),
                       10.verticalSpace,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

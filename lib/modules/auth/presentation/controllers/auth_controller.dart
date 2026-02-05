@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../app/core/utils/app_validator.dart';
 import '../../data/models/user_enum.dart';
 
 class AuthController extends GetxController {
   var selectedCategory = UserCategory.citizen.obs;
   late final TextEditingController idTextController;
+  final passwordController = TextEditingController();
+
 
   void changeCategory(UserCategory? category) {
     if (category != null) {
@@ -56,7 +59,7 @@ class AuthController extends GetxController {
 
   @override
   void onClose() {
-    // idTextController.dispose();
+    idTextController.dispose();
     super.onClose();
   }
 }

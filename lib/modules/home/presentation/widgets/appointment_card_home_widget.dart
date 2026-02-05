@@ -56,6 +56,7 @@ class AppointmentCardWidget extends StatelessWidget {
             child: Column(
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppCachedImageWidget(
                       imageUrl: imageUrl,
@@ -84,17 +85,26 @@ class AppointmentCardWidget extends StatelessWidget {
                               fontSize: 12.sp,
                             ),
                           ),
+                          4.verticalSpace,
+                          Text(
+                            'مشفى الأميرة نورة',
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.8),
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.all(8.sp),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(Iconsax.video, color: Colors.white, size: 20.sp),
-                    ),
+                    // Container(
+                    //   padding: EdgeInsets.all(8.sp),
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.white.withOpacity(0.2),
+                    //     shape: BoxShape.circle,
+                    //   ),
+                    //   child: Icon(Iconsax.video, color: Colors.white, size: 20.sp),
+                    // ),
                   ],
                 ),
                 16.verticalSpace,
@@ -107,13 +117,23 @@ class AppointmentCardWidget extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Iconsax.calendar_1, color: Colors.white, size: 18.sp),
+                      Icon(
+                        Iconsax.calendar_1,
+                        color: Colors.white,
+                        size: 18.sp,
+                      ),
                       6.horizontalSpace,
-                      Text(date, style: TextStyle(color: Colors.white, fontSize: 12.sp)),
+                      Text(
+                        date,
+                        style: TextStyle(color: Colors.white, fontSize: 12.sp),
+                      ),
                       12.horizontalSpace,
                       Icon(Iconsax.clock, color: Colors.white, size: 18.sp),
                       6.horizontalSpace,
-                      Text(time, style: TextStyle(color: Colors.white, fontSize: 12.sp)),
+                      Text(
+                        time,
+                        style: TextStyle(color: Colors.white, fontSize: 12.sp),
+                      ),
                     ],
                   ),
                 ),

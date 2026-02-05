@@ -18,13 +18,13 @@ import '../../../../app/core/widgets/app_scaffold_widget.dart';
 import '../../../../app/core/widgets/app_text_filed_widget.dart';
 import '../../../../app/routes/app_routes.dart';
 import '../../../../generated/locale_keys.g.dart';
+import '../widgets/password_field_with_strength_widget.dart';
 
 class SignupScreen extends GetView<SignupController> {
   const SignupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // final authController = Get.find<AuthController>();
     return AppScaffoldWidget(
       backgroundColor: Theme.of(context).primaryColor,
       body: Center(
@@ -129,11 +129,18 @@ class SignupScreen extends GetView<SignupController> {
                         prefixIcon: Iconsax.lock,
                         controller: controller.passwordController,
                         isPassword: true,
-                        hintText: tr(LocaleKeys.signup_password),
-                        currentFocusNode: controller.passwordFocus,
-                        nextFocusNode: controller.confirmPasswordFocus,
-                        validator: AppValidator.validatePassword,
+                        hintText: tr(LocaleKeys.login_password),
+                        labelText: tr(LocaleKeys.login_password),
+                        textInputAction: TextInputAction.send,
+
+                        validator: (value) => AppValidator.validatePassword(
+                          value,
+                          showDetailedErrors: true,
+                        ),
                       ).fadeIn(),
+                      PasswordFieldWithStrengthWidget(
+                        controller: controller,
+                      ),
                       10.verticalSpace,
                       AppTextFormFieldWidget(
                         prefixIcon: Iconsax.lock,
@@ -152,13 +159,11 @@ class SignupScreen extends GetView<SignupController> {
                       Row(
                         children: [
                           Obx(
-                                () => Checkbox(
+                            () => Checkbox(
                               visualDensity: VisualDensity.compact,
                               side: BorderSide(width: .6),
                               value: controller.isAgreed.value,
-                              activeColor: Theme.of(
-                                context,
-                              ).primaryColor,
+                              activeColor: Theme.of(context).primaryColor,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5),
                               ),
@@ -179,12 +184,10 @@ class SignupScreen extends GetView<SignupController> {
                                         .textTheme
                                         .bodyMedium
                                         ?.copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).primaryColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 11.sp,
-                                    ),
+                                          color: Theme.of(context).primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 11.sp,
+                                        ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
                                         Get.toNamed(AppRoutes.privacyPolicy);
