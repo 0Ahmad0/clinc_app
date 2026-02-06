@@ -1,59 +1,72 @@
-import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
-import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
-import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
-import 'package:clinc_app_t1/app/routes/app_routes.dart';
-import 'package:clinc_app_t1/generated/locale_keys.g.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../search/data/models/property_model.dart';
-import '../widgets/hospital_about_section_widget.dart';
-import '../widgets/hospital_doctors_header_widget.dart';
+import '../controllers/clinic_details_controller.dart';
+import '../widgets/hospital_specialties_grid.dart';
 import '../widgets/hospital_info_section_widget.dart';
-import '../widgets/hospital_specialties_section_widget.dart';
+import '../widgets/doctor_location_widget.dart';
+import '../widgets/hospital_about_section_widget.dart';
 
 class ClinicAppDetailsScreen extends StatelessWidget {
   const ClinicAppDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // تفعيل الكنترولر واستلام البيانات
+    final controller = Get.put(ClinicDetailsController());
     final Hospital hospital = Get.arguments ?? Hospital.mockHospitals[0];
-    final theme = Theme.of(context);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
+          // الرأس: صورة غلاف + لوجو دائري
           SliverAppBar(
             expandedHeight: 250.h,
             pinned: true,
-            backgroundColor: theme.primaryColor,
-            leading: Container(
-              margin: EdgeInsets.all(8.w),
-              decoration: BoxDecoration(
-                color: AppColors.white.myOpacity(0.9),
-                shape: BoxShape.circle,
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back, color: AppColors.black),
-                onPressed: () => Get.back(),
-              ),
+            backgroundColor: Theme.of(context).primaryColor,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+              onPressed: () => Get.back(),
             ),
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
-                fit: StackFit.expand,
                 children: [
-                  Image.network(hospital.imageUrl, fit: BoxFit.cover),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          AppColors.black.myOpacity(0.7),
-                        ],
+                  // صورة الباك جراوند
+                  Positioned.fill(
+                    child: Image.network(hospital.imageUrl, fit: BoxFit.cover),
+                  ),
+                  // طبقة تظليل خفيفة للصورة
+                  Positioned.fill(child: Container(color: Colors.black26)),
+                  // انحناء الحواف السفلي
+                  Positioned(
+                    bottom: -1,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      height: 30.h,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
+                      ),
+                    ),
+                  ),
+                  // اللوجو الدائري الصغير
+                  Positioned(
+                    bottom: 10.h,
+                    right: 25.w,
+                    child: ZoomIn(
+                      child: Container(
+                        padding: EdgeInsets.all(3.w),
+                        decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                        child: CircleAvatar(
+                          radius: 45.r,
+                          backgroundColor: Colors.white,
+                          backgroundImage: const NetworkImage("https://cdn-icons-png.flaticon.com/512/3306/3306526.png"), // استبدله بلوجو المشفى
+                        ),
                       ),
                     ),
                   ),
@@ -61,47 +74,88 @@ class ClinicAppDetailsScreen extends StatelessWidget {
               ),
             ),
           ),
+
+          // المحتوى
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.all(20.w),
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // معلومات المشفى (الاسم، التقييم، المنطقة)
                   HospitalInfoSection(hospital: hospital),
+
                   20.verticalSpace,
-                  Divider(color: AppColors.grey.myOpacity(0.2)),
-                  20.verticalSpace,
-                  HospitalAboutSection(
-                    supportedInsurances: hospital.supportedInsurances,
+
+                  // شريط التقييمات التفاعلي
+                  FadeInLeft(
+                    child: InkWell(
+                      onTap: () => controller.showRatingSheet(context),
+                      child: Container(
+                        padding: EdgeInsets.all(15.w),
+                        decoration: BoxDecoration(
+                          color: Colors.amber.withOpacity(0.08),
+                          borderRadius: BorderRadius.circular(15.r),
+                          border: Border.all(color: Colors.amber.withOpacity(0.2)),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.star_rounded, color: Colors.amber, size: 28),
+                            12.horizontalSpace,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("قيم العيادة", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp)),
+                                Text("شاركنا تجربتك لمساعدة الآخرين", style: TextStyle(fontSize: 11.sp, color: Colors.grey[700])),
+                              ],
+                            ),
+                            const Spacer(),
+                            const Icon(Icons.arrow_forward_ios, size: 14, color: Colors.amber),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
+
                   25.verticalSpace,
-                  HospitalSpecialtiesSection(specialties: hospital.specialties),
-                  30.verticalSpace,
-                  const HospitalDoctorsHeader(),
+
+
+                  // عن العيادة والتأمينات
+                  HospitalAboutSection(supportedInsurances: hospital.supportedInsurances),
+
+                  25.verticalSpace,
+                  // التخصصات المتاحة (Grid)
+                  HospitalSpecialtiesGrid(specialties: hospital.specialties),
+
+                  25.verticalSpace,
+                  // الموقع الخريطة
+                  const DoctorLocation(),
+
+                  120.verticalSpace, // مساحة للزر السفلي
                 ],
               ),
             ),
           ),
         ],
       ),
-      bottomNavigationBar: Container(
+
+      // زر الاتصال السفلي
+      bottomSheet: Container(
         padding: EdgeInsets.all(20.w),
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.black.myOpacity(0.05),
-              blurRadius: 10.r,
-              offset: const Offset(0, -4),
-            ),
-          ],
+          color: Colors.white,
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 20, offset: const Offset(0, -5))],
         ),
-        child: AppButtonWidget(
-          text: tr(LocaleKeys.clinic_app_details_call_clinic),
-          icon: Icon(Iconsax.call, size: 20.sp),
-          onPressed: () {
-            Get.toNamed(AppRoutes.clinicDetails);
-          },
+        child: ElevatedButton.icon(
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).primaryColor,
+            minimumSize: Size(double.infinity, 55.h),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.r)),
+            elevation: 0,
+          ),
+          icon: const Icon(Iconsax.call, color: Colors.white),
+          label: const Text("اتصال مباشر بالعيادة", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
         ),
       ),
     );

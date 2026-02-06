@@ -20,7 +20,9 @@ import '../../modules/clinc_details/presentation/bindings/clinic_details_binding
 import '../../modules/clinc_details/presentation/screens/clinic_details_screen.dart';
 import '../../modules/contact/presentation/bindings/contact_binding.dart';
 import '../../modules/contact/presentation/screens/contact_screen.dart';
+import '../../modules/doctors/presentation/bindings/doctor_details_binding.dart';
 import '../../modules/doctors/presentation/bindings/doctors_binding.dart';
+import '../../modules/doctors/presentation/screens/doctor_details_screen.dart';
 import '../../modules/doctors/presentation/screens/doctors_screen.dart';
 import '../../modules/insurance/presentation/bindings/insurance_binding.dart';
 import '../../modules/insurance/presentation/screens/insurance_screen.dart';
@@ -171,6 +173,11 @@ class AppPages {
       name: AppRoutes.doctors,
       page: () => const DoctorsScreen(),
       binding: DoctorsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.doctorDetails,
+      page: () => const DoctorDetailsScreen(),
+      binding: DoctorDetailsBinding(),
     ),
     GetPage(
       name: AppRoutes.chatbot,

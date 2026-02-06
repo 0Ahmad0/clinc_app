@@ -37,6 +37,7 @@ dependencies:
   readmore:
   url_launcher:
   chat_bubbles:
+  flutter_rating_bar: 
 
 
 dev_dependencies:

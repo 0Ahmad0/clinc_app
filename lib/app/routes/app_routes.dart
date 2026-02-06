@@ -25,6 +25,7 @@ abstract class AppRoutes {
   static const myAppointmentDetails = '/my_appointment_details';
   static const clinicDetails = '/clinic_details';
   static const doctors = '/doctors';
+  static const doctorDetails = '/doctor_details';
   static const chatbot = '/chatbot';
   static const labs = '/labs';
   static const labsTest = '/labs_test';

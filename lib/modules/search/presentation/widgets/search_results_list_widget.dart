@@ -26,12 +26,7 @@ class SearchResultsList extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 12.w,vertical: 10.h),
         itemBuilder: (context, index) {
           final hospital = controller.filteredHospitals[index];
-          return GestureDetector(
-            onTap: () {
-              Get.toNamed(AppRoutes.clinicDetails, arguments: hospital);
-            },
-            child: ClinicCardWidget(hospital: hospital),
-          );
+          return ClinicCardWidget(hospital: hospital);
         },
       );
     });

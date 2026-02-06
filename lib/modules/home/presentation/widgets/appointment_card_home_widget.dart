@@ -79,21 +79,21 @@ class AppointmentCardWidget extends StatelessWidget {
                           ),
                           4.verticalSpace,
                           Text(
+                            'مشفى الأميرة نورة',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12.sp,
+                            ),
+                          ),
+                          4.verticalSpace,
+                          Text(
                             specialty,
                             style: TextStyle(
                               color: Colors.white.withOpacity(0.8),
                               fontSize: 12.sp,
                             ),
                           ),
-                          4.verticalSpace,
-                          Text(
-                            'مشفى الأميرة نورة',
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.8),
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.bold
-                            ),
-                          ),
+
                         ],
                       ),
                     ),

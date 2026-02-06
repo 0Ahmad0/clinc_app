@@ -2,15 +2,13 @@ import 'package:get/get.dart';
 import '../../data/models/property_model.dart';
 
 class SearchAndFilterController extends GetxController {
-  // البيانات
+  // البيانات الأصلية
   final _allHospitals = Hospital.mockHospitals.obs;
   var filteredHospitals = <Hospital>[].obs;
 
   // متغيرات الواجهة
   var currentSearchQuery = ''.obs;
   var isFilterBarVisible = true.obs;
-
-  // متغير جديد لإخفاء فلتر التأمين إذا جئنا من صفحة التأمين
   var isInsuranceFilterHidden = false.obs;
 
   // فلاتر
@@ -20,7 +18,19 @@ class SearchAndFilterController extends GetxController {
   var selectedSpecialty = 'الكل'.obs;
   var sortCriteria = 'priceAsc'.obs;
 
-  // القوائم (يمكنك لاحقاً جعلها تأتي من API أو Translation)
+  // --- الإضافات الجديدة لطلبك ---
+  var tempSelectedMainRegion = 'الكل'.obs; // المنطقة الكبرى المختارة داخل الشيت
+  var regionSearchText = ''.obs; // نص البحث داخل الشيت
+
+  final Map<String, List<String>> groupedRegions = {
+    'المناطق الوسطى': ['الرياض', 'القصيم', 'حائل'],
+    'المناطق الشمالية': ['الحدود الشمالية', 'الجوف', 'تبوك'],
+    'المناطق الجنوبية': ['عسير', 'جازان', 'نجران', 'الباحة'],
+    'المناطق الغربية': ['مكة المكرمة', 'المدينة المنورة'],
+    'المنطقة الشرقية': ['المنطقة الشرقية'],
+  };
+  // ------------------------------
+
   final List<String> regions = ['الكل', 'الرياض', 'جدة', 'الدمام', 'أبها', 'تبوك'];
   final List<String> genders = ['الكل', 'ذكر', 'أنثى'];
   final List<String> specialties = ['الكل', 'أسنان', 'جلدية', 'عيون', 'باطنية', 'أذن وحنجرة', 'ليزر'];
@@ -41,15 +51,12 @@ class SearchAndFilterController extends GetxController {
     applyFiltersAndSort();
   }
 
-  // معالجة البيانات القادمة من صفحة التأمينات
   void _handleIncomingArguments() {
     if (Get.arguments != null && Get.arguments is Map) {
       final args = Get.arguments as Map;
-
       if (args.containsKey('selectedInsurance')) {
         selectedInsurance.value = args['selectedInsurance'];
       }
-
       if (args.containsKey('hideInsuranceFilter')) {
         isInsuranceFilterHidden.value = args['hideInsuranceFilter'];
       }
@@ -75,42 +82,38 @@ class SearchAndFilterController extends GetxController {
     if (insurance != null) selectedInsurance.value = insurance;
     if (specialty != null) selectedSpecialty.value = specialty;
     if (sort != null) sortCriteria.value = sort;
-
     applyFiltersAndSort();
   }
 
   void resetFilters() {
     selectedRegion.value = 'الكل';
+    tempSelectedMainRegion.value = 'الكل'; // ريسيت للمنطقة الكبرى
     selectedGender.value = 'الكل';
-    // إذا كان الفلتر مخفي (جاي من تأمين)، لا نعيد تصفيره للكل، بل نبقيه كما هو
     if (!isInsuranceFilterHidden.value) {
       selectedInsurance.value = 'الكل';
     }
     selectedSpecialty.value = 'الكل';
     sortCriteria.value = 'priceAsc';
     currentSearchQuery.value = '';
-
     applyFiltersAndSort();
   }
 
   bool get hasActiveFilters {
     return selectedRegion.value != 'الكل' ||
         selectedGender.value != 'الكل' ||
-        (selectedInsurance.value != 'الكل' && !isInsuranceFilterHidden.value) || // لا نعتبره نشطاً للحذف إذا كان مفروضاً
+        (selectedInsurance.value != 'الكل' && !isInsuranceFilterHidden.value) ||
         selectedSpecialty.value != 'الكل';
   }
 
   void applyFiltersAndSort() {
     List<Hospital> results = _allHospitals.toList();
 
-    // 1. البحث
     if (currentSearchQuery.value.isNotEmpty) {
       results = results
           .where((h) => h.name.toLowerCase().contains(currentSearchQuery.value.toLowerCase()))
           .toList();
     }
 
-    // 2. الفلاتر
     if (selectedRegion.value != 'الكل') {
       results = results.where((h) => h.region == selectedRegion.value).toList();
     }
@@ -121,7 +124,6 @@ class SearchAndFilterController extends GetxController {
       results = results.where((h) => h.supportedInsurances.contains(selectedInsurance.value)).toList();
     }
 
-    // 3. الترتيب
     results.sort((a, b) {
       switch (sortCriteria.value) {
         case 'priceAsc': return a.consultationFee.compareTo(b.consultationFee);

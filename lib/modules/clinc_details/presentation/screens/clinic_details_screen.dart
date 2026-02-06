@@ -36,7 +36,6 @@ class ClinicDetailsScreen extends StatelessWidget {
                   25.verticalSpace,
                   const DoctorBio(),
                   25.verticalSpace,
-                  const DoctorLocation(),
                   25.verticalSpace,
                   const DoctorReviewsList(),
                   20.verticalSpace,
