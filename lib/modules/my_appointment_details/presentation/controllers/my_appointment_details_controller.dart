@@ -1,14 +1,47 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import '../../../appointments/data/enum/appointment_status.dart';
+import '../../../appointments/data/models/order_model.dart';
 
 class MyAppointmentDetailsController extends GetxController {
+  // استقبال الموعد من الشاشة السابقة
+  late AppointmentModel appointment;
+
+  // بيانات العيادة والطبيب
   final doctorName = "الدكتورة كارلي أنجلا";
   final specialty = "أخصائية | أمراض المناعة";
-  final rating = 5.0.obs;
-  final reviewCount = 332.obs;
-  final aboutText = "الدكتورة كارلي أنجل هي أفضل أخصائية في أمراض المناعة في مستشفى كريست في لندن، المملكة المتحدة.";
+  final clinicName = "مستشفى كريست الدولي";
+  final clinicAddress = "لندن، شارع باكر، مبنى 221B";
 
-  // رابط صورة افتراضي (Placeholder)
-  final String doctorImage =
-      "https://img.freepik.com/free-photo/pleased-young-female-doctor-wearing-medical-robe-stethoscope-around-neck-standing-with-closed-posture_409827-254.jpg";
+  // بيانات الحجز
+  final patientName = "أحمد محمد العتوم";
+  final appointmentDate = "24 مايو 2024";
+  final appointmentTime = "10:30 صباحاً";
+  final appointmentType = "زيارة أولى";
+
+  @override
+  void onInit() {
+    super.onInit();
+    // نأخذ البيانات الممرة أو نضع قيمة افتراضية للتجربة
+    appointment = Get.arguments ?? AppointmentModel(id: 'QQ1122Z', price: 850, status: AppointmentStatus.accepted);
+  }
+
+  bool canCancel() {
+    // شرطك: الإلغاء متاح فقط إذا كانت الحالة مقبول
+    return appointment.status == AppointmentStatus.accepted;
+  }
+
+  void cancelAction() {
+    Get.defaultDialog(
+        title: "تأكيد الإلغاء",
+        middleText: "هل أنت متأكد من إلغاء الموعد؟",
+        textConfirm: "نعم",
+        textCancel: "تراجع",
+        confirmTextColor: Colors.white,
+        onConfirm: () {
+          // منطق الإلغاء هنا
+          Get.back();
+        }
+    );
+  }
 }

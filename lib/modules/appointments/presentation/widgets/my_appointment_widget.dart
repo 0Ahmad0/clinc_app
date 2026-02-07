@@ -194,7 +194,7 @@ class MyAppointmentWidget extends GetView<AppointmentsController> {
 
                   // إذا كان لا يمكن الإلغاء (شرط الإدمن)
                   if (appointment.status == AppointmentStatus.accepted &&
-                      !controller.canCancel(2))
+                      !controller.canCancel(1))
                     Text(
                       "غير قابل للإلغاء (تجاوز الوقت المسموح)",
                       style: TextStyle(

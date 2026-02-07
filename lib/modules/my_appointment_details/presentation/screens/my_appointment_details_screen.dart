@@ -10,6 +10,9 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../../app/core/theme/app_colors.dart';
+import '../../../appointments/data/enum/appointment_status.dart';
+
 class MyAppointmentDetailsScreen
     extends GetView<MyAppointmentDetailsController> {
   const MyAppointmentDetailsScreen({super.key});
@@ -24,86 +27,109 @@ class MyAppointmentDetailsScreen
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildDoctorCard(),
+              _buildDoctorCard(), // كرت الدكتور (الموجود عندك أصلاً)
               20.verticalSpace,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildStatItem(
-                    Iconsax.people,
-                    "120+",
-                    "المراجعون",
-                    Colors.blue.shade100,
-                    Colors.blue,
-                  ),
-                  _buildStatItem(
-                    Iconsax.chart,
-                    "7+",
-                    "الخبرة",
-                    Colors.purple.shade100,
-                    Colors.purple,
-                  ),
-                  _buildStatItem(
-                    Iconsax.star_14,
-                    "4.9",
-                    "التقييم",
-                    Colors.orange.shade100,
-                    Colors.orange,
-                  ),
-                  _buildStatItem(
-                    Iconsax.message_text,
-                    "100+",
-                    "الآراء",
-                    Colors.pink.shade100,
-                    Colors.pink,
-                  ),
-                ],
-              ),
+
+              _buildSectionTitle("معلومات الموعد"),
+              _buildInfoCard([
+                _buildInfoRow(Iconsax.user, "المريض", controller.patientName),
+                _buildInfoRow(
+                  Iconsax.calendar_1,
+                  "التاريخ",
+                  controller.appointmentDate,
+                ),
+                _buildInfoRow(
+                  Iconsax.clock,
+                  "الوقت",
+                  controller.appointmentTime,
+                ),
+                _buildInfoRow(
+                  Iconsax.info_circle,
+                  "نوع الزيارة",
+                  controller.appointmentType,
+                ),
+              ]),
+
               20.verticalSpace,
-              // --- قسم نبذة عني (About Me) ---
-              Text(
-                "نبذة عن الطبيب",
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              10.verticalSpace,
-              ReadMoreText(
-                controller.aboutText,
-                trimMode: TrimMode.Line,
-                trimLines: 1,
-                colorClickableText: Theme.of(context).primaryColor,
-                trimCollapsedText: 'عرض المزيد...',
-                trimExpandedText: 'عرض أقل',
-              ),
+              _buildSectionTitle("تفاصيل العيادة"),
+              _buildInfoCard([
+                _buildInfoRow(
+                  Iconsax.hospital,
+                  "المنشأة",
+                  controller.clinicName,
+                ),
+                _buildInfoRow(
+                  Iconsax.location,
+                  "العنوان",
+                  controller.clinicAddress,
+                ),
+              ]),
+
+              20.verticalSpace,
+              _buildSectionTitle("الملخص المالي"),
+              _buildInfoCard([
+                _buildInfoRow(
+                  Iconsax.money_send,
+                  "رسوم الكشفية",
+                  "${controller.appointment.price} ر.س",
+                ),
+                _buildInfoRow(Iconsax.card_pos, "طريقة الدفع", "بطاقة ائتمان"),
+              ]),
+
+              100.verticalSpace, // مساحة للزر بالأسفل
             ],
           ),
         ),
       ),
+      bottomNavigationBar: _buildBottomAction(),
+    );
+  }
 
-      // --- الزر السفلي ---
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: ElevatedButton.icon(
-          onPressed: () {},
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF5A65E6),
-            // لون الزر البنفسجي/الأزرق
-            padding: const EdgeInsets.symmetric(vertical: 18),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
+  // ودجيت بناء الأسطر داخل البطاقة
+  Widget _buildInfoRow(IconData icon, String label, String value) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8.h),
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.all(6.r),
+            decoration: BoxDecoration(
+              color: AppColors.primary.myOpacity(0.1),
+              shape: BoxShape.circle,
             ),
-            elevation: 5,
+            child: Icon(icon, size: 18.sp, color: AppColors.primary),
           ),
-          icon: const Icon(Icons.phone_in_talk, color: Colors.white),
-          label: const Text(
-            "Voice Call (14.30 - 15.00 PM)",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+          12.horizontalSpace,
+          Text(
+            label,
+            style: TextStyle(color: Colors.grey, fontSize: 13.sp),
           ),
-        ),
+          const Spacer(),
+          Text(
+            value,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.sp),
+          ),
+        ],
       ),
+    );
+  }
+
+  // بطاقة المعلومات المغلفة
+  Widget _buildInfoCard(List<Widget> children) {
+    return Container(
+      padding: EdgeInsets.all(16.r),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(children: children),
     );
   }
 
@@ -129,7 +155,7 @@ class MyAppointmentDetailsScreen
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
             child: Image.network(
-              controller.doctorImage,
+              'https://tse3.mm.bing.net/th/id/OIP.oE3nZ-YMw5_n3fFaJjCedQHaJQ?rs=1&pid=ImgDetMain&o=7&rm=3',
               height: 200,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -168,14 +194,14 @@ class MyAppointmentDetailsScreen
                     const SizedBox(width: 4),
                     Obx(
                       () => Text(
-                        "${controller.rating.value}".trNumbers(),
+                        "${50}".trNumbers(),
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
                     const SizedBox(width: 4),
                     Obx(
                       () => Text(
-                        "(${controller.reviewCount.value} تقييم)".trNumbers(),
+                        "(${50} تقييم)".trNumbers(),
                         style: TextStyle(fontSize: 12, color: Colors.grey[500]),
                       ),
                     ),
@@ -207,19 +233,65 @@ class MyAppointmentDetailsScreen
           child: Icon(icon, color: iconColor),
         ),
         const SizedBox(height: 10),
-        Text(
-          value.trNumbers(),
-          style: TextStyle(
-            fontSize: 16.sp,
-          ),
-        ),
+        Text(value.trNumbers(), style: TextStyle(fontSize: 16.sp)),
         const SizedBox(height: 5),
         Builder(
           builder: (context) {
-            return Text(label,style: Theme.of(context).textTheme.bodySmall,);
-          }
+            return Text(label, style: Theme.of(context).textTheme.bodySmall);
+          },
         ),
       ],
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 10.h, right: 5.w),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 15.sp,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
+        ),
+      ),
+    );
+  }
+
+  // الزر السفلي الذكي
+  Widget _buildBottomAction() {
+    bool isAccepted =
+        controller.appointment.status == AppointmentStatus.accepted;
+
+    return Container(
+      padding: EdgeInsets.all(20.r),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10,
+            offset: Offset(0, -2),
+          ),
+        ],
+      ),
+      child: ElevatedButton(
+        onPressed: isAccepted ? controller.cancelAction : () => Get.back(),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: isAccepted ? Colors.redAccent : AppColors.primary,
+          minimumSize: Size(double.infinity, 55.h),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.r),
+          ),
+        ),
+        child: Text(
+          isAccepted ? "إلغاء الحجز" : "إعادة حجز موعد",
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
     );
   }
 }
