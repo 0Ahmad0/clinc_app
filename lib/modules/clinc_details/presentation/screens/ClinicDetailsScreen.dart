@@ -155,7 +155,7 @@ class ClinicAppDetailsScreen extends StatelessWidget {
             elevation: 0,
           ),
           icon: const Icon(Iconsax.call, color: Colors.white),
-          label: const Text("اتصال مباشر بالعيادة", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+          label: const Text("اتصال مباشر بالعيادة"),
         ),
       ),
     );
