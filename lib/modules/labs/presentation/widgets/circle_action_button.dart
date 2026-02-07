@@ -18,7 +18,7 @@ class CircleActionButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: CircleAvatar(
-        backgroundColor: Colors.white.withOpacity(0.9),
+        backgroundColor: Colors.white.withValues(alpha: 0.9),
         radius: 20.r,
         child: Icon(icon, color: color, size: 20.sp),
       ),

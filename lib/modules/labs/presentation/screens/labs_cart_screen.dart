@@ -1,4 +1,3 @@
-import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
@@ -32,7 +31,9 @@ class LabsCartScreen extends GetView<LabsTestController> {
                 itemBuilder: (context, index) {
                   return _CartItemWidget(
                     test: controller.cartItems[index],
-                    onDelete: () => controller.removeFromCart(controller.cartItems[index]),
+                    onDelete: () => controller.removeFromCart(
+                      controller.cartItems[index].id,
+                    ),
                   );
                 },
               ),
@@ -50,7 +51,11 @@ class LabsCartScreen extends GetView<LabsTestController> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Iconsax.shopping_cart, size: 80.sp, color: Colors.grey.withOpacity(0.3)),
+          Icon(
+            Iconsax.shopping_cart,
+            size: 80.sp,
+            color: Colors.grey.withValues(alpha: 0.3),
+          ),
           20.verticalSpace,
           Text(
             tr(LocaleKeys.labs_cart_empty_title),
@@ -59,7 +64,9 @@ class LabsCartScreen extends GetView<LabsTestController> {
           8.verticalSpace,
           Text(
             tr(LocaleKeys.labs_cart_empty_desc),
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
           ),
         ],
       ),
@@ -90,7 +97,9 @@ class LabsCartScreen extends GetView<LabsTestController> {
               children: [
                 Text(
                   tr(LocaleKeys.labs_cart_total_price),
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 Text(
                   "${controller.cartTotal} ${tr(LocaleKeys.labs_currency)}",
@@ -129,7 +138,7 @@ class _CartItemWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -142,7 +151,7 @@ class _CartItemWidget extends StatelessWidget {
             height: 60.w,
             width: 60.w,
             decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor.withOpacity(0.1),
+              color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12.r),
             ),
             child: Icon(
@@ -161,14 +170,16 @@ class _CartItemWidget extends StatelessWidget {
                   test.title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 4.verticalSpace,
                 Text(
                   test.category,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: Colors.grey),
                 ),
                 6.verticalSpace,
                 Text(

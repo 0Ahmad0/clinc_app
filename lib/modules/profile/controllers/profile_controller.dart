@@ -50,7 +50,7 @@ class ProfileController extends GetxController {
 
   void editProfile() {
     if (profileFormKey.currentState?.validate() ?? false) {
-      print('تسجيل المستخدم: ${usernameController.text}');
+      debugPrint('تسجيل المستخدم: ${usernameController.text}');
     }
   }
 

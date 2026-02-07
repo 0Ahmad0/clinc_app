@@ -17,25 +17,30 @@ class DoctorsScreen extends GetView<DoctorsController> {
 
   @override
   Widget build(BuildContext context) {
+    final args = Get.arguments ?? {};
+    final hideFilters = args['isFromClinc'] ?? false;
+    final specialty = args['specialty'] ?? '';
     return Scaffold(
       appBar: AppAppBarWidget(
-        title: tr(LocaleKeys.doctors_title),
-        showBackButton: false,
+        title: hideFilters ? "أطباء $specialty" : tr(LocaleKeys.doctors_title),
+        showBackButton: hideFilters,
       ),
       body: Column(
         children: <Widget>[
-          // 1. شريط البحث وزر الفلتر
           AppPaddingWidget(
             child: Row(
               children: [
                 Expanded(child: DoctorsSearchBar(controller: controller)),
-                8.horizontalSpace,
-                DoctorsFilterButton(controller: controller),
+                // لا يظهر الزر إذا كنا قادمين من صفحة العيادة
+                if (!hideFilters) ...[
+                  8.horizontalSpace,
+                  DoctorsFilterButton(controller: controller),
+                ],
               ],
             ),
           ),
           // 2. شريط الفلاتر الأفقي
-          DoctorsFilterList(controller: controller),
+          if (!hideFilters) DoctorsFilterList(controller: controller),
 
           // 3. قائمة النتائج
           Expanded(child: DoctorsList(controller: controller)),

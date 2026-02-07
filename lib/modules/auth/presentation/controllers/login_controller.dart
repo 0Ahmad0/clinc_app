@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../app/core/utils/app_validator.dart';
-import '../../data/models/user_enum.dart';
 import '../../../../app/routes/app_routes.dart';
 
 class LoginController extends GetxController {

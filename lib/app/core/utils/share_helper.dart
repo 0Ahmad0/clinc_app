@@ -1,13 +1,11 @@
 import 'dart:io';
 
 import 'package:clinc_app_t1/app/core/constants/app_assets.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../theme/app_colors.dart';
 
 class ShareHelper {
   static Future<void> shareAppWithImage({
@@ -32,7 +30,7 @@ class ShareHelper {
       );
       await SharePlus.instance.share(params);
     } catch (e) {
-      print("خطأ أثناء المشاركة: $e");
+      debugPrint("خطأ أثناء المشاركة: $e");
     }
   }
 

@@ -1,9 +1,6 @@
-import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
-import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/modules/insurance/presentation/controllers/insurance_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 import 'insurance_card_widget.dart';
 

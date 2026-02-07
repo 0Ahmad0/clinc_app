@@ -1,13 +1,7 @@
-import 'package:animate_do/animate_do.dart';
-import 'package:clinc_app_t1/app/core/constants/app_assets.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
-import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 
-import '../../../../app/core/theme/app_colors.dart';
 
 class SuccessBookAppointmentWidget extends StatelessWidget {
   const SuccessBookAppointmentWidget({super.key});

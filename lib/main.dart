@@ -11,7 +11,6 @@ import 'app/routes/app_routes.dart';
 import 'app/bindings/initial_binding.dart';
 import 'app/core/theme/app_theme.dart';
 import 'generated/codegen_loader.g.dart';
-import 'modules/settings/presentation/controllers/settings_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

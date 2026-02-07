@@ -58,11 +58,11 @@ class HospitalDoctorsListSection extends GetView<ClinicDetailsController> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(15.r),
                             border: Border.all(
-                              color: Colors.grey.withOpacity(0.1),
+                              color: Colors.grey.withValues(alpha: 0.1),
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.02),
+                                color: Colors.black.withValues(alpha: 0.02),
                                 blurRadius: 10,
                                 offset: const Offset(0, 5),
                               ),

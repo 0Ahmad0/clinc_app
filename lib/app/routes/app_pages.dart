@@ -17,7 +17,7 @@ import '../../modules/book_appointments/presentation/bindings/book_appointment_b
 import '../../modules/chatbot/presentation/bindings/chatbot_binding.dart';
 import '../../modules/chatbot/presentation/screens/chatbot_screen.dart';
 import '../../modules/clinc_details/presentation/bindings/clinic_details_binding.dart';
-import '../../modules/clinc_details/presentation/screens/clinic_details_screen.dart';
+import '../../modules/clinc_details/presentation/screens/ClinicDetailsScreen.dart';
 import '../../modules/contact/presentation/bindings/contact_binding.dart';
 import '../../modules/contact/presentation/screens/contact_screen.dart';
 import '../../modules/doctors/presentation/bindings/doctor_details_binding.dart';

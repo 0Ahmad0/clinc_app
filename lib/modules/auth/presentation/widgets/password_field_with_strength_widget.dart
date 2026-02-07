@@ -1,12 +1,9 @@
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
-import 'package:clinc_app_t1/modules/auth/presentation/controllers/auth_controller.dart';
 import 'package:clinc_app_t1/modules/auth/presentation/controllers/signup_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'animated_password_strength_widget.dart';
-import '../controllers/login_controller.dart';
 
 class PasswordFieldWithStrengthWidget extends StatelessWidget {
   final SignupController controller;
@@ -78,7 +75,7 @@ class PasswordFieldWithStrengthWidget extends StatelessWidget {
             duration: const Duration(milliseconds: 300),
             child: Icon(
               isMet ? Icons.check_circle : Icons.circle_outlined,
-              color: isMet ? Colors.green : Colors.grey.withOpacity(0.5),
+              color: isMet ? Colors.green : Colors.grey.withValues(alpha: 0.5),
               size: 18,
             ),
           ),

@@ -1,7 +1,5 @@
-import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
-import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/home/presentation/controllers/home_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -53,14 +51,14 @@ class MainSectionWidget extends GetView<HomeController> {
                     boxShadow: [
                       if (!isSpecial)
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
+                          color: Colors.grey.withValues(alpha: 0.1),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
                     ],
                     border: isSpecial
                         ? null
-                        : Border.all(color: theme.dividerColor.withOpacity(0.1)),
+                        : Border.all(color: theme.dividerColor.withValues(alpha: 0.1)),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

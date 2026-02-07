@@ -1,5 +1,3 @@
-import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
-import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/labs/data/models/lab_test_model.dart';
 import 'package:clinc_app_t1/modules/labs/presentation/controllers/labs_test_controller.dart';
@@ -11,7 +9,7 @@ import 'package:iconsax/iconsax.dart';
 
 class LabTestItem extends StatelessWidget {
   final LabTest test;
-  const LabTestItem({required this.test});
+  const LabTestItem({super.key, required this.test});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +21,7 @@ class LabTestItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05), // ظل خفيف
+            color: Colors.black.withValues(alpha: 0.05), // ظل خفيف
             blurRadius: 5,
             offset: const Offset(0, 2),
           ),
@@ -36,8 +34,8 @@ class LabTestItem extends StatelessWidget {
             width: 50.w,
             decoration: BoxDecoration(
               color: test.isPackage
-                  ? Colors.purple.withOpacity(0.1)
-                  : Colors.teal.withOpacity(0.1),
+                  ? Colors.purple.withValues(alpha: 0.1)
+                  : Colors.teal.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10.r),
             ),
             child: Icon(

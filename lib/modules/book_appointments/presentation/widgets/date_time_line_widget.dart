@@ -1,6 +1,4 @@
-import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class DateTimeLineWidget extends StatelessWidget {

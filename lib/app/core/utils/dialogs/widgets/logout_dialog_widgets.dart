@@ -1,7 +1,5 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 

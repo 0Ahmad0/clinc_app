@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import '../widgets/container_shape_widget.dart';
 import '../widgets/logo_shape_widget.dart';
-import '../../../../app/core/constants/app_assets.dart';
 import '../../../../app/core/utils/app_validator.dart';
 import '../../../../app/core/widgets/app_app_bar_widget.dart';
 import '../../../../app/core/widgets/app_scaffold_widget.dart';

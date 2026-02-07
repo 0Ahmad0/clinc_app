@@ -1,5 +1,4 @@
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../app/data/offer_model.dart';

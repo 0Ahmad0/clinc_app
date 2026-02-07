@@ -1,14 +1,9 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:clinc_app_t1/app/controllers/settings_app_controller.dart';
-import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
-import 'package:clinc_app_t1/modules/auth/presentation/controllers/auth_controller.dart';
-import 'package:clinc_app_t1/modules/auth/presentation/widgets/password_field_with_strength_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import '../../data/models/user_enum.dart';
 import '../widgets/container_shape_widget.dart';
 import '../widgets/logo_shape_widget.dart';
 import '../../../../app/core/constants/app_assets.dart';

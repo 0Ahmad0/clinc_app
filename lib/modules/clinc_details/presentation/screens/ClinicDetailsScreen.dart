@@ -1,4 +1,7 @@
+// ignore_for_file: file_names
 import 'package:animate_do/animate_do.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,8 +13,8 @@ import '../widgets/hospital_info_section_widget.dart';
 import '../widgets/doctor_location_widget.dart';
 import '../widgets/hospital_about_section_widget.dart';
 
-class ClinicAppDetailsScreen extends StatelessWidget {
-  const ClinicAppDetailsScreen({super.key});
+class ClinicDetailsScreen extends StatelessWidget {
+  const ClinicDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +35,7 @@ class ClinicAppDetailsScreen extends StatelessWidget {
               icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
               onPressed: () => Get.back(),
             ),
+            title: Text(hospital.name),
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
                 children: [
@@ -94,9 +98,9 @@ class ClinicAppDetailsScreen extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.all(15.w),
                         decoration: BoxDecoration(
-                          color: Colors.amber.withOpacity(0.08),
+                          color: Colors.amber.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(15.r),
-                          border: Border.all(color: Colors.amber.withOpacity(0.2)),
+                          border: Border.all(color: Colors.amber.withValues(alpha: 0.2)),
                         ),
                         child: Row(
                           children: [
@@ -125,7 +129,7 @@ class ClinicAppDetailsScreen extends StatelessWidget {
 
                   25.verticalSpace,
                   // التخصصات المتاحة (Grid)
-                  HospitalSpecialtiesGrid(specialties: hospital.specialties),
+                  HospitalSpecialtiesList(specialties: hospital.specialties),
 
                   25.verticalSpace,
                   // الموقع الخريطة
@@ -144,18 +148,12 @@ class ClinicAppDetailsScreen extends StatelessWidget {
         padding: EdgeInsets.all(20.w),
         decoration: BoxDecoration(
           color: Colors.white,
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 20, offset: const Offset(0, -5))],
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 20, offset: const Offset(0, -5))],
         ),
-        child: ElevatedButton.icon(
+        child: AppButtonWidget(
           onPressed: () {},
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).primaryColor,
-            minimumSize: Size(double.infinity, 55.h),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.r)),
-            elevation: 0,
-          ),
           icon: const Icon(Iconsax.call, color: Colors.white),
-          label: const Text("اتصال مباشر بالعيادة"),
+          text: "اتصال بالعيادة",
         ),
       ),
     );

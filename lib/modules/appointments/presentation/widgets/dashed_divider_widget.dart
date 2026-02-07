@@ -1,19 +1,4 @@
-import 'package:animate_do/animate_do.dart';
-import 'package:clinc_app_t1/app/core/constants/app_assets.dart';
-import 'package:clinc_app_t1/app/core/constants/app_constants.dart';
-import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
-import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
-import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
-import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
-import 'package:clinc_app_t1/app/routes/app_routes.dart';
-import 'package:clinc_app_t1/generated/locale_keys.g.dart';
-import 'package:clinc_app_t1/modules/appointments/data/enum/appointment_status.dart';
-import 'package:clinc_app_t1/modules/appointments/data/models/filter_model.dart';
-import 'package:clinc_app_t1/modules/appointments/data/models/order_model.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 class DashedDividerWidget extends StatelessWidget {
   final double height;
   final double dashWidth;
@@ -41,7 +26,7 @@ class DashedDividerWidget extends StatelessWidget {
             return SizedBox(
               width: dashWidth,
               height: height,
-              child: ColoredBox(color: color.withOpacity(0.3)),
+              child: ColoredBox(color: color.withValues(alpha: 0.3)),
             );
           }),
         );

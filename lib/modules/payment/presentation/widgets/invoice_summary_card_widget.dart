@@ -1,6 +1,4 @@
-import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/extension/localization_extension.dart';
-import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +19,7 @@ class InvoiceSummaryCard extends GetView<CheckoutController> {
         borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).primaryColor.withOpacity(0.3),
+            color: Theme.of(context).primaryColor.withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -42,13 +40,13 @@ class InvoiceSummaryCard extends GetView<CheckoutController> {
             LocaleKeys.checkout_summary_service,
             controller.consultationPrice,
           ),
-          Divider(color: Colors.white.withOpacity(0.2), height: 24.h),
+          Divider(color: Colors.white.withValues(alpha: 0.2), height: 24.h),
           _buildRow(
             context,
             LocaleKeys.checkout_summary_vat,
             controller.vatAmount,
           ),
-          Divider(color: Colors.white.withOpacity(0.2), height: 24.h),
+          Divider(color: Colors.white.withValues(alpha: 0.2), height: 24.h),
           _buildRow(
             context,
             LocaleKeys.checkout_summary_total,

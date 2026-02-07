@@ -35,7 +35,7 @@ class HospitalSpecialtiesSection extends GetView<ClinicDetailsController> {
                         color: isSelected ? Theme.of(context).primaryColor : Colors.grey[100],
                         borderRadius: BorderRadius.circular(20.r),
                         boxShadow: isSelected
-                            ? [BoxShadow(color: Theme.of(context).primaryColor.withOpacity(0.3), blurRadius: 8, offset: const Offset(0, 4))]
+                            ? [BoxShadow(color: Theme.of(context).primaryColor.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 4))]
                             : [],
                       ),
                       child: Text(

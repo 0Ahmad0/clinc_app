@@ -1,10 +1,4 @@
-import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
-import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
-import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
-import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
-import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/labs/presentation/controllers/lab_profile_controller.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -24,7 +18,7 @@ class LabProfileAppBar extends GetView<LabProfileController> {
       leading: Padding(
         padding: EdgeInsets.all(8.sp),
         child: CircleAvatar(
-          backgroundColor: Colors.white.withOpacity(0.9),
+          backgroundColor: Colors.white.withValues(alpha: 0.9),
           child: const BackButton(color: Colors.black),
         ),
       ),
@@ -59,7 +53,7 @@ class LabProfileAppBar extends GetView<LabProfileController> {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withOpacity(0.7),
+                    Colors.black.withValues(alpha: 0.7),
                   ],
                 ),
               ),

@@ -1,6 +1,5 @@
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
-import 'package:clinc_app_t1/modules/doctors/data/models/doctor_model.dart';
 import 'package:clinc_app_t1/modules/doctors/presentation/controllers/doctors_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -149,12 +148,15 @@ class DoctorsFilterList extends StatelessWidget {
             items: options.map((v) {
               // ترجمة خيارات الفرز للعرض فقط
               String display = v;
-              if (v == 'priceAsc')
+              if (v == 'priceAsc') {
                 display = tr(LocaleKeys.search_sort_price_asc);
-              if (v == 'priceDesc')
+              }
+              if (v == 'priceDesc') {
                 display = tr(LocaleKeys.search_sort_price_desc);
-              if (v == 'distanceAsc')
+              }
+              if (v == 'distanceAsc') {
                 display = tr(LocaleKeys.search_sort_distance);
+              }
 
               return DropdownMenuItem(
                 value: v,

@@ -1,18 +1,15 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:clinc_app_t1/modules/auth/presentation/controllers/auth_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import '../../data/models/user_enum.dart';
 import '../widgets/container_shape_widget.dart';
 import '../widgets/logo_shape_widget.dart';
 import '../../../../app/core/utils/app_validator.dart';
 import '../controllers/signup_controller.dart';
 
-import '../../../../app/core/constants/app_assets.dart';
 import '../../../../app/core/widgets/app_button_widget.dart';
 import '../../../../app/core/widgets/app_scaffold_widget.dart';
 import '../../../../app/core/widgets/app_text_filed_widget.dart';

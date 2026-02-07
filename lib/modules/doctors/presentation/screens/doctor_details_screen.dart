@@ -1,7 +1,14 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
+import 'package:clinc_app_t1/app/extension/localization_extension.dart';
+import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
+import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:readmore/readmore.dart';
 import '../controllers/doctor_details_controller.dart';
 
 class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
@@ -12,143 +19,222 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
     final doc = controller.doctor;
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 350.h,
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Hero(
-                tag: doc.id, // أنيميشن الانتقال السلس
-                child: Image.network(
-                  'https://thevoiceofblackcincinnati.com/wp-content/uploads/2021/06/AdobeStock_305412791-scaled.jpeg',
-                  fit: BoxFit.cover,
-                ),
+      appBar: AppAppBarWidget(
+        title: "تفاصيل الطبيب",
+        actions: [
+          Obx(
+            () => IconButton(
+              icon: Icon(
+                controller.isFavorite.value
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+                color: controller.isFavorite.value ? Colors.red : Colors.black,
               ),
-            ),
-            actions: [
-              Obx(() => IconButton(
-                icon: Icon(
-                  controller.isFavorite.value ? Icons.favorite : Icons.favorite_border,
-                  color: Colors.red,
-                ),
-                onPressed: () => controller.toggleFavorite(),
-              )),
-            ],
-          ),
-
-          SliverToBoxAdapter(
-            child: Container(
-              padding: EdgeInsets.all(20.w),
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // الاسم والتخصص مع أنيميشن
-                  FadeInDown(
-                    duration: const Duration(milliseconds: 500),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(doc.name, style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold)),
-                            Text(doc.specialty, style: TextStyle(fontSize: 16.sp, color: Colors.grey)),
-                          ],
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
-                          decoration: BoxDecoration(color: Colors.amber.withOpacity(0.1), borderRadius: BorderRadius.circular(10.r)),
-                          child: Row(
-                            children: [
-                              Icon(Icons.star, color: Colors.amber, size: 20.sp),
-                              Text(" ${doc.rating}", style: const TextStyle(fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  20.verticalSpace,
-
-                  // كروت المعلومات السريعة
-                  FadeInLeft(
-                    delay: const Duration(milliseconds: 300),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildStatCard(context, "المرضى", "1000+", Icons.people),
-                        _buildStatCard(context, "خبرة", "10 سنين", Icons.work),
-                        _buildStatCard(context, "المنطقة", doc.region, Icons.location_on),
-                      ],
-                    ),
-                  ),
-                  25.verticalSpace,
-
-                  // نبذة عن الطبيب
-                  FadeInUp(
-                    delay: const Duration(milliseconds: 500),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("عن الطبيب", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                        10.verticalSpace,
-                        Text(
-                          "هذا النص هو مثال لوصف الطبيب وخبراته العلمية والعملية في مجال التخصص المذكور أعلاه.",
-                          style: TextStyle(color: Colors.grey.shade600, height: 1.5),
-                        ),
-                      ],
-                    ),
-                  ),
-                  100.verticalSpace, // مساحة للزر السفلي
-                ],
-              ),
+              onPressed: () => controller.toggleFavorite(),
             ),
           ),
         ],
       ),
-      // زر الحجز السفلي الثابت
-      bottomSheet: FadeInUp(
-        duration: const Duration(milliseconds: 800),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildDoctorCard(),
+
+            25.verticalSpace,
+
+            // 2. كروت الإحصائيات (ألوان ملف الحجز)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildStatItem(Iconsax.people, "7,500+", "مريض", Colors.blue),
+                _buildStatItem(
+                  Iconsax.award,
+                  "10 سنوات",
+                  "خبرة",
+                  Colors.orange,
+                ),
+                _buildStatItem(Iconsax.wallet_2, "100", "ريال", Colors.green),
+              ],
+            ),
+
+            25.verticalSpace,
+
+            // 3. عن الدكتور
+            const Text(
+              "عن الطبيب",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            10.verticalSpace,
+            ReadMoreText(
+              "الدكتور ${doc.name} متخصص في ${doc.specialty}. يتمتع بخبرة واسعة في تشخيص وعلاج أدق الحالات الطبية باستخدام أحدث التقنيات المتاحة عالمياً.",
+              trimLines: 3,
+              colorClickableText: Theme.of(context).primaryColor,
+              style: TextStyle(color: Colors.grey[600], height: 1.5),
+            ),
+
+            25.verticalSpace,
+
+            // 4. قسم التقييمات (عرض 3 + زر الكل)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "آراء المرضى",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                TextButton(
+                  onPressed: () => controller.showAllReviews(),
+                  child: const Text("عرض الكل"),
+                ),
+              ],
+            ),
+            10.verticalSpace,
+            // عرض أول 3 تقييمات فقط كمعاينة
+            ...controller.allReviews
+                .take(3)
+                .map((review) => controller.reviewCard(review)),
+
+            120.verticalSpace, // مساحة للزر السفلي لكي لا يغطي المحتوى
+          ],
+        ),
+      ),
+      bottomNavigationBar: FadeInUp(
         child: Container(
           padding: EdgeInsets.all(20.w),
           decoration: BoxDecoration(
             color: Colors.white,
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10.r, spreadRadius: 2.r)],
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 10.r,
+                offset: const Offset(0, -4),
+              ),
+            ],
           ),
-          child: ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).primaryColor,
-              minimumSize: Size(double.infinity, 55.h),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.r)),
-            ),
-            child: const Text("احجز موعد الآن", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          child: AppButtonWidget(
+            onPressed: () =>
+                Get.toNamed(AppRoutes.bookAppointments, arguments: doc),
+            text: "حجز موعد الآن",
           ),
         ),
       ),
     );
   }
 
-  Widget _buildStatCard(BuildContext context, String title, String value, IconData icon) {
+  Widget _buildDoctorCard() {
+    final doc = controller.doctor;
     return Container(
-      width: 100.w,
-      padding: EdgeInsets.symmetric(vertical: 15.h),
+      width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15.r),
-        border: Border.all(color: Colors.grey.shade200),
+        borderRadius: BorderRadius.circular(20.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.myOpacity(0.1),
+            blurRadius: 10,
+            spreadRadius: 5,
+            offset: const Offset(0, 5),
+          ),
+        ],
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: Theme.of(context).primaryColor),
-          5.verticalSpace,
-          Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text(title, style: TextStyle(fontSize: 12.sp, color: Colors.grey)),
+          ClipRRect(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+            child: Image.network(
+              doc.imageUrl,
+              height: 200.h,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              alignment: Alignment.topCenter,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(16.w),
+            child: IntrinsicHeight(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        doc.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      subtitle: Text(
+                        doc.specialty,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          color: Colors.grey[500],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  Row(
+                    children: [
+                      const Icon(Icons.star, color: Colors.amber, size: 20),
+                      SizedBox(width: 4.w),
+                      Text(
+                        "${doc.rating}".trNumbers(),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(width: 4.w),
+                      Text(
+                        "(${controller.allReviews.length} تقييم)".trNumbers(),
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: Colors.grey[500],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ويدجت الإحصائيات (نفس التصميم المطلوب)
+  Widget _buildStatItem(
+    IconData icon,
+    String value,
+    String label,
+    Color color,
+  ) {
+    return Flexible(
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(15.w),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: color),
+          ),
+          10.verticalSpace,
+          Text(
+            value.trNumbers(),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
+          ),
+          Text(
+            label,
+            style: TextStyle(fontSize: 11.sp, color: Colors.grey),
+          ),
         ],
       ),
     );

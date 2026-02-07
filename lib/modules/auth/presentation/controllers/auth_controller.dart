@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../app/core/utils/app_validator.dart';
 import '../../data/models/user_enum.dart';
 
 class AuthController extends GetxController {

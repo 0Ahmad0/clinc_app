@@ -1,4 +1,3 @@
-import 'package:clinc_app_t1/app/core/theme/app_theme.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

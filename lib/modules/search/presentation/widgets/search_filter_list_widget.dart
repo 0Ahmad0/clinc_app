@@ -174,7 +174,7 @@ class SearchFilterList extends StatelessWidget {
                           Divider(),
                         ],
                       );
-                    }).toList(),
+                    }),
                   ],
                 );
               }),

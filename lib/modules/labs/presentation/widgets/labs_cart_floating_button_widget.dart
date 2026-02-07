@@ -1,13 +1,9 @@
-import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
-import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
-import 'package:clinc_app_t1/modules/labs/data/models/lab_test_model.dart';
 import 'package:clinc_app_t1/modules/labs/presentation/controllers/labs_test_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 
 class LabsCartFloatingButton extends GetView<LabsTestController> {
   const LabsCartFloatingButton({super.key});
@@ -24,7 +20,7 @@ class LabsCartFloatingButton extends GetView<LabsTestController> {
           borderRadius: BorderRadius.circular(30.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withValues(alpha: 0.2),
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),
@@ -58,7 +54,7 @@ class LabsCartFloatingButton extends GetView<LabsTestController> {
               ),
             ),
             10.horizontalSpace,
-            VerticalDivider(color: Colors.white.withOpacity(0.3), width: 1),
+            VerticalDivider(color: Colors.white.withValues(alpha: 0.3), width: 1),
             10.horizontalSpace,
             GestureDetector(
               onTap: controller.proceedToCheckout,

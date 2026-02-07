@@ -1,8 +1,5 @@
-import 'package:clinc_app_t1/app/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:get/get.dart';
 
 class AppTypography {
   static TextStyle displayLarge()=> TextStyle(fontSize: 32.sp, fontWeight: FontWeight.bold);

@@ -1,7 +1,5 @@
-import 'package:clinc_app_t1/app/extension/localization_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 import 'time_chip_widget.dart';
 

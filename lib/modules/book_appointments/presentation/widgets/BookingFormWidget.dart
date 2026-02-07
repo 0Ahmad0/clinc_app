@@ -1,11 +1,8 @@
-import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+// ignore_for_file: file_names
 import 'package:clinc_app_t1/app/core/widgets/app_text_filed_widget.dart';
 import 'package:clinc_app_t1/app/extension/localization_extension.dart';
-import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/book_appointments/presentation/controllers/book_appointment_controller.dart';
-import 'package:clinc_app_t1/modules/book_appointments/presentation/widgets/time_chip_widget.dart';
-import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -40,7 +37,7 @@ class BookingFormWidget extends GetView<BookAppointmentController> {
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: Colors.grey.withOpacity(0.3)),
+            border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
           ),
           child: DropdownButtonHideUnderline(
             child: Obx(() => DropdownButton<String>(
@@ -96,9 +93,9 @@ class BookingFormWidget extends GetView<BookAppointmentController> {
               Container(
                 padding: EdgeInsets.all(12.w),
                 decoration: BoxDecoration(
-                  color: Colors.pinkAccent.withOpacity(0.05), // خلفية ناعمة
+                  color: Colors.pinkAccent.withValues(alpha: 0.05), // خلفية ناعمة
                   borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: Colors.pinkAccent.withOpacity(0.2)),
+                  border: Border.all(color: Colors.pinkAccent.withValues(alpha: 0.2)),
                 ),
                 child: Column(
                   children: [
@@ -107,7 +104,7 @@ class BookingFormWidget extends GetView<BookAppointmentController> {
                       value: controller.isPregnant.value,
                       onChanged: controller.togglePregnant,
                     ),
-                    Divider(height: 10.h, color: Colors.pinkAccent.withOpacity(0.1)),
+                    Divider(height: 10.h, color: Colors.pinkAccent.withValues(alpha: 0.1)),
                     CheckboxItem(
                       label: LocaleKeys.booking_is_breastfeeding,
                       value: controller.isBreastfeeding.value,

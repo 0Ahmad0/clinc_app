@@ -1,6 +1,4 @@
-import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
-import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -38,7 +36,7 @@ class HomeAppBarWidget extends StatelessWidget {
               title: Text(
                 tr(LocaleKeys.home_app_bar_welcome),
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha: 0.9),
                 ),
               ),
               subtitle: Text(
@@ -65,7 +63,7 @@ class HomeAppBarWidget extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2), // شفافية جميلة
+                  color: Colors.white.withValues(alpha: 0.2), // شفافية جميلة
                   borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Row(

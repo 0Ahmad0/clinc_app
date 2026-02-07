@@ -3,60 +3,90 @@ import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
-class HospitalSpecialtiesGrid extends StatelessWidget {
+class HospitalSpecialtiesList extends StatelessWidget {
   final List<String> specialties;
-  const HospitalSpecialtiesGrid({super.key, required this.specialties});
+
+  const HospitalSpecialtiesList({super.key, required this.specialties});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("التخصصات المتاحة", style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
-        15.verticalSpace,
-        GridView.builder(
+        Text(
+          "التخصصات المتاحة",
+          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+        ),
+        ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 15.w,
-            mainAxisSpacing: 15.h,
-            childAspectRatio: 1,
-          ),
           itemCount: specialties.length,
           itemBuilder: (context, index) {
             return FadeInUp(
               delay: Duration(milliseconds: index * 50),
               child: InkWell(
-                onTap: () => Get.toNamed(AppRoutes.doctors, arguments: {'specialty': specialties[index]}),
+                onTap: () => Get.toNamed(
+                  AppRoutes.doctors,
+                  arguments: {
+                    'specialty': specialties[index],
+                    'isFromClinc': true,
+                  },
+                ),
                 borderRadius: BorderRadius.circular(20.r),
                 child: Container(
-                  padding: EdgeInsets.all(15.w),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 4.h,
+                    horizontal: 10.w,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.r),
                     border: Border.all(color: Colors.grey[100]!),
-                    boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 5))],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(10.w),
-                        decoration: BoxDecoration(color: Theme.of(context).primaryColor.withOpacity(0.1), shape: BoxShape.circle),
-                        child: Icon(Icons.medical_services_outlined, color: Theme.of(context).primaryColor, size: 24.sp),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.03),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
                       ),
-                      12.verticalSpace,
-                      Text(specialties[index], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp), textAlign: TextAlign.center),
-                      4.verticalSpace,
-                      Text("8 أطباء", style: TextStyle(fontSize: 11.sp, color: Colors.grey)),
                     ],
+                  ),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Container(
+                      padding: EdgeInsets.all(6.w),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.r),
+                        color: Theme.of(
+                          context,
+                        ).primaryColor.withValues(alpha: 0.1),
+                      ),
+                      child: Icon(
+                        Icons.medical_services_outlined,
+                        color: Theme.of(context).primaryColor,
+                        size: 20.sp,
+                      ),
+                    ),
+
+                    trailing: Icon(Iconsax.arrow_circle_left),
+                    subtitle: Text(
+                      "8 أطباء",
+                      style: TextStyle(fontSize: 11.sp, color: Colors.grey),
+                    ),
+                    title: Text(
+                      specialties[index],
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.sp,
+                      ),
+                    ),
                   ),
                 ),
               ),
             );
           },
+          separatorBuilder: (_, __) => 4.verticalSpace,
         ),
       ],
     );

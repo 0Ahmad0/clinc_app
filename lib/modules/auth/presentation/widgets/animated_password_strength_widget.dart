@@ -70,16 +70,4 @@ class AnimatedPasswordStrength extends StatelessWidget {
     }
   }
 
-  String _getStrengthLabel(PasswordStrength strength) {
-    switch (strength) {
-      case PasswordStrength.veryWeak:
-        return 'ضعيفة جداً';
-      case PasswordStrength.weak:
-        return 'ضعيفة';
-      case PasswordStrength.medium:
-        return 'جيدة';
-      case PasswordStrength.strong:
-        return 'ممتازة';
-    }
-  }
 }

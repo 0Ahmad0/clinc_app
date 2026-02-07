@@ -10,7 +10,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:animate_do/animate_do.dart';
 
-import '../widgets/language_selected_card_widget.dart';
 import '../widgets/welcome_background_widget.dart';
 import '../widgets/welcome_header_widget.dart';
 import '../widgets/welcome_language_selection_widget.dart';

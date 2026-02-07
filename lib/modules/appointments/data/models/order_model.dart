@@ -10,4 +10,17 @@ class AppointmentModel {
     required this.price,
     required this.status,
   });
+
+  // دالة copyWith لتحديث الحقول بسهولة
+  AppointmentModel copyWith({
+    String? id,
+    double? price,
+    AppointmentStatus? status,
+  }) {
+    return AppointmentModel(
+      id: id ?? this.id,
+      price: price ?? this.price,
+      status: status ?? this.status,
+    );
+  }
 }

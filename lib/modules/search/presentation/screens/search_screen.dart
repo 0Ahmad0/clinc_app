@@ -1,6 +1,5 @@
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
-import 'package:clinc_app_t1/app/core/widgets/app_scaffold_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/search/presentation/controllers/search_controller.dart';
 import 'package:easy_localization/easy_localization.dart';

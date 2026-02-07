@@ -85,7 +85,7 @@ class AppTheme {
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.white,
           textStyle: AppTypography.labelLarge(),
-          minimumSize: const Size(double.maxFinite, 54),
+          minimumSize: Size(double.maxFinite, 55.h),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.r),
           ),
@@ -172,7 +172,8 @@ class AppTheme {
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.white,
           textStyle: AppTypography.labelLarge(),
-          minimumSize: const Size(double.maxFinite, 54),
+          minimumSize: Size(double.maxFinite, 52.h),
+
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.r),
           ),

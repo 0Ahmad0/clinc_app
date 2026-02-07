@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../../../doctors/data/models/doctor_model.dart';
-import '../../../search/data/models/property_model.dart';
 
 class ClinicDetailsController extends GetxController {
   var selectedRating = 0.0.obs;
