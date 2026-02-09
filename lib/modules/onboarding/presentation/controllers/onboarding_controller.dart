@@ -19,17 +19,17 @@ class OnboardingController extends GetxController {
   // 4. قائمة بيانات الصفحات (باستخدام الموديل)
   final List<OnboardingItem> onboardingPages = [
     OnboardingItem(
-      lottieAsset: AppAssets.calendarAnimation, // TODO: غيّر هذا للمسار الصحيح
+      lottieAsset: AppAssets.onboarding_1, // TODO: غيّر هذا للمسار الصحيح
       title: LocaleKeys.onboarding_title1,
       subtitle: LocaleKeys.onboarding_sub_title1,
     ),
     OnboardingItem(
-      lottieAsset: AppAssets.scanDrugAnimation, // TODO: غيّر هذا للمسار الصحيح
+      lottieAsset: AppAssets.onboarding_2, // TODO: غيّر هذا للمسار الصحيح
       title: LocaleKeys.onboarding_title2,
       subtitle: LocaleKeys.onboarding_sub_title2,
     ),
     OnboardingItem(
-      lottieAsset: AppAssets.healthAnalysisAnimation, // TODO: غيّر هذا للمسار الصحيح
+      lottieAsset: AppAssets.onboarding_3, // TODO: غيّر هذا للمسار الصحيح
       title: LocaleKeys.onboarding_title3,
       subtitle: LocaleKeys.onboarding_sub_title3,
     ),

@@ -22,52 +22,29 @@ class OnboardingPageWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                foregroundDecoration: BoxDecoration(
-                    border: Border.all(
-                      color: Get.theme.primaryColor,
-                      width: .25
-                    ),
-                    borderRadius: BorderRadius.circular(8.r)),
-                child: AspectRatio(
-                  aspectRatio: 1, // يجعلها مربعة
-                  child: Lottie.asset(
-                    item.lottieAsset,
-                  ),
-                ),
-              ).zoomIn(),
-              PositionedDirectional(
-                top: -24,
-                start: 0,
-                child: AppSvgWidget(
-                  assetsUrl: AppAssets.splashHeartIcon,
-                  width: 50.w,
-                  height: 50.w,
-                ).heartBeat(infinite: true),
-              )
-            ],
-          ),
-          30.verticalSpace, // مسافة متجاوبة
+          AspectRatio(
+            aspectRatio: 1, // يجعلها مربعة
+            child: Lottie.asset(item.lottieAsset),
+          ).zoomIn(),
+          20.verticalSpace, // مسافة متجاوبة
           // 2. النص العريض (العنوان)
           Text(
             tr(item.title),
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              fontSize: 20.sp
+              fontSize: 20.sp,
             ), // <-- من الثيم
             textAlign: TextAlign.center,
           ).slideDown(),
           8.verticalSpace, // مسافة متجاوبة
-
           // 3. النص العادي (الوصف)
           Text(
             tr(item.subtitle),
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontSize: 12.sp,
-              color: Theme.of(context).textTheme.bodyMedium?.color!.myOpacity(.825),
-              height: 1.6
+              color: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.color!.myOpacity(.825),
+              height: 1.6,
             ), // <-- من الثيم
             textAlign: TextAlign.center,
           ).slideUp(),

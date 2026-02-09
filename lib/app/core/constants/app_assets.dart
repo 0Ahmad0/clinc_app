@@ -60,8 +60,8 @@ abstract class AppAssets {
   static const cardChipIcon = '$_iconsPath/credit_card_chip.svg';
 
   // --- ملفات Lottie (JSON) ---
-  static const String scanDrugAnimation = '$_lottiePath/scan_drug_lottie.json';
-  static const String healthAnalysisAnimation =
-      '$_lottiePath/health_analysis_lottie.json';
-  static const String calendarAnimation = '$_lottiePath/calendar_lottie.json';
+  static const String onboarding_1 = '$_lottiePath/best_doctor.json';
+  static const String onboarding_2 = '$_lottiePath/calendar_booking.json';
+  static const String onboarding_3 =
+      '$_lottiePath/support.json';
 }

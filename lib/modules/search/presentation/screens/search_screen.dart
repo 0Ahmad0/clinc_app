@@ -1,5 +1,6 @@
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_search_bar_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/search/presentation/controllers/search_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -29,14 +30,11 @@ class SearchScreen extends GetView<SearchAndFilterController> {
         children: <Widget>[
           Visibility(
             visible: !isShow,
-            child: AppPaddingWidget(
-              child: Row(
-                children: [
-                  Expanded(child: SearchInputField(controller: controller)),
-                  4.horizontalSpace,
-                  SearchFilterToggleButton(controller: controller),
-                ],
-              ),
+            child: AppSearchBarWidget(
+              hintText: tr(LocaleKeys.search_search_hint),
+              showFilterButton: true,
+              onChanged: controller.updateSearchQuery,
+              onFilterTap: controller.toggleFilterBar,
             ),
           ),
           Visibility(
