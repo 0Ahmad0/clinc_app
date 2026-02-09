@@ -30,6 +30,15 @@ class LabsTestController extends GetxController {
     super.onInit();
     loadData();
     initializeCategories();
+
+    // في حال تم تمرير قسم معيّن من شاشة سابقة نبدأ به مباشرة
+    final args = Get.arguments;
+    if (args is Map && args['category'] is String) {
+      final String initialCategory = args['category'];
+      if (categories.contains(initialCategory)) {
+        selectedCategory.value = initialCategory;
+      }
+    }
   }
 
   void loadData() {

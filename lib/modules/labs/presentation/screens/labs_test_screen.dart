@@ -7,8 +7,6 @@ import 'package:get/get.dart';
 
 import '../widgets/draggable_cart_button_widget.dart';
 import '../widgets/labs_category_filter_widget.dart';
-import '../widgets/labs_packages_header_widget.dart';
-import '../widgets/labs_packages_list_widget.dart';
 import '../widgets/labs_search_bar_widget.dart';
 import '../widgets/labs_tests_list_widget.dart';
 
@@ -17,8 +15,9 @@ class LabsTestScreen extends GetView<LabsTestController> {
 
   @override
   Widget build(BuildContext context) {
-    final args = Get.arguments as Map;
-    final labName = args['name'] ?? {};
+    final args = Get.arguments as Map?;
+    final labName = args != null ? args['name'] : null;
+
     return Scaffold(
       appBar: AppAppBarWidget(title: labName ?? tr(LocaleKeys.labs_title)),
       body: LayoutBuilder(
@@ -26,16 +25,12 @@ class LabsTestScreen extends GetView<LabsTestController> {
           return Stack(
             children: [
               CustomScrollView(
-                slivers: [
-                  const SliverToBoxAdapter(child: LabsSearchBar()),
+                slivers: const [
+                  // شريط البحث عن الفحوصات
+                  SliverToBoxAdapter(child: LabsSearchBar()),
 
-                  const SliverToBoxAdapter(child: LabsPackagesHeader()),
-
-                  const SliverToBoxAdapter(child: LabsPackagesList()),
-
-                  const SliverToBoxAdapter(child: LabsCategoryFilter()),
-
-                  const LabsTestsList(),
+                  // قائمة التحاليل حسب القسم المختار
+                  LabsTestsList(),
                 ],
               ),
 

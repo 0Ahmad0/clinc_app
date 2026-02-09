@@ -9,9 +9,9 @@ import 'typography.dart';
 class AppTheme {
   static String? getFontFamily(String languageCode) {
     if (languageCode == AppConstants.arLang) {
-      return GoogleFonts.cairo().fontFamily;
+      return GoogleFonts.almarai().fontFamily;
     } else {
-      return GoogleFonts.poppins().fontFamily;
+      return GoogleFonts.outfit().fontFamily;
     }
   }
 
@@ -85,7 +85,7 @@ class AppTheme {
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.white,
           textStyle: AppTypography.labelLarge(),
-          minimumSize: Size(double.maxFinite, 55.h),
+          minimumSize: Size(double.maxFinite, 50.h),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.r),
           ),
@@ -96,7 +96,7 @@ class AppTheme {
           backgroundColor: AppColors.transparent,
           foregroundColor: AppColors.transparent,
           textStyle: AppTypography.labelLarge(),
-          minimumSize: const Size(double.maxFinite, 54),
+          minimumSize:  Size(double.maxFinite, 50.h),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.r),
             side: BorderSide(width: .75),
@@ -172,7 +172,7 @@ class AppTheme {
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.white,
           textStyle: AppTypography.labelLarge(),
-          minimumSize: Size(double.maxFinite, 52.h),
+          minimumSize: Size(double.maxFinite, 50.h),
 
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.r),

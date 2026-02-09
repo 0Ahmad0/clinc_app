@@ -15,21 +15,20 @@ class LabAboutAndServicesWidget extends GetView<LabProfileController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          24.verticalSpace,
-          Text(tr(LocaleKeys.labs_page_profile_about), style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+          Text(
+            tr(LocaleKeys.labs_page_profile_about),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+          ),
           8.verticalSpace,
-          Text(controller.lab.description, style: TextStyle(color: Colors.grey[600], height: 1.5)),
-          24.verticalSpace,
-          Text(tr(LocaleKeys.labs_page_profile_services), style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
-          10.verticalSpace,
-          Wrap(
-            spacing: 8.w,
-            runSpacing: 8.h,
-            children: controller.lab.services.map((s) => Chip(
-              label: Text(s),
-              backgroundColor: Theme.of(context).cardColor,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r), side: BorderSide(color: Colors.grey.shade300)),
-            )).toList(),
+          Text(
+            controller.lab.description,
+            style: TextStyle(
+              color: Colors.grey[600],
+              height: 1.5,
+              fontSize: 14.sp,
+            ),
           ),
         ],
       ),

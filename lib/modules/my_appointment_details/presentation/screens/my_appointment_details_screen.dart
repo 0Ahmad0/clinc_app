@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_scaffold_widget.dart';
 import 'package:clinc_app_t1/app/extension/localization_extension.dart';
@@ -8,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:readmore/readmore.dart';
 
 import '../../../../app/core/theme/app_colors.dart';
 import '../../../appointments/data/enum/appointment_status.dart';
@@ -75,8 +75,6 @@ class MyAppointmentDetailsScreen
                 ),
                 _buildInfoRow(Iconsax.card_pos, "طريقة الدفع", "بطاقة ائتمان"),
               ]),
-
-              100.verticalSpace, // مساحة للزر بالأسفل
             ],
           ),
         ),
@@ -123,7 +121,7 @@ class MyAppointmentDetailsScreen
         borderRadius: BorderRadius.circular(15.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -168,42 +166,43 @@ class MyAppointmentDetailsScreen
             padding: const EdgeInsets.all(16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      controller.doctorName,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        controller.doctorName,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      controller.specialty,
-                      style: TextStyle(fontSize: 14, color: Colors.grey[500]),
-                    ),
-                  ],
+                      const SizedBox(height: 5),
+                      Text(
+                        controller.specialty,
+                        style: TextStyle(fontSize: 14, color: Colors.grey[500]),
+                      ),
+                    ],
+                  ),
                 ),
+                const SizedBox(width: 12),
                 // التقييم
                 Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     const Icon(Icons.star, color: Colors.amber, size: 20),
                     const SizedBox(width: 4),
-                    Obx(
-                      () => Text(
-                        "${50}".trNumbers(),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
+                    Text(
+                      "50".trNumbers(),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(width: 4),
-                    Obx(
-                      () => Text(
-                        "(${50} تقييم)".trNumbers(),
-                        style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-                      ),
+                    Text(
+                      "(50 تقييم)".trNumbers(),
+                      style: TextStyle(fontSize: 12, color: Colors.grey[500]),
                     ),
                   ],
                 ),
@@ -275,22 +274,10 @@ class MyAppointmentDetailsScreen
           ),
         ],
       ),
-      child: ElevatedButton(
+      child: AppButtonWidget(
         onPressed: isAccepted ? controller.cancelAction : () => Get.back(),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: isAccepted ? Colors.redAccent : AppColors.primary,
-          minimumSize: Size(double.infinity, 55.h),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.r),
-          ),
-        ),
-        child: Text(
-          isAccepted ? "إلغاء الحجز" : "إعادة حجز موعد",
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        backgroundColor: isAccepted ? Colors.redAccent : AppColors.primary,
+        text: isAccepted ? "إلغاء الحجز" : "إعادة حجز موعد",
       ),
     );
   }

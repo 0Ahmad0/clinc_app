@@ -1,3 +1,4 @@
+import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/labs/presentation/controllers/lab_profile_controller.dart';
@@ -16,7 +17,6 @@ class LabLocationWidget extends GetView<LabProfileController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          24.verticalSpace,
           Text(tr(LocaleKeys.labs_profile_location_title), style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
           12.verticalSpace,
           GestureDetector(
@@ -25,6 +25,9 @@ class LabLocationWidget extends GetView<LabProfileController> {
               height: 150.h,
               width: double.infinity,
               decoration: BoxDecoration(
+                border: Border.all(
+                  color: AppColors.success
+                ),
                 borderRadius: BorderRadius.circular(16.r),
                 image: const DecorationImage(
                   // صورة وهمية للخريطة

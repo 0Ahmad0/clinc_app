@@ -16,7 +16,6 @@ class LabBasicInfoWidget extends GetView<LabProfileController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          20.verticalSpace,
           Row(
             children: [
               Expanded(

@@ -12,7 +12,7 @@ class LabsFilterListWidget extends GetView<LabsController> {
     return SizedBox(
       height: 40.h,
       child: ListView.separated(
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        padding: EdgeInsets.symmetric(horizontal: 14.w),
         scrollDirection: Axis.horizontal,
         itemCount: controller.filterLabels.length,
         separatorBuilder: (_, __) => 8.horizontalSpace,
@@ -23,7 +23,8 @@ class LabsFilterListWidget extends GetView<LabsController> {
               onTap: () => controller.changeFilter(index),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? Theme.of(context).primaryColor

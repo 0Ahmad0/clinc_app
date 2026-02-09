@@ -15,6 +15,7 @@ class LabProfileAppBar extends GetView<LabProfileController> {
       expandedHeight: 280.h,
       pinned: true,
       backgroundColor: Theme.of(context).primaryColor,
+      title: Text(controller.lab.name),
       leading: Padding(
         padding: EdgeInsets.all(8.sp),
         child: CircleAvatar(
@@ -24,27 +25,23 @@ class LabProfileAppBar extends GetView<LabProfileController> {
       ),
       actions: [
         // زر المشاركة
-        CircleActionButton(
-          icon: Iconsax.share,
-          onTap: controller.shareLab,
-        ),
+        CircleActionButton(icon: Iconsax.share, onTap: controller.shareLab),
         8.horizontalSpace,
         // زر المفضلة
-        Obx(() => CircleActionButton(
-              icon: controller.isFavorite.value ? Iconsax.heart5 : Iconsax.heart,
-              color: controller.isFavorite.value ? Colors.red : Colors.black,
-              onTap: controller.toggleFavorite,
-            )),
+        Obx(
+          () => CircleActionButton(
+            icon: controller.isFavorite.value ? Iconsax.heart5 : Iconsax.heart,
+            color: controller.isFavorite.value ? Colors.red : Colors.black,
+            onTap: controller.toggleFavorite,
+          ),
+        ),
         16.horizontalSpace,
       ],
       flexibleSpace: FlexibleSpaceBar(
         background: Stack(
           fit: StackFit.expand,
           children: [
-            Image.network(
-              controller.lab.imageUrl,
-              fit: BoxFit.cover,
-            ),
+            Image.network(controller.lab.imageUrl, fit: BoxFit.cover),
             // تدرج لوني لجمال النص
             Container(
               decoration: BoxDecoration(
@@ -64,4 +61,3 @@ class LabProfileAppBar extends GetView<LabProfileController> {
     );
   }
 }
-
