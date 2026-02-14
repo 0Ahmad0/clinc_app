@@ -4,11 +4,7 @@ import '../enums/snackbar_type.dart';
 import '../extension/snackbar_type_extension.dart';
 
 class SnackBarService {
-  static final SnackBarService _instance = SnackBarService._internal();
-
-  factory SnackBarService() => _instance;
-
-  SnackBarService._internal();
+  SnackBarService._();
 
   // الطريقة الرئيسية التي تعتمد على Enum
   static void show({

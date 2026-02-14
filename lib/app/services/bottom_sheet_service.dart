@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BottomSheetService {
-  static final BottomSheetService _instance = BottomSheetService._internal();
 
-  factory BottomSheetService() => _instance;
-
-  BottomSheetService._internal();
+  BottomSheetService._();
 
   static void show({
     required BuildContext context,
     required Widget child,
+    BoxConstraints? constraints,
     bool isScrollControlled = true,
     bool showDragHandle = true,
     bool isDismissible = true,
@@ -18,6 +16,7 @@ class BottomSheetService {
     double? borderRadius,
   }) {
     showModalBottomSheet(
+      constraints: constraints,
       context: context,
       isScrollControlled: isScrollControlled,
       isDismissible: isDismissible,

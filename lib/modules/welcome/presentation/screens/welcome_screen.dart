@@ -1,7 +1,9 @@
 import 'package:clinc_app_t1/app/controllers/settings_app_controller.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
+import 'package:clinc_app_t1/app/extension/dialog_type_extension.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
+import 'package:clinc_app_t1/app/services/dialog_service.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/welcome/presentation/controllers/welcome_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
