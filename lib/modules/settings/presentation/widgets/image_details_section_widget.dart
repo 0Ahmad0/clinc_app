@@ -16,54 +16,73 @@ class ImageDetailsSectionWidget extends GetView<SettingsController> {
     return SafeArea(
       child: Column(
         children: [
-          SafeArea(
-            child: Container(
-              padding: EdgeInsets.all(4.sp),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Theme.of(context).primaryColor),
-              ),
-              child: CircleAvatar(
-                radius: 40.r,
-                backgroundImage: NetworkImage(controller.userImage),
-              ),
-            ),
-          ),
-          8.verticalSpace,
-          Text(
-            'Ahlam Alharir',
-            style: Theme.of(
-              context,
-            ).textTheme.displayLarge?.copyWith(fontSize: 20.sp),
-          ),
-          2.verticalSpace,
-          Text(
-            'ahlam@gmail.com', // يمكن جعلها ديناميكية لاحقاً
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          10.verticalSpace,
-          GestureDetector(
-            onTap: () => Get.toNamed(AppRoutes.profile),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(24.r),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Iconsax.edit, color: AppColors.white, size: 16.sp),
-                  6.horizontalSpace,
-                  Text(
-                    tr(LocaleKeys.setting_edit_profile), // استخدام المفتاح
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppColors.white,
-                      fontSize: 12.sp,
-                    ),
-                  ),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16.r),
+              // زوايا خفيفة تعطي لمسة عصرية
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                stops: const [0.2, 0.9],
+                colors: [
+                  AppColors.primary,
+                  AppColors.primary.withValues(alpha: .7),
                 ],
               ),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(2.sp),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.5),
+                    ),
+                  ),
+                  child: CircleAvatar(
+                    radius: 30.sp, // قمنا بتصغيرها قليلاً لتناسب الصف
+                    backgroundImage: NetworkImage(controller.userImage),
+                  ),
+                ),
+                12.horizontalSpace,
+                Expanded(
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
+                      'Ahlam Alharir',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                        fontSize: 18.sp,
+                        color: Colors.white,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'ahlam@gmail.com',
+                      maxLines: 1,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.white.withOpacity(0.8),
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                  ),
+                ),
+
+                GestureDetector(
+                  onTap: () => Get.toNamed(AppRoutes.profile),
+                  child: Container(
+                    padding: EdgeInsets.all(10.sp),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(Iconsax.edit, color: Colors.white, size: 18.sp),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

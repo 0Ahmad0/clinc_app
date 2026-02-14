@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../app/core/widgets/app_rating_widget.dart';
+import '../../../../app/services/bottom_sheet_service.dart';
+import '../../../../app/services/snackbar_service.dart';
 import '../../data/models/doctor_model.dart';
 
 class DoctorDetailsController extends GetxController {
@@ -100,4 +103,18 @@ class DoctorDetailsController extends GetxController {
       ),
     );
   }
+  void showRatingSheet(BuildContext context) {
+    BottomSheetService.show(
+      context: context,
+      child: AppRatingWidget(
+        onSubmit: (rating, comment) {
+          selectedRating.value = rating;
+          commentController.text = comment;
+          Get.back();
+          SnackBarService.showSuccess(context: context, title: "تم التقييم بنجاح");
+        },
+      ),
+    );
+  }
+
 }

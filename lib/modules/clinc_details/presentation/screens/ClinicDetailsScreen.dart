@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 import 'package:animate_do/animate_do.dart';
+import 'package:clinc_app_t1/app/core/widgets/action_rating_card_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,9 @@ class ClinicDetailsScreen extends StatelessWidget {
                       height: 30.h,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(30.r),
+                        ),
                       ),
                     ),
                   ),
@@ -65,11 +68,16 @@ class ClinicDetailsScreen extends StatelessWidget {
                     child: ZoomIn(
                       child: Container(
                         padding: EdgeInsets.all(3.w),
-                        decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
                         child: CircleAvatar(
                           radius: 45.r,
                           backgroundColor: Colors.white,
-                          backgroundImage: const NetworkImage("https://cdn-icons-png.flaticon.com/512/3306/3306526.png"), // استبدله بلوجو المشفى
+                          backgroundImage: const NetworkImage(
+                            "https://cdn-icons-png.flaticon.com/512/3306/3306526.png",
+                          ), // استبدله بلوجو المشفى
                         ),
                       ),
                     ),
@@ -90,42 +98,17 @@ class ClinicDetailsScreen extends StatelessWidget {
                   HospitalInfoSection(hospital: hospital),
 
                   20.verticalSpace,
-
-                  // شريط التقييمات التفاعلي
-                  FadeInLeft(
-                    child: InkWell(
-                      onTap: () => controller.showRatingSheet(context),
-                      child: Container(
-                        padding: EdgeInsets.all(15.w),
-                        decoration: BoxDecoration(
-                          color: Colors.amber.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(15.r),
-                          border: Border.all(color: Colors.amber.withValues(alpha: 0.2)),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.star_rounded, color: Colors.amber, size: 28),
-                            12.horizontalSpace,
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("قيم العيادة", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp)),
-                                Text("شاركنا تجربتك لمساعدة الآخرين", style: TextStyle(fontSize: 11.sp, color: Colors.grey[700])),
-                              ],
-                            ),
-                            const Spacer(),
-                            const Icon(Icons.arrow_forward_ios, size: 14, color: Colors.amber),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-
+                  ActionRatingCardWidget(
+                    title: 'قيم العيادة',
+                    subtitle: 'شاركنا تجربتك لمساعدة الآخرين',
+                    onTap: () => controller.showRatingSheet(context),
+                  ).fadeInLeft(),
                   25.verticalSpace,
 
-
                   // عن العيادة والتأمينات
-                  HospitalAboutSection(supportedInsurances: hospital.supportedInsurances),
+                  HospitalAboutSection(
+                    supportedInsurances: hospital.supportedInsurances,
+                  ),
 
                   25.verticalSpace,
                   // التخصصات المتاحة (Grid)
@@ -134,8 +117,25 @@ class ClinicDetailsScreen extends StatelessWidget {
                   25.verticalSpace,
                   // الموقع الخريطة
                   const DoctorLocation(),
-
-                  120.verticalSpace, // مساحة للزر السفلي
+                  25.verticalSpace,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "آراء المرضى",
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                      TextButton(
+                        onPressed: () => controller.showAllReviews(),
+                        child: const Text("عرض الكل"),
+                      ),
+                    ],
+                  ),
+                  10.verticalSpace,
+                  // عرض أول 3 تقييمات فقط كمعاينة
+                  ...controller.allReviews
+                      .take(3)
+                      .map((review) => controller.reviewCard(review)),
                 ],
               ),
             ),
@@ -148,7 +148,13 @@ class ClinicDetailsScreen extends StatelessWidget {
         padding: EdgeInsets.all(20.w),
         decoration: BoxDecoration(
           color: Colors.white,
-          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 20, offset: const Offset(0, -5))],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 20,
+              offset: const Offset(0, -5),
+            ),
+          ],
         ),
         child: AppButtonWidget(
           onPressed: () {},

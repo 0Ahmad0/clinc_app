@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:readmore/readmore.dart';
+import '../../../../app/core/widgets/action_rating_card_widget.dart';
 import '../controllers/doctor_details_controller.dart';
 
 class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
@@ -60,6 +61,12 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
             ),
 
             25.verticalSpace,
+            ActionRatingCardWidget(
+              title: 'قيم الطبيب',
+              subtitle: 'شاركنا تجربتك لمساعدة الآخرين',
+              onTap: () => controller.showRatingSheet(context),
+            ).fadeInLeft(),
+            25.verticalSpace,
 
             // 3. عن الدكتور
             const Text(
@@ -95,8 +102,6 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
             ...controller.allReviews
                 .take(3)
                 .map((review) => controller.reviewCard(review)),
-
-            120.verticalSpace, // مساحة للزر السفلي لكي لا يغطي المحتوى
           ],
         ),
       ),

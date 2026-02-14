@@ -5,7 +5,9 @@ import '../extension/snackbar_type_extension.dart';
 
 class SnackBarService {
   static final SnackBarService _instance = SnackBarService._internal();
+
   factory SnackBarService() => _instance;
+
   SnackBarService._internal();
 
   // الطريقة الرئيسية التي تعتمد على Enum
@@ -214,9 +216,5 @@ class SnackBarInfo {
   final IconData icon;
   final String title;
 
-  SnackBarInfo({
-    required this.color,
-    required this.icon,
-    required this.title,
-  });
+  SnackBarInfo({required this.color, required this.icon, required this.title});
 }

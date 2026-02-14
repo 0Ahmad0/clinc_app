@@ -1,7 +1,10 @@
+import 'package:clinc_app_t1/app/core/widgets/app_rating_widget.dart';
+import 'package:clinc_app_t1/app/services/bottom_sheet_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import '../../../../app/services/snackbar_service.dart';
 import '../../../doctors/data/models/doctor_model.dart';
 
 class ClinicDetailsController extends GetxController {
@@ -13,6 +16,76 @@ class ClinicDetailsController extends GetxController {
 
   // قائمة الأطباء الأصلية (يتم جلبها عادة من الـ API أو الموديل)
   final allDoctors = DoctorModel.mockDoctors.obs;
+
+
+  final List<Map<String, dynamic>> allReviews = [
+    {"name": "أحمد محمد", "rating": 5.0, "comment": "دكتور محترم جداً وتشخيصه دقيق للغاية.", "date": "منذ يومين"},
+    {"name": "سارة علي", "rating": 4.5, "comment": "التعامل راقي جداً والعيادة نظيفة ومنظمة.", "date": "منذ أسبوع"},
+    {"name": "ياسين كمال", "rating": 5.0, "comment": "من أفضل الدكاترة في هذا التخصص بلا منازع.", "date": "منذ شهر"},
+    {"name": "نور الهدى", "rating": 4.0, "comment": "شرح لي الحالة بالتفصيل، شكراً دكتور.", "date": "منذ شهرين"},
+  ];
+  Widget reviewCard(Map<String, dynamic> review) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 15.h),
+      padding: EdgeInsets.all(12.w),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(15.r),
+        border: Border.all(color: Colors.grey[100]!),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const CircleAvatar(backgroundColor: Colors.blue, child: Icon(Icons.person, color: Colors.white, size: 20)),
+              10.horizontalSpace,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(review['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text(review['date'], style: TextStyle(fontSize: 10.sp, color: Colors.grey)),
+                ],
+              ),
+              const Spacer(),
+              const Icon(Icons.star, color: Colors.amber, size: 14),
+              Text(" ${review['rating']}"),
+            ],
+          ),
+          8.verticalSpace,
+          Text(review['comment'], style: TextStyle(fontSize: 12.sp, color: Colors.black87)),
+        ],
+      ),
+    );
+  }
+
+  void showAllReviews() {
+    Get.bottomSheet(
+      Container(
+        padding: EdgeInsets.all(20.w),
+        height: Get.height * 0.75,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
+        ),
+        child: Column(
+          children: [
+            Container(width: 40.w, height: 4.h, decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10))),
+            20.verticalSpace,
+            Text("كل آراء المرضى (${allReviews.length})", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            20.verticalSpace,
+            Expanded(
+              child: ListView.builder(
+                itemCount: allReviews.length,
+                itemBuilder: (context, index) => reviewCard(allReviews[index]),
+              ),
+            ),
+          ],
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
 
   // دالة لتغيير التخصص المختار
   void toggleSpecialty(String specialty) {
@@ -32,61 +105,17 @@ class ClinicDetailsController extends GetxController {
         .where((doc) => doc.specialty == selectedSpecialty.value)
         .toList();
   }
+
   void showRatingSheet(BuildContext context) {
-    Get.bottomSheet(
-      isScrollControlled: true,
-      Container(
-        padding: EdgeInsets.only(
-          left: 20.w, right: 20.w, top: 20.h,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 20.h,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(width: 40.w, height: 4.h, decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10.r))),
-            20.verticalSpace,
-            Text("قيم تجربتك", style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
-            15.verticalSpace,
-            RatingBar.builder(
-              initialRating: 0,
-              minRating: 1,
-              direction: Axis.horizontal,
-              allowHalfRating: true,
-              itemCount: 5,
-              itemPadding: EdgeInsets.symmetric(horizontal: 4.0.w),
-              itemBuilder: (context, _) => const Icon(Icons.star, color: Colors.amber),
-              onRatingUpdate: (rating) => selectedRating.value = rating,
-            ),
-            20.verticalSpace,
-            TextField(
-              controller: commentController,
-              decoration: InputDecoration(
-                hintText: "اكتب رأيك بصراحة...",
-                filled: true,
-                fillColor: Colors.grey[50],
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(15.r), borderSide: BorderSide.none),
-              ),
-              maxLines: 3,
-            ),
-            20.verticalSpace,
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).primaryColor,
-                minimumSize: Size(double.infinity, 50.h),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.r)),
-              ),
-              onPressed: () {
-                Get.back();
-                Get.snackbar("شكراً لك", "تم استلام تقييمك", snackPosition: SnackPosition.BOTTOM);
-              },
-              child: const Text("إرسال التقييم", style: TextStyle(color: Colors.white)),
-            ),
-          ],
-        ),
+    BottomSheetService.show(
+      context: context,
+      child: AppRatingWidget(
+        onSubmit: (rating, comment) {
+          selectedRating.value = rating;
+          commentController.text = comment;
+          Get.back();
+          SnackBarService.showSuccess(context: context, title: "تم التقييم بنجاح");
+        },
       ),
     );
   }
