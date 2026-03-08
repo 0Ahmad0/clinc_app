@@ -1,3 +1,4 @@
+import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
@@ -44,9 +45,13 @@ class MainSectionWidget extends GetView<HomeController> {
                   height: (Get.width - 32.w - 24.w) / 3,
                   padding: EdgeInsets.all(12.sp),
                   decoration: BoxDecoration(
-                    color: isSpecial
-                        ? theme.primaryColor
-                        : theme.cardColor, // لون البطاقة حسب الثيم
+                    color: isSpecial ? null : theme.cardColor,
+                    gradient: isSpecial
+                        ? AppColors.primaryGradient
+                        : null,
+                    // color: isSpecial
+                    //     ? theme.primaryColor
+                    //     : theme.cardColor, // لون البطاقة حسب الثيم
                     borderRadius: BorderRadius.circular(16.r),
                     boxShadow: [
                       if (!isSpecial)

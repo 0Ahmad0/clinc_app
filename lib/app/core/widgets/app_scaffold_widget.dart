@@ -1,3 +1,4 @@
+import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -10,6 +11,8 @@ class AppScaffoldWidget extends StatelessWidget {
 
   final bool applyBodyPadding;
   final bool resizeToAvoidBottomInset;
+  // إضافة خاصية للتحكم في تفعيل التدرج للخلفية
+  final bool useGradientBackground;
 
   const AppScaffoldWidget({
     super.key,
@@ -20,6 +23,8 @@ class AppScaffoldWidget extends StatelessWidget {
     this.backgroundColor,
     this.applyBodyPadding = true,
     this.resizeToAvoidBottomInset = true,
+    this.useGradientBackground = false,
+    // افتراضياً معطلة للحفاظ على مرونة التطبيق
   });
 
   static final EdgeInsets _defaultPadding = EdgeInsets.symmetric(
@@ -31,13 +36,21 @@ class AppScaffoldWidget extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       appBar: appBar,
-      body: applyBodyPadding
-          ? Padding(padding: _defaultPadding, child: body)
-          : body,
-      // أو عرض الـ body بدون حشوة
+      backgroundColor: useGradientBackground ? Colors.transparent : backgroundColor,
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: useGradientBackground
+              ? AppColors.primaryGradient
+              : null,
+        ),
+        child: applyBodyPadding
+            ? Padding(padding: _defaultPadding, child: body)
+            : body,
+      ),
       floatingActionButton: floatingActionButton,
       bottomNavigationBar: bottomNavigationBar,
-      backgroundColor: backgroundColor,
     );
   }
 }

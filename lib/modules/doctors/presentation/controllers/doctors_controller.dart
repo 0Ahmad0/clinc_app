@@ -1,46 +1,39 @@
 import 'package:get/get.dart';
-
 import '../../data/models/doctor_model.dart';
 
 class DoctorsController extends GetxController {
-  // 1. البيانات
+  // 1. البيانات الأصلية
   final _allDoctors = DoctorModel.mockDoctors.obs;
   var filteredDoctors = <DoctorModel>[].obs;
 
-  // 2. متغيرات البحث والواجهة
+  // 2. متغيرات الواجهة والبحث
   var currentSearchQuery = ''.obs;
   var isFilterBarVisible = true.obs;
+
+  // --- الإضافات الجديدة ليتطابق مع الـ Search ---
+  var tempSelectedMainRegion = 'الكل'.obs; // المنطقة الكبرى المختارة داخل الشيت
+  var regionSearchText = ''.obs; // نص البحث داخل الشيت (إذا أردت البحث عن مدينة)
+
+  // توزيع المناطق (نفس الموجود في SearchController)
+  final Map<String, List<String>> groupedRegions = {
+    'المناطق الوسطى': ['الرياض', 'القصيم', 'حائل'],
+    'المناطق الشمالية': ['الحدود الشمالية', 'الجوف', 'تبوك'],
+    'المناطق الجنوبية': ['عسير', 'جازان', 'نجران', 'الباحة'],
+    'المناطق الغربية': ['مكة المكرمة', 'المدينة المنورة'],
+    'المنطقة الشرقية': ['المنطقة الشرقية'],
+  };
+  // ------------------------------------------
 
   // 3. الفلاتر النشطة
   var selectedRegion = 'الكل'.obs;
   var selectedSpecialty = 'الكل'.obs;
   var selectedGender = 'الكل'.obs;
-  var selectedRating = 'الكل'.obs; // الفلتر الجديد للتقييم
+  var selectedRating = 'الكل'.obs;
 
   // 4. القوائم الثابتة
-  final List<String> regions = [
-    'الكل',
-    'الرياض',
-    'جدة',
-    'الدمام',
-    'أبها',
-    'تبوك',
-  ];
-  final List<String> specialties = [
-    'الكل',
-    'قلب',
-    'جلدية',
-    'أسنان',
-    'عيون',
-    'باطنية',
-  ];
+  final List<String> specialties = ['الكل', 'قلب', 'جلدية', 'أسنان', 'عيون', 'باطنية'];
   final List<String> genders = ['الكل', 'ذكر', 'أنثى'];
-  final List<String> ratings = [
-    'الكل',
-    '4.5+',
-    '4.0+',
-    '3.5+',
-  ]; // خيارات التقييم
+  final List<String> ratings = ['الكل', '4.5+', '4.0+', '3.5+'];
 
   @override
   void onInit() {
@@ -48,8 +41,7 @@ class DoctorsController extends GetxController {
     applyFilters();
   }
 
-  void toggleFilterBar() =>
-      isFilterBarVisible.value = !isFilterBarVisible.value;
+  void toggleFilterBar() => isFilterBarVisible.value = !isFilterBarVisible.value;
 
   void updateSearchQuery(String query) {
     currentSearchQuery.value = query;
@@ -73,6 +65,7 @@ class DoctorsController extends GetxController {
 
   void resetFilters() {
     selectedRegion.value = 'الكل';
+    tempSelectedMainRegion.value = 'الكل'; // ريسيت المنطقة الكبرى
     selectedSpecialty.value = 'الكل';
     selectedGender.value = 'الكل';
     selectedRating.value = 'الكل';
@@ -94,24 +87,18 @@ class DoctorsController extends GetxController {
     // 1. البحث بالاسم
     if (currentSearchQuery.value.isNotEmpty) {
       results = results
-          .where(
-            (d) => d.name.toLowerCase().contains(
-              currentSearchQuery.value.toLowerCase(),
-            ),
-          )
+          .where((d) => d.name.toLowerCase().contains(currentSearchQuery.value.toLowerCase()))
           .toList();
     }
 
-    // 2. المنطقة
+    // 2. المنطقة (تأكد أن موديل DoctorModel يحتوي على حقل region)
     if (selectedRegion.value != 'الكل') {
       results = results.where((d) => d.region == selectedRegion.value).toList();
     }
 
     // 3. التخصص
     if (selectedSpecialty.value != 'الكل') {
-      results = results
-          .where((d) => d.specialty == selectedSpecialty.value)
-          .toList();
+      results = results.where((d) => d.specialty == selectedSpecialty.value).toList();
     }
 
     // 4. الجنس
@@ -119,16 +106,12 @@ class DoctorsController extends GetxController {
       results = results.where((d) => d.gender == selectedGender.value).toList();
     }
 
-    // 5. التقييم (منطق مخصص)
+    // 5. التقييم
     if (selectedRating.value != 'الكل') {
       double minRating = 0.0;
-      if (selectedRating.value == '4.5+') {
-        minRating = 4.5;
-      } else if (selectedRating.value == '4.0+') {
-        minRating = 4.0;
-      } else if (selectedRating.value == '3.5+') {
-        minRating = 3.5;
-      }
+      if (selectedRating.value == '4.5+') minRating = 4.5;
+      else if (selectedRating.value == '4.0+') minRating = 4.0;
+      else if (selectedRating.value == '3.5+') minRating = 3.5;
 
       results = results.where((d) => d.rating >= minRating).toList();
     }

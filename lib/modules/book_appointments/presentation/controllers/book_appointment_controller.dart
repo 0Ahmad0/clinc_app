@@ -13,6 +13,7 @@ class BookAppointmentController extends GetxController {
   // 2. الحقول النصية
   final fullNameController = TextEditingController();
   final problemController = TextEditingController();
+  final phoneController = TextEditingController();
 
   // 3. القوائم والاختيارات
   final selectedAgeRange = '26 - 30'.obs;
@@ -70,6 +71,7 @@ class BookAppointmentController extends GetxController {
     dateLineController.dispose();
     fullNameController.dispose();
     problemController.dispose();
+    phoneController.dispose();
     super.onClose();
   }
 }
