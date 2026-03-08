@@ -31,6 +31,7 @@ class AppButtonWidget extends StatelessWidget {
 
     return SizedBox(
       width: isFullWidth ? double.infinity : null,
+      height: 54.h,
       child: Material(
         color: Colors.transparent, // لجعل تأثير النقر (Splash) يظهر فوق الـ Container
         child: InkWell(
@@ -39,6 +40,7 @@ class AppButtonWidget extends StatelessWidget {
           child: Ink(
             padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
             decoration: BoxDecoration(
+              gradient: AppColors.primaryGradient,
               color: (onPressed == null) ? Colors.grey : effectiveBgColor,
               borderRadius: BorderRadius.circular(12.r),
             ),
