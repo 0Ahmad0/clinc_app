@@ -24,6 +24,7 @@ class SignupScreen extends GetView<SignupController> {
   Widget build(BuildContext context) {
     return AppScaffoldWidget(
       backgroundColor: Theme.of(context).primaryColor,
+      useGradientBackground: true,
       body: Center(
         child: SingleChildScrollView(
           child: Stack(
