@@ -5,17 +5,11 @@ import 'package:get/get.dart';
 
 class AppButtonWidget extends StatelessWidget {
   final String text;
-
   final VoidCallback? onPressed;
-
   final Widget? icon;
-
   final bool isLoading;
-
   final bool isFullWidth;
-
   final Color? backgroundColor;
-
   final Color? foregroundColor;
 
   const AppButtonWidget({
@@ -31,66 +25,71 @@ class AppButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = ElevatedButton.styleFrom(
-      backgroundColor: backgroundColor,
-      foregroundColor: foregroundColor,
-      textStyle: Theme.of(
-        context,
-      ).textTheme.displayLarge?.copyWith(fontSize: 16.sp),
-    );
+    // تحديد الألوان الافتراضية إذا لم يتم تمريرها
+    final effectiveBgColor = backgroundColor ?? Theme.of(context).primaryColor;
+    final effectiveFgColor = foregroundColor ?? Colors.white;
 
-    final button = ElevatedButton(
-      onPressed: isLoading ? null : onPressed,
-      style: style,
-      child: isLoading
-          ? _buildLoading() // 4. عرض مؤشر تحميل
-          : _buildChild(), // 5. عرض محتوى الزر (أيقونة + نص)
-    );
-
-    // 6. إذا لم يكن بالعرض الكامل، لا تمدده
-    if (!isFullWidth) {
-      return button;
-    }
-
-    // 7. إذا كان بالعرض الكامل، تأكد أنه يملأ المساحة
-    return SizedBox(width: double.infinity, child: button);
-  }
-
-  /// ويدجت داخلي لبناء مؤشر التحميل
-  Widget _buildLoading() {
     return SizedBox(
-      height: 24.h, // حجم مناسب للنص
-      width: 24.h,
-      child: CircularProgressIndicator(
-        // استخدم لون النص ليكون متناسقاً
-        color: foregroundColor ?? Get.theme.colorScheme.onPrimary,
+      width: isFullWidth ? double.infinity : null,
+      height: 50.h,
+      child: Material(
+        color: Colors.transparent, // لجعل تأثير النقر (Splash) يظهر فوق الـ Container
+        child: InkWell(
+          onTap: (isLoading || onPressed == null) ? null : onPressed,
+          borderRadius: BorderRadius.circular(12.r), // حواف دائرية متناسقة
+          child: Ink(
+            padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
+            decoration: BoxDecoration(
+              gradient: AppColors.primaryGradient,
+              color: (onPressed == null) ? Colors.grey : effectiveBgColor,
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+            child: Center(
+              child: isLoading
+                  ? _buildLoading(effectiveFgColor)
+                  : _buildChild(context, effectiveFgColor),
+            ),
+          ),
+        ),
       ),
     );
   }
 
-  /// ويدجت داخلي لبناء محتوى الزر
-  Widget _buildChild() {
-    if (icon == null) {
-      // إذا لم يكن هناك أيقونة، اعرض النص فقط
-      return Text(text);
-    }
-    // إذا كان هناك أيقونة، اعرضها بجانب النص
-    return Builder(
-      builder: (context) {
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          // ليجعل الزر يتوسط إذا لم يكن (isFullWidth)
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            icon!,
-            10.horizontalSpace, // مسافة متجاوبة
-            Text(text),
-          ],
-        );
-      },
+  Widget _buildLoading(Color color) {
+    return SizedBox(
+      height: 20.h,
+      width: 20.h,
+      child: CircularProgressIndicator(
+        strokeWidth: 2.5,
+        color: color,
+      ),
+    );
+  }
+
+  Widget _buildChild(BuildContext context, Color color) {
+    final textWidget = Text(
+      text,
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+        color: color,
+        fontSize: 16.sp,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+
+    if (icon == null) return textWidget;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        icon!,
+        8.horizontalSpace,
+        textWidget,
+      ],
     );
   }
 }
+
 
 class AppOutlineButtonWidget extends StatelessWidget {
   final String text;
@@ -130,8 +129,8 @@ class AppOutlineButtonWidget extends StatelessWidget {
         side: BorderSide(color: effectiveBorderColor, width: 0.75),
 
         minimumSize: isFullWidth
-            ? const Size(double.infinity, 54)
-            : const Size(0, 54),
+            ?  Size(double.infinity, 50.h)
+            : Size(0, 50.h),
 
         textStyle: theme.textTheme.labelLarge?.copyWith(
           fontSize: 16.sp,

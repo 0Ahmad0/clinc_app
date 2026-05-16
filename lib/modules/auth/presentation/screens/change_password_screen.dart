@@ -21,6 +21,7 @@ class ChangePasswordScreen extends GetView<ChangePasswordController> {
   Widget build(BuildContext context) {
     return AppScaffoldWidget(
       backgroundColor: Theme.of(context).primaryColor,
+      useGradientBackground: true,
       appBar: const AppAppBarWidget(title: "تغيير كلمة المرور"),
       body: SafeArea(
         child: Center(

@@ -21,16 +21,16 @@ class ImageDetailsSectionWidget extends GetView<SettingsController> {
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.r),
-              // زوايا خفيفة تعطي لمسة عصرية
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                stops: const [0.2, 0.9],
-                colors: [
-                  AppColors.primary,
-                  AppColors.primary.withValues(alpha: .7),
-                ],
-              ),
+              // gradient: LinearGradient(
+              //   begin: Alignment.topLeft,
+              //   end: Alignment.bottomRight,
+              //   stops: const [0.2, 0.9],
+              //   colors: [
+              //     AppColors.primary,
+              //     AppColors.primary.withValues(alpha: .7),
+              //   ],
+              // ),
+              gradient: AppColors.primaryGradient
             ),
             child: Row(
               children: [

@@ -22,6 +22,7 @@ class ForgetPasswordScreen extends GetView<ForgetPasswordController> {
   Widget build(BuildContext context) {
     return AppScaffoldWidget(
       backgroundColor: Theme.of(context).primaryColor,
+      useGradientBackground: true,
       appBar: const AppAppBarWidget(),
       body: SafeArea(
         child: Center(

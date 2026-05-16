@@ -7,6 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../app/core/theme/app_colors.dart';
+
 class HomeAppBarWidget extends StatelessWidget {
   const HomeAppBarWidget({super.key});
 
@@ -17,7 +19,8 @@ class HomeAppBarWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: theme.primaryColor, // اللون الأساسي من الثيم
+        gradient: AppColors.primaryGradient,
+        // color: theme.primaryColor, // اللون الأساسي من الثيم
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(24.r)),
       ),
       child: SafeArea(

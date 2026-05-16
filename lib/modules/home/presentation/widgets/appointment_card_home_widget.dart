@@ -1,3 +1,4 @@
+import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
@@ -41,7 +42,8 @@ class AppointmentCardWidget extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(16.w),
             decoration: BoxDecoration(
-              color: theme.primaryColor,
+              // color: theme.primaryColor,
+              gradient: AppColors.primaryGradient,
               borderRadius: BorderRadius.circular(16.r),
               boxShadow: [
                 BoxShadow(
@@ -79,8 +81,8 @@ class AppointmentCardWidget extends StatelessWidget {
                           Text(
                             'مشفى الأميرة نورة',
                             style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12.sp,
+                              color: Colors.white,
+                              fontSize: 12.sp,
                             ),
                           ),
                           4.verticalSpace,
@@ -91,7 +93,6 @@ class AppointmentCardWidget extends StatelessWidget {
                               fontSize: 12.sp,
                             ),
                           ),
-
                         ],
                       ),
                     ),

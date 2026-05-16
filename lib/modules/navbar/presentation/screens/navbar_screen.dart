@@ -71,23 +71,31 @@ class NavbarScreen extends GetView<NavbarController> {
         // لمنع الكيبورد من رفع الناف بار
 
         // الزر العائم (FAB)
-        floatingActionButton: FloatingActionButton.large(
-          onPressed: () => Get.toNamed(AppRoutes.search),
-          shape: const StarBorder.polygon(pointRounding: .8, sides: 5),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Iconsax.add_square, size: 26.sp),
-              6.verticalSpace,
-              Text(
-                tr(LocaleKeys.navbar_book_now), // <--- هنا الترجمة
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontSize: 9.sp,
-                  color: AppColors.white,
-                  fontWeight: FontWeight.bold,
+        floatingActionButton: Container(
+          decoration: const ShapeDecoration(
+            gradient: AppColors.primaryGradient,
+            shape: StarBorder.polygon(pointRounding: .8, sides: 5),
+          ),
+          child: FloatingActionButton.large(
+            backgroundColor: AppColors.transparent,
+            elevation: 0.0,
+            onPressed: () => Get.toNamed(AppRoutes.search),
+            shape: const StarBorder.polygon(pointRounding: .8, sides: 5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Iconsax.add_square, size: 26.sp),
+                6.verticalSpace,
+                Text(
+                  tr(LocaleKeys.navbar_book_now), // <--- هنا الترجمة
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontSize: 9.sp,
+                    color: AppColors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         floatingActionButtonLocation:

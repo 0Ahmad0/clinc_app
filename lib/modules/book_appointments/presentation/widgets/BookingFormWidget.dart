@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../app/core/utils/app_validator.dart';
 import 'GenderSelectionCard.dart';
 import 'SectionLabel.dart';
 import 'checkbox_item_widget.dart';
@@ -117,6 +118,16 @@ class BookingFormWidget extends GetView<BookAppointmentController> {
           ),
         )),
 
+        16.verticalSpace,
+
+        // المشكلة
+        SectionLabel(label: LocaleKeys.signup_phone_number),
+        AppTextFormFieldWidget(
+          controller: controller.phoneController,
+          hintText: tr(LocaleKeys.signup_phone_number),
+          validator: AppValidator.validateSaudiPhone,
+          keyboardType: TextInputType.phone,
+        ),
         16.verticalSpace,
 
         // المشكلة

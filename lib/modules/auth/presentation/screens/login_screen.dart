@@ -26,7 +26,8 @@ class LoginScreen extends GetView<LoginController> {
     // final authController = Get.find<AuthController>();
     return AppScaffoldWidget(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Theme.of(context).primaryColor,
+      useGradientBackground: true,
+      // backgroundColor: Theme.of(context).primaryColor,
       body: Center(
         child: Stack(
           alignment: Alignment.center,
