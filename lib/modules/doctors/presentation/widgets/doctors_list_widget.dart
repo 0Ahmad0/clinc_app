@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../app/core/widgets/widgets_Informative/loading_data_view.dart';
 import 'doctor_card_widget.dart';
 
 class DoctorsList extends StatelessWidget {
@@ -15,6 +16,10 @@ class DoctorsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      if (controller.isInitialLoading) {
+        return const LoadingDataBaseView();
+      }
+
       if (controller.filteredDoctors.isEmpty) {
         return Center(
           child: Column(
@@ -30,12 +35,25 @@ class DoctorsList extends StatelessWidget {
           ),
         );
       }
-      return ListView.builder(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-        itemCount: controller.filteredDoctors.length,
-        itemBuilder: (context, index) {
-          return DoctorCard(doctor: controller.filteredDoctors[index]);
-        },
+      return RefreshIndicator(
+        onRefresh: controller.reloadDoctors,
+        child: ListView.builder(
+          controller: controller.scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+          itemCount:
+              controller.filteredDoctors.length +
+              (controller.isLoadingMore ? 1 : 0),
+          itemBuilder: (context, index) {
+            if (index >= controller.filteredDoctors.length) {
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.h),
+                child: const LoadingDataView(),
+              );
+            }
+            return DoctorCard(doctor: controller.filteredDoctors[index]);
+          },
+        ),
       );
     });
   }

@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'offer_card.dart';
+
 class LabOffersListWidget extends GetView<LabProfileController> {
   const LabOffersListWidget({super.key});
 
@@ -19,7 +20,9 @@ class LabOffersListWidget extends GetView<LabProfileController> {
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Text(
             tr(LocaleKeys.labs_profile_offers_title),
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
         10.verticalSpace,
@@ -32,7 +35,10 @@ class LabOffersListWidget extends GetView<LabProfileController> {
             separatorBuilder: (_, __) => 10.horizontalSpace,
             itemBuilder: (context, index) {
               final offer = controller.lab.offers[index];
-              return OfferCard(offer: offer, onTap: () => controller.copyCoupon(offer.code));
+              return OfferCard(
+                offer: offer,
+                onTap: () => controller.copyCoupon(offer.code),
+              );
             },
           ),
         ),

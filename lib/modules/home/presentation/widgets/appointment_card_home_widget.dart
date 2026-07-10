@@ -10,6 +10,7 @@ import 'package:iconsax/iconsax.dart';
 class AppointmentCardWidget extends StatelessWidget {
   final String doctorName;
   final String specialty;
+  final String clinicName;
   final String imageUrl;
   final String date;
   final String time;
@@ -18,6 +19,7 @@ class AppointmentCardWidget extends StatelessWidget {
     super.key,
     required this.doctorName,
     required this.specialty,
+    required this.clinicName,
     required this.imageUrl,
     required this.date,
     required this.time,
@@ -79,7 +81,7 @@ class AppointmentCardWidget extends StatelessWidget {
                           ),
                           4.verticalSpace,
                           Text(
-                            'مشفى الأميرة نورة',
+                            clinicName,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 12.sp,

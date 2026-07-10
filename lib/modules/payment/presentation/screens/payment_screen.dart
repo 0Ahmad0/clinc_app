@@ -24,6 +24,9 @@ class PaymentScreen extends GetView<PaymentController> {
         children: [
           Expanded(
             child: Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
               if (controller.savedCards.isEmpty) {
                 return Center(
                   child: Column(
@@ -33,7 +36,9 @@ class PaymentScreen extends GetView<PaymentController> {
                       10.verticalSpace,
                       Text(
                         tr(LocaleKeys.payment_settings_no_cards),
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
                       ),
                     ],
                   ),

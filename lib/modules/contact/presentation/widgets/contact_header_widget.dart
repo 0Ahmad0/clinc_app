@@ -34,28 +34,24 @@ class ContactHeader extends StatelessWidget {
               color: AppColors.white.myOpacity(0.2),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              Iconsax.support,
-              size: 40.sp,
-              color: AppColors.white,
-            ),
+            child: Icon(Iconsax.support, size: 40.sp, color: AppColors.white),
           ),
           8.verticalSpace,
           Text(
             tr(LocaleKeys.contact_us_hero_title),
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.white,
-                ),
+              fontSize: 20.sp,
+              fontWeight: FontWeight.bold,
+              color: AppColors.white,
+            ),
           ),
           12.verticalSpace,
           Text(
             tr(LocaleKeys.contact_us_hero_subtitle),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontSize: 14.sp,
-                  color: AppColors.white,
-                ),
+              fontSize: 14.sp,
+              color: AppColors.white,
+            ),
           ),
           10.verticalSpace,
         ],
@@ -63,5 +59,3 @@ class ContactHeader extends StatelessWidget {
     );
   }
 }
-
-

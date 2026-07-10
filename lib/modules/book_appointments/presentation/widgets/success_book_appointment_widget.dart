@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-
 class SuccessBookAppointmentWidget extends StatelessWidget {
   const SuccessBookAppointmentWidget({super.key});
 
@@ -151,10 +150,12 @@ class SuccessBookAppointmentWidget extends StatelessWidget {
                   // يدفع الزر للأسفل
 
                   // زر العودة للرئيسية
-                  AppButtonWidget(text: 'العودة للرئيسية', onPressed: () {
-                    Get.offAllNamed(AppRoutes.navbar);
-
-                  }),
+                  AppButtonWidget(
+                    text: 'العودة للرئيسية',
+                    onPressed: () {
+                      Get.offAllNamed(AppRoutes.navbar);
+                    },
+                  ),
                   const SizedBox(height: 20),
                 ],
               ),

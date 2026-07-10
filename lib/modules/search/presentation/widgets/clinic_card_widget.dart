@@ -1,6 +1,5 @@
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
-import 'package:clinc_app_t1/modules/clinc_details/presentation/screens/ClinicDetailsScreen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,7 +15,6 @@ class ClinicCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-
       onTap: () => Get.toNamed(AppRoutes.clinicDetails, arguments: hospital),
       child: Container(
         margin: EdgeInsets.only(bottom: 12.h),

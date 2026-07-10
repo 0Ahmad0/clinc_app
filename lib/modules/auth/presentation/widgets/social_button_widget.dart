@@ -5,8 +5,15 @@ import 'package:get/get.dart';
 import '../../../../app/core/widgets/app_svg_widget.dart';
 
 class SocialButtonWidget extends StatelessWidget {
-  const SocialButtonWidget(
-      {super.key, required this.text, this.icon, this.onPressed, this.isLoading = false, this.backgroundColor, this.foregroundColor,});
+  const SocialButtonWidget({
+    super.key,
+    required this.text,
+    this.icon,
+    this.onPressed,
+    this.isLoading = false,
+    this.backgroundColor,
+    this.foregroundColor,
+  });
 
   final String text;
   final String? icon;
@@ -21,15 +28,12 @@ class SocialButtonWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(8.r),
       onTap: onPressed,
       child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: 12.w,
-          vertical: 12.h
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: backgroundColor ??
-                Get.theme.colorScheme.surface.myOpacity(.85),
-            borderRadius: BorderRadius.circular(8.r)
+          color:
+              backgroundColor ?? Get.theme.colorScheme.surface.myOpacity(.85),
+          borderRadius: BorderRadius.circular(8.r),
         ),
         child: isLoading ? _buildLoading() : _buildWidget(),
       ),
@@ -55,10 +59,9 @@ class SocialButtonWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        AppSvgWidget(assetsUrl: icon!, width: 24.w, height: 24.w,),
+        AppSvgWidget(assetsUrl: icon!, width: 24.w, height: 24.w),
         12.horizontalSpace,
         Text(text),
-
       ],
     );
   }

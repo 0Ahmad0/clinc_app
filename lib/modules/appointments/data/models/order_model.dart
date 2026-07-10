@@ -11,6 +11,24 @@ class AppointmentModel {
     required this.status,
   });
 
+  factory AppointmentModel.fromJson(Map<String, dynamic> json) {
+    return AppointmentModel(
+      id: (json['id'] ?? json['appointment_id'])?.toString() ?? '',
+      price:
+          double.tryParse(
+            (json['price'] ?? json['consultation_fee'])?.toString() ?? '',
+          ) ??
+          0,
+      status: AppointmentStatusX.fromValue(json['status']?.toString()),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'price': price,
+    'status': status.name,
+  };
+
   // دالة copyWith لتحديث الحقول بسهولة
   AppointmentModel copyWith({
     String? id,

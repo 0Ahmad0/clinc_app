@@ -14,18 +14,17 @@ class DoctorLocation extends StatelessWidget {
       children: [
         Text(
           tr(LocaleKeys.doctor_details_location_title),
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium
-              ?.copyWith(fontWeight: FontWeight.bold, fontSize: 18.sp),
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 18.sp,
+          ),
         ),
         8.verticalSpace,
         Text(
           tr(LocaleKeys.doctor_details_address),
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: AppColors.grey),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: AppColors.grey),
         ),
         12.verticalSpace,
         Container(
@@ -35,13 +34,17 @@ class DoctorLocation extends StatelessWidget {
             borderRadius: BorderRadius.circular(16.r),
             image: const DecorationImage(
               image: NetworkImage(
-                  "https://media.wired.com/photos/59269cd37034dc5f91bec0f1/191:100/w_1280,c_limit/GoogleMapTA.jpg"),
+                "https://media.wired.com/photos/59269cd37034dc5f91bec0f1/191:100/w_1280,c_limit/GoogleMapTA.jpg",
+              ),
               fit: BoxFit.cover,
             ),
           ),
           child: Center(
-            child: Icon(Icons.location_on,
-                color: Theme.of(context).primaryColor, size: 40.sp),
+            child: Icon(
+              Icons.location_on,
+              color: Theme.of(context).primaryColor,
+              size: 40.sp,
+            ),
           ),
         ),
       ],

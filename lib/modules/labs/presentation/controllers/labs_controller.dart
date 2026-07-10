@@ -1,76 +1,19 @@
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
+import 'package:clinc_app_t1/app/core/configuration/locator.dart';
+import 'package:clinc_app_t1/app/core/helper/response_helper.dart';
+import 'package:clinc_app_t1/app/data/base_model.dart';
+import 'package:clinc_app_t1/app/domain/error_handler/network_exceptions.dart';
 import 'package:get/get.dart';
 
-import '../../../../app/data/offer_model.dart';
-import '../../../../app/data/review_model.dart';
 import '../../data/models/lab_model.dart';
+import '../../domain/labs_repository.dart';
 
 class LabsController extends GetxController {
-  // بيانات وهمية
-// بيانات وهمية محدثة
-  final List<LabModel> _allLabs = [
-    LabModel(
-      id: '1',
-      name: 'مختبرات البرج الطبية',
-      imageUrl: 'https://img.freepik.com/free-photo/laboratory-interior_1098-13411.jpg',
-      address: 'شارع الملك فهد، الرياض',
-      rating: 4.8,
-      isOpen: true,
-      category: 'تحاليل شاملة',
-      description: 'مختبرات رائدة تقدم كافة أنواع التحاليل الطبية بأحدث الأجهزة ودقة عالية في النتائج.',
-      services: ['فحص شامل', 'فيتامينات', 'هرمونات', 'فحص زواج'],
-      phoneNumber: '920000000',
-      // --- الحقول الجديدة ---
-      latitude: 24.7136,
-      longitude: 46.6753,
-      offers: [
-        LabOfferModel(title: "باقة الفحص الشامل", code: "BORJ2024", discount: "20%"),
-        LabOfferModel(title: "فحص فيتامين د", code: "VITD50", discount: "50%"),
-      ],
-      reviews: [
-        ReviewModel(
-          userName: "محمد علي",
-          userImage: "https://i.pravatar.cc/150?img=11",
-          rating: 5.0,
-          comment: "خدمة سريعة وممتازة، النتائج وصلتني عالجوال.",
-          date: "منذ يومين",
-        ),
-        ReviewModel(
-          userName: "سارة أحمد",
-          userImage: "https://i.pravatar.cc/150?img=5",
-          rating: 4.5,
-          comment: "المكان نظيف جداً والموظفين محترمين.",
-          date: "منذ أسبوع",
-        ),
-      ],
-    ),
-    LabModel(
-      id: '2',
-      name: 'مركز الأشعة المتطور',
-      imageUrl: 'https://img.freepik.com/free-photo/ct-scan-room-hospital_1170-2228.jpg',
-      address: 'حي الورود، جدة',
-      rating: 4.5,
-      isOpen: false,
-      category: 'أشعة',
-      description: 'مركز متخصص في جميع أنواع الأشعة التشخيصية (MRI, CT) بإشراف استشاريين.',
-      services: ['MRI', 'CT Scan', 'X-Ray', 'Ultrasound'],
-      phoneNumber: '012345678',
-      // --- الحقول الجديدة ---
-      latitude: 21.5433,
-      longitude: 39.1728,
-      offers: [], // لا يوجد عروض لهذا المخبر
-      reviews: [
-        ReviewModel(
-          userName: "خالد عمر",
-          userImage: "https://i.pravatar.cc/150?img=60",
-          rating: 4.0,
-          comment: "جهاز الرنين المغناطيسي حديث، لكن الانتظار طويل قليلاً.",
-          date: "منذ شهر",
-        ),
-      ],
-    ),
-  ];
+  late final LabsRepository _repository;
+  final RxBool isLoading = false.obs;
+
   // المتغيرات المراقبة
+  final RxList<LabModel> allLabs = <LabModel>[].obs;
   var filteredLabs = <LabModel>[].obs;
   var selectedFilter = 0.obs;
   var searchQuery = ''.obs;
@@ -86,19 +29,46 @@ class LabsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    filteredLabs.assignAll(_allLabs);
+    _repository = locator<LabsRepository>();
+    loadLabs();
+  }
+
+  Future<void> loadLabs() async {
+    if (isLoading.value) return;
+    isLoading(true);
+    final result = await _repository.getLabs();
+    isLoading(false);
+    result.when(
+      success: _handleLabsResponse,
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
+
+  void _handleLabsResponse(BaseModel<List<LabModel>> response) {
+    if (!response.isSuccess || response.result == null) {
+      ResponseHelper.onFailure(message: response.message);
+      return;
+    }
+    allLabs.assignAll(response.result!);
+    filterLabs();
   }
 
   // منطق الفلترة والبحث
   void filterLabs() {
     String query = searchQuery.value.toLowerCase();
-    String category = selectedFilter.value == 0 ? '' : _getCategoryByIndex(selectedFilter.value);
+    String category = selectedFilter.value == 0
+        ? ''
+        : _getCategoryByIndex(selectedFilter.value);
 
-    filteredLabs.assignAll(_allLabs.where((lab) {
-      bool matchesSearch = lab.name.toLowerCase().contains(query);
-      bool matchesCategory = category.isEmpty || lab.category == category;
-      return matchesSearch && matchesCategory;
-    }).toList());
+    filteredLabs.assignAll(
+      allLabs.where((lab) {
+        bool matchesSearch = lab.name.toLowerCase().contains(query);
+        bool matchesCategory = category.isEmpty || lab.category == category;
+        return matchesSearch && matchesCategory;
+      }).toList(),
+    );
   }
 
   void updateSearch(String val) {
@@ -114,10 +84,14 @@ class LabsController extends GetxController {
   // دالة مساعدة لربط الإندكس بنوع المخبر (يمكن تحسينها باستخدام Enum)
   String _getCategoryByIndex(int index) {
     switch (index) {
-      case 1: return 'تحاليل شاملة';
-      case 2: return 'أشعة';
-      case 3: return 'أنسجة';
-      default: return '';
+      case 1:
+        return 'تحاليل شاملة';
+      case 2:
+        return 'أشعة';
+      case 3:
+        return 'أنسجة';
+      default:
+        return '';
     }
   }
 }

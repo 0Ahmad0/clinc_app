@@ -56,9 +56,12 @@ class ForgetPasswordScreen extends GetView<ForgetPasswordController> {
                         ).fadeIn(),
                       ),
                       16.verticalSpace,
-                      AppButtonWidget(
-                        text: tr(LocaleKeys.core_reset),
-                        onPressed: controller.processForgetPassword,
+                      Obx(
+                        () => AppButtonWidget(
+                          text: tr(LocaleKeys.core_reset),
+                          isLoading: controller.isLoading.value,
+                          onPressed: controller.processForgetPassword,
+                        ),
                       ).fadeIn(),
                     ],
                   ),

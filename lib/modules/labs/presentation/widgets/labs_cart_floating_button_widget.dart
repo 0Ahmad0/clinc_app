@@ -54,7 +54,10 @@ class LabsCartFloatingButton extends GetView<LabsTestController> {
               ),
             ),
             10.horizontalSpace,
-            VerticalDivider(color: Colors.white.withValues(alpha: 0.3), width: 1),
+            VerticalDivider(
+              color: Colors.white.withValues(alpha: 0.3),
+              width: 1,
+            ),
             10.horizontalSpace,
             GestureDetector(
               onTap: controller.proceedToCheckout,
@@ -65,7 +68,11 @@ class LabsCartFloatingButton extends GetView<LabsTestController> {
                     style: TextStyle(color: Colors.white, fontSize: 14.sp),
                   ),
                   4.horizontalSpace,
-                  Icon(Icons.arrow_forward_ios, color: Colors.white, size: 12.sp),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                    size: 12.sp,
+                  ),
                 ],
               ),
             ),

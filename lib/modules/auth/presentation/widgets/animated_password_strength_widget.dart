@@ -49,7 +49,7 @@ class AnimatedPasswordStrength extends StatelessWidget {
                 ),
               ),
               2.horizontalSpace,
-              Icon(_getStrengthIcon(strength),size: 14.sp,color: info.color,),
+              Icon(_getStrengthIcon(strength), size: 14.sp, color: info.color),
             ],
           ),
         ],
@@ -69,5 +69,4 @@ class AnimatedPasswordStrength extends StatelessWidget {
         return Icons.verified;
     }
   }
-
 }

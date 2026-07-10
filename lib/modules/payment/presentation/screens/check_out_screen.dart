@@ -1,7 +1,9 @@
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/payment/presentation/controllers/checkout_controller.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -16,8 +18,10 @@ class CheckoutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FD),
-      appBar: AppAppBarWidget(title: "إتمام الحجز والدفع"),
-      bottomNavigationBar: _buildStickyFooter(),
+      appBar: AppAppBarWidget(
+        title: tr(LocaleKeys.checkout_booking_payment_title),
+      ),
+      bottomNavigationBar: _buildStickyFooter(context),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.w),
         child: Column(
@@ -26,7 +30,7 @@ class CheckoutScreen extends StatelessWidget {
             _buildDoctorCard(),
             24.verticalSpace,
 
-            _buildSectionTitle("طريقة الدفع"),
+            _buildSectionTitle(tr(LocaleKeys.checkout_payment_method_title)),
             _buildMainPaymentOptions(),
 
             // ظهور خيارات الأونلاين التفاعلية
@@ -36,7 +40,9 @@ class CheckoutScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         20.verticalSpace,
-                        _buildSectionTitle("وسيلة الدفع الإلكتروني"),
+                        _buildSectionTitle(
+                          tr(LocaleKeys.checkout_online_payment_method_title),
+                        ),
                         _buildOnlinePaymentGrid(),
                       ],
                     )
@@ -44,11 +50,11 @@ class CheckoutScreen extends StatelessWidget {
             ),
 
             24.verticalSpace,
-            _buildSectionTitle("كود الخصم"),
+            _buildSectionTitle(tr(LocaleKeys.checkout_coupon_code_title)),
             _buildCouponInputSection(),
 
             24.verticalSpace,
-            _buildSectionTitle("ملخص الفاتورة"),
+            _buildSectionTitle(tr(LocaleKeys.checkout_invoice_summary_title)),
             _buildPriceSummary(),
           ],
         ),
@@ -83,16 +89,16 @@ class CheckoutScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "د. أحمد سليمان",
+                tr(LocaleKeys.checkout_mock_doctor_name),
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp),
               ),
               Text(
-                "أخصائي جراحة العظام",
+                tr(LocaleKeys.checkout_mock_doctor_specialty),
                 style: TextStyle(color: Colors.grey, fontSize: 12.sp),
               ),
               5.verticalSpace,
               Text(
-                "الاثنين، 15 فبراير - 04:30 م",
+                tr(LocaleKeys.checkout_mock_booking_time),
                 style: TextStyle(
                   fontSize: 11.sp,
                   color: AppColors.primary,
@@ -112,14 +118,14 @@ class CheckoutScreen extends StatelessWidget {
       () => Row(
         children: [
           _buildPaymentCard(
-            label: "نقداً في العيادة",
+            label: tr(LocaleKeys.checkout_cash_at_clinic),
             icon: Iconsax.wallet_money,
             isSelected: controller.selectedPayment.value == 'cash',
             onTap: () => controller.selectPayment('cash'),
           ),
           12.horizontalSpace,
           _buildPaymentCard(
-            label: "دفع أونلاين",
+            label: tr(LocaleKeys.checkout_online_payment),
             icon: Iconsax.card_pos,
             isSelected: controller.selectedPayment.value == 'online',
             onTap: () => controller.selectPayment('online'),
@@ -139,10 +145,22 @@ class CheckoutScreen extends StatelessWidget {
       mainAxisSpacing: 10,
       crossAxisSpacing: 10,
       children: [
-        _buildSubMethodCard("بطاقة بنكية", Iconsax.card, 'visa'),
+        _buildSubMethodCard(
+          tr(LocaleKeys.checkout_bank_card),
+          Iconsax.card,
+          'visa',
+        ),
         _buildSubMethodCard("Apple Pay", Icons.apple, 'apple_pay'),
-        _buildSubMethodCard("تقسيط (تابي/تمارا)", Iconsax.timer_1, 'tabby'),
-        _buildSubMethodCard("تأمين طبي", Iconsax.shield_tick, 'insurance'),
+        _buildSubMethodCard(
+          tr(LocaleKeys.checkout_installments),
+          Iconsax.timer_1,
+          'tabby',
+        ),
+        _buildSubMethodCard(
+          tr(LocaleKeys.checkout_medical_insurance),
+          Iconsax.shield_tick,
+          'insurance',
+        ),
       ],
     );
   }
@@ -164,7 +182,7 @@ class CheckoutScreen extends StatelessWidget {
                 child: TextField(
                   controller: controller.couponController,
                   decoration: InputDecoration(
-                    hintText: "هل لديك كود خصم؟",
+                    hintText: tr(LocaleKeys.checkout_coupon_hint),
                     border: InputBorder.none,
                     hintStyle: TextStyle(fontSize: 13.sp),
                   ),
@@ -173,7 +191,7 @@ class CheckoutScreen extends StatelessWidget {
               TextButton(
                 onPressed: controller.applyCoupon,
                 child: Text(
-                  "تطبيق",
+                  tr(LocaleKeys.checkout_apply_coupon),
                   style: TextStyle(
                     color: AppColors.primary,
                     fontWeight: FontWeight.bold,
@@ -193,7 +211,7 @@ class CheckoutScreen extends StatelessWidget {
               color: AppColors.primary,
             ),
             label: Text(
-              "عرض كوبوناتي",
+              tr(LocaleKeys.checkout_my_coupons),
               style: TextStyle(fontSize: 12.sp, color: AppColors.primary),
             ),
           ),
@@ -213,18 +231,24 @@ class CheckoutScreen extends StatelessWidget {
       child: Obx(
         () => Column(
           children: [
-            _rowSummary("سعر الكشفية", "${controller.consultationPrice} ر.س"),
-            _rowSummary("ضريبة القيمة المضافة", "${controller.vatAmount} ر.س"),
+            _rowSummary(
+              tr(LocaleKeys.checkout_summary_service),
+              "${controller.consultationPrice} ${tr(LocaleKeys.checkout_currency)}",
+            ),
+            _rowSummary(
+              tr(LocaleKeys.checkout_summary_vat),
+              "${controller.vatAmount} ${tr(LocaleKeys.checkout_currency)}",
+            ),
             if (controller.isCouponApplied.value)
               _rowSummary(
-                "خصم الكوبون",
-                "-${controller.discountAmount} ر.س",
+                tr(LocaleKeys.checkout_coupon_discount),
+                "-${controller.discountAmount} ${tr(LocaleKeys.checkout_currency)}",
                 isDiscount: true,
               ),
-            const Divider( thickness: 0.1),
+            const Divider(thickness: 0.1),
             _rowSummary(
-              "الإجمالي المستحق",
-              "${controller.totalAmount} ر.س",
+              tr(LocaleKeys.checkout_total_due),
+              "${controller.totalAmount} ${tr(LocaleKeys.checkout_currency)}",
               isTotal: true,
             ),
           ],
@@ -234,7 +258,7 @@ class CheckoutScreen extends StatelessWidget {
   }
 
   // --- 6. الزر السفلي المثبت (Sticky Footer) ---
-  Widget _buildStickyFooter() {
+  Widget _buildStickyFooter(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(12.sp),
       decoration: BoxDecoration(
@@ -249,13 +273,14 @@ class CheckoutScreen extends StatelessWidget {
       ),
       child: Obx(
         () => AppButtonWidget(
-          onPressed: () => Get.defaultDialog(
-            title: "تأكيد",
-            middleText: "تم تأكيد الحجز بنجاح",
-          ),
+          isLoading: controller.isProcessingPayment.value,
+          onPressed: () => controller.processPayment(context),
           text: controller.selectedPayment.value == 'cash'
-              ? "تأكيد الحجز"
-              : "تأكيد ودفع ${controller.totalAmount} ر.س",
+              ? tr(LocaleKeys.checkout_confirm_booking)
+              : tr(
+                  LocaleKeys.checkout_confirm_and_pay,
+                  args: [controller.totalAmount.toString()],
+                ),
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:clinc_app_t1/app/enums/loading.dart';
 import 'package:clinc_app_t1/modules/labs/data/models/lab_test_model.dart';
 import 'package:clinc_app_t1/modules/labs/presentation/controllers/labs_test_controller.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,16 @@ class LabsTestsList extends GetView<LabsTestController> {
     return Obx(() {
       final tests = controller.searchedTests;
 
+      if (controller.loadingState.value == GeneralLoading.loading ||
+          controller.loadingState.value == GeneralLoading.initial) {
+        return SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.all(32.w),
+            child: const Center(child: CircularProgressIndicator()),
+          ),
+        );
+      }
+
       if (tests.isEmpty && controller.searchQuery.isNotEmpty) {
         return SliverToBoxAdapter(
           child: Padding(
@@ -27,17 +38,11 @@ class LabsTestsList extends GetView<LabsTestController> {
                 SizedBox(height: 16.h),
                 Text(
                   "لا توجد نتائج",
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontSize: 16.sp, color: Colors.grey[600]),
                 ),
                 Text(
                   "جرب كلمات بحث أخرى",
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    color: Colors.grey[500],
-                  ),
+                  style: TextStyle(fontSize: 14.sp, color: Colors.grey[500]),
                 ),
               ],
             ),
@@ -46,13 +51,10 @@ class LabsTestsList extends GetView<LabsTestController> {
       }
 
       return SliverList(
-        delegate: SliverChildBuilderDelegate(
-              (context, index) {
-            final test = tests[index];
-            return _buildTestItem(test, context);
-          },
-          childCount: tests.length,
-        ),
+        delegate: SliverChildBuilderDelegate((context, index) {
+          final test = tests[index];
+          return _buildTestItem(test, context);
+        }, childCount: tests.length),
       );
     });
   }
@@ -81,9 +83,7 @@ class LabsTestsList extends GetView<LabsTestController> {
               _buildTestDetailsSheet(test, context),
               backgroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(25.r),
-                ),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(25.r)),
               ),
               isScrollControlled: true,
             );
@@ -136,8 +136,9 @@ class LabsTestsList extends GetView<LabsTestController> {
                               vertical: 4.h,
                             ),
                             decoration: BoxDecoration(
-                              color: _getCategoryColor(test.category)
-                                  .withOpacity(0.1),
+                              color: _getCategoryColor(
+                                test.category,
+                              ).withOpacity(0.1),
                               borderRadius: BorderRadius.circular(8.r),
                             ),
                             child: Text(
@@ -341,11 +342,7 @@ class LabsTestsList extends GetView<LabsTestController> {
                     ),
                     child: Row(
                       children: [
-                        Icon(
-                          Iconsax.clock,
-                          size: 12.sp,
-                          color: Colors.orange,
-                        ),
+                        Icon(Iconsax.clock, size: 12.sp, color: Colors.orange),
                         SizedBox(width: 4.w),
                         Text(
                           "صيام مطلوب",
@@ -439,15 +436,11 @@ class LabsTestsList extends GetView<LabsTestController> {
               visualDensity: VisualDensity.compact,
             ),
             ListTile(
-              leading: Icon(
-                Iconsax.clock,
-                color: Colors.orange,
-                size: 20.sp,
-              ),
+              leading: Icon(Iconsax.clock, color: Colors.orange, size: 20.sp),
               title: Text(
-                test.isFastingRequired ?
-                "الصيام لمدة 8 ساعات قبل الفحص" :
-                "لا يتطلب صيام",
+                test.isFastingRequired
+                    ? "الصيام لمدة 8 ساعات قبل الفحص"
+                    : "لا يتطلب صيام",
                 style: TextStyle(fontSize: 14.sp),
               ),
               dense: true,
@@ -486,10 +479,7 @@ class LabsTestsList extends GetView<LabsTestController> {
                     backgroundColor: Colors.grey[100],
                     padding: EdgeInsets.all(12.w),
                   ),
-                  icon: Icon(
-                    Iconsax.share,
-                    color: Colors.grey[600],
-                  ),
+                  icon: Icon(Iconsax.share, color: Colors.grey[600]),
                 ),
               ],
             ),

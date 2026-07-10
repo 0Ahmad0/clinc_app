@@ -7,7 +7,6 @@ import 'fab_body_widget.dart';
 class DraggableCartButtonWidget extends GetView<LabsTestController> {
   final BoxConstraints constraints;
 
-
   const DraggableCartButtonWidget({super.key, required this.constraints});
 
   @override

@@ -1,10 +1,23 @@
+import 'package:clinc_app_t1/app/core/configuration/locator.dart';
+import 'package:clinc_app_t1/app/core/helper/response_helper.dart';
+import 'package:clinc_app_t1/app/data/base_model.dart';
+import 'package:clinc_app_t1/app/domain/error_handler/network_exceptions.dart';
+import 'package:clinc_app_t1/app/enums/loading.dart';
+import 'package:clinc_app_t1/app/routes/app_routes.dart';
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/labs/data/models/lab_test_model.dart';
+import 'package:clinc_app_t1/modules/labs/domain/labs_repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class LabsTestController extends GetxController {
+  late final LabsRepository _repository;
+
   // المتغيرات العامة
+  final Rx<GeneralLoading> loadingState = GeneralLoading.initial.obs;
+  final Rx<GeneralLoading> cartLoadingState = GeneralLoading.initial.obs;
+  final RxSet<String> cartItemLoadingIds = <String>{}.obs;
   final RxList<LabTest> allTests = <LabTest>[].obs;
   final RxList<LabTest> specialOffers = <LabTest>[].obs;
   final RxList<LabTest> packages = <LabTest>[].obs;
@@ -14,6 +27,8 @@ class LabsTestController extends GetxController {
   final Rx<Offset> fabPosition = Offset.zero.obs;
   final RxBool isDragging = false.obs;
   final RxString searchQuery = ''.obs;
+  String? _labId;
+  String? _initialCategory;
 
   // البيانات المختبرية - تأتي من API
   final Map<String, dynamic> labData = {
@@ -28,197 +43,36 @@ class LabsTestController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _repository = locator<LabsRepository>();
+    _readRouteArgs();
     loadData();
-    initializeCategories();
-
-    // في حال تم تمرير قسم معيّن من شاشة سابقة نبدأ به مباشرة
-    final args = Get.arguments;
-    if (args is Map && args['category'] is String) {
-      final String initialCategory = args['category'];
-      if (categories.contains(initialCategory)) {
-        selectedCategory.value = initialCategory;
-      }
-    }
+    loadCart();
   }
 
-  void loadData() {
-    // 1. العروض الخاصة (Special Offers)
-    final List<LabTest> offers = [
-      LabTest(
-        id: 'offer_1',
-        title: 'عرض الفحص الشامل',
-        category: 'عروض خاصة',
-        description: 'باقة دموعات، شاملة تشمل جميع الفحوصات الأساسية',
-        price: 1050.0,
-        isSpecialOffer: true,
-        expiryDate: '2026-02-28',
-        gradient: LinearGradient(
-          colors: [Color(0xFF1A5FB4), Color(0xFF2D7DD2)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        includedTests: [
-          'صورة الدم الكاملة',
-          'وظائف الكلى',
-          'وظائف الكبد',
-          'فحص السكري',
-          'فحص الغدة الدرقية',
-          'فيتامين د',
-        ],
-        originalPrice: 1500.0,
-        discountPercentage: 30,
-      ),
-      LabTest(
-        id: 'offer_2',
-        title: 'عرض فحوصات الزواج',
-        category: 'عروض خاصة',
-        description: 'باقة دموعات، شاملة لفحوصات ما قبل الزواج',
-        price: 600.0,
-        isSpecialOffer: true,
-        expiryDate: '2026-03-15',
-        gradient: LinearGradient(
-          colors: [Color(0xFF27AE60), Color(0xFF2ECC71)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        includedTests: [
-          'فحص الدم',
-          'فصيلة الدم',
-          'فحص الأمراض المعدية',
-          'فحص الخصوبة',
-        ],
-        originalPrice: 850.0,
-        discountPercentage: 29,
-      ),
-    ];
+  Future<void> loadData() async {
+    loadingState.value = GeneralLoading.loading;
+    final result = await _repository.getLabTests(labId: _labId);
+    result.when(
+      success: _handleTestsResponse,
+      failure: (exception) {
+        loadingState.value = GeneralLoading.failure;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
+    );
+  }
 
-    // 2. الباقات (Packages)
-    final List<LabTest> packageList = [
-      LabTest(
-        id: 'package_1',
-        title: 'الباقة الذهبية',
-        category: 'باقات',
-        description: 'فحوصات شاملة للكشف عن الأمراض الشائعة',
-        price: 750.0,
-        isPackage: true,
-        numberOfTests: 15,
-        cardColor: Color(0xFFFFD700).withOpacity(0.1),
-        includedTests: [
-          'CBC صورة دم كاملة',
-          'وظائف الكلى',
-          'وظائف الكبد',
-          'الدهون الثلاثية',
-          'فيتامين د',
-          'فيتامين ب12',
-        ],
-        discountPercentage: 20,
+  Future<void> loadCart() async {
+    cartLoadingState.value = GeneralLoading.loading;
+    final result = await _repository.getLabCart();
+    cartLoadingState.value = GeneralLoading.initial;
+    result.when(
+      success: _handleCartResponse,
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
       ),
-      LabTest(
-        id: 'package_2',
-        title: 'باقة صحة المرأة',
-        category: 'باقات',
-        description: 'فحوصات مخصصة للكشف عن أمراض النساء',
-        price: 899.0,
-        isPackage: true,
-        numberOfTests: 12,
-        cardColor: Color(0xFFE91E63).withOpacity(0.1),
-        discountPercentage: 25,
-      ),
-      LabTest(
-        id: 'package_3',
-        title: 'باقة الرياضيين',
-        category: 'باقات',
-        description: 'فحوصات مكثفة للرياضيين والمتدربين',
-        price: 1200.0,
-        isPackage: true,
-        numberOfTests: 18,
-        cardColor: Color(0xFF4CAF50).withOpacity(0.1),
-        discountPercentage: 15,
-      ),
-    ];
-
-    // 3. الفحوصات الفردية (Individual Tests)
-    final List<LabTest> individualTests = [
-      // فيتامينات
-      LabTest(
-        id: 'vit_d',
-        title: 'فيتامين D',
-        category: 'فيتامينات',
-        description: 'فحص مستوى فيتامين د في الدم',
-        price: 150.0,
-        sampleType: 'عينة دم',
-        labName: 'مختبر الميدان',
-      ),
-      LabTest(
-        id: 'vit_b12',
-        title: 'فيتامين B12',
-        category: 'فيتامينات',
-        description: 'فحص مستوى فيتامين ب12 في الدم',
-        price: 120.0,
-        sampleType: 'عينة دم',
-        labName: 'مختبر الميدان',
-      ),
-      LabTest(
-        id: 'vit_b6',
-        title: 'فيتامين B6',
-        category: 'فيتامينات',
-        description: 'فحص مستوى فيتامين ب6 في الدم',
-        price: 110.0,
-        sampleType: 'عينة دم',
-        labName: 'مختبر الميدان',
-      ),
-
-      // وظائف حيوية
-      LabTest(
-        id: 'cbc',
-        title: 'صورة الدم الكاملة (CBC)',
-        category: 'وظائف حيوية',
-        description: 'الكشف عن فقر الدم والالتهابات',
-        price: 80.0,
-        isFastingRequired: false,
-        sampleType: 'عينة دم',
-        labName: 'مختبر الميدان',
-      ),
-      LabTest(
-        id: 'kidney',
-        title: 'وظائف الكلى الشاملة',
-        category: 'وظائف حيوية',
-        description: 'يوريا، كرياتينين، أملاح الدم',
-        price: 120.0,
-        isFastingRequired: true,
-        sampleType: 'عينة دم',
-        labName: 'مختبر الميدان',
-      ),
-
-      // سكري
-      LabTest(
-        id: 'glucose',
-        title: 'فحص السكري التراكمي (HbA1c)',
-        category: 'سكري',
-        description: 'قياس مستوى السكر في الدم خلال 3 أشهر',
-        price: 90.0,
-        isFastingRequired: false,
-        sampleType: 'عينة دم',
-        labName: 'مختبر الميدان',
-      ),
-
-      // غدد
-      LabTest(
-        id: 'thyroid',
-        title: 'وظائف الغدة الدرقية',
-        category: 'غدد',
-        description: 'TSH, T3, T4',
-        price: 180.0,
-        isFastingRequired: false,
-        sampleType: 'عينة دم',
-        labName: 'مختبر الميدان',
-      ),
-    ];
-
-    // دمج جميع البيانات
-    allTests.assignAll([...offers, ...packageList, ...individualTests]);
-    specialOffers.assignAll(offers);
-    packages.assignAll(packageList);
+    );
   }
 
   void initializeCategories() {
@@ -232,13 +86,45 @@ class LabsTestController extends GetxController {
     categories.assignAll(uniqueCategories.toList());
   }
 
+  void _handleTestsResponse(BaseModel<BaseModels<LabTest>> response) {
+    if (!response.isSuccess || response.result == null) {
+      loadingState.value = GeneralLoading.failure;
+      ResponseHelper.onFailure(message: response.message);
+      return;
+    }
+
+    allTests.assignAll(response.result!.list);
+    specialOffers.assignAll(allTests.where((test) => test.isSpecialOffer));
+    packages.assignAll(allTests.where((test) => test.isPackage));
+    initializeCategories();
+
+    if (_initialCategory != null && categories.contains(_initialCategory)) {
+      selectedCategory.value = _initialCategory!;
+    }
+
+    loadingState.value = allTests.isEmpty
+        ? GeneralLoading.empty
+        : GeneralLoading.success;
+  }
+
+  void _handleCartResponse(BaseModel<BaseModels<LabTest>> response) {
+    if (!response.isSuccess || response.result == null) {
+      ResponseHelper.onFailure(message: response.message);
+      return;
+    }
+    cartItems.assignAll(response.result!.list);
+  }
+
   // جلب الفحوصات حسب التصنيف
   List<LabTest> get filteredTests {
     if (selectedCategory.value == 'الكل') {
       return allTests.where((test) => !test.isSpecialOffer).toList();
     }
     return allTests
-        .where((test) => test.category == selectedCategory.value && !test.isSpecialOffer)
+        .where(
+          (test) =>
+              test.category == selectedCategory.value && !test.isSpecialOffer,
+        )
         .toList();
   }
 
@@ -269,52 +155,60 @@ class LabsTestController extends GetxController {
   // إدارة السلة
   double get cartTotal => cartItems.fold(0, (sum, item) => sum + item.price);
 
-  void addToCart(LabTest test) {
-    if (!cartItems.any((item) => item.id == test.id)) {
-      cartItems.add(test);
-      Get.snackbar(
-        "✅ تم الإضافة",
-        "${test.title} أضيفت للسلة",
-        backgroundColor: Colors.green.shade50,
-        colorText: Colors.green.shade800,
-        duration: const Duration(seconds: 2),
-        snackPosition: SnackPosition.TOP,
-        margin: EdgeInsets.all(16.w),
-        borderRadius: 12,
-      );
-    } else {
-      Get.snackbar(
-        "⚠️ تنبيه",
-        "هذا الفحص موجود بالفعل في السلة",
-        backgroundColor: Colors.orange.shade50,
-        colorText: Colors.orange.shade800,
-        duration: const Duration(seconds: 2),
-      );
+  Future<void> addToCart(LabTest test) async {
+    if (cartItems.any((item) => item.id == test.id)) {
+      ResponseHelper.onWarning(message: 'This test is already in cart');
+      return;
     }
+    if (cartItemLoadingIds.contains(test.id)) return;
+
+    cartItemLoadingIds.add(test.id);
+    final result = await _repository.addLabTestToCart(test.id);
+    cartItemLoadingIds.remove(test.id);
+    result.when(
+      success: (response) {
+        _handleCartResponse(response);
+        if (response.isSuccess) {
+          ResponseHelper.onSuccess(message: response.message);
+        }
+      },
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
   }
 
-  void removeFromCart(String testId) {
-    final removedItem = cartItems.firstWhereOrNull((item) => item.id == testId);
-    cartItems.removeWhere((item) => item.id == testId);
+  Future<void> removeFromCart(String testId) async {
+    if (cartItemLoadingIds.contains(testId)) return;
 
-    if (removedItem != null) {
-      Get.snackbar(
-        "🗑️ تم الحذف",
-        "${removedItem.title} تمت إزالته من السلة",
-        backgroundColor: Colors.red.shade50,
-        colorText: Colors.red.shade800,
-        duration: const Duration(seconds: 2),
-        snackPosition: SnackPosition.TOP,
-      );
-    }
+    cartItemLoadingIds.add(testId);
+    final result = await _repository.removeLabTestFromCart(testId);
+    cartItemLoadingIds.remove(testId);
+    result.when(
+      success: (response) {
+        _handleCartResponse(response);
+        if (response.isSuccess) {
+          ResponseHelper.onSuccess(message: response.message);
+        }
+      },
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
   }
 
   void updateQuantity(String testId, int quantity) {
     // يمكن تطويرها لإضافة كميات
   }
 
-  void clearCart() {
-    cartItems.clear();
+  Future<void> clearCart() async {
+    final result = await _repository.clearLabCart();
+    result.when(
+      success: _handleCartResponse,
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
   }
 
   void changeCategory(String category) {
@@ -347,25 +241,43 @@ class LabsTestController extends GetxController {
   }
 
   List<LabTest> getRecentTests() {
-    return allTests.where((test) => test.category != 'عروض خاصة').take(3).toList();
+    return allTests
+        .where((test) => test.category != 'عروض خاصة')
+        .take(3)
+        .toList();
   }
 
   // تحويل للدفع
   void proceedToCheckout() {
     if (cartItems.isEmpty) {
       Get.snackbar(
-        "السلة فارغة",
-        "أضف فحوصات للسلة أولاً",
+        tr(LocaleKeys.labs_cart_empty_title),
+        tr(LocaleKeys.labs_cart_empty_action_desc),
         backgroundColor: Colors.red.shade50,
         colorText: Colors.red,
       );
       return;
     }
 
-    Get.toNamed('/checkout', arguments: {
-      'items': cartItems.toList(),
-      'total': cartTotal,
-      'labName': labData['name'],
-    });
+    Get.toNamed(
+      AppRoutes.payment,
+      arguments: {
+        'items': cartItems.toList(),
+        'total': cartTotal,
+        'labName': labData['name'],
+      },
+    );
+  }
+
+  void _readRouteArgs() {
+    final args = Get.arguments;
+    if (args is! Map) return;
+    _labId = args['id']?.toString() ?? args['lab_id']?.toString();
+    if (args['category'] is String) {
+      _initialCategory = args['category'] as String;
+    }
+    if (args['name'] != null) {
+      labData['name'] = args['name'];
+    }
   }
 }

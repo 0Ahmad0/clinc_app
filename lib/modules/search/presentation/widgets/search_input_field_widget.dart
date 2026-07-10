@@ -26,4 +26,3 @@ class SearchInputField extends StatelessWidget {
     );
   }
 }
-

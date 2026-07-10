@@ -26,6 +26,10 @@ class NotificationsScreen extends GetView<NotificationsController> {
         ],
       ),
       body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
         final groupedData = controller.groupedNotifications;
 
         if (groupedData.isEmpty) {

@@ -1,13 +1,21 @@
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
+import 'package:clinc_app_t1/app/core/configuration/locator.dart';
+import 'package:clinc_app_t1/app/core/helper/response_helper.dart';
+import 'package:clinc_app_t1/app/data/base_model.dart';
+import 'package:clinc_app_t1/app/domain/error_handler/network_exceptions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../data/models/card_model.dart';
 import '../../data/models/card_utils.dart';
+import '../../domain/payment_repository.dart';
 
 class PaymentController extends GetxController {
+  late final PaymentRepository _repository;
   var savedCards = <CardModel>[].obs;
+  final RxBool isLoading = false.obs;
+  final RxBool isSaving = false.obs;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -25,7 +33,9 @@ class PaymentController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _repository = locator<PaymentRepository>();
     _initControllers();
+    loadSavedCards();
   }
 
   void _initControllers() {
@@ -39,7 +49,9 @@ class PaymentController extends GetxController {
       previewCardNumber.value = numberController.text.isEmpty
           ? '0000 0000 0000 0000'
           : numberController.text;
-      previewType.value = CardUtils.getCardTypeFromNumber(numberController.text);
+      previewType.value = CardUtils.getCardTypeFromNumber(
+        numberController.text,
+      );
     });
 
     nameController.addListener(() {
@@ -56,26 +68,71 @@ class PaymentController extends GetxController {
   }
 
   // دالة الحفظ
-  void saveCard() {
-    if (formKey.currentState!.validate()) {
-      final newCard = CardModel(
-        id: DateTime.now().toString(),
-        holderName: nameController.text,
-        cardNumber: numberController.text,
-        expiryDate: expiryController.text,
-        cvv: cvvController.text,
-        type: previewType.value,
-      );
-
-      savedCards.add(newCard);
-      Get.back(); // إغلاق الـ BottomSheet
-      Get.snackbar("تم", tr(LocaleKeys.payment_settings_save_btn));
-      _clearForm();
-    }
+  Future<void> saveCard() async {
+    if (isSaving.value || !formKey.currentState!.validate()) return;
+    final newCard = CardModel(
+      id: DateTime.now().toString(),
+      holderName: nameController.text,
+      cardNumber: numberController.text,
+      expiryDate: expiryController.text,
+      cvv: cvvController.text,
+      type: previewType.value,
+    );
+    isSaving(true);
+    final result = await _repository.addCard(newCard);
+    isSaving(false);
+    result.when(
+      success: (response) {
+        if (!response.isSuccess) {
+          ResponseHelper.onFailure(message: response.message);
+          return;
+        }
+        savedCards.add(newCard);
+        Get.back(); // إغلاق الـ BottomSheet
+        ResponseHelper.onSuccess(message: response.message);
+        _clearForm();
+      },
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
   }
 
-  void removeCard(String id) {
-    savedCards.removeWhere((card) => card.id == id);
+  Future<void> removeCard(String id) async {
+    final result = await _repository.deleteCard(id);
+    result.when(
+      success: (response) {
+        if (!response.isSuccess) {
+          ResponseHelper.onFailure(message: response.message);
+          return;
+        }
+        savedCards.removeWhere((card) => card.id == id);
+      },
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
+
+  Future<void> loadSavedCards() async {
+    if (isLoading.value) return;
+    isLoading(true);
+    final result = await _repository.getSavedCards();
+    isLoading(false);
+    result.when(
+      success: _handleCardsResponse,
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
+
+  void _handleCardsResponse(BaseModel<List<CardModel>> response) {
+    if (!response.isSuccess || response.result == null) {
+      ResponseHelper.onFailure(message: response.message);
+      return;
+    }
+    savedCards.assignAll(response.result!);
   }
 
   void _clearForm() {

@@ -1,10 +1,22 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../../app/core/configuration/locator.dart';
+import '../../../../app/core/helper/response_helper.dart';
+import '../../../../app/data/base_model.dart';
+import '../../../../app/data/pagination/pagination_params.dart';
+import '../../../../app/data/pagination/pagination_state.dart';
+import '../../../../app/domain/error_handler/network_exceptions.dart';
 import '../../data/models/property_model.dart';
+import '../../domain/search_repository.dart';
 
 class SearchAndFilterController extends GetxController {
-  // البيانات الأصلية
-  final _allHospitals = Hospital.mockHospitals.obs;
-  var filteredHospitals = <Hospital>[].obs;
+  late final SearchRepository _repository;
+  final PaginationState<Hospital> clinicsPagination = PaginationState(
+    perPage: 6,
+  );
+  final ScrollController scrollController = ScrollController();
+  Worker? _searchWorker;
 
   // متغيرات الواجهة
   var currentSearchQuery = ''.obs;
@@ -31,9 +43,24 @@ class SearchAndFilterController extends GetxController {
   };
   // ------------------------------
 
-  final List<String> regions = ['الكل', 'الرياض', 'جدة', 'الدمام', 'أبها', 'تبوك'];
+  final List<String> regions = [
+    'الكل',
+    'الرياض',
+    'جدة',
+    'الدمام',
+    'أبها',
+    'تبوك',
+  ];
   final List<String> genders = ['الكل', 'ذكر', 'أنثى'];
-  final List<String> specialties = ['الكل', 'أسنان', 'جلدية', 'عيون', 'باطنية', 'أذن وحنجرة', 'ليزر'];
+  final List<String> specialties = [
+    'الكل',
+    'أسنان',
+    'جلدية',
+    'عيون',
+    'باطنية',
+    'أذن وحنجرة',
+    'ليزر',
+  ];
   final List<String> insuranceCompanies = [
     'الكل',
     'بوبا العربية (Bupa Arabia)',
@@ -44,11 +71,29 @@ class SearchAndFilterController extends GetxController {
     'ولاء للتأمين (Walaa)',
   ];
 
+  RxList<Hospital> get filteredHospitals => clinicsPagination.items;
+  bool get isInitialLoading => clinicsPagination.isInitialLoading.value;
+  bool get isLoadingMore => clinicsPagination.isLoadingMore.value;
+
   @override
   void onInit() {
     super.onInit();
+    _repository = locator<SearchRepository>();
     _handleIncomingArguments();
-    applyFiltersAndSort();
+    scrollController.addListener(_onScroll);
+    _searchWorker = debounce<String>(
+      currentSearchQuery,
+      (_) => reloadClinics(),
+      time: const Duration(milliseconds: 450),
+    );
+    loadClinics(refresh: true);
+  }
+
+  @override
+  void onClose() {
+    _searchWorker?.dispose();
+    scrollController.dispose();
+    super.onClose();
   }
 
   void _handleIncomingArguments() {
@@ -63,11 +108,11 @@ class SearchAndFilterController extends GetxController {
     }
   }
 
-  void toggleFilterBar() => isFilterBarVisible.value = !isFilterBarVisible.value;
+  void toggleFilterBar() =>
+      isFilterBarVisible.value = !isFilterBarVisible.value;
 
   void updateSearchQuery(String query) {
     currentSearchQuery.value = query;
-    applyFiltersAndSort();
   }
 
   void updateFilter({
@@ -82,7 +127,7 @@ class SearchAndFilterController extends GetxController {
     if (insurance != null) selectedInsurance.value = insurance;
     if (specialty != null) selectedSpecialty.value = specialty;
     if (sort != null) sortCriteria.value = sort;
-    applyFiltersAndSort();
+    reloadClinics();
   }
 
   void resetFilters() {
@@ -95,7 +140,7 @@ class SearchAndFilterController extends GetxController {
     selectedSpecialty.value = 'الكل';
     sortCriteria.value = 'priceAsc';
     currentSearchQuery.value = '';
-    applyFiltersAndSort();
+    reloadClinics();
   }
 
   bool get hasActiveFilters {
@@ -105,34 +150,79 @@ class SearchAndFilterController extends GetxController {
         selectedSpecialty.value != 'الكل';
   }
 
+  Future<void> reloadClinics() => loadClinics(refresh: true);
+
+  Future<void> loadClinics({bool refresh = false}) async {
+    if (clinicsPagination.isBusy) return;
+    if (!refresh && !clinicsPagination.hasMore) return;
+
+    final page = refresh ? 1 : clinicsPagination.currentPage + 1;
+    if (refresh) {
+      clinicsPagination.reset();
+      clinicsPagination.isInitialLoading(true);
+    } else {
+      clinicsPagination.isLoadingMore(true);
+    }
+
+    final result = await _repository.searchClinics(
+      PaginationParams(
+        page: page,
+        perPage: clinicsPagination.perPage,
+        filters: _activeFilters,
+      ),
+    );
+
+    clinicsPagination.isInitialLoading(false);
+    clinicsPagination.isLoadingMore(false);
+
+    result.when(
+      success: (response) => _handleClinicsResponse(response, page),
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
+
   void applyFiltersAndSort() {
-    List<Hospital> results = _allHospitals.toList();
+    reloadClinics();
+  }
 
-    if (currentSearchQuery.value.isNotEmpty) {
-      results = results
-          .where((h) => h.name.toLowerCase().contains(currentSearchQuery.value.toLowerCase()))
-          .toList();
+  void _handleClinicsResponse(
+    BaseModel<BaseModels<Hospital>> response,
+    int page,
+  ) {
+    if (!response.isSuccess || response.result == null) {
+      ResponseHelper.onFailure(message: response.message);
+      return;
     }
+    clinicsPagination.setPage(
+      data: response.result!.list,
+      page: page,
+      meta: response.meta,
+    );
+  }
 
-    if (selectedRegion.value != 'الكل') {
-      results = results.where((h) => h.region == selectedRegion.value).toList();
+  void _onScroll() {
+    if (!scrollController.hasClients) return;
+    final position = scrollController.position;
+    if (position.pixels >= position.maxScrollExtent - 240) {
+      loadClinics();
     }
-    if (selectedSpecialty.value != 'الكل') {
-      results = results.where((h) => h.specialties.contains(selectedSpecialty.value)).toList();
-    }
-    if (selectedInsurance.value != 'الكل') {
-      results = results.where((h) => h.supportedInsurances.contains(selectedInsurance.value)).toList();
-    }
+  }
 
-    results.sort((a, b) {
-      switch (sortCriteria.value) {
-        case 'priceAsc': return a.consultationFee.compareTo(b.consultationFee);
-        case 'priceDesc': return b.consultationFee.compareTo(a.consultationFee);
-        case 'distanceAsc': return a.distanceKm.compareTo(b.distanceKm);
-        default: return 0;
-      }
-    });
+  Map<String, dynamic> get _activeFilters => {
+    'query': currentSearchQuery.value,
+    'region': _valueOrNull(selectedRegion.value),
+    'gender': _valueOrNull(selectedGender.value),
+    'insurance': isInsuranceFilterHidden.value
+        ? _valueOrNull(selectedInsurance.value)
+        : _valueOrNull(selectedInsurance.value),
+    'specialty': _valueOrNull(selectedSpecialty.value),
+    'sort': sortCriteria.value,
+  };
 
-    filteredHospitals.value = results;
+  String? _valueOrNull(String value) {
+    if (value == 'الكل' || value.trim().isEmpty) return null;
+    return value;
   }
 }

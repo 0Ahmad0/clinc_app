@@ -30,20 +30,35 @@ class HospitalSpecialtiesSection extends GetView<ClinicDetailsController> {
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
                       margin: EdgeInsets.only(left: 10.w),
-                      padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 8.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 18.w,
+                        vertical: 8.h,
+                      ),
                       decoration: BoxDecoration(
-                        color: isSelected ? Theme.of(context).primaryColor : Colors.grey[100],
+                        color: isSelected
+                            ? Theme.of(context).primaryColor
+                            : Colors.grey[100],
                         borderRadius: BorderRadius.circular(20.r),
                         boxShadow: isSelected
-                            ? [BoxShadow(color: Theme.of(context).primaryColor.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 4))]
+                            ? [
+                                BoxShadow(
+                                  color: Theme.of(
+                                    context,
+                                  ).primaryColor.withValues(alpha: 0.3),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ]
                             : [],
                       ),
                       child: Text(
                         spec,
                         style: TextStyle(
-                            color: isSelected ? Colors.white : Colors.black87,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                            fontSize: 13.sp
+                          color: isSelected ? Colors.white : Colors.black87,
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                          fontSize: 13.sp,
                         ),
                       ),
                     ),

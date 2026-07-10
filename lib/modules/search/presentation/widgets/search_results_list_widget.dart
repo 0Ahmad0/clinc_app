@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../../../app/core/widgets/widgets_Informative/loading_data_view.dart';
+
 class SearchResultsList extends StatelessWidget {
   final SearchAndFilterController controller;
   const SearchResultsList({super.key, required this.controller});
@@ -13,18 +15,33 @@ class SearchResultsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (controller.filteredHospitals.isEmpty) {
-        return Center(
-          child: Text(tr(LocaleKeys.search_no_results)),
-        );
+      if (controller.isInitialLoading) {
+        return const LoadingDataBaseView();
       }
-      return ListView.builder(
-        itemCount: controller.filteredHospitals.length,
-        padding: EdgeInsets.symmetric(horizontal: 12.w,vertical: 10.h),
-        itemBuilder: (context, index) {
-          final hospital = controller.filteredHospitals[index];
-          return ClinicCardWidget(hospital: hospital);
-        },
+
+      if (controller.filteredHospitals.isEmpty) {
+        return Center(child: Text(tr(LocaleKeys.search_no_results)));
+      }
+      return RefreshIndicator(
+        onRefresh: controller.reloadClinics,
+        child: ListView.builder(
+          controller: controller.scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemCount:
+              controller.filteredHospitals.length +
+              (controller.isLoadingMore ? 1 : 0),
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+          itemBuilder: (context, index) {
+            if (index >= controller.filteredHospitals.length) {
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.h),
+                child: const LoadingDataView(),
+              );
+            }
+            final hospital = controller.filteredHospitals[index];
+            return ClinicCardWidget(hospital: hospital);
+          },
+        ),
       );
     });
   }

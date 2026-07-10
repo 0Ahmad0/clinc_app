@@ -73,7 +73,8 @@
     "continue_with_google": "جوجل",
     "do_not_have_account": "ليس لديك حساب؟ ",
     "signup": "إنشاء حساب",
-    "visitor_login": "الدخول كزائر"
+    "visitor_login": "الدخول كزائر",
+    "visitor_register": "التسجيل كزائر"
   },
   "signup": {
     "welcome": "أهلاً بك! 💊",
@@ -95,6 +96,28 @@
     "email": "البريد الالكتروني",
     "welcome": "لا مشكلة, هذا يحدث للجميع\uD83D\uDE4C",
     "description": "أدخل بريدك الالكتروني لإعادة تعيين كلمة مرورك"
+  },
+  "auth": {
+    "otp_title": "رمز التحقق",
+    "otp_password_reset_title": "تحقق من إعادة كلمة المرور",
+    "otp_email_title": "تأكيد البريد الإلكتروني",
+    "otp_sent_to": "أدخل الرمز المرسل إلى {}",
+    "otp_confirm": "تأكيد",
+    "otp_resending": "جاري الإرسال...",
+    "otp_resend": "إعادة إرسال الرمز",
+    "reset_password_title": "إعادة تعيين كلمة المرور",
+    "new_password_title": "كلمة مرور جديدة",
+    "new_password_desc": "اختر كلمة مرور قوية لحسابك",
+    "new_password_hint": "كلمة المرور الجديدة",
+    "confirm_password_hint": "تأكيد كلمة المرور",
+    "save_password": "حفظ كلمة المرور",
+    "change_password_title": "تغيير كلمة المرور",
+    "change_password_new_desc": "الرجاء إدخال كلمة المرور الجديدة",
+    "change_password_current_desc": "للأمان، يرجى تأكيد كلمة المرور الحالية أولاً",
+    "current_password_hint": "كلمة المرور الحالية",
+    "verify": "تحقق",
+    "confirm_new_password_hint": "تأكيد كلمة المرور الجديدة",
+    "password_no_match": "كلمة المرور غير متطابقة"
   },
   "home": {
     "app_bar": {
@@ -215,6 +238,10 @@
     "filter_rating": "التقييم",
     "filter_gender": "الجنس",
     "filter_all": "الكل",
+    "filter_city_search_hint": "بحث عن مدينة...",
+    "rating_45_plus": "تقييم 4.5 فأعلى",
+    "rating_40_plus": "تقييم 4.0 فأعلى",
+    "rating_35_plus": "تقييم 3.5 فأعلى",
     "no_results": "لا يوجد أطباء مطابقين للبحث",
     "currency": "SAR",
     "gender_male": "ذكر",
@@ -245,6 +272,19 @@
     "clinic_location": "موقع العيادة",
     "address": "طريق الملك فهد، حي العليا، الرياض 12345، المملكة العربية السعودية",
     "reviews_title": "التقييمات",
+    "details_title": "تفاصيل الطبيب",
+    "patients_label": "مريض",
+    "years_experience": "10 سنوات",
+    "experience_label": "خبرة",
+    "price_value": "100",
+    "currency_label": "ريال",
+    "rate_doctor": "قيم الطبيب",
+    "rate_doctor_subtitle": "شاركنا تجربتك لمساعدة الآخرين",
+    "about_dynamic": "الدكتور {} متخصص في {}. يتمتع بخبرة واسعة في تشخيص وعلاج أدق الحالات الطبية باستخدام أحدث التقنيات المتاحة عالمياً.",
+    "patient_reviews": "آراء المرضى",
+    "view_all": "عرض الكل",
+    "all_reviews_title": "كل آراء المرضى ({})",
+    "rating_success": "تم التقييم بنجاح",
     "hospital_label": "المستشفى",
     "hospital_name": "مستشفى الأمل",
     "working_hours": "أوقات العمل",
@@ -271,7 +311,11 @@
     "mode_light": "نهاري",
     "mode_dark": "ليلي",
     "lang_ar": "العربية",
-    "lang_en": "الانجليزية"
+    "lang_en": "الانجليزية",
+    "notification_settings_title": "إعدادات الإشعارات",
+    "notification_app": "إشعارات التطبيق",
+    "notification_email": "البريد الإلكتروني",
+    "notification_sms": "الرسائل النصية"
   },
   "search": {
     "search_title": "البحث المتقدم",
@@ -341,6 +385,29 @@
     "summary_vat": "ضريبة القيمة المضافة (15%)",
     "summary_total": "الإجمالي",
     "payment_method_title": "طريقة الدفع",
+    "booking_payment_title": "إتمام الحجز والدفع",
+    "online_payment_method_title": "وسيلة الدفع الإلكتروني",
+    "coupon_code_title": "كود الخصم",
+    "invoice_summary_title": "ملخص الفاتورة",
+    "mock_doctor_name": "د. أحمد سليمان",
+    "mock_doctor_specialty": "أخصائي جراحة العظام",
+    "mock_booking_time": "الاثنين، 15 فبراير - 04:30 م",
+    "cash_at_clinic": "نقداً في العيادة",
+    "online_payment": "دفع أونلاين",
+    "bank_card": "بطاقة بنكية",
+    "installments": "تقسيط (تابي/تمارا)",
+    "medical_insurance": "تأمين طبي",
+    "coupon_hint": "هل لديك كود خصم؟",
+    "apply_coupon": "تطبيق",
+    "my_coupons": "عرض كوبوناتي",
+    "coupon_discount": "خصم الكوبون",
+    "total_due": "الإجمالي المستحق",
+    "currency": "ر.س",
+    "confirm_booking": "تأكيد الحجز",
+    "confirm_and_pay": "تأكيد ودفع {} ر.س",
+    "available_coupons_title": "كوبوناتي المتاحة",
+    "coupon_code_label": "كود: {}",
+    "no_coupons_available": "لا توجد كوبونات متاحة حالياً",
     "pay_btn": "دفع",
     "success_msg": "تمت عملية الدفع بنجاح",
     "select_method_error": "يرجى اختيار طريقة دفع"
@@ -364,6 +431,7 @@
     "cart_title": "سلة التحاليل",
     "cart_empty_title": "السلة فارغة",
     "cart_empty_desc": "لم تقم بإضافة أي تحاليل بعد",
+    "cart_empty_action_desc": "أضف فحوصات للسلة أولاً",
     "cart_delete_item": "حذف",
     "cart_confirm_order": "تأكيد الطلب",
     "cart_summary": "ملخص الفاتورة",
@@ -430,5 +498,3 @@
     "currency": "ريال"
   }
 }
-
-

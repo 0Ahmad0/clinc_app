@@ -31,13 +31,15 @@ class AddCardBottomSheet extends GetView<PaymentController> {
             20.verticalSpace,
 
             // المعاينة الحية
-            Obx(() => CreditCardWidget(
-              cardNumber: controller.previewCardNumber.value,
-              holderName: controller.previewHolderName.value,
-              expiryDate: controller.previewExpiry.value,
-              cardType: controller.previewType.value,
-              isPreview: true,
-            )),
+            Obx(
+              () => CreditCardWidget(
+                cardNumber: controller.previewCardNumber.value,
+                holderName: controller.previewHolderName.value,
+                expiryDate: controller.previewExpiry.value,
+                cardType: controller.previewType.value,
+                isPreview: true,
+              ),
+            ),
 
             20.verticalSpace,
 
@@ -59,7 +61,9 @@ class AddCardBottomSheet extends GetView<PaymentController> {
                     hintText: "NAME",
                     labelText: tr(LocaleKeys.payment_settings_card_holder),
                     keyboardType: TextInputType.name,
-                    validator: (v) => v!.isEmpty ? tr(LocaleKeys.payment_pay_validation_required) : null,
+                    validator: (v) => v!.isEmpty
+                        ? tr(LocaleKeys.payment_pay_validation_required)
+                        : null,
                   ),
                   10.verticalSpace,
                   Row(
@@ -92,13 +96,18 @@ class AddCardBottomSheet extends GetView<PaymentController> {
               ),
             ),
             20.verticalSpace,
-            AppButtonWidget(
-              text: tr(LocaleKeys.payment_settings_save_btn),
-              onPressed: controller.saveCard,
+            Obx(
+              () => AppButtonWidget(
+                text: tr(LocaleKeys.payment_settings_save_btn),
+                isLoading: controller.isSaving.value,
+                onPressed: controller.saveCard,
+              ),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-            )
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+            ),
           ],
         ),
       ),

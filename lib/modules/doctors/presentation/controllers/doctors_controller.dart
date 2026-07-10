@@ -1,10 +1,22 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../../app/core/configuration/locator.dart';
+import '../../../../app/core/helper/response_helper.dart';
+import '../../../../app/data/base_model.dart';
+import '../../../../app/data/pagination/pagination_params.dart';
+import '../../../../app/data/pagination/pagination_state.dart';
+import '../../../../app/domain/error_handler/network_exceptions.dart';
 import '../../data/models/doctor_model.dart';
+import '../../domain/doctors_repository.dart';
 
 class DoctorsController extends GetxController {
-  // 1. البيانات الأصلية
-  final _allDoctors = DoctorModel.mockDoctors.obs;
-  var filteredDoctors = <DoctorModel>[].obs;
+  late final DoctorsRepository _repository;
+  final PaginationState<DoctorModel> doctorsPagination = PaginationState(
+    perPage: 5,
+  );
+  final ScrollController scrollController = ScrollController();
+  Worker? _searchWorker;
 
   // 2. متغيرات الواجهة والبحث
   var currentSearchQuery = ''.obs;
@@ -12,7 +24,8 @@ class DoctorsController extends GetxController {
 
   // --- الإضافات الجديدة ليتطابق مع الـ Search ---
   var tempSelectedMainRegion = 'الكل'.obs; // المنطقة الكبرى المختارة داخل الشيت
-  var regionSearchText = ''.obs; // نص البحث داخل الشيت (إذا أردت البحث عن مدينة)
+  var regionSearchText =
+      ''.obs; // نص البحث داخل الشيت (إذا أردت البحث عن مدينة)
 
   // توزيع المناطق (نفس الموجود في SearchController)
   final Map<String, List<String>> groupedRegions = {
@@ -31,21 +44,48 @@ class DoctorsController extends GetxController {
   var selectedRating = 'الكل'.obs;
 
   // 4. القوائم الثابتة
-  final List<String> specialties = ['الكل', 'قلب', 'جلدية', 'أسنان', 'عيون', 'باطنية'];
+  final List<String> specialties = [
+    'الكل',
+    'قلب',
+    'جلدية',
+    'أسنان',
+    'عيون',
+    'باطنية',
+  ];
   final List<String> genders = ['الكل', 'ذكر', 'أنثى'];
   final List<String> ratings = ['الكل', '4.5+', '4.0+', '3.5+'];
+
+  RxList<DoctorModel> get filteredDoctors => doctorsPagination.items;
+  bool get isInitialLoading => doctorsPagination.isInitialLoading.value;
+  bool get isLoadingMore => doctorsPagination.isLoadingMore.value;
+  bool get hasMoreDoctors => doctorsPagination.hasMore;
 
   @override
   void onInit() {
     super.onInit();
-    applyFilters();
+    _repository = locator<DoctorsRepository>();
+    _applyRouteFilters();
+    scrollController.addListener(_onScroll);
+    _searchWorker = debounce<String>(
+      currentSearchQuery,
+      (_) => reloadDoctors(),
+      time: const Duration(milliseconds: 450),
+    );
+    loadDoctors(refresh: true);
   }
 
-  void toggleFilterBar() => isFilterBarVisible.value = !isFilterBarVisible.value;
+  @override
+  void onClose() {
+    _searchWorker?.dispose();
+    scrollController.dispose();
+    super.onClose();
+  }
+
+  void toggleFilterBar() =>
+      isFilterBarVisible.value = !isFilterBarVisible.value;
 
   void updateSearchQuery(String query) {
     currentSearchQuery.value = query;
-    applyFilters();
   }
 
   // تحديث الفلاتر
@@ -60,7 +100,7 @@ class DoctorsController extends GetxController {
     if (gender != null) selectedGender.value = gender;
     if (rating != null) selectedRating.value = rating;
 
-    applyFilters();
+    reloadDoctors();
   }
 
   void resetFilters() {
@@ -70,7 +110,7 @@ class DoctorsController extends GetxController {
     selectedGender.value = 'الكل';
     selectedRating.value = 'الكل';
     currentSearchQuery.value = '';
-    applyFilters();
+    reloadDoctors();
   }
 
   bool get hasActiveFilters {
@@ -80,42 +120,90 @@ class DoctorsController extends GetxController {
         selectedRating.value != 'الكل';
   }
 
-  // --- منطق الفلترة ---
+  Future<void> reloadDoctors() => loadDoctors(refresh: true);
+
+  Future<void> loadDoctors({bool refresh = false}) async {
+    if (doctorsPagination.isBusy) return;
+    if (!refresh && !doctorsPagination.hasMore) return;
+
+    final page = refresh ? 1 : doctorsPagination.currentPage + 1;
+    if (refresh) {
+      doctorsPagination.reset();
+      doctorsPagination.isInitialLoading(true);
+    } else {
+      doctorsPagination.isLoadingMore(true);
+    }
+
+    final result = await _repository.getDoctors(
+      PaginationParams(
+        page: page,
+        perPage: doctorsPagination.perPage,
+        filters: _activeFilters,
+      ),
+    );
+
+    doctorsPagination.isInitialLoading(false);
+    doctorsPagination.isLoadingMore(false);
+
+    result.when(
+      success: (response) => _handleDoctorsResponse(response, page),
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
+
   void applyFilters() {
-    List<DoctorModel> results = _allDoctors.toList();
+    reloadDoctors();
+  }
 
-    // 1. البحث بالاسم
-    if (currentSearchQuery.value.isNotEmpty) {
-      results = results
-          .where((d) => d.name.toLowerCase().contains(currentSearchQuery.value.toLowerCase()))
-          .toList();
+  void _handleDoctorsResponse(
+    BaseModel<BaseModels<DoctorModel>> response,
+    int page,
+  ) {
+    if (!response.isSuccess || response.result == null) {
+      ResponseHelper.onFailure(message: response.message);
+      return;
     }
+    doctorsPagination.setPage(
+      data: response.result!.list,
+      page: page,
+      meta: response.meta,
+    );
+  }
 
-    // 2. المنطقة (تأكد أن موديل DoctorModel يحتوي على حقل region)
-    if (selectedRegion.value != 'الكل') {
-      results = results.where((d) => d.region == selectedRegion.value).toList();
+  void _onScroll() {
+    if (!scrollController.hasClients) return;
+    final position = scrollController.position;
+    if (position.pixels >= position.maxScrollExtent - 240) {
+      loadDoctors();
     }
+  }
 
-    // 3. التخصص
-    if (selectedSpecialty.value != 'الكل') {
-      results = results.where((d) => d.specialty == selectedSpecialty.value).toList();
+  void _applyRouteFilters() {
+    final args = Get.arguments;
+    if (args is! Map) return;
+    final specialty = args['specialty']?.toString() ?? '';
+    if (specialty.isNotEmpty) {
+      selectedSpecialty.value = specialty;
     }
+  }
 
-    // 4. الجنس
-    if (selectedGender.value != 'الكل') {
-      results = results.where((d) => d.gender == selectedGender.value).toList();
-    }
+  Map<String, dynamic> get _activeFilters => {
+    'query': currentSearchQuery.value,
+    'region': _valueOrNull(selectedRegion.value),
+    'specialty': _valueOrNull(selectedSpecialty.value),
+    'gender': _valueOrNull(selectedGender.value),
+    'min_rating': _minRating,
+  };
 
-    // 5. التقييم
-    if (selectedRating.value != 'الكل') {
-      double minRating = 0.0;
-      if (selectedRating.value == '4.5+') minRating = 4.5;
-      else if (selectedRating.value == '4.0+') minRating = 4.0;
-      else if (selectedRating.value == '3.5+') minRating = 3.5;
+  String? _valueOrNull(String value) {
+    if (value == 'الكل' || value.trim().isEmpty) return null;
+    return value;
+  }
 
-      results = results.where((d) => d.rating >= minRating).toList();
-    }
-
-    filteredDoctors.value = results;
+  double? get _minRating {
+    if (selectedRating.value == 'الكل') return null;
+    return double.tryParse(selectedRating.value.replaceAll('+', ''));
   }
 }

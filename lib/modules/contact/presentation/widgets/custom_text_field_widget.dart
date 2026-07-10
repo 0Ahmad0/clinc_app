@@ -9,13 +9,16 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final int maxLines;
   final TextInputType inputType;
+  final String? Function(String?)? validator;
 
-  const CustomTextField({super.key, 
+  const CustomTextField({
+    super.key,
     required this.label,
     required this.hint,
     required this.controller,
     this.maxLines = 1,
     this.inputType = TextInputType.text,
+    this.validator,
   });
 
   @override
@@ -43,6 +46,7 @@ class CustomTextField extends StatelessWidget {
             maxLines: maxLines,
             hintText: hint,
             keyboardType: inputType,
+            validator: validator,
           ),
         ],
       ),

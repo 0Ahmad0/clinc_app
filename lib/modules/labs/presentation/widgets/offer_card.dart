@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../app/data/offer_model.dart';
+
 class OfferCard extends StatelessWidget {
   final LabOfferModel offer;
   final VoidCallback onTap;
@@ -29,9 +30,23 @@ class OfferCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(offer.title, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14.sp)),
+                Text(
+                  offer.title,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14.sp,
+                  ),
+                ),
                 4.verticalSpace,
-                Text("خصم ${offer.discount}", style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 12.sp)),
+                Text(
+                  "خصم ${offer.discount}",
+                  style: TextStyle(
+                    color: Colors.amber,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12.sp,
+                  ),
+                ),
               ],
             ),
           ),
@@ -43,7 +58,10 @@ class OfferCard extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20.r),
               ),
-              child: Text(tr(LocaleKeys.labs_profile_copy_coupon), style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold)),
+              child: Text(
+                tr(LocaleKeys.labs_profile_copy_coupon),
+                style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ],

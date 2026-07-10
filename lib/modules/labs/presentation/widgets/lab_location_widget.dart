@@ -17,7 +17,12 @@ class LabLocationWidget extends GetView<LabProfileController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(tr(LocaleKeys.labs_profile_location_title), style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+          Text(
+            tr(LocaleKeys.labs_profile_location_title),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+          ),
           12.verticalSpace,
           GestureDetector(
             onTap: controller.openMap,
@@ -25,30 +30,41 @@ class LabLocationWidget extends GetView<LabProfileController> {
               height: 150.h,
               width: double.infinity,
               decoration: BoxDecoration(
-                border: Border.all(
-                  color: AppColors.success
-                ),
+                border: Border.all(color: AppColors.success),
                 borderRadius: BorderRadius.circular(16.r),
                 image: const DecorationImage(
                   // صورة وهمية للخريطة
-                  image: NetworkImage("https://media.wired.com/photos/59269cd37034dc5f91becd80/master/pass/GoogleMapTA.jpg"),
+                  image: NetworkImage(
+                    "https://media.wired.com/photos/59269cd37034dc5f91becd80/master/pass/GoogleMapTA.jpg",
+                  ),
                   fit: BoxFit.cover,
                 ),
               ),
               child: Center(
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 8.h,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.r),
-                    boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 10)],
+                    boxShadow: [
+                      BoxShadow(color: Colors.black26, blurRadius: 10),
+                    ],
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(Iconsax.map, color: Colors.blue),
                       8.horizontalSpace,
-                      Text(tr(LocaleKeys.labs_profile_view_map), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp)),
+                      Text(
+                        tr(LocaleKeys.labs_profile_view_map),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.sp,
+                        ),
+                      ),
                     ],
                   ),
                 ),

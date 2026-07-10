@@ -22,10 +22,7 @@ class ChatbotQuickReplies extends StatelessWidget {
             onTap: () => controller.sendMessage(controller.quickReplies[index]),
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 4.w),
-              padding: EdgeInsets.symmetric(
-                horizontal: 12.w,
-                vertical: 8.h,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
               decoration: BoxDecoration(
                 color: Get.theme.primaryColor.myOpacity(0.1),
                 borderRadius: BorderRadius.circular(20.r),
@@ -37,10 +34,10 @@ class ChatbotQuickReplies extends StatelessWidget {
                 child: Text(
                   controller.quickReplies[index],
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Get.theme.primaryColor,
-                        fontSize: 10.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    color: Get.theme.primaryColor,
+                    fontSize: 10.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),

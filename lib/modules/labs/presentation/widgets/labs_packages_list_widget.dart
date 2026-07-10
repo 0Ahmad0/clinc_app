@@ -13,13 +13,13 @@ class LabsPackagesList extends GetView<LabsTestController> {
     return SizedBox(
       height: 160.h,
       child: ListView.builder(
-        padding: EdgeInsets.symmetric(
-          horizontal: 14.w
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 14.w),
         scrollDirection: Axis.horizontal,
         itemCount: controller.allTests.where((t) => t.isPackage).length,
         itemBuilder: (context, index) {
-          final package = controller.allTests.where((t) => t.isPackage).toList()[index];
+          final package = controller.allTests
+              .where((t) => t.isPackage)
+              .toList()[index];
           return PackageCard(test: package);
         },
       ),

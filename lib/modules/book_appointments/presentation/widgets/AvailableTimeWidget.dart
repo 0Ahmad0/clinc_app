@@ -30,22 +30,30 @@ class AvailableTimeWidget extends StatelessWidget {
         Wrap(
           spacing: 10.w,
           runSpacing: 10.h,
-          children: morningTimes.map((time) => TimeChipWidget(
-            time: time,
-            isSelected: time == selectedTime,
-            onTap: onTap,
-          )).toList(),
+          children: morningTimes
+              .map(
+                (time) => TimeChipWidget(
+                  time: time,
+                  isSelected: time == selectedTime,
+                  onTap: onTap,
+                ),
+              )
+              .toList(),
         ),
         16.verticalSpace,
         SectionLabel(label: LocaleKeys.booking_evening_times),
         Wrap(
           spacing: 10.w,
           runSpacing: 10.h,
-          children: eveningTimes.map((time) => TimeChipWidget(
-            time: time,
-            isSelected: time == selectedTime,
-            onTap: onTap,
-          )).toList(),
+          children: eveningTimes
+              .map(
+                (time) => TimeChipWidget(
+                  time: time,
+                  isSelected: time == selectedTime,
+                  onTap: onTap,
+                ),
+              )
+              .toList(),
         ),
       ],
     );

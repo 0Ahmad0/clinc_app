@@ -48,7 +48,9 @@ class ChatbotMessageList extends StatelessWidget {
 
     return BubbleSpecialThree(
       text: msg.text,
-      color: msg.isSender ? Get.theme.primaryColor : Theme.of(context).cardColor,
+      color: msg.isSender
+          ? Get.theme.primaryColor
+          : Theme.of(context).cardColor,
       tail: true,
       seen: false,
       sent: false,

@@ -24,4 +24,3 @@ class InsuranceGridList extends StatelessWidget {
     );
   }
 }
-

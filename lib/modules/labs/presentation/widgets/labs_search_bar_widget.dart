@@ -27,10 +27,7 @@ class LabsSearchBar extends GetView<LabsTestController> {
           onChanged: (value) => controller.updateSearchQuery(value),
           decoration: InputDecoration(
             hintText: tr(LocaleKeys.labs_search_hint),
-            hintStyle: TextStyle(
-              fontSize: 14.sp,
-              color: Colors.grey[600],
-            ),
+            hintStyle: TextStyle(fontSize: 14.sp, color: Colors.grey[600]),
             prefixIcon: Container(
               padding: EdgeInsets.all(14.w),
               child: Icon(

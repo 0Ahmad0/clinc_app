@@ -5,9 +5,7 @@ import '../../../../app/core/constants/app_assets.dart';
 import '../../../../app/core/widgets/app_svg_widget.dart';
 
 class LogoShapeWidget extends StatelessWidget {
-  const LogoShapeWidget({
-    super.key,
-  });
+  const LogoShapeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +15,7 @@ class LogoShapeWidget extends StatelessWidget {
         color: Theme.of(context).cardColor,
         shape: StarBorder.polygon(
           pointRounding: .75,
-          side: BorderSide(
-            color: Theme.of(context).primaryColor,
-            width: 6.sp,
-          ),
+          side: BorderSide(color: Theme.of(context).primaryColor, width: 6.sp),
         ),
       ),
       child: AppSvgWidget(

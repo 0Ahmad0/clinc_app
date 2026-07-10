@@ -9,7 +9,7 @@ import '../../../../app/data/review_model.dart'; // مكتبة المشاركة 
 
 class LabProfileController extends GetxController {
   late LabModel lab;
-  
+
   // المتغيرات المراقبة
   var isFavorite = false.obs;
   var userRating = 0.0.obs; // للتقييم الجديد
@@ -21,7 +21,7 @@ class LabProfileController extends GetxController {
     // استقبال البيانات
     if (Get.arguments is LabModel) {
       lab = Get.arguments;
-    } 
+    }
     // إذا كان Map نحوله (كما فعلنا سابقاً)
     else if (Get.arguments is Map) {
       lab = LabModel.fromMap(Map<String, dynamic>.from(Get.arguments));
@@ -52,13 +52,16 @@ class LabProfileController extends GetxController {
   void submitReview() {
     if (reviewController.text.isNotEmpty && userRating.value > 0) {
       // إضافة التقييم للقائمة (محاكاة)
-      lab.reviews.insert(0, ReviewModel(
-        userName: "مستخدم حالي",
-        userImage: "https://i.pravatar.cc/150?img=3",
-        rating: userRating.value,
-        comment: reviewController.text,
-        date: "الآن",
-      ));
+      lab.reviews.insert(
+        0,
+        ReviewModel(
+          userName: "مستخدم حالي",
+          userImage: "https://i.pravatar.cc/150?img=3",
+          rating: userRating.value,
+          comment: reviewController.text,
+          date: "الآن",
+        ),
+      );
       reviewController.clear();
       userRating.value = 0.0;
       Get.back(); // إغلاق الـ BottomSheet

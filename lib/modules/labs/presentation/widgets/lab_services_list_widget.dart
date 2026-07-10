@@ -19,9 +19,9 @@ class LabServicesListWidget extends GetView<LabProfileController> {
         children: [
           Text(
             tr(LocaleKeys.labs_page_profile_services),
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           12.verticalSpace,
           ...controller.lab.services.map(
@@ -89,9 +89,9 @@ class _ServiceTile extends StatelessWidget {
                   child: Text(
                     serviceName,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14.sp,
-                        ),
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14.sp,
+                    ),
                   ),
                 ),
                 Icon(
@@ -121,10 +121,11 @@ class _ServiceTile extends StatelessWidget {
     if (lower.contains('زواج') || lower.contains('شامل')) {
       return Iconsax.box;
     }
-    if (lower.contains('أشعة') || lower.contains('اشعة') || lower.contains('radiology')) {
+    if (lower.contains('أشعة') ||
+        lower.contains('اشعة') ||
+        lower.contains('radiology')) {
       return Iconsax.scan_barcode;
     }
     return Iconsax.lamp_charge;
   }
 }
-

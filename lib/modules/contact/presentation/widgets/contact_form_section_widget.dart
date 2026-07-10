@@ -5,6 +5,7 @@ import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../controllers/contact_controller.dart';
@@ -30,56 +31,67 @@ class ContactFormSection extends StatelessWidget {
           style: textTheme.bodyMedium?.copyWith(color: AppColors.grey),
         ),
         20.verticalSpace,
-        Container(
-          padding: EdgeInsets.all(18.sp),
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.myOpacity(0.1),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              CustomTextField(
-                label: tr(LocaleKeys.contact_us_label_full_name),
-                hint: tr(LocaleKeys.contact_us_hint_full_name),
-                controller: controller.nameController,
-              ),
-              CustomTextField(
-                label: tr(LocaleKeys.contact_us_label_phone),
-                hint: "05xxxxxxxx",
-                controller: controller.phoneController,
-                inputType: TextInputType.phone,
-              ),
-              CustomTextField(
-                label: tr(LocaleKeys.contact_us_label_email),
-                hint: "example@email.com",
-                controller: controller.emailController,
-                inputType: TextInputType.emailAddress,
-              ),
-              CustomTextField(
-                label: tr(LocaleKeys.contact_us_label_subject),
-                hint: tr(LocaleKeys.contact_us_hint_subject),
-                controller: controller.subjectController,
-              ),
-              CustomTextField(
-                label: tr(LocaleKeys.contact_us_label_message),
-                hint: tr(LocaleKeys.contact_us_hint_message),
-                controller: controller.messageController,
-                maxLines: 4,
-              ),
-              20.verticalSpace,
-              AppButtonWidget(
-                text: tr(LocaleKeys.contact_us_btn_send),
-                onPressed: controller.submitForm,
-                icon: Icon(Iconsax.send_2, size: 20.sp),
-              ),
-            ],
+        Form(
+          key: controller.contactFormKey,
+          child: Container(
+            padding: EdgeInsets.all(18.sp),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.myOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                CustomTextField(
+                  label: tr(LocaleKeys.contact_us_label_full_name),
+                  hint: tr(LocaleKeys.contact_us_hint_full_name),
+                  controller: controller.nameController,
+                  validator: controller.validateName,
+                ),
+                CustomTextField(
+                  label: tr(LocaleKeys.contact_us_label_phone),
+                  hint: "05xxxxxxxx",
+                  controller: controller.phoneController,
+                  inputType: TextInputType.phone,
+                  validator: controller.validatePhone,
+                ),
+                CustomTextField(
+                  label: tr(LocaleKeys.contact_us_label_email),
+                  hint: "example@email.com",
+                  controller: controller.emailController,
+                  inputType: TextInputType.emailAddress,
+                  validator: controller.validateEmail,
+                ),
+                CustomTextField(
+                  label: tr(LocaleKeys.contact_us_label_subject),
+                  hint: tr(LocaleKeys.contact_us_hint_subject),
+                  controller: controller.subjectController,
+                  validator: controller.validateRequired,
+                ),
+                CustomTextField(
+                  label: tr(LocaleKeys.contact_us_label_message),
+                  hint: tr(LocaleKeys.contact_us_hint_message),
+                  controller: controller.messageController,
+                  maxLines: 4,
+                  validator: controller.validateRequired,
+                ),
+                20.verticalSpace,
+                Obx(
+                  () => AppButtonWidget(
+                    text: tr(LocaleKeys.contact_us_btn_send),
+                    isLoading: controller.isSubmitting.value,
+                    onPressed: controller.submitForm,
+                    icon: Icon(Iconsax.send_2, size: 20.sp),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],

@@ -49,13 +49,51 @@ class LabModel {
           ? List<String>.from(map['services'].map((x) => x.toString()))
           : <String>[],
       phoneNumber: map['phoneNumber']?.toString() ?? '',
-      // قيم افتراضية مؤقتة
-      reviews: [],
-      offers: [],
+      reviews: _reviewList(map['reviews']),
+      offers: _offerList(map['offers']),
       latitude: _parseDouble(map['latitude'] ?? 0),
       longitude: _parseDouble(map['longitude'] ?? 0),
     );
   }
+
+  factory LabModel.fromJson(Map<String, dynamic> json) {
+    return LabModel.fromMap(json);
+  }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'imageUrl': imageUrl,
+    'address': address,
+    'rating': rating,
+    'isOpen': isOpen,
+    'category': category,
+    'description': description,
+    'services': services,
+    'phoneNumber': phoneNumber,
+    'reviews': reviews
+        .map(
+          (review) => {
+            'userName': review.userName,
+            'userImage': review.userImage,
+            'rating': review.rating,
+            'comment': review.comment,
+            'date': review.date,
+          },
+        )
+        .toList(),
+    'offers': offers
+        .map(
+          (offer) => {
+            'title': offer.title,
+            'code': offer.code,
+            'discount': offer.discount,
+          },
+        )
+        .toList(),
+    'latitude': latitude,
+    'longitude': longitude,
+  };
 
   // دالة مساعدة لتحويل الأرقام
   static double _parseDouble(dynamic value) {
@@ -66,6 +104,33 @@ class LabModel {
     return 0.0;
   }
 
+  static List<ReviewModel> _reviewList(dynamic value) {
+    if (value is! List) return <ReviewModel>[];
+    return value
+        .whereType<Map>()
+        .map(
+          (item) => ReviewModel(
+            userName: item['userName']?.toString() ?? '',
+            userImage: item['userImage']?.toString() ?? '',
+            rating: _parseDouble(item['rating']),
+            comment: item['comment']?.toString() ?? '',
+            date: item['date']?.toString() ?? '',
+          ),
+        )
+        .toList();
+  }
 
-
+  static List<LabOfferModel> _offerList(dynamic value) {
+    if (value is! List) return <LabOfferModel>[];
+    return value
+        .whereType<Map>()
+        .map(
+          (item) => LabOfferModel(
+            title: item['title']?.toString() ?? '',
+            code: item['code']?.toString() ?? '',
+            discount: item['discount']?.toString() ?? '',
+          ),
+        )
+        .toList();
+  }
 }

@@ -13,6 +13,8 @@ abstract class AppRoutes {
   static const login = '/login';
   static const signup = '/signup';
   static const forgetPassword = '/forgot-password';
+  static const otp = '/otp';
+  static const resetPassword = '/reset-password';
   static const changePassword = '/change-password';
 
   // --- ميزة الرئيسية (Home) ---
@@ -32,11 +34,11 @@ abstract class AppRoutes {
   static const labProfile = '/lab_profile';
   static const insurance = '/insurance';
 
-
   // --- ميزة البروفايل (Profile) ---
   static const profile = '/profile';
   static const editProfile = '/profile/edit';
   static const settings = '/settings';
+  static const notificationSettings = '/settings/notifications';
   static const contact = '/contact';
   static const aboutApp = '/about_app';
   static const privacyPolicy = '/privacy_policy';

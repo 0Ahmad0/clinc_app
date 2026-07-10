@@ -7,7 +7,8 @@ class CheckboxItem extends StatelessWidget {
   final bool value;
   final ValueChanged<bool?> onChanged;
 
-  const CheckboxItem({super.key, 
+  const CheckboxItem({
+    super.key,
     required this.label,
     required this.value,
     required this.onChanged,
@@ -24,13 +25,17 @@ class CheckboxItem extends StatelessWidget {
             value: value,
             onChanged: onChanged,
             activeColor: Colors.pinkAccent,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.r)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4.r),
+            ),
           ),
         ),
         8.horizontalSpace,
         Text(
           tr(label),
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 13.sp),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontSize: 13.sp),
         ),
       ],
     );

@@ -41,7 +41,6 @@ class LabProfileScreen extends StatelessWidget {
                 const LabLocationWidget(),
 
                 const LabReviewsWidget(),
-
               ],
             ),
           ),

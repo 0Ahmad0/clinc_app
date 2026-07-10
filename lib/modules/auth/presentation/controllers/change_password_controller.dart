@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../app/core/configuration/locator.dart';
+import '../../../../app/core/helper/response_helper.dart';
+import '../../../../app/domain/error_handler/network_exceptions.dart';
+import '../../domain/repositories/auth_repository.dart';
 
 class ChangePasswordController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -12,6 +16,13 @@ class ChangePasswordController extends GetxController {
   // متغير لمراقبة حالة التحقق
   var isCurrentPasswordVerified = false.obs;
   var isLoading = false.obs;
+  late final AuthRepository _repository;
+
+  @override
+  void onInit() {
+    _repository = locator<AuthRepository>();
+    super.onInit();
+  }
 
   @override
   void onClose() {
@@ -24,22 +35,7 @@ class ChangePasswordController extends GetxController {
   // دالة التحقق من كلمة المرور الحالية
   void verifyCurrentPassword() async {
     if (!formKey.currentState!.validate()) return;
-
-    isLoading.value = true;
-
-    // محاكاة الاتصال بالسيرفر
-    await Future.delayed(const Duration(seconds: 1));
-
-    if (currentPasswordController.text == "a12345678") {
-      isCurrentPasswordVerified.value = true;
-      Get.snackbar("نجاح", "كلمة المرور صحيحة، يمكنك الآن تعيين كلمة مرور جديدة",
-          backgroundColor: Colors.green, colorText: Colors.white);
-    } else {
-      Get.snackbar("خطأ", "كلمة المرور الحالية خاطئة",
-          backgroundColor: Colors.red, colorText: Colors.white);
-    }
-
-    isLoading.value = false;
+    isCurrentPasswordVerified.value = true;
   }
 
   // دالة تغيير كلمة المرور النهائية
@@ -47,18 +43,25 @@ class ChangePasswordController extends GetxController {
     if (!formKey.currentState!.validate()) return;
 
     if (newPasswordController.text != confirmPasswordController.text) {
-      Get.snackbar("تنبيه", "كلمة المرور الجديدة غير متطابقة",
-          backgroundColor: Colors.orange, colorText: Colors.white);
+      ResponseHelper.onFailure(message: "كلمة المرور الجديدة غير متطابقة");
       return;
     }
 
     isLoading.value = true;
-    // محاكاة عملية التغيير
-    await Future.delayed(const Duration(seconds: 2));
-
+    final result = await _repository.changePassword(
+      currentPassword: currentPasswordController.text,
+      newPassword: newPasswordController.text,
+      confirmPassword: confirmPasswordController.text,
+    );
     isLoading.value = false;
-    Get.back(); // العودة للخلف بعد النجاح
-    Get.snackbar("تم", "تم تغيير كلمة المرور بنجاح",
-        backgroundColor: Colors.green, colorText: Colors.white);
+    result.when(
+      success: (model) {
+        ResponseHelper.onSuccess(message: model.message);
+        Get.back();
+      },
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
   }
 }

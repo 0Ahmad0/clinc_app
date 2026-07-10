@@ -13,18 +13,18 @@ class HospitalDoctorsHeader extends StatelessWidget {
       children: [
         Text(
           tr(LocaleKeys.clinic_app_details_elite_doctors),
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge
-              ?.copyWith(fontWeight: FontWeight.bold, fontSize: 18.sp),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 18.sp,
+          ),
         ),
         TextButton(
           onPressed: () {},
           child: Text(
             tr(LocaleKeys.clinic_app_details_view_all),
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).primaryColor,
-                ),
+              color: Theme.of(context).primaryColor,
+            ),
           ),
         ),
       ],

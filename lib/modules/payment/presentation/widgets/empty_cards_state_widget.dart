@@ -29,10 +29,9 @@ class EmptyCardsState extends StatelessWidget {
             child: Text(
               tr(LocaleKeys.payment_settings_no_cards),
               textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(color: Colors.grey),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
             ),
           ),
         ],

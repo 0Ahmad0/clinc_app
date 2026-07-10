@@ -46,9 +46,7 @@ class MainSectionWidget extends GetView<HomeController> {
                   padding: EdgeInsets.all(12.sp),
                   decoration: BoxDecoration(
                     color: isSpecial ? null : theme.cardColor,
-                    gradient: isSpecial
-                        ? AppColors.primaryGradient
-                        : null,
+                    gradient: isSpecial ? AppColors.primaryGradient : null,
                     // color: isSpecial
                     //     ? theme.primaryColor
                     //     : theme.cardColor, // لون البطاقة حسب الثيم
@@ -63,7 +61,9 @@ class MainSectionWidget extends GetView<HomeController> {
                     ],
                     border: isSpecial
                         ? null
-                        : Border.all(color: theme.dividerColor.withValues(alpha: 0.1)),
+                        : Border.all(
+                            color: theme.dividerColor.withValues(alpha: 0.1),
+                          ),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

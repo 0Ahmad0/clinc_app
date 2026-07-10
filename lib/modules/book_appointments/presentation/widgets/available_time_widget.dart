@@ -22,9 +22,12 @@ class AvailableTimeWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('الأوقات الصباحية', style: Theme.of(context).textTheme.labelMedium?.copyWith(
-          fontSize: 16.sp
-        )),
+        Text(
+          'الأوقات الصباحية',
+          style: Theme.of(
+            context,
+          ).textTheme.labelMedium?.copyWith(fontSize: 16.sp),
+        ),
         14.verticalSpace,
         Wrap(
           crossAxisAlignment: WrapCrossAlignment.start,
@@ -41,9 +44,12 @@ class AvailableTimeWidget extends StatelessWidget {
           }).toList(),
         ),
         14.verticalSpace,
-        Text('الأوقات المسائية', style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            fontSize: 16.sp
-        )),
+        Text(
+          'الأوقات المسائية',
+          style: Theme.of(
+            context,
+          ).textTheme.labelMedium?.copyWith(fontSize: 16.sp),
+        ),
         12.verticalSpace,
         Wrap(
           crossAxisAlignment: WrapCrossAlignment.start,
@@ -59,7 +65,6 @@ class AvailableTimeWidget extends StatelessWidget {
             );
           }).toList(),
         ),
-
       ],
     );
   }

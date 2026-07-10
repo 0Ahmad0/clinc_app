@@ -23,13 +23,11 @@ class DateTimeLineWidget extends StatelessWidget {
       firstDate: DateTime.now(),
       focusedDate: selectedDate,
       lastDate: DateTime(2030),
-      locale: Locale(context.locale.languageCode), // استخدام لغة التطبيق الحالية
+      locale: Locale(
+        context.locale.languageCode,
+      ), // استخدام لغة التطبيق الحالية
       onDateChange: onDateChange,
-      timelineOptions: TimelineOptions(
-        padding: EdgeInsets.zero,
-        height: 100.h,
-      ),
-
+      timelineOptions: TimelineOptions(padding: EdgeInsets.zero, height: 100.h),
     );
   }
 }

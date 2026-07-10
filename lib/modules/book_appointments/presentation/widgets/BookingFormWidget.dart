@@ -41,82 +41,95 @@ class BookingFormWidget extends GetView<BookAppointmentController> {
             border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
           ),
           child: DropdownButtonHideUnderline(
-            child: Obx(() => DropdownButton<String>(
-                  value: controller.selectedAgeRange.value,
-                  isExpanded: true,
-                  icon: const Icon(Iconsax.arrow_down_1),
-                  items: controller.ageRanges.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value.trNumbers()),
-                    );
-                  }).toList(),
-                  onChanged: (val) => controller.selectedAgeRange.value = val!,
-                )),
+            child: Obx(
+              () => DropdownButton<String>(
+                value: controller.selectedAgeRange.value,
+                isExpanded: true,
+                icon: const Icon(Iconsax.arrow_down_1),
+                items: controller.ageRanges.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value.trNumbers()),
+                  );
+                }).toList(),
+                onChanged: (val) => controller.selectedAgeRange.value = val!,
+              ),
+            ),
           ),
         ),
         16.verticalSpace,
 
         // الجنس (تصميم جديد)
         SectionLabel(label: LocaleKeys.booking_patient_gender_label),
-        Obx(() => Row(
-              children: [
-                Expanded(
-                  child: GenderSelectionCard(
-                    label: LocaleKeys.booking_gender_male,
-                    icon: Icons.male, // أيقونة الذكر
-                    isSelected: controller.selectedGender.value == 'Male',
-                    onTap: () => controller.selectGender('Male'),
-                    activeColor: Colors.blueAccent, // لون مميز للذكر
-                  ),
-                ),
-                12.horizontalSpace,
-                Expanded(
-                  child: GenderSelectionCard(
-                    label: LocaleKeys.booking_gender_female,
-                    icon: Icons.female, // أيقونة الأنثى
-                    isSelected: controller.selectedGender.value == 'Female',
-                    onTap: () => controller.selectGender('Female'),
-                    activeColor: Colors.pinkAccent, // لون مميز للأنثى
-                  ),
-                ),
-              ],
-            )),
-        
-        // --- القسم الشرطي (يظهر فقط إذا كان الجنس أنثى) ---
-        Obx(() => Visibility(
-          visible: controller.selectedGender.value == 'Female',
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        Obx(
+          () => Row(
             children: [
-              16.verticalSpace,
-              SectionLabel(label: LocaleKeys.booking_female_status_label),
-              Container(
-                padding: EdgeInsets.all(12.w),
-                decoration: BoxDecoration(
-                  color: Colors.pinkAccent.withValues(alpha: 0.05), // خلفية ناعمة
-                  borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: Colors.pinkAccent.withValues(alpha: 0.2)),
+              Expanded(
+                child: GenderSelectionCard(
+                  label: LocaleKeys.booking_gender_male,
+                  icon: Icons.male, // أيقونة الذكر
+                  isSelected: controller.selectedGender.value == 'Male',
+                  onTap: () => controller.selectGender('Male'),
+                  activeColor: Colors.blueAccent, // لون مميز للذكر
                 ),
-                child: Column(
-                  children: [
-                    CheckboxItem(
-                      label: LocaleKeys.booking_is_pregnant,
-                      value: controller.isPregnant.value,
-                      onChanged: controller.togglePregnant,
-                    ),
-                    Divider(height: 10.h, color: Colors.pinkAccent.withValues(alpha: 0.1)),
-                    CheckboxItem(
-                      label: LocaleKeys.booking_is_breastfeeding,
-                      value: controller.isBreastfeeding.value,
-                      onChanged: controller.toggleBreastfeeding,
-                    ),
-                  ],
+              ),
+              12.horizontalSpace,
+              Expanded(
+                child: GenderSelectionCard(
+                  label: LocaleKeys.booking_gender_female,
+                  icon: Icons.female, // أيقونة الأنثى
+                  isSelected: controller.selectedGender.value == 'Female',
+                  onTap: () => controller.selectGender('Female'),
+                  activeColor: Colors.pinkAccent, // لون مميز للأنثى
                 ),
               ),
             ],
           ),
-        )),
+        ),
+
+        // --- القسم الشرطي (يظهر فقط إذا كان الجنس أنثى) ---
+        Obx(
+          () => Visibility(
+            visible: controller.selectedGender.value == 'Female',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                16.verticalSpace,
+                SectionLabel(label: LocaleKeys.booking_female_status_label),
+                Container(
+                  padding: EdgeInsets.all(12.w),
+                  decoration: BoxDecoration(
+                    color: Colors.pinkAccent.withValues(
+                      alpha: 0.05,
+                    ), // خلفية ناعمة
+                    borderRadius: BorderRadius.circular(12.r),
+                    border: Border.all(
+                      color: Colors.pinkAccent.withValues(alpha: 0.2),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      CheckboxItem(
+                        label: LocaleKeys.booking_is_pregnant,
+                        value: controller.isPregnant.value,
+                        onChanged: controller.togglePregnant,
+                      ),
+                      Divider(
+                        height: 10.h,
+                        color: Colors.pinkAccent.withValues(alpha: 0.1),
+                      ),
+                      CheckboxItem(
+                        label: LocaleKeys.booking_is_breastfeeding,
+                        value: controller.isBreastfeeding.value,
+                        onChanged: controller.toggleBreastfeeding,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
 
         16.verticalSpace,
 
@@ -142,6 +155,3 @@ class BookingFormWidget extends GetView<BookAppointmentController> {
     );
   }
 }
-
-
-

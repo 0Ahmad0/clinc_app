@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../app/core/configuration/locator.dart';
+import '../../../../app/core/helper/response_helper.dart';
 import '../../../../app/core/utils/app_validator.dart';
+import '../../../../app/domain/error_handler/network_exceptions.dart';
 import '../../../../app/routes/app_routes.dart';
+import '../../../../app/services/storage_service.dart';
+import '../../data/models/user_auth_model.dart';
+import '../../domain/repositories/auth_repository.dart';
 
 class LoginController extends GetxController {
   final TextEditingController passwordController = TextEditingController();
@@ -10,6 +16,7 @@ class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
 
   final RxBool rememberMe = false.obs;
+  final RxBool isLoading = false.obs;
   final Rx<PasswordStrength> passwordStrength = PasswordStrength.veryWeak.obs;
   final Rx<Map<String, bool>> passwordRequirements = Rx<Map<String, bool>>({
     'length': false,
@@ -19,10 +26,12 @@ class LoginController extends GetxController {
     'special': false,
     'noSpaces': true,
   });
+  late final AuthRepository _repository;
 
   @override
   void onInit() {
     super.onInit();
+    _repository = locator<AuthRepository>();
 
     // Listen to password changes
     passwordController.addListener(_checkPasswordStrength);
@@ -53,42 +62,69 @@ class LoginController extends GetxController {
   // login Apple
 
   Future<void> processLogin() async {
+    if (isLoading.value) return;
     final isValid = formKey.currentState!.validate();
 
     if (!isValid) {
-      Get.snackbar(
-        "خطأ",
-        "الرجاء التأكد من جميع الحقول المدخلة",
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      ResponseHelper.onFailure(message: "الرجاء التأكد من جميع الحقول المدخلة");
       return;
-    } else {
-      // Check if password is strong enough
-      if (passwordStrength.value.index < PasswordStrength.medium.index) {
-        Get.dialog(
-          AlertDialog(
-            title: const Text("كلمة مرور ضعيفة"),
-            content: const Text("كلمة المرور ضعيفة. يوصى بتعزيزها للأمان."),
-            actions: [
-              TextButton(
-                onPressed: () => Get.back(),
-                child: const Text("عدل الكلمة"),
-              ),
-              TextButton(
-                onPressed: () {
-                  Get.back();
-                  Get.offAllNamed(AppRoutes.navbar);
-                },
-                child: const Text("متابعة"),
-              ),
-            ],
-          ),
-        );
-      } else {
-        Get.offAllNamed(AppRoutes.navbar);
-      }
     }
+    isLoading.value = true;
+    final result = await _repository.login(
+      identifier: usernameOrEmail.text.trim(),
+      password: passwordController.text,
+    );
+    isLoading.value = false;
+    result.when(
+      success: (model) async {
+        if (model.result == null) {
+          ResponseHelper.onFailure(message: model.message);
+          return;
+        }
+        await _completeLogin(model.result!, model.message);
+      },
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
+
+  Future<void> loginWithProvider(String provider) async {
+    if (isLoading.value) return;
+    isLoading.value = true;
+    final result = provider == 'guest'
+        ? await _repository.guestLogin()
+        : await _repository.socialLogin(provider);
+    isLoading.value = false;
+    result.when(
+      success: (model) async {
+        if (model.result == null) {
+          ResponseHelper.onFailure(message: model.message);
+          return;
+        }
+        await _completeLogin(model.result!, model.message);
+      },
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
+
+  Future<void> _completeLogin(AuthSessionModel session, String? message) async {
+    await StorageService.instance.setAccessToken(session.token);
+    await StorageService.instance.writeData(
+      StorageService.REFRESH_TOKEN,
+      session.refreshToken,
+    );
+    await StorageService.instance.cacheUserModel(
+      session.user.toUserModel().toJson(),
+    );
+    await StorageService.instance.writeData(
+      StorageService.LOGIN_TIME,
+      DateTime.now().toIso8601String(),
+    );
+    ResponseHelper.onSuccess(message: message);
+    Get.offAllNamed(AppRoutes.navbar);
   }
 
   // Get strength info for UI
@@ -98,7 +134,9 @@ class LoginController extends GetxController {
 
   // Check if all requirements are met
   bool get isPasswordStrong {
-    return passwordRequirements.value.values.every((element) => element == true);
+    return passwordRequirements.value.values.every(
+      (element) => element == true,
+    );
   }
 
   @override

@@ -34,9 +34,9 @@ class EmptyNotificationWidget extends StatelessWidget {
         Text(
           tr(LocaleKeys.notifications_empty_desc),
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Colors.grey,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: Colors.grey),
         ),
       ],
     );

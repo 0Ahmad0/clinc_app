@@ -1,10 +1,19 @@
 import 'dart:io';
 
-import 'package:clinc_app_t1/app/core/utils/app_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../app/core/configuration/locator.dart';
+import '../../../app/core/helper/response_helper.dart';
+import '../../../app/core/utils/app_validator.dart';
+import '../../../app/data/base_model.dart';
+import '../../../app/domain/error_handler/network_exceptions.dart';
+import '../../../app/routes/app_routes.dart';
+import '../../../app/services/storage_service.dart';
+import '../../settings/data/models/user_settings_model.dart';
+import '../../settings/domain/settings_repository.dart';
+import '../../settings/presentation/controllers/settings_controller.dart';
 
 class ProfileController extends GetxController {
   final profileFormKey = GlobalKey<FormState>();
@@ -14,16 +23,46 @@ class ProfileController extends GetxController {
   final phoneController = TextEditingController();
 
   final Rx<File?> selectedImage = Rx<File?>(null);
+  final RxBool isLoading = false.obs;
+  final RxBool isSaving = false.obs;
+  final Rxn<UserSettingsProfileModel> profile = Rxn<UserSettingsProfileModel>();
 
+  late final SettingsRepository _repository;
   final ImagePicker _picker = ImagePicker();
+  String? get avatar => profile.value?.avatar;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _repository = locator<SettingsRepository>();
+    loadProfile();
+  }
+
+  Future<void> loadProfile() async {
+    isLoading(true);
+    final result = await _repository.getProfile();
+    isLoading(false);
+    result.when(
+      success: (response) {
+        if (!response.isSuccess || response.result == null) {
+          ResponseHelper.onFailure(message: response.message);
+          return;
+        }
+        _applyProfile(response.result!);
+      },
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
 
   Future<void> pickImageFromGallery() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) selectedImage.value = File(image.path);
   }
 
   Future<void> pickImageFromCamera() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    final image = await _picker.pickImage(source: ImageSource.camera);
     if (image != null) selectedImage.value = File(image.path);
   }
 
@@ -31,27 +70,80 @@ class ProfileController extends GetxController {
     selectedImage.value = null;
   }
 
-  // Validation Methods
-  String? validateUsername(String? value) {
-    return AppValidator.validateUsername(value);
-  }
+  String? validateUsername(String? value) =>
+      AppValidator.validateUsername(value);
 
-  String? validateFullName(String? value) {
-    return AppValidator.validateName(value);
-  }
+  String? validateFullName(String? value) => AppValidator.validateName(value);
 
-  String? validateEmail(String? value) {
-    return AppValidator.validateEmail(value);
-  }
+  String? validateEmail(String? value) => AppValidator.validateEmail(value);
 
-  String? validatePhone(String? value) {
-    return AppValidator.validateSaudiPhone(value);
-  }
+  String? validatePhone(String? value) =>
+      AppValidator.validateSaudiPhone(value);
 
-  void editProfile() {
-    if (profileFormKey.currentState?.validate() ?? false) {
-      debugPrint('تسجيل المستخدم: ${usernameController.text}');
+  Future<void> editProfile() async {
+    if (isSaving.value || !(profileFormKey.currentState?.validate() ?? false)) {
+      return;
     }
+    final current = profile.value;
+    if (current == null) return;
+    final updated = current.copyWith(
+      fullName: fullNameController.text.trim(),
+      username: usernameController.text.trim(),
+      email: emailController.text.trim(),
+      phone: phoneController.text.trim(),
+      avatar: selectedImage.value?.path ?? current.avatar,
+    );
+    isSaving(true);
+    final result = await _repository.updateProfile(updated);
+    isSaving(false);
+    result.when(
+      success: (response) async {
+        if (!response.isSuccess || response.result == null) {
+          ResponseHelper.onFailure(message: response.message);
+          return;
+        }
+        _applyProfile(response.result!);
+        await StorageService.instance.cacheUserModel(
+          response.result!.toUserModel().toJson(),
+        );
+        if (Get.isRegistered<SettingsController>()) {
+          Get.find<SettingsController>().profile.value = response.result!;
+        }
+        ResponseHelper.onSuccess(message: response.message);
+      },
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
+
+  Future<void> deleteAccount() async {
+    if (isSaving.value) return;
+    isSaving(true);
+    final result = await _repository.deleteAccount();
+    isSaving(false);
+    result.when(
+      success: (response) async {
+        if (!response.isSuccess) {
+          ResponseHelper.onFailure(message: response.message);
+          return;
+        }
+        await StorageService.instance.depose();
+        ResponseHelper.onSuccess(message: response.message);
+        Get.offAllNamed(AppRoutes.login);
+      },
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
+
+  void _applyProfile(UserSettingsProfileModel profile) {
+    this.profile.value = profile;
+    fullNameController.text = profile.fullName;
+    usernameController.text = profile.username;
+    emailController.text = profile.email;
+    phoneController.text = profile.phone;
   }
 
   @override

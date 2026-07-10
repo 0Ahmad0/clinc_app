@@ -14,9 +14,9 @@ class SectionLabel extends StatelessWidget {
       child: Text(
         tr(label),
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              fontSize: 14.sp,
-            ),
+          fontWeight: FontWeight.bold,
+          fontSize: 14.sp,
+        ),
       ),
     );
   }

@@ -8,10 +8,7 @@ import '../../../../app/core/widgets/app_padding_widget.dart';
 import '../../data/models/offer_model.dart';
 
 class OfferItemWidget extends StatelessWidget {
-  const OfferItemWidget({
-    super.key,
-    required this.offer,
-  });
+  const OfferItemWidget({super.key, required this.offer});
 
   final OfferModel offer;
 
@@ -59,13 +56,15 @@ class OfferItemWidget extends StatelessWidget {
                     child: Text(
                       offer.subTitle ?? '',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.white, fontSize: 20.sp),
+                        color: AppColors.white,
+                        fontSize: 20.sp,
+                      ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

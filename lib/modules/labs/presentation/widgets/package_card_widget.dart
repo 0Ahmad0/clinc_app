@@ -18,9 +18,7 @@ class PackageCard extends GetView<LabsTestController> {
           _buildPackageDetails(test, context),
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(25.r),
-            ),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25.r)),
           ),
           isScrollControlled: true,
         );
@@ -30,9 +28,7 @@ class PackageCard extends GetView<LabsTestController> {
         decoration: BoxDecoration(
           color: test.cardColor ?? Color(0xFFF8FAFD),
           borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(
-            color: Colors.grey.withOpacity(0.1),
-          ),
+          border: Border.all(color: Colors.grey.withOpacity(0.1)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
@@ -55,11 +51,7 @@ class PackageCard extends GetView<LabsTestController> {
                 ),
                 child: Row(
                   children: [
-                    Icon(
-                      Iconsax.box,
-                      size: 12.sp,
-                      color: Colors.orange,
-                    ),
+                    Icon(Iconsax.box, size: 12.sp, color: Colors.orange),
                     SizedBox(width: 4.w),
                     Text(
                       "باقة",
@@ -113,18 +105,11 @@ class PackageCard extends GetView<LabsTestController> {
                   // عدد الفحوصات
                   Row(
                     children: [
-                      Icon(
-                        Iconsax.activity,
-                        size: 14.sp,
-                        color: Colors.blue,
-                      ),
+                      Icon(Iconsax.activity, size: 14.sp, color: Colors.blue),
                       SizedBox(width: 4.w),
                       Text(
                         "${test.numberOfTests ?? 0} فحص",
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: Colors.blue,
-                        ),
+                        style: TextStyle(fontSize: 12.sp, color: Colors.blue),
                       ),
                       Spacer(),
 
@@ -259,11 +244,7 @@ class PackageCard extends GetView<LabsTestController> {
                   ),
                   child: Row(
                     children: [
-                      Icon(
-                        Iconsax.box,
-                        size: 14.sp,
-                        color: Colors.orange,
-                      ),
+                      Icon(Iconsax.box, size: 14.sp, color: Colors.orange),
                       SizedBox(width: 4.w),
                       Text(
                         "باقة",
@@ -288,18 +269,11 @@ class PackageCard extends GetView<LabsTestController> {
                   ),
                   child: Row(
                     children: [
-                      Icon(
-                        Iconsax.activity,
-                        size: 14.sp,
-                        color: Colors.blue,
-                      ),
+                      Icon(Iconsax.activity, size: 14.sp, color: Colors.blue),
                       SizedBox(width: 4.w),
                       Text(
                         "${test.numberOfTests} فحص",
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: Colors.blue,
-                        ),
+                        style: TextStyle(fontSize: 12.sp, color: Colors.blue),
                       ),
                     ],
                   ),
@@ -376,7 +350,9 @@ class PackageCard extends GetView<LabsTestController> {
                   ),
                 ),
                 SizedBox(height: 12.h),
-                _buildBenefitItem("توفير يصل إلى ${test.discountPercentage ?? 20}%"),
+                _buildBenefitItem(
+                  "توفير يصل إلى ${test.discountPercentage ?? 20}%",
+                ),
                 _buildBenefitItem("نتائج دقيقة خلال 24 ساعة"),
                 _buildBenefitItem("تقرير طبي مفصل"),
                 _buildBenefitItem("استشارة طبية مجانية"),
@@ -429,10 +405,7 @@ class PackageCard extends GetView<LabsTestController> {
                     backgroundColor: Colors.grey[100],
                     padding: EdgeInsets.all(12.w),
                   ),
-                  icon: Icon(
-                    Iconsax.share,
-                    color: Colors.grey[600],
-                  ),
+                  icon: Icon(Iconsax.share, color: Colors.grey[600]),
                 ),
               ],
             ),
@@ -447,18 +420,11 @@ class PackageCard extends GetView<LabsTestController> {
       padding: EdgeInsets.only(bottom: 8.h),
       child: Row(
         children: [
-          Icon(
-            Iconsax.arrow_right,
-            color: Colors.green,
-            size: 16.sp,
-          ),
+          Icon(Iconsax.arrow_right, color: Colors.green, size: 16.sp),
           SizedBox(width: 8.w),
           Text(
             text,
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: Colors.grey[700],
-            ),
+            style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
           ),
         ],
       ),

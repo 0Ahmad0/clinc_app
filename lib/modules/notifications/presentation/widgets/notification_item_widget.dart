@@ -20,7 +20,9 @@ class NotificationItemWidget extends StatelessWidget {
       padding: EdgeInsets.all(16.sp),
       decoration: BoxDecoration(
         // color: isUnread ? Colors.white : const Color(0xFFFAFAFA),
-        color: isUnread ? Theme.of(context).cardColor : Theme.of(context).cardColor.myOpacity(.3),
+        color: isUnread
+            ? Theme.of(context).cardColor
+            : Theme.of(context).cardColor.myOpacity(.3),
 
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
@@ -32,9 +34,9 @@ class NotificationItemWidget extends StatelessWidget {
         ],
         border: isUnread
             ? Border.all(
-          color: Theme.of(context).primaryColor.myOpacity(0.1),
-          width: 1,
-        )
+                color: Theme.of(context).primaryColor.myOpacity(0.1),
+                width: 1,
+              )
             : null,
       ),
       child: Row(
@@ -69,12 +71,13 @@ class NotificationItemWidget extends StatelessWidget {
                         notification.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: isUnread
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                          fontSize: 15.sp,
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              fontWeight: isUnread
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                              fontSize: 15.sp,
+                            ),
                       ),
                     ),
                     if (isUnread)
@@ -100,8 +103,10 @@ class NotificationItemWidget extends StatelessWidget {
                 ),
                 8.verticalSpace,
                 Text(
-                  DateFormat('hh:mm a', Get.locale?.languageCode)
-                      .format(notification.time),
+                  DateFormat(
+                    'hh:mm a',
+                    Get.locale?.languageCode,
+                  ).format(notification.time),
                   style: TextStyle(
                     fontSize: 11.sp,
                     color: Colors.grey.shade400,

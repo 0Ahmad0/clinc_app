@@ -4,6 +4,7 @@ import 'package:clinc_app_t1/modules/appointments/data/models/filter_model.dart'
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class FilterButtonWidget extends StatelessWidget {
   final int currentIndex;
   final int index;
@@ -30,11 +31,16 @@ class FilterButtonWidget extends StatelessWidget {
         duration: const Duration(milliseconds: AppConstants.defaultDuration),
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
         decoration: BoxDecoration(
-          color: isSelected ? Theme.of(context).primaryColor : Theme.of(context).cardColor,
+          color: isSelected
+              ? Theme.of(context).primaryColor
+              : Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(10.r),
           border: isSelected
               ? null
-              : Border.all(color: Colors.grey.withValues(alpha: 0.3), width: 0.5),
+              : Border.all(
+                  color: Colors.grey.withValues(alpha: 0.3),
+                  width: 0.5,
+                ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

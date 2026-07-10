@@ -1,12 +1,9 @@
-import 'package:clinc_app_t1/app/core/utils/dialogs/app_dialog.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
-import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/book_appointments/presentation/controllers/book_appointment_controller.dart';
-import 'package:clinc_app_t1/modules/book_appointments/presentation/widgets/success_book_appointment_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -47,6 +44,14 @@ class BookAppointmentScreen extends GetView<BookAppointmentController> {
                   onTap: controller.selectTime,
                 ),
               ),
+              Obx(
+                () => controller.isLoadingTimes.value
+                    ? Padding(
+                        padding: EdgeInsets.only(top: 10.h),
+                        child: const Center(child: CircularProgressIndicator()),
+                      )
+                    : const SizedBox.shrink(),
+              ),
               24.verticalSpace,
 
               // 3. نموذج البيانات
@@ -67,13 +72,16 @@ class BookAppointmentScreen extends GetView<BookAppointmentController> {
             ),
           ],
         ),
-        child: AppButtonWidget(
-          onPressed: () {
-            if (controller.validateBooking()) {
-              Get.to(CheckoutScreen());
-            }
-          },
-          text: tr(LocaleKeys.booking_btn_book_now),
+        child: Obx(
+          () => AppButtonWidget(
+            isLoading: controller.isSubmitting.value,
+            onPressed: () async {
+              if (await controller.submitBooking()) {
+                Get.to(CheckoutScreen());
+              }
+            },
+            text: tr(LocaleKeys.booking_btn_book_now),
+          ),
         ),
       ),
     );

@@ -1,4 +1,8 @@
 import 'package:clinc_app_t1/app/core/constants/app_assets.dart';
+import 'package:clinc_app_t1/app/core/configuration/locator.dart';
+import 'package:clinc_app_t1/app/core/helper/response_helper.dart';
+import 'package:clinc_app_t1/app/data/base_model.dart';
+import 'package:clinc_app_t1/app/domain/error_handler/network_exceptions.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/appointments/data/enum/appointment_status.dart';
 import 'package:clinc_app_t1/modules/appointments/data/models/filter_model.dart';
@@ -6,7 +10,11 @@ import 'package:clinc_app_t1/modules/appointments/data/models/order_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../domain/appointments_repository.dart';
+
 class AppointmentsController extends GetxController {
+  late final AppointmentsRepository _repository;
+
   // قائمة الفلاتر باستخدام مفاتيح الترجمة
   final List<FilterModel> quotationsFilterList = [
     FilterModel(name: LocaleKeys.appointments_filter_all),
@@ -24,31 +32,17 @@ class AppointmentsController extends GetxController {
     ),
   ];
 
+  final RxBool isLoading = false.obs;
   RxInt currentFilterIndex = 0.obs;
 
-  final RxList<AppointmentModel> allOrders = <AppointmentModel>[
-    AppointmentModel(
-      id: 'QQ1122Z',
-      price: 850,
-      status: AppointmentStatus.accepted,
-    ),
-    AppointmentModel(
-      id: 'AF1250H',
-      price: 1000,
-      status: AppointmentStatus.rejected,
-    ),
-    AppointmentModel(
-      id: 'XY4231J',
-      price: 750,
-      status: AppointmentStatus.accepted,
-    ),
-    AppointmentModel(
-      id: 'GH7723L',
-      price: 500,
-      status: AppointmentStatus.pending,
-    ),
-    // ... المزيد من البيانات
-  ].obs;
+  final RxList<AppointmentModel> allOrders = <AppointmentModel>[].obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _repository = locator<AppointmentsRepository>();
+    loadAppointments();
+  }
 
   List<AppointmentModel> get filteredOrders {
     switch (currentFilterIndex.value) {
@@ -65,7 +59,7 @@ class AppointmentsController extends GetxController {
             .where((e) => e.status == AppointmentStatus.rejected)
             .toList();
       default:
-        return allOrders;
+        return allOrders.toList();
     }
   }
 
@@ -92,19 +86,49 @@ class AppointmentsController extends GetxController {
     currentFilterIndex.value = index;
   }
 
-  void cancelAppointment(String id) {
-    // محاكاة الإلغاء: تغيير الحالة إلى مرفوض أو محذوف
-    int index = allOrders.indexWhere((element) => element.id == id);
+  Future<void> loadAppointments() async {
+    if (isLoading.value) return;
+    isLoading(true);
+    final result = await _repository.getAppointments();
+    isLoading(false);
+    result.when(
+      success: _handleAppointmentsResponse,
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
+
+  Future<void> cancelAppointment(String id) async {
+    final result = await _repository.cancelAppointment(id);
+    result.when(
+      success: (response) {
+        if (!response.isSuccess) {
+          ResponseHelper.onFailure(message: response.message);
+          return;
+        }
+        final index = allOrders.indexWhere((element) => element.id == id);
+        _markAsRejected(index);
+        ResponseHelper.onSuccess(message: response.message);
+      },
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
+
+  void _handleAppointmentsResponse(BaseModel<List<AppointmentModel>> response) {
+    if (!response.isSuccess || response.result == null) {
+      ResponseHelper.onFailure(message: response.message);
+      return;
+    }
+    allOrders.assignAll(response.result!);
+  }
+
+  void _markAsRejected(int index) {
     if (index != -1) {
       allOrders[index] = allOrders[index].copyWith(
         status: AppointmentStatus.rejected,
-      );
-      Get.snackbar(
-        "تم الإلغاء",
-        "تم إلغاء الحجز بنجاح",
-        backgroundColor: Colors.red.withOpacity(0.1),
-        colorText: Colors.red,
-        snackPosition: SnackPosition.BOTTOM,
       );
     }
   }

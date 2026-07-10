@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 // تأكد من استيراد مسارات الودجت الخاصة بك بشكل صحيح
 import '../widgets/container_shape_widget.dart';
@@ -13,6 +14,7 @@ import '../../../../app/core/widgets/app_app_bar_widget.dart';
 import '../../../../app/core/widgets/app_scaffold_widget.dart';
 import '../../../../app/core/widgets/app_button_widget.dart';
 import '../../../../app/core/widgets/app_text_filed_widget.dart';
+import '../../../../generated/locale_keys.g.dart';
 
 class ChangePasswordScreen extends GetView<ChangePasswordController> {
   const ChangePasswordScreen({super.key});
@@ -22,7 +24,7 @@ class ChangePasswordScreen extends GetView<ChangePasswordController> {
     return AppScaffoldWidget(
       backgroundColor: Theme.of(context).primaryColor,
       useGradientBackground: true,
-      appBar: const AppAppBarWidget(title: "تغيير كلمة المرور"),
+      appBar: AppAppBarWidget(title: tr(LocaleKeys.auth_change_password_title)),
       body: SafeArea(
         child: Center(
           child: Stack(
@@ -36,7 +38,7 @@ class ChangePasswordScreen extends GetView<ChangePasswordController> {
                       children: [
                         40.verticalSpace,
                         Text(
-                          "تغيير كلمة المرور",
+                          tr(LocaleKeys.auth_change_password_title),
                           style: Theme.of(context).textTheme.headlineMedium,
                         ).fadeIn(),
                         6.verticalSpace,
@@ -45,8 +47,11 @@ class ChangePasswordScreen extends GetView<ChangePasswordController> {
                         Obx(
                           () => Text(
                             controller.isCurrentPasswordVerified.value
-                                ? "الرجاء إدخال كلمة المرور الجديدة"
-                                : "للأمان، يرجى تأكيد كلمة المرور الحالية أولاً",
+                                ? tr(LocaleKeys.auth_change_password_new_desc)
+                                : tr(
+                                    LocaleKeys
+                                        .auth_change_password_current_desc,
+                                  ),
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyMedium,
                           ).fadeIn(),
@@ -65,14 +70,16 @@ class ChangePasswordScreen extends GetView<ChangePasswordController> {
                                   prefixIcon: Iconsax.lock,
                                   controller:
                                       controller.currentPasswordController,
-                                  hintText: "كلمة المرور الحالية",
+                                  hintText: tr(
+                                    LocaleKeys.auth_current_password_hint,
+                                  ),
                                   validator: AppValidator.validatePassword,
                                   textInputAction: TextInputAction.done,
                                   isPassword: true,
                                 ).fadeIn(),
                                 20.verticalSpace,
                                 AppButtonWidget(
-                                  text: "تحقق",
+                                  text: tr(LocaleKeys.auth_verify),
                                   isLoading: controller.isLoading.value,
                                   onPressed: controller.verifyCurrentPassword,
                                 ).fadeIn(),
@@ -86,9 +93,10 @@ class ChangePasswordScreen extends GetView<ChangePasswordController> {
                                 AppTextFormFieldWidget(
                                   autofocus: true,
                                   prefixIcon: Iconsax.lock,
-                                  controller:
-                                      controller.newPasswordController,
-                                  hintText: "كلمة المرور الجديدة",
+                                  controller: controller.newPasswordController,
+                                  hintText: tr(
+                                    LocaleKeys.auth_new_password_hint,
+                                  ),
                                   validator: AppValidator.validatePassword,
                                   textInputAction: TextInputAction.next,
                                   isPassword: true,
@@ -98,13 +106,15 @@ class ChangePasswordScreen extends GetView<ChangePasswordController> {
                                   prefixIcon: Iconsax.lock_1,
                                   controller:
                                       controller.confirmPasswordController,
-                                  hintText: "تأكيد كلمة المرور الجديدة",
+                                  hintText: tr(
+                                    LocaleKeys.auth_confirm_new_password_hint,
+                                  ),
                                   validator: (val) {
                                     if (val !=
-                                        controller
-                                            .newPasswordController
-                                            .text) {
-                                      return "كلمة المرور غير متطابقة";
+                                        controller.newPasswordController.text) {
+                                      return tr(
+                                        LocaleKeys.auth_password_no_match,
+                                      );
                                     }
                                     return null;
                                   },
@@ -113,7 +123,7 @@ class ChangePasswordScreen extends GetView<ChangePasswordController> {
                                 ).fadeIn(),
                                 20.verticalSpace,
                                 AppButtonWidget(
-                                  text: "حفظ التغييرات",
+                                  text: tr(LocaleKeys.profile_save_changes),
                                   isLoading: controller.isLoading.value,
                                   onPressed: controller.changePassword,
                                 ).fadeIn(),

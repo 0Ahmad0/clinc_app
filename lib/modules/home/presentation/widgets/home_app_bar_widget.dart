@@ -10,7 +10,16 @@ import 'package:iconsax/iconsax.dart';
 import '../../../../app/core/theme/app_colors.dart';
 
 class HomeAppBarWidget extends StatelessWidget {
-  const HomeAppBarWidget({super.key});
+  const HomeAppBarWidget({
+    super.key,
+    required this.userName,
+    required this.userImage,
+    required this.notificationCount,
+  });
+
+  final String userName;
+  final String userImage;
+  final int notificationCount;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +40,7 @@ class HomeAppBarWidget extends StatelessWidget {
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: AppCachedImageWidget(
-                imageUrl: 'https://tse1.mm.bing.net/th/id/OIP.lj2NFJ7HSEsDqn7er7BuDAHaHa?cb=ucfimg2&ucfimg=1&w=626&h=626&rs=1&pid=ImgDetMain&o=7&rm=3',
+                imageUrl: userImage,
                 width: 50.sp,
                 height: 50.sp,
                 clipRadius: 50.r,
@@ -43,7 +52,7 @@ class HomeAppBarWidget extends StatelessWidget {
                 ),
               ),
               subtitle: Text(
-                'أحلام الحرير', // اسم المستخدم (يفترض أن يأتي من الكنترولر)
+                userName,
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontSize: 18.sp,
                   color: Colors.white,
@@ -52,10 +61,15 @@ class HomeAppBarWidget extends StatelessWidget {
               ),
               trailing: IconButton(
                 onPressed: () => Get.toNamed(AppRoutes.notifications),
-                icon: Badge(
-                  label: Text('3', style: TextStyle(fontSize: 10.sp)),
-                  child: Icon(Iconsax.notification, color: Colors.white),
-                ),
+                icon: notificationCount > 0
+                    ? Badge(
+                        label: Text(
+                          '$notificationCount',
+                          style: TextStyle(fontSize: 10.sp),
+                        ),
+                        child: Icon(Iconsax.notification, color: Colors.white),
+                      )
+                    : Icon(Iconsax.notification, color: Colors.white),
               ),
             ),
             16.verticalSpace,
@@ -71,7 +85,11 @@ class HomeAppBarWidget extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(Iconsax.search_normal, color: Colors.white70, size: 20.sp),
+                    Icon(
+                      Iconsax.search_normal,
+                      color: Colors.white70,
+                      size: 20.sp,
+                    ),
                     12.horizontalSpace,
                     Text(
                       tr(LocaleKeys.home_app_bar_search_hint),

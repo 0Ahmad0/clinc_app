@@ -107,10 +107,7 @@ class LoginScreen extends GetView<LoginController> {
                         hintText: tr(LocaleKeys.login_password),
                         labelText: tr(LocaleKeys.login_password),
                         textInputAction: TextInputAction.send,
-                        validator: (value) => AppValidator.validatePassword(
-                          value,
-                          showDetailedErrors: false,
-                        ),
+                        validator: AppValidator.validateEmpty,
                       ).fadeIn(),
                       // 10.verticalSpace,
                       // PasswordFieldWithStrengthWidget(controller: controller),
@@ -147,9 +144,12 @@ class LoginScreen extends GetView<LoginController> {
                         ],
                       ).fadeIn(),
                       8.verticalSpace,
-                      AppButtonWidget(
-                        text: tr(LocaleKeys.login_login),
-                        onPressed: controller.processLogin,
+                      Obx(
+                        () => AppButtonWidget(
+                          text: tr(LocaleKeys.login_login),
+                          isLoading: controller.isLoading.value,
+                          onPressed: controller.processLogin,
+                        ),
                       ).fadeIn(),
                       6.verticalSpace,
                       TextButton(
@@ -174,7 +174,7 @@ class LoginScreen extends GetView<LoginController> {
                         ),
                       ).fadeIn(),
                       AppTextButtonWidget(
-                        onPressed: () => Get.toNamed(AppRoutes.navbar),
+                        onPressed: () => controller.loginWithProvider('guest'),
                         text: tr(LocaleKeys.login_visitor_login),
                       ).fadeIn(),
 
@@ -199,7 +199,8 @@ class LoginScreen extends GetView<LoginController> {
                         children: [
                           Expanded(
                             child: SocialButtonWidget(
-                              onPressed: () {},
+                              onPressed: () =>
+                                  controller.loginWithProvider('google'),
                               text: tr(LocaleKeys.login_continue_with_google),
                               icon: AppAssets.googleLogoIcon,
                             ).fadeIn(),
@@ -207,9 +208,8 @@ class LoginScreen extends GetView<LoginController> {
                           10.horizontalSpace,
                           Expanded(
                             child: SocialButtonWidget(
-                              onPressed: () {
-                                //login with Apple
-                              },
+                              onPressed: () =>
+                                  controller.loginWithProvider('apple'),
                               text: tr(LocaleKeys.login_continue_with_apple),
                               icon: AppAssets.appleLogoIcon,
                             ).fadeIn(),

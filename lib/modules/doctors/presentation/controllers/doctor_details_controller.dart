@@ -1,43 +1,94 @@
+import 'package:clinc_app_t1/app/core/configuration/locator.dart';
+import 'package:clinc_app_t1/app/core/helper/response_helper.dart';
+import 'package:clinc_app_t1/app/data/base_model.dart';
+import 'package:clinc_app_t1/app/domain/error_handler/network_exceptions.dart';
+import 'package:clinc_app_t1/app/enums/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../../../app/core/widgets/app_rating_widget.dart';
 import '../../../../app/services/bottom_sheet_service.dart';
 import '../../../../app/services/snackbar_service.dart';
+import '../../../../generated/locale_keys.g.dart';
+import '../../data/models/doctor_details_model.dart';
 import '../../data/models/doctor_model.dart';
+import '../../data/models/doctor_review_model.dart';
+import '../../domain/doctors_repository.dart';
 
 class DoctorDetailsController extends GetxController {
+  late final DoctorsRepository _repository;
   late DoctorModel doctor;
-  var isFavorite = false.obs;
-  var selectedRating = 0.0.obs;
-  var commentController = TextEditingController();
-  final doctorName = "الدكتورة كارلي أنجلا";
-  final specialty = "أخصائية | أمراض المناعة";
+  final Rxn<DoctorDetailsModel> details = Rxn<DoctorDetailsModel>();
+  final Rx<GeneralLoading> loadingState = GeneralLoading.initial.obs;
+  final RxSet<String> favoriteLoadingIds = <String>{}.obs;
+  final RxBool isSubmittingReview = false.obs;
+  final RxBool isFavorite = false.obs;
+  final selectedRating = 0.0.obs;
+  final commentController = TextEditingController();
   final rating = 5.0.obs;
   final reviewCount = 332.obs;
-  final aboutText = "الدكتورة كارلي أنجل هي أفضل أخصائية في أمراض المناعة في مستشفى كريست في لندن، المملكة المتحدة.";
+  final RxList<DoctorReviewModel> allReviews = <DoctorReviewModel>[].obs;
 
-  // رابط صورة افتراضي (Placeholder)
-  final String doctorImage =
-      "https://img.freepik.com/free-photo/pleased-young-female-doctor-wearing-medical-robe-stethoscope-around-neck-standing-with-closed-posture_409827-254.jpg";
-
-
-  // بيانات وهمية للتقييمات (Reviews) لغرض العرض
-  final List<Map<String, dynamic>> allReviews = [
-    {"name": "أحمد محمد", "rating": 5.0, "comment": "دكتور محترم جداً وتشخيصه دقيق للغاية.", "date": "منذ يومين"},
-    {"name": "سارة علي", "rating": 4.5, "comment": "التعامل راقي جداً والعيادة نظيفة ومنظمة.", "date": "منذ أسبوع"},
-    {"name": "ياسين كمال", "rating": 5.0, "comment": "من أفضل الدكاترة في هذا التخصص بلا منازع.", "date": "منذ شهر"},
-    {"name": "نور الهدى", "rating": 4.0, "comment": "شرح لي الحالة بالتفصيل، شكراً دكتور.", "date": "منذ شهرين"},
-  ];
+  DoctorModel get currentDoctor => details.value?.doctor ?? doctor;
+  int get patientCount => details.value?.patientCount ?? 7500;
+  int get yearsExperience => details.value?.yearsExperience ?? 10;
+  String get aboutText => details.value?.about ?? '';
 
   @override
   void onInit() {
     super.onInit();
+    _repository = locator<DoctorsRepository>();
     doctor = Get.arguments as DoctorModel;
+    loadDoctorDetails();
   }
 
-  void toggleFavorite() => isFavorite.value = !isFavorite.value;
+  Future<void> loadDoctorDetails() async {
+    loadingState.value = GeneralLoading.loading;
+    final result = await _repository.getDoctorDetails(doctor.id);
+    result.when(
+      success: _handleDetailsResponse,
+      failure: (exception) {
+        loadingState.value = GeneralLoading.failure;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
+    );
+  }
+
+  void _handleDetailsResponse(BaseModel<DoctorDetailsModel> response) {
+    if (!response.isSuccess || response.result == null) {
+      loadingState.value = GeneralLoading.failure;
+      ResponseHelper.onFailure(message: response.message);
+      return;
+    }
+    details.value = response.result;
+    doctor = response.result!.doctor;
+    isFavorite.value = response.result!.isFavorite;
+    allReviews.assignAll(response.result!.reviews);
+    loadingState.value = GeneralLoading.success;
+  }
+
+  Future<void> toggleFavorite() async {
+    if (favoriteLoadingIds.contains(doctor.id)) return;
+    favoriteLoadingIds.add(doctor.id);
+    final result = await _repository.toggleDoctorFavorite(doctor.id);
+    favoriteLoadingIds.remove(doctor.id);
+    result.when(
+      success: (response) {
+        if (!response.isSuccess || response.result == null) {
+          ResponseHelper.onFailure(message: response.message);
+          return;
+        }
+        isFavorite.value = response.result!['is_favorite'] == true;
+        ResponseHelper.onSuccess(message: response.message);
+      },
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
 
   // فتح كل التقييمات في Bottom Sheet
   void showAllReviews() {
@@ -51,14 +102,28 @@ class DoctorDetailsController extends GetxController {
         ),
         child: Column(
           children: [
-            Container(width: 40.w, height: 4.h, decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10))),
+            Container(
+              width: 40.w,
+              height: 4.h,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
             20.verticalSpace,
-            Text("كل آراء المرضى (${allReviews.length})", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            Text(
+              tr(
+                LocaleKeys.doctor_details_all_reviews_title,
+                args: [allReviews.length.toString()],
+              ),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
             20.verticalSpace,
             Expanded(
               child: ListView.builder(
                 itemCount: allReviews.length,
-                itemBuilder: (context, index) => reviewCard(allReviews[index]),
+                itemBuilder: (context, index) =>
+                    Obx(() => reviewCard(allReviews[index])),
               ),
             ),
           ],
@@ -69,7 +134,7 @@ class DoctorDetailsController extends GetxController {
   }
 
   // ويدجت كرت المراجعة الصغير
-  Widget reviewCard(Map<String, dynamic> review) {
+  Widget reviewCard(DoctorReviewModel review) {
     return Container(
       margin: EdgeInsets.only(bottom: 15.h),
       padding: EdgeInsets.all(12.w),
@@ -83,38 +148,87 @@ class DoctorDetailsController extends GetxController {
         children: [
           Row(
             children: [
-              const CircleAvatar(backgroundColor: Colors.blue, child: Icon(Icons.person, color: Colors.white, size: 20)),
+              const CircleAvatar(
+                backgroundColor: Colors.blue,
+                child: Icon(Icons.person, color: Colors.white, size: 20),
+              ),
               10.horizontalSpace,
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(review['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
-                  Text(review['date'], style: TextStyle(fontSize: 10.sp, color: Colors.grey)),
+                  Text(
+                    review.userName,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    review.date,
+                    style: TextStyle(fontSize: 10.sp, color: Colors.grey),
+                  ),
                 ],
               ),
               const Spacer(),
               const Icon(Icons.star, color: Colors.amber, size: 14),
-              Text(" ${review['rating']}"),
+              Text(" ${review.rating}"),
             ],
           ),
           8.verticalSpace,
-          Text(review['comment'], style: TextStyle(fontSize: 12.sp, color: Colors.black87)),
+          Text(
+            review.comment,
+            style: TextStyle(fontSize: 12.sp, color: Colors.black87),
+          ),
         ],
       ),
     );
   }
+
   void showRatingSheet(BuildContext context) {
     BottomSheetService.show(
       context: context,
       child: AppRatingWidget(
         onSubmit: (rating, comment) {
-          selectedRating.value = rating;
-          commentController.text = comment;
-          Get.back();
-          SnackBarService.showSuccess(context: context, title: "تم التقييم بنجاح");
+          submitReview(context: context, rating: rating, comment: comment);
         },
       ),
     );
   }
 
+  Future<void> submitReview({
+    required BuildContext context,
+    required double rating,
+    required String comment,
+  }) async {
+    if (isSubmittingReview.value) return;
+    isSubmittingReview(true);
+    final result = await _repository.addDoctorReview(
+      doctorId: doctor.id,
+      rating: rating,
+      comment: comment,
+    );
+    isSubmittingReview(false);
+    result.when(
+      success: (response) {
+        if (!response.isSuccess || response.result == null) {
+          ResponseHelper.onFailure(message: response.message);
+          return;
+        }
+        selectedRating.value = rating;
+        commentController.text = comment;
+        allReviews.insert(0, response.result!);
+        Get.back();
+        SnackBarService.showSuccess(
+          context: context,
+          title: tr(LocaleKeys.doctor_details_rating_success),
+        );
+      },
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
+
+  @override
+  void onClose() {
+    commentController.dispose();
+    super.onClose();
+  }
 }

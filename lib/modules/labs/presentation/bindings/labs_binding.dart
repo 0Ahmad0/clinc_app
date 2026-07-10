@@ -5,11 +5,7 @@ import '../controllers/labs_test_controller.dart';
 class LabsBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<LabsTestController>(
-      () => LabsTestController(),
-    );
-    Get.lazyPut<LabsController>(
-      () => LabsController(),
-    );
+    Get.lazyPut<LabsTestController>(() => LabsTestController());
+    Get.lazyPut<LabsController>(() => LabsController());
   }
 }

@@ -10,7 +10,8 @@ class GenderSelectionCard extends StatelessWidget {
   final VoidCallback onTap;
   final Color activeColor;
 
-  const GenderSelectionCard({super.key, 
+  const GenderSelectionCard({
+    super.key,
     required this.label,
     required this.icon,
     required this.isSelected,
@@ -26,10 +27,14 @@ class GenderSelectionCard extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: EdgeInsets.symmetric(vertical: 12.h),
         decoration: BoxDecoration(
-          color: isSelected ? activeColor.withValues(alpha: 0.1) : Theme.of(context).cardColor,
+          color: isSelected
+              ? activeColor.withValues(alpha: 0.1)
+              : Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
-            color: isSelected ? activeColor : Colors.grey.withValues(alpha: 0.3),
+            color: isSelected
+                ? activeColor
+                : Colors.grey.withValues(alpha: 0.3),
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -53,7 +58,7 @@ class GenderSelectionCard extends StatelessWidget {
             if (isSelected) ...[
               8.horizontalSpace,
               Icon(Icons.check_circle, color: activeColor, size: 16.sp),
-            ]
+            ],
           ],
         ),
       ),

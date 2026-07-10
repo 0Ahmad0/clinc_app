@@ -3,28 +3,44 @@ import 'package:clinc_app_t1/app/services/bottom_sheet_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+
+import '../../../../app/core/configuration/locator.dart';
+import '../../../../app/core/helper/response_helper.dart';
+import '../../../../app/data/base_model.dart';
+import '../../../../app/domain/error_handler/network_exceptions.dart';
+import '../../../search/data/models/property_model.dart';
+import '../../domain/clinic_details_repository.dart';
+import '../../data/models/clinic_details_model.dart';
+import '../../data/models/clinic_review_model.dart';
 import '../../../../app/services/snackbar_service.dart';
 import '../../../doctors/data/models/doctor_model.dart';
 
 class ClinicDetailsController extends GetxController {
+  late final ClinicDetailsRepository _repository;
+
+  final RxBool isLoading = false.obs;
+  final Rxn<Hospital> clinic = Rxn<Hospital>();
   var selectedRating = 0.0.obs;
   var commentController = TextEditingController();
 
   // التخصص المختار (فارغ يعني عرض الكل)
   var selectedSpecialty = ''.obs;
 
-  // قائمة الأطباء الأصلية (يتم جلبها عادة من الـ API أو الموديل)
-  final allDoctors = DoctorModel.mockDoctors.obs;
+  final RxList<DoctorModel> allDoctors = <DoctorModel>[].obs;
+  final RxList<ClinicReviewModel> allReviews = <ClinicReviewModel>[].obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    _repository = locator<ClinicDetailsRepository>();
+    final argumentHospital = Get.arguments is Hospital
+        ? Get.arguments as Hospital
+        : Hospital.mockHospitals.first;
+    clinic.value = argumentHospital;
+    loadClinicDetails();
+  }
 
-  final List<Map<String, dynamic>> allReviews = [
-    {"name": "أحمد محمد", "rating": 5.0, "comment": "دكتور محترم جداً وتشخيصه دقيق للغاية.", "date": "منذ يومين"},
-    {"name": "سارة علي", "rating": 4.5, "comment": "التعامل راقي جداً والعيادة نظيفة ومنظمة.", "date": "منذ أسبوع"},
-    {"name": "ياسين كمال", "rating": 5.0, "comment": "من أفضل الدكاترة في هذا التخصص بلا منازع.", "date": "منذ شهر"},
-    {"name": "نور الهدى", "rating": 4.0, "comment": "شرح لي الحالة بالتفصيل، شكراً دكتور.", "date": "منذ شهرين"},
-  ];
-  Widget reviewCard(Map<String, dynamic> review) {
+  Widget reviewCard(ClinicReviewModel review) {
     return Container(
       margin: EdgeInsets.only(bottom: 15.h),
       padding: EdgeInsets.all(12.w),
@@ -38,22 +54,34 @@ class ClinicDetailsController extends GetxController {
         children: [
           Row(
             children: [
-              const CircleAvatar(backgroundColor: Colors.blue, child: Icon(Icons.person, color: Colors.white, size: 20)),
+              const CircleAvatar(
+                backgroundColor: Colors.blue,
+                child: Icon(Icons.person, color: Colors.white, size: 20),
+              ),
               10.horizontalSpace,
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(review['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
-                  Text(review['date'], style: TextStyle(fontSize: 10.sp, color: Colors.grey)),
+                  Text(
+                    review.name,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    review.dateLabel,
+                    style: TextStyle(fontSize: 10.sp, color: Colors.grey),
+                  ),
                 ],
               ),
               const Spacer(),
               const Icon(Icons.star, color: Colors.amber, size: 14),
-              Text(" ${review['rating']}"),
+              Text(" ${review.rating}"),
             ],
           ),
           8.verticalSpace,
-          Text(review['comment'], style: TextStyle(fontSize: 12.sp, color: Colors.black87)),
+          Text(
+            review.comment,
+            style: TextStyle(fontSize: 12.sp, color: Colors.black87),
+          ),
         ],
       ),
     );
@@ -70,9 +98,19 @@ class ClinicDetailsController extends GetxController {
         ),
         child: Column(
           children: [
-            Container(width: 40.w, height: 4.h, decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(10))),
+            Container(
+              width: 40.w,
+              height: 4.h,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
             20.verticalSpace,
-            Text("كل آراء المرضى (${allReviews.length})", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            Text(
+              "كل آراء المرضى (${allReviews.length})",
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
             20.verticalSpace,
             Expanded(
               child: ListView.builder(
@@ -87,6 +125,30 @@ class ClinicDetailsController extends GetxController {
     );
   }
 
+  Future<void> loadClinicDetails() async {
+    final clinicId = clinic.value?.id ?? '';
+    if (isLoading.value || clinicId.isEmpty) return;
+    isLoading(true);
+    final result = await _repository.getClinicDetails(clinicId);
+    isLoading(false);
+    result.when(
+      success: _handleDetailsResponse,
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
+
+  void _handleDetailsResponse(BaseModel<ClinicDetailsModel> response) {
+    if (!response.isSuccess || response.result == null) {
+      ResponseHelper.onFailure(message: response.message);
+      return;
+    }
+    selectedSpecialty.value = '';
+    allDoctors.assignAll(response.result!.doctors);
+    allReviews.assignAll(response.result!.reviews);
+  }
+
   // دالة لتغيير التخصص المختار
   void toggleSpecialty(String specialty) {
     if (selectedSpecialty.value == specialty) {
@@ -99,7 +161,7 @@ class ClinicDetailsController extends GetxController {
   // الحصول على الأطباء المفلترين بناءً على التخصص
   List<DoctorModel> get filteredDoctors {
     if (selectedSpecialty.value.isEmpty) {
-      return allDoctors;
+      return allDoctors.toList();
     }
     return allDoctors
         .where((doc) => doc.specialty == selectedSpecialty.value)
@@ -114,7 +176,10 @@ class ClinicDetailsController extends GetxController {
           selectedRating.value = rating;
           commentController.text = comment;
           Get.back();
-          SnackBarService.showSuccess(context: context, title: "تم التقييم بنجاح");
+          SnackBarService.showSuccess(
+            context: context,
+            title: "تم التقييم بنجاح",
+          );
         },
       ),
     );

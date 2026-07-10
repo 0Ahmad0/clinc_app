@@ -28,20 +28,20 @@ class ContactIntroCard extends StatelessWidget {
           Text(
             tr(LocaleKeys.contact_us_intro_title),
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
-                ),
+              fontSize: 16.sp,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).primaryColor,
+            ),
           ),
           10.verticalSpace,
           Text(
             tr(LocaleKeys.contact_us_intro_desc),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontSize: 12.sp,
-                  height: 1.8,
-                  color: AppColors.grey,
-                ),
+              fontSize: 12.sp,
+              height: 1.8,
+              color: AppColors.grey,
+            ),
           ),
         ],
       ),

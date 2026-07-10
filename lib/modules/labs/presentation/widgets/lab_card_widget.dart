@@ -34,7 +34,9 @@ class LabCardWidget extends StatelessWidget {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(16.r),
+                  ),
                   child: Image.network(
                     lab.imageUrl,
                     height: 140.h,
@@ -47,14 +49,25 @@ class LabCardWidget extends StatelessWidget {
                   top: 10.h,
                   right: 10.w,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 8.w,
+                      vertical: 4.h,
+                    ),
                     decoration: BoxDecoration(
                       color: lab.isOpen ? Colors.green : Colors.red,
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Text(
-                      tr(lab.isOpen ? LocaleKeys.labs_page_status_open : LocaleKeys.labs_page_status_closed),
-                      style: TextStyle(color: Colors.white, fontSize: 10.sp, fontWeight: FontWeight.bold),
+                      tr(
+                        lab.isOpen
+                            ? LocaleKeys.labs_page_status_open
+                            : LocaleKeys.labs_page_status_closed,
+                      ),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -72,9 +85,8 @@ class LabCardWidget extends StatelessWidget {
                       Expanded(
                         child: Text(
                           lab.name,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -83,7 +95,10 @@ class LabCardWidget extends StatelessWidget {
                       4.horizontalSpace,
                       Text(
                         lab.rating.toString(),
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.sp,
+                        ),
                       ),
                     ],
                   ),
@@ -95,7 +110,9 @@ class LabCardWidget extends StatelessWidget {
                       Expanded(
                         child: Text(
                           lab.address,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodySmall?.copyWith(color: Colors.grey),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -106,20 +123,30 @@ class LabCardWidget extends StatelessWidget {
                   // الخدمات (Tags)
                   Wrap(
                     spacing: 6.w,
-                    children: lab.services.take(3).map((service) => Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor.myOpacity(0.1),
-                        borderRadius: BorderRadius.circular(6.r),
-                      ),
-                      child: Text(
-                        service,
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 10.sp,
-                        ),
-                      ),
-                    )).toList(),
+                    children: lab.services
+                        .take(3)
+                        .map(
+                          (service) => Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8.w,
+                              vertical: 4.h,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Theme.of(
+                                context,
+                              ).primaryColor.myOpacity(0.1),
+                              borderRadius: BorderRadius.circular(6.r),
+                            ),
+                            child: Text(
+                              service,
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 10.sp,
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
                   ),
                 ],
               ),

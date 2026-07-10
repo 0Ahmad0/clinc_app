@@ -14,7 +14,11 @@ class InsuranceScreen extends GetView<InsuranceController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppAppBarWidget(title: tr(LocaleKeys.insurance_title)),
-      body: InsuranceGridList(controller: controller),
+      body: Obx(
+        () => controller.isLoading.value
+            ? const Center(child: CircularProgressIndicator())
+            : InsuranceGridList(controller: controller),
+      ),
     );
   }
 }

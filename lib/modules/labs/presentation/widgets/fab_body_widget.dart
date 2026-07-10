@@ -39,33 +39,37 @@ class FabBodyWidget extends GetView<LabsTestController> {
             borderRadius: BorderRadius.circular(30.r),
             onTap: isDragging
                 ? null // منع الضغط أثناء السحب
-                : () => Get.to(() => const LabsCartScreen(), transition: Transition.downToUp),
+                : () => Get.to(
+                    () => const LabsCartScreen(),
+                    transition: Transition.downToUp,
+                  ),
             child: isDragging
                 ? Center(
-              child: Icon(Iconsax.shopping_cart, color: Colors.white, size: 24.sp),
-            )
+                    child: Icon(
+                      Iconsax.shopping_cart,
+                      color: Colors.white,
+                      size: 24.sp,
+                    ),
+                  )
                 : Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(
-                  Iconsax.shopping_cart,
-                  color: Colors.white,
-                ),
-                Text(
-                  "${controller.cartItems.length} ${tr(LocaleKeys.labs_package_count)}",
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14.sp,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(Iconsax.shopping_cart, color: Colors.white),
+                      Text(
+                        "${controller.cartItems.length} ${tr(LocaleKeys.labs_package_count)}",
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.sp,
+                        ),
+                      ),
+                      Icon(
+                        Iconsax.arrow_left_2, // سهم صغير
+                        color: Colors.white70,
+                        size: 18.sp,
+                      ),
+                    ],
                   ),
-                ),
-                Icon(
-                  Iconsax.arrow_left_2, // سهم صغير
-                  color: Colors.white70,
-                  size: 18.sp,
-                ),
-              ],
-            ),
           ),
         ),
       );

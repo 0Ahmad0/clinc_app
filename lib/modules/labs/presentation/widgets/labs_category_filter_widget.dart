@@ -29,25 +29,32 @@ class LabsCategoryFilter extends GetView<LabsTestController> {
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                     margin: EdgeInsets.symmetric(horizontal: 4.w),
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 8.h,
+                    ),
                     decoration: BoxDecoration(
-                      color: isSelected ?
-                      Theme.of(context).primaryColor :
-                      Colors.white,
+                      color: isSelected
+                          ? Theme.of(context).primaryColor
+                          : Colors.white,
                       borderRadius: BorderRadius.circular(25.r),
                       border: Border.all(
-                        color: isSelected ?
-                        Theme.of(context).primaryColor :
-                        Colors.grey.withOpacity(0.3),
+                        color: isSelected
+                            ? Theme.of(context).primaryColor
+                            : Colors.grey.withOpacity(0.3),
                         width: 1.5,
                       ),
-                      boxShadow: isSelected ? [
-                        BoxShadow(
-                          color: Theme.of(context).primaryColor.withOpacity(0.3),
-                          blurRadius: 10,
-                          offset: Offset(0, 4),
-                        ),
-                      ] : [],
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                color: Theme.of(
+                                  context,
+                                ).primaryColor.withOpacity(0.3),
+                                blurRadius: 10,
+                                offset: Offset(0, 4),
+                              ),
+                            ]
+                          : [],
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -55,13 +62,11 @@ class LabsCategoryFilter extends GetView<LabsTestController> {
                         Text(
                           cat,
                           style: TextStyle(
-                            color: isSelected ?
-                            Colors.white :
-                            Colors.black,
+                            color: isSelected ? Colors.white : Colors.black,
                             fontSize: 14.sp,
-                            fontWeight: isSelected ?
-                            FontWeight.bold :
-                            FontWeight.w500,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.w500,
                           ),
                         ),
 
@@ -73,18 +78,20 @@ class LabsCategoryFilter extends GetView<LabsTestController> {
                               vertical: 2.h,
                             ),
                             decoration: BoxDecoration(
-                              color: isSelected ?
-                              Colors.white :
-                              Theme.of(context).primaryColor.withOpacity(0.1),
+                              color: isSelected
+                                  ? Colors.white
+                                  : Theme.of(
+                                      context,
+                                    ).primaryColor.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(10.r),
                             ),
                             child: Text(
                               testCount.toString(),
                               style: TextStyle(
                                 fontSize: 10.sp,
-                                color: isSelected ?
-                                Theme.of(context).primaryColor :
-                                Theme.of(context).primaryColor,
+                                color: isSelected
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

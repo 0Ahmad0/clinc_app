@@ -5,6 +5,7 @@ import 'package:clinc_app_t1/modules/navbar/presentation/bindings/navbar_binding
 import 'package:clinc_app_t1/modules/navbar/presentation/screens/navbar_screen.dart';
 import 'package:clinc_app_t1/modules/profile/bindings/profile_binding.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/bindings/settings_binding.dart';
+import 'package:clinc_app_t1/modules/settings/presentation/screens/notification_settings_screen.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/screens/settings_screen.dart';
 import 'package:get/get.dart';
 import '../../modules/about_app/presentation/bindings/about_app_binding.dart';
@@ -12,7 +13,11 @@ import '../../modules/about_app/presentation/screens/about_app_screen.dart';
 import '../../modules/appointments/presentation/bindings/appointments_binding.dart';
 import '../../modules/appointments/presentation/screens/appointments_screen.dart';
 import '../../modules/auth/presentation/bindings/change_password_binding.dart';
+import '../../modules/auth/presentation/bindings/otp_binding.dart';
+import '../../modules/auth/presentation/bindings/reset_password_binding.dart';
 import '../../modules/auth/presentation/screens/change_password_screen.dart';
+import '../../modules/auth/presentation/screens/otp_screen.dart';
+import '../../modules/auth/presentation/screens/reset_password_screen.dart';
 import '../../modules/book_appointments/presentation/bindings/book_appointment_binding.dart';
 import '../../modules/chatbot/presentation/bindings/chatbot_binding.dart';
 import '../../modules/chatbot/presentation/screens/chatbot_screen.dart';
@@ -93,6 +98,16 @@ class AppPages {
       binding: ForgetPasswordBinding(), // <-- يستخدم ForgetPasswordBinding
     ),
     GetPage(
+      name: AppRoutes.otp,
+      page: () => const OtpScreen(),
+      binding: OtpBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.resetPassword,
+      page: () => const ResetPasswordScreen(),
+      binding: ResetPasswordBinding(),
+    ),
+    GetPage(
       name: AppRoutes.changePassword,
       page: () => const ChangePasswordScreen(),
       binding: ChangePasswordBinding(), // <-- يستخدم ForgetPasswordBinding
@@ -113,6 +128,11 @@ class AppPages {
       name: AppRoutes.settings,
       page: () => const SettingsScreen(),
       binding: SettingsBinding(), // <-- يستخدم ForgetPasswordBinding
+    ),
+    GetPage(
+      name: AppRoutes.notificationSettings,
+      page: () => const NotificationSettingsScreen(),
+      binding: SettingsBinding(),
     ),
     GetPage(
       name: AppRoutes.search,

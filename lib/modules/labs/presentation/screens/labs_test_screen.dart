@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../widgets/draggable_cart_button_widget.dart';
-import '../widgets/labs_category_filter_widget.dart';
 import '../widgets/labs_tests_list_widget.dart';
 
 class LabsTestScreen extends GetView<LabsTestController> {

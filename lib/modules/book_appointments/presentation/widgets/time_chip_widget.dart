@@ -21,7 +21,7 @@ class TimeChipWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () => onTap(time),
+      onTap: () => onTap(time),
       child: AnimatedContainer(
         duration: Duration(milliseconds: AppConstants.defaultDuration),
         padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),

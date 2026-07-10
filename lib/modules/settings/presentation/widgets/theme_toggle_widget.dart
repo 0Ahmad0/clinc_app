@@ -18,11 +18,11 @@ class ThemeToggleWidget extends GetView<SettingsAppController> {
 
       return InkWell(
         borderRadius: BorderRadius.circular(8.r),
-        onTap: (){
+        onTap: () {
           controller.toggleTheme(!isDark);
         },
         child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -48,7 +48,7 @@ class ThemeToggleWidget extends GetView<SettingsAppController> {
                   color: Theme.of(context).primaryColor,
                   size: 24.sp,
                 ),
-              )
+              ),
             ],
           ),
         ),

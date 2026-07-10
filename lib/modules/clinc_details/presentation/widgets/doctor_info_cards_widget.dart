@@ -23,8 +23,11 @@ class DoctorInfoCards extends StatelessWidget {
                   color: Colors.red.myOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.local_hospital,
-                    color: Colors.red, size: 20.sp),
+                child: Icon(
+                  Icons.local_hospital,
+                  color: Colors.red,
+                  size: 20.sp,
+                ),
               ),
               10.horizontalSpace,
               Column(
@@ -32,25 +35,27 @@ class DoctorInfoCards extends StatelessWidget {
                 children: [
                   Text(
                     tr(LocaleKeys.doctor_details_hospital_label),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(color: AppColors.grey, fontSize: 12.sp),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppColors.grey,
+                      fontSize: 12.sp,
+                    ),
                   ),
                   Text(
                     tr(LocaleKeys.doctor_details_hospital_name),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w600),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
         Container(
-            width: 1.w, height: 40.h, color: AppColors.grey.myOpacity(0.3)),
+          width: 1.w,
+          height: 40.h,
+          color: AppColors.grey.myOpacity(0.3),
+        ),
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -61,8 +66,11 @@ class DoctorInfoCards extends StatelessWidget {
                   color: primary.myOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.access_time_filled,
-                    color: primary, size: 20.sp),
+                child: Icon(
+                  Icons.access_time_filled,
+                  color: primary,
+                  size: 20.sp,
+                ),
               ),
               10.horizontalSpace,
               Column(
@@ -70,20 +78,19 @@ class DoctorInfoCards extends StatelessWidget {
                 children: [
                   Text(
                     tr(LocaleKeys.doctor_details_time_label),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(color: AppColors.grey, fontSize: 12.sp),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppColors.grey,
+                      fontSize: 12.sp,
+                    ),
                   ),
                   Text(
                     "07:00 - 18:00",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w600),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),

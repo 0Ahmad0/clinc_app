@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../../routes/app_routes.dart';
+import '../../../../../modules/settings/presentation/controllers/settings_controller.dart';
 import '../general_dialog.dart';
 
 class LogoutDialogWidget extends StatelessWidget {
@@ -14,7 +14,10 @@ class LogoutDialogWidget extends StatelessWidget {
     return GeneralAppDialog(
       title: 'هل تريد بالفعل تسجيل الخروج ؟',
       generalColor: AppColors.error,
-      okOnTap: () => Get.offAllNamed(AppRoutes.welcome),
+      okOnTap: () {
+        Get.back();
+        Get.find<SettingsController>().logout();
+      },
       icon: Iconsax.logout,
     );
   }

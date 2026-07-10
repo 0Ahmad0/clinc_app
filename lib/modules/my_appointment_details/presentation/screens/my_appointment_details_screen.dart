@@ -11,75 +11,85 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../app/core/theme/app_colors.dart';
-import '../../../appointments/data/enum/appointment_status.dart';
 
 class MyAppointmentDetailsScreen
     extends GetView<MyAppointmentDetailsController> {
   const MyAppointmentDetailsScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return AppScaffoldWidget(
-      applyBodyPadding: false,
-      appBar: AppAppBarWidget(title: 'تفاصيل الحجز'),
-      body: SingleChildScrollView(
-        child: AppPaddingWidget(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildDoctorCard(), // كرت الدكتور (الموجود عندك أصلاً)
-              20.verticalSpace,
+    return Obx(
+      () => AppScaffoldWidget(
+        applyBodyPadding: false,
+        appBar: AppAppBarWidget(title: 'تفاصيل الحجز'),
+        body: controller.isLoading.value
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                child: AppPaddingWidget(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildDoctorCard(), // كرت الدكتور (الموجود عندك أصلاً)
+                      20.verticalSpace,
 
-              _buildSectionTitle("معلومات الموعد"),
-              _buildInfoCard([
-                _buildInfoRow(Iconsax.user, "المريض", controller.patientName),
-                _buildInfoRow(
-                  Iconsax.calendar_1,
-                  "التاريخ",
-                  controller.appointmentDate,
-                ),
-                _buildInfoRow(
-                  Iconsax.clock,
-                  "الوقت",
-                  controller.appointmentTime,
-                ),
-                _buildInfoRow(
-                  Iconsax.info_circle,
-                  "نوع الزيارة",
-                  controller.appointmentType,
-                ),
-              ]),
+                      _buildSectionTitle("معلومات الموعد"),
+                      _buildInfoCard([
+                        _buildInfoRow(
+                          Iconsax.user,
+                          "المريض",
+                          controller.patientName,
+                        ),
+                        _buildInfoRow(
+                          Iconsax.calendar_1,
+                          "التاريخ",
+                          controller.appointmentDate,
+                        ),
+                        _buildInfoRow(
+                          Iconsax.clock,
+                          "الوقت",
+                          controller.appointmentTime,
+                        ),
+                        _buildInfoRow(
+                          Iconsax.info_circle,
+                          "نوع الزيارة",
+                          controller.appointmentType,
+                        ),
+                      ]),
 
-              20.verticalSpace,
-              _buildSectionTitle("تفاصيل العيادة"),
-              _buildInfoCard([
-                _buildInfoRow(
-                  Iconsax.hospital,
-                  "المنشأة",
-                  controller.clinicName,
-                ),
-                _buildInfoRow(
-                  Iconsax.location,
-                  "العنوان",
-                  controller.clinicAddress,
-                ),
-              ]),
+                      20.verticalSpace,
+                      _buildSectionTitle("تفاصيل العيادة"),
+                      _buildInfoCard([
+                        _buildInfoRow(
+                          Iconsax.hospital,
+                          "المنشأة",
+                          controller.clinicName,
+                        ),
+                        _buildInfoRow(
+                          Iconsax.location,
+                          "العنوان",
+                          controller.clinicAddress,
+                        ),
+                      ]),
 
-              20.verticalSpace,
-              _buildSectionTitle("الملخص المالي"),
-              _buildInfoCard([
-                _buildInfoRow(
-                  Iconsax.money_send,
-                  "رسوم الكشفية",
-                  "${controller.appointment.price} ر.س",
+                      20.verticalSpace,
+                      _buildSectionTitle("الملخص المالي"),
+                      _buildInfoCard([
+                        _buildInfoRow(
+                          Iconsax.money_send,
+                          "رسوم الكشفية",
+                          "${controller.appointment.price} ر.س",
+                        ),
+                        _buildInfoRow(
+                          Iconsax.card_pos,
+                          "طريقة الدفع",
+                          controller.paymentMethod,
+                        ),
+                      ]),
+                    ],
+                  ),
                 ),
-                _buildInfoRow(Iconsax.card_pos, "طريقة الدفع", "بطاقة ائتمان"),
-              ]),
-            ],
-          ),
-        ),
+              ),
+        bottomNavigationBar: _buildBottomAction(),
       ),
-      bottomNavigationBar: _buildBottomAction(),
     );
   }
 
@@ -214,35 +224,6 @@ class MyAppointmentDetailsScreen
     );
   }
 
-  Widget _buildStatItem(
-    IconData icon,
-    String value,
-    String label,
-    Color bgColor,
-    Color iconColor,
-  ) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(15),
-          decoration: BoxDecoration(
-            color: bgColor.myOpacity(0.2), // شفافية للخلفية
-            shape: BoxShape.circle,
-          ),
-          child: Icon(icon, color: iconColor),
-        ),
-        const SizedBox(height: 10),
-        Text(value.trNumbers(), style: TextStyle(fontSize: 16.sp)),
-        const SizedBox(height: 5),
-        Builder(
-          builder: (context) {
-            return Text(label, style: Theme.of(context).textTheme.bodySmall);
-          },
-        ),
-      ],
-    );
-  }
-
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: EdgeInsets.only(bottom: 10.h, right: 5.w),
@@ -259,8 +240,7 @@ class MyAppointmentDetailsScreen
 
   // الزر السفلي الذكي
   Widget _buildBottomAction() {
-    bool isAccepted =
-        controller.appointment.status == AppointmentStatus.accepted;
+    bool isAccepted = controller.isAccepted;
 
     return Container(
       padding: EdgeInsets.all(20.r),
@@ -275,6 +255,7 @@ class MyAppointmentDetailsScreen
         ],
       ),
       child: AppButtonWidget(
+        isLoading: controller.isCancelling.value,
         onPressed: isAccepted ? controller.cancelAction : () => Get.back(),
         backgroundColor: isAccepted ? Colors.redAccent : AppColors.primary,
         text: isAccepted ? "إلغاء الحجز" : "إعادة حجز موعد",

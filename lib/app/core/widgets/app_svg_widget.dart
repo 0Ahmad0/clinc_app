@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vector_graphics/vector_graphics.dart';
+import 'package:flutter_svg/svg.dart';
+// import 'package:vector_graphics/vector_graphics.dart';
 
 class AppSvgWidget extends StatelessWidget {
   const AppSvgWidget({
@@ -19,13 +20,23 @@ class AppSvgWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return VectorGraphic(
-      loader: AssetBytesLoader(assetsUrl),
+    return
+     SvgPicture.asset(
+       assetsUrl,
       width: width ?? 26,
       height: height ?? 26,
-      colorFilter:
-          color != null ? ColorFilter.mode(color!, BlendMode.srcIn) : null,
+      colorFilter: color != null
+          ? ColorFilter.mode(color!, BlendMode.srcIn)
+          : null,
       fit: fit,
     );
+    //   VectorGraphic(
+    //   loader: AssetBytesLoader(assetsUrl),
+    //   width: width ?? 26,
+    //   height: height ?? 26,
+    //   colorFilter:
+    //       color != null ? ColorFilter.mode(color!, BlendMode.srcIn) : null,
+    //   fit: fit,
+    // );
   }
 }

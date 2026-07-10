@@ -4,8 +4,6 @@ import '../controllers/book_appointment_controller.dart';
 class BookAppointmentBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<BookAppointmentController>(
-      () => BookAppointmentController(),
-    );
+    Get.lazyPut<BookAppointmentController>(() => BookAppointmentController());
   }
 }

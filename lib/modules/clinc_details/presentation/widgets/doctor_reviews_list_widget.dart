@@ -17,10 +17,10 @@ class DoctorReviewsList extends StatelessWidget {
           children: [
             Text(
               "${tr(LocaleKeys.doctor_details_reviews_title)} (72)",
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(fontWeight: FontWeight.bold, fontSize: 18.sp),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 18.sp,
+              ),
             ),
             Row(
               children: [
@@ -28,9 +28,9 @@ class DoctorReviewsList extends StatelessWidget {
                 4.horizontalSpace,
                 Text(
                   "4.5",
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ],
             ),

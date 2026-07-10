@@ -49,7 +49,7 @@ class LabsSpecialOffers extends GetView<LabsTestController> {
           SizedBox(
             height: 200.h,
             child: ListView.separated(
-              separatorBuilder: (_,_)=> 12.horizontalSpace,
+              separatorBuilder: (_, _) => 12.horizontalSpace,
               padding: EdgeInsets.symmetric(horizontal: 14.w),
               scrollDirection: Axis.horizontal,
               itemCount: controller.specialOffers.length,

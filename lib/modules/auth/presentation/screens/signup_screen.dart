@@ -136,9 +136,7 @@ class SignupScreen extends GetView<SignupController> {
                           showDetailedErrors: true,
                         ),
                       ).fadeIn(),
-                      PasswordFieldWithStrengthWidget(
-                        controller: controller,
-                      ),
+                      PasswordFieldWithStrengthWidget(controller: controller),
                       10.verticalSpace,
                       AppTextFormFieldWidget(
                         prefixIcon: Iconsax.lock,
@@ -198,9 +196,12 @@ class SignupScreen extends GetView<SignupController> {
                         ],
                       ),
                       6.verticalSpace,
-                      AppButtonWidget(
-                        text: tr(LocaleKeys.signup_signup),
-                        onPressed: controller.processSignup,
+                      Obx(
+                        () => AppButtonWidget(
+                          text: tr(LocaleKeys.signup_signup),
+                          isLoading: controller.isLoading.value,
+                          onPressed: controller.processSignup,
+                        ),
                       ).fadeIn(),
                       TextButton(
                         onPressed: () => Get.offNamed(AppRoutes.login),

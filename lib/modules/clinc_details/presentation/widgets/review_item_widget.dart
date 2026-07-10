@@ -6,7 +6,8 @@ class ReviewItem extends StatelessWidget {
   final String name, time, comment, imgUrl;
   final double rating;
 
-  const ReviewItem({super.key, 
+  const ReviewItem({
+    super.key,
     required this.name,
     required this.time,
     required this.rating,
@@ -32,47 +33,46 @@ class ReviewItem extends StatelessWidget {
                     Text(
                       name,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Row(
                       children: [
                         ...List.generate(
-                            5,
-                            (index) => Icon(
-                                index < rating.floor()
-                                    ? Icons.star
-                                    : Icons.star_border,
-                                size: 14.sp,
-                                color: Colors.amber)),
+                          5,
+                          (index) => Icon(
+                            index < rating.floor()
+                                ? Icons.star
+                                : Icons.star_border,
+                            size: 14.sp,
+                            color: Colors.amber,
+                          ),
+                        ),
                         5.horizontalSpace,
                         Text(
                           "$rating",
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
               Text(
                 time,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: AppColors.grey),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: AppColors.grey),
               ),
             ],
           ),
           8.verticalSpace,
           Text(
             comment,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  height: 1.4,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(height: 1.4),
           ),
         ],
       ),

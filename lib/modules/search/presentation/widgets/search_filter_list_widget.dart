@@ -1,11 +1,9 @@
 import 'package:clinc_app_t1/app/services/bottom_sheet_service.dart';
-import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/search/presentation/controllers/search_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../app/core/widgets/app_search_bar_widget.dart';
 
@@ -135,7 +133,7 @@ class SearchFilterList extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 8.w),
           decoration: BoxDecoration(
             color: isSelected
-                ? Theme.of(context).primaryColor.withOpacity(0.1)
+                ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
                 : Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(8.r),
             border: Border.all(
@@ -236,9 +234,9 @@ class SearchFilterList extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 4.w),
         padding: EdgeInsets.symmetric(horizontal: 12.w),
         decoration: BoxDecoration(
-          color: Colors.red.withOpacity(0.1),
+          color: Colors.red.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(color: Colors.red.withOpacity(0.2)),
+          border: Border.all(color: Colors.red.withValues(alpha: 0.2)),
         ),
         child: Center(
           child: Row(

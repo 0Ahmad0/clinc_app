@@ -3,36 +3,23 @@ import 'package:clinc_app_t1/modules/notifications/data/models/notification_mode
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 
-class NotificationsController extends GetxController {
-  final _notifications = <NotificationModel>[
-    NotificationModel(
-      title: "تم تأكيد موعدك",
-      body: "تم تأكيد حجزك مع د. محمد علي غداً الساعة 4:00 م",
-      time: DateTime.now().subtract(const Duration(hours: 2)),
-      isRead: false,
-      type: NotificationType.appointment, // Enum
-    ),
-    NotificationModel(
-      title: "خصم خاص لك! 🎉",
-      body: "احصل على خصم 20% على فحوصات المختبر",
-      time: DateTime.now().subtract(const Duration(hours: 5)),
-      isRead: false,
-      type: NotificationType.offer, // Enum
-    ),
-    NotificationModel(
-      title: "تذكير بالدواء",
-      body: "لا تنس تناول دوائك الموصوف",
-      time: DateTime.now().subtract(const Duration(days: 1, hours: 3)),
-      isRead: true,
-      type: NotificationType.system, // Enum
-    ),
-  ].obs;
+import '../../../../app/core/configuration/locator.dart';
+import '../../../../app/core/helper/response_helper.dart';
+import '../../../../app/data/base_model.dart';
+import '../../../../app/domain/error_handler/network_exceptions.dart';
+import '../../domain/notifications_repository.dart';
 
+class NotificationsController extends GetxController {
+  late final NotificationsRepository _repository;
+
+  final RxBool isLoading = false.obs;
+  final RxBool isMarkingAllRead = false.obs;
+  final RxList<NotificationModel> notifications = <NotificationModel>[].obs;
 
   // تجميع الإشعارات حسب التاريخ
   Map<String, List<NotificationModel>> get groupedNotifications {
     Map<String, List<NotificationModel>> grouped = {};
-    for (var notification in _notifications) {
+    for (var notification in notifications) {
       String key = _getDateLabel(notification.time);
       if (grouped.containsKey(key)) {
         grouped[key]!.add(notification);
@@ -58,11 +45,55 @@ class NotificationsController extends GetxController {
     }
   }
 
-  void markAllAsRead() {
-    for (var n in _notifications) {
-      n.isRead = true;
+  @override
+  void onInit() {
+    super.onInit();
+    _repository = locator<NotificationsRepository>();
+    loadNotifications();
+  }
+
+  Future<void> loadNotifications() async {
+    if (isLoading.value) return;
+    isLoading(true);
+    final result = await _repository.getNotifications();
+    isLoading(false);
+    result.when(
+      success: _handleNotificationsResponse,
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
+
+  Future<void> markAllAsRead() async {
+    if (isMarkingAllRead.value || notifications.isEmpty) return;
+    isMarkingAllRead(true);
+    final result = await _repository.markAllAsRead();
+    isMarkingAllRead(false);
+    result.when(
+      success: (response) {
+        if (!response.isSuccess) {
+          ResponseHelper.onFailure(message: response.message);
+          return;
+        }
+        for (var notification in notifications) {
+          notification.isRead = true;
+        }
+        notifications.refresh();
+      },
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
+
+  void _handleNotificationsResponse(
+    BaseModel<List<NotificationModel>> response,
+  ) {
+    if (!response.isSuccess || response.result == null) {
+      ResponseHelper.onFailure(message: response.message);
+      return;
     }
-    _notifications.refresh();
+    notifications.assignAll(response.result!);
   }
 }
-

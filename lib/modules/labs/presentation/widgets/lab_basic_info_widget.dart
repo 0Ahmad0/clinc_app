@@ -30,11 +30,17 @@ class LabBasicInfoWidget extends GetView<LabProfileController> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
                 decoration: BoxDecoration(
-                  color: controller.lab.isOpen ? Colors.green.withValues(alpha: 0.1) : Colors.red.withValues(alpha: 0.1),
+                  color: controller.lab.isOpen
+                      ? Colors.green.withValues(alpha: 0.1)
+                      : Colors.red.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Text(
-                  tr(controller.lab.isOpen ? LocaleKeys.labs_page_status_open : LocaleKeys.labs_page_status_closed),
+                  tr(
+                    controller.lab.isOpen
+                        ? LocaleKeys.labs_page_status_open
+                        : LocaleKeys.labs_page_status_closed,
+                  ),
                   style: TextStyle(
                     color: controller.lab.isOpen ? Colors.green : Colors.red,
                     fontWeight: FontWeight.bold,

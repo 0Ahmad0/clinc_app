@@ -29,10 +29,9 @@ class SettingsItemWidget extends StatelessWidget {
     final effectiveColor = color ?? Theme.of(context).colorScheme.onSurface;
 
     return ListTile(
-      contentPadding: removePadding ? EdgeInsetsDirectional.only(
-        end: 6.w,
-        start: 14.w
-      ) : null,
+      contentPadding: removePadding
+          ? EdgeInsetsDirectional.only(end: 6.w, start: 14.w)
+          : null,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       onTap:
           onTap ??

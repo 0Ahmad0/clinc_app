@@ -19,7 +19,8 @@ class DoctorHeader extends StatelessWidget {
             shape: BoxShape.circle,
             image: const DecorationImage(
               image: NetworkImage(
-                  "https://img.freepik.com/free-photo/woman-doctor-wearing-lab-coat-with-stethoscope-isolated_1303-29791.jpg"),
+                "https://img.freepik.com/free-photo/woman-doctor-wearing-lab-coat-with-stethoscope-isolated_1303-29791.jpg",
+              ),
               fit: BoxFit.cover,
             ),
             border: Border.all(color: AppColors.grey.myOpacity(0.2)),
@@ -33,24 +34,24 @@ class DoctorHeader extends StatelessWidget {
               Text(
                 "د. سارة العلي",
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.sp,
-                    ),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.sp,
+                ),
               ),
               4.verticalSpace,
               Text(
                 tr(LocaleKeys.doctor_details_app_bar_title),
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.grey,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: AppColors.grey),
               ),
               6.verticalSpace,
               Text(
                 "150 ر.س",
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.sp,
-                    ),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.sp,
+                ),
               ),
             ],
           ),
@@ -59,9 +60,3 @@ class DoctorHeader extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-

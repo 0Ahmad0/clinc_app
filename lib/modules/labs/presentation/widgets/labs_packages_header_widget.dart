@@ -14,9 +14,9 @@ class LabsPackagesHeader extends StatelessWidget {
         children: [
           Text(
             tr(LocaleKeys.labs_packages_title),
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           Text(
             tr(LocaleKeys.labs_view_all),

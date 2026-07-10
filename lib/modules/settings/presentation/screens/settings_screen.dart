@@ -67,7 +67,7 @@ class SettingsScreen extends GetView<SettingsController> {
                     SettingsItemWidget(
                       titleKey: LocaleKeys.setting_notifications,
                       icon: Iconsax.notification,
-                      route: AppRoutes.notifications,
+                      route: AppRoutes.notificationSettings,
                     ),
                     SettingsItemWidget(
                       titleKey: LocaleKeys.setting_share_app,
@@ -89,7 +89,6 @@ class SettingsScreen extends GetView<SettingsController> {
                   ],
                 ),
                 10.verticalSpace,
-
               ],
             ),
           ),

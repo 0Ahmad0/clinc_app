@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../app/core/configuration/locator.dart';
+import '../../../../app/core/helper/response_helper.dart';
+import '../../../../app/data/base_model.dart';
+import '../../../../app/domain/error_handler/network_exceptions.dart';
 import '../../data/models/chat_message_model.dart';
+import '../../data/models/chatbot_message_request_model.dart';
+import '../../domain/chatbot_repository.dart';
 
 class ChatbotController extends GetxController {
+  late final ChatbotRepository _repository;
   var messages = <ChatMessage>[].obs;
   var isTyping = false.obs;
   final textController = TextEditingController();
@@ -21,10 +28,12 @@ class ChatbotController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _repository = locator<ChatbotRepository>();
     // رسالة الترحيب وإخلاء المسؤولية
     messages.add(
       ChatMessage(
-        text: "مرحباً بك في المساعد الذكي لعياداتنا 👋\n\n"
+        text:
+            "مرحباً بك في المساعد الذكي لعياداتنا 👋\n\n"
             "⚠️ تنويه هام: أنا ذكاء اصطناعي مخصص للإجابة على الاستفسارات الطبية العامة ومساعدتك في خدمات العيادة. معلوماتي قد تحتمل الخطأ ولا تغني أبداً عن استشارة الطبيب المختص.",
         isSender: false,
         time: DateTime.now(),
@@ -33,32 +42,53 @@ class ChatbotController extends GetxController {
   }
 
   // إرسال رسالة نصية
-  void sendMessage(String text) async {
+  Future<void> sendMessage(String text) async {
     if (text.trim().isEmpty) return;
 
     // 1. إضافة رسالة المستخدم
-    messages.add(ChatMessage(
-      text: text,
-      isSender: true,
-      time: DateTime.now(),
-    ));
+    messages.add(ChatMessage(text: text, isSender: true, time: DateTime.now()));
     textController.clear();
     _scrollToBottom();
 
-    // 2. محاكاة التفكير (Typing...)
+    // 2. إظهار حالة الكتابة أثناء انتظار الباك
     isTyping.value = true;
-    await Future.delayed(const Duration(seconds: 2));
 
-    // 3. معالجة الرد (AI Logic Simulation)
-    String response = _getAIResponse(text);
+    final history = messages.where((m) => !m.isImage).toList(growable: false);
+    final result = await _repository.sendMessage(
+      ChatbotMessageRequestModel(message: text, history: history, useAi: true),
+    );
 
     isTyping.value = false;
-    messages.add(ChatMessage(
-      text: response,
-      isSender: false,
-      time: DateTime.now(),
-    ));
-    _scrollToBottom();
+    result.when(
+      success: (response) {
+        if (!response.isSuccess || response.result == null) {
+          _addFallbackAssistantMessage();
+          ResponseHelper.onFailure(message: response.message);
+          return;
+        }
+        final payload = response.result!;
+        if (payload.messages.isNotEmpty) {
+          messages.addAll(payload.messages.where((m) => !m.isSender));
+        } else if (payload.reply.trim().isNotEmpty) {
+          messages.add(
+            ChatMessage(
+              text: payload.reply,
+              isSender: false,
+              time: DateTime.now(),
+            ),
+          );
+        } else {
+          _addFallbackAssistantMessage();
+        }
+        _scrollToBottom();
+      },
+      failure: (exception) {
+        _addFallbackAssistantMessage();
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
+    );
   }
 
   // إرسال صورة (محاكاة)
@@ -68,52 +98,39 @@ class ChatbotController extends GetxController {
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
-      messages.add(ChatMessage(
-        text: "",
-        isSender: true,
-        isImage: true,
-        imagePath: image.path,
-        time: DateTime.now(),
-      ));
+      messages.add(
+        ChatMessage(
+          text: "",
+          isSender: true,
+          isImage: true,
+          imagePath: image.path,
+          time: DateTime.now(),
+        ),
+      );
       _scrollToBottom();
 
-      isTyping.value = true;
-      await Future.delayed(const Duration(seconds: 2));
-      isTyping.value = false;
-
-      messages.add(ChatMessage(
-        text: "لقد استلمت الصورة 📷.\nبناءً على التحليل المبدئي، يبدو أن هناك احمراراً جلديًا. أنصحك بحجز موعد مع دكتور الجلدية للفحص الدقيق.",
-        isSender: false,
-        time: DateTime.now(),
-      ));
+      messages.add(
+        ChatMessage(
+          text:
+              "لقد استلمت الصورة 📷.\nيمكنك إرسال سؤالك النصي الآن ليتم تمريره إلى نظام المساعدة في الخلفية.",
+          isSender: false,
+          time: DateTime.now(),
+        ),
+      );
       _scrollToBottom();
     }
   }
 
-  // محاكاة الذكاء الاصطناعي (هنا يتم ربط API لاحقاً)
-  String _getAIResponse(String input) {
-    String text = input.toLowerCase();
-
-    // 1. فلتر المواضيع غير الطبية
-    List<String> medicalKeywords = ['ألم', 'حجز', 'دكتور', 'عيادة', 'سعر', 'علاج', 'دواء', 'صداع', 'حرارة', 'تحليل', 'موعد', 'تيم', 'سوبورت', 'وقت', 'موقع'];
-    bool isMedical = medicalKeywords.any((word) => text.contains(word));
-
-    if (!isMedical) {
-      return "عذراً، أنا بوت طبي متخصص 🩺. يمكنني الإجابة فقط على الأسئلة المتعلقة بالصحة أو خدمات العيادة.";
-    }
-
-    // 2. الردود السريعة والطبية
-    if (text.contains("حجز") || text.contains("موعد")) {
-      return "لحجز موعد، يمكنك استخدام زر 'حجز سريع' في الصفحة الرئيسية، أو أخبـرني بالتخصص الذي تريده وسأساعدك.";
-    } else if (text.contains("تيم") || text.contains("سوبورت") || text.contains("أوقات")) {
-      return "فريق الدعم متواجد لخدمتكم يومياً من الساعة 8:00 صباحاً وحتى 10:00 مساءً 🕙.";
-    } else if (text.contains("موقع")) {
-      return "نقع في الرياض، طريق الملك فهد، مبنى رقم 102.";
-    } else if (text.contains("صداع")) {
-      return "سلامتك! الصداع قد يكون بسبب الإجهاد أو قلة النوم. ننصحك بشرب الماء والراحة. إذا استمر الألم، يرجى حجز موعد مع طبيب الباطنية.";
-    }
-
-    return "شكراً لاستفسارك. سأقوم بتحويل هذا السؤال لأحد موظفي الاستقبال للرد عليك بدقة أكبر، أو يمكنك الاتصال بنا مباشرة 📞.";
+  void _addFallbackAssistantMessage() {
+    messages.add(
+      ChatMessage(
+        text:
+            "تم استلام رسالتك. حالياً لم يتمكن النظام من توليد رد ذكي، وسيتم الرد اعتماداً على البيانات المتاحة في الخلفية.",
+        isSender: false,
+        time: DateTime.now(),
+      ),
+    );
+    _scrollToBottom();
   }
 
   void _scrollToBottom() {

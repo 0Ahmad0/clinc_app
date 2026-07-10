@@ -23,9 +23,9 @@ class HospitalInfoSection extends StatelessWidget {
               child: Text(
                 hospital.name,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.sp,
-                    ),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.sp,
+                ),
               ),
             ),
             Container(
@@ -41,9 +41,9 @@ class HospitalInfoSection extends StatelessWidget {
                   Text(
                     "${hospital.rating} (${tr(LocaleKeys.clinic_app_details_rating_count)})",
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.amber[800],
-                        ),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.amber[800],
+                    ),
                   ),
                 ],
               ),
@@ -57,10 +57,9 @@ class HospitalInfoSection extends StatelessWidget {
             4.horizontalSpace,
             Text(
               "${hospital.region} - ${tr(LocaleKeys.clinic_app_details_distance_away)} ${hospital.distanceKm} ${tr(LocaleKeys.clinic_app_details_km)}",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(color: AppColors.grey),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppColors.grey),
             ),
           ],
         ),
@@ -68,7 +67,3 @@ class HospitalInfoSection extends StatelessWidget {
     );
   }
 }
-
-
-
-

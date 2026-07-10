@@ -1,11 +1,11 @@
 import 'package:clinc_app_t1/app/services/bottom_sheet_service.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/doctors/presentation/controllers/doctors_controller.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../app/core/widgets/app_search_bar_widget.dart';
 
@@ -16,14 +16,19 @@ class DoctorsFilterList extends StatelessWidget {
 
   // دالة لتحويل القيم التقنية إلى نصوص عربية مفهومة (مثل السيرش)
   String _mapTechnicalToArabic(String value, String label) {
-    if (value == 'الكل' || value.isEmpty) return label;
+    if (value.isEmpty) return label;
+    if (value == 'الكل') {
+      return label == 'الكل' ? tr(LocaleKeys.doctors_filter_all) : label;
+    }
 
     final map = {
-      'male': 'ذكر',
-      'female': 'أنثى',
-      '4.5+': 'تقييم 4.5 فأعلى',
-      '4.0+': 'تقييم 4.0 فأعلى',
-      '3.5+': 'تقييم 3.5 فأعلى',
+      'male': tr(LocaleKeys.doctors_gender_male),
+      'female': tr(LocaleKeys.doctors_gender_female),
+      'ذكر': tr(LocaleKeys.doctors_gender_male),
+      'أنثى': tr(LocaleKeys.doctors_gender_female),
+      '4.5+': tr(LocaleKeys.doctors_rating_45_plus),
+      '4.0+': tr(LocaleKeys.doctors_rating_40_plus),
+      '3.5+': tr(LocaleKeys.doctors_rating_35_plus),
     };
     return map[value] ?? value;
   }
@@ -31,7 +36,7 @@ class DoctorsFilterList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-          () => Visibility(
+      () => Visibility(
         visible: controller.isFilterBarVisible.value,
         child: Container(
           height: 42.h,
@@ -47,7 +52,7 @@ class DoctorsFilterList extends StatelessWidget {
               _buildFilterItem(
                 context: context,
                 icon: Icons.location_on,
-                label: 'المنطقة',
+                label: tr(LocaleKeys.doctors_filter_region),
                 selectedValue: controller.selectedRegion,
                 options: [],
                 onUpdate: (v) => controller.updateFilter(region: v),
@@ -58,7 +63,7 @@ class DoctorsFilterList extends StatelessWidget {
               _buildFilterItem(
                 context: context,
                 icon: Icons.medical_services,
-                label: 'التخصص',
+                label: tr(LocaleKeys.doctors_filter_specialty),
                 options: controller.specialties,
                 selectedValue: controller.selectedSpecialty,
                 onUpdate: (v) => controller.updateFilter(specialty: v),
@@ -68,7 +73,7 @@ class DoctorsFilterList extends StatelessWidget {
               _buildFilterItem(
                 context: context,
                 icon: Icons.star,
-                label: 'التقييم',
+                label: tr(LocaleKeys.doctors_filter_rating),
                 options: controller.ratings,
                 selectedValue: controller.selectedRating,
                 onUpdate: (v) => controller.updateFilter(rating: v),
@@ -78,7 +83,7 @@ class DoctorsFilterList extends StatelessWidget {
               _buildFilterItem(
                 context: context,
                 icon: Icons.wc,
-                label: 'الجنس',
+                label: tr(LocaleKeys.doctors_filter_gender),
                 options: ['الكل', 'ذكر', 'أنثى'],
                 selectedValue: controller.selectedGender,
                 onUpdate: (v) => controller.updateFilter(gender: v),
@@ -100,33 +105,52 @@ class DoctorsFilterList extends StatelessWidget {
     bool isRegion = false,
   }) {
     return Obx(() {
-      bool isSelected = selectedValue.value != 'الكل' && selectedValue.value.isNotEmpty;
+      bool isSelected =
+          selectedValue.value != 'الكل' && selectedValue.value.isNotEmpty;
 
       return GestureDetector(
         onTap: () => isRegion
             ? _showRegionBottomSheet(context)
-            : _showGenericBottomSheet(context, label, options, selectedValue, onUpdate),
+            : _showGenericBottomSheet(
+                context,
+                label,
+                options,
+                selectedValue,
+                onUpdate,
+              ),
         child: Container(
           width: 140.w,
           margin: EdgeInsets.symmetric(horizontal: 4.w),
           padding: EdgeInsets.symmetric(horizontal: 8.w),
           decoration: BoxDecoration(
-            color: isSelected ? Theme.of(context).primaryColor.withOpacity(0.1) : Theme.of(context).cardColor,
+            color: isSelected
+                ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
+                : Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(8.r),
             border: Border.all(
-              color: isSelected ? Theme.of(context).primaryColor : Theme.of(context).dividerColor,
+              color: isSelected
+                  ? Theme.of(context).primaryColor
+                  : Theme.of(context).dividerColor,
             ),
           ),
           child: Row(
             children: [
-              Icon(icon, size: 16.sp, color: isSelected ? Theme.of(context).primaryColor : Colors.grey),
+              Icon(
+                icon,
+                size: 16.sp,
+                color: isSelected
+                    ? Theme.of(context).primaryColor
+                    : Colors.grey,
+              ),
               4.horizontalSpace,
               Expanded(
                 child: Text(
                   _mapTechnicalToArabic(selectedValue.value, label),
                   style: TextStyle(
                     fontSize: 11.sp,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    fontWeight: isSelected
+                        ? FontWeight.bold
+                        : FontWeight.normal,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -141,18 +165,21 @@ class DoctorsFilterList extends StatelessWidget {
 
   // شيت الخيارات العادية (تخصص، تقييم، جنس)
   void _showGenericBottomSheet(
-      BuildContext context,
-      String title,
-      List<String> options,
-      RxString selectedValue,
-      Function(String) onUpdate,
-      ) {
+    BuildContext context,
+    String title,
+    List<String> options,
+    RxString selectedValue,
+    Function(String) onUpdate,
+  ) {
     BottomSheetService.show(
       context: context,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(title, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+          Text(
+            title,
+            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+          ),
           10.verticalSpace,
           Flexible(
             child: ListView.builder(
@@ -172,7 +199,12 @@ class DoctorsFilterList extends StatelessWidget {
                       fontWeight: isSelected ? FontWeight.bold : null,
                     ),
                   ),
-                  trailing: isSelected ? Icon(Icons.check_circle, color: Theme.of(context).primaryColor) : null,
+                  trailing: isSelected
+                      ? Icon(
+                          Icons.check_circle,
+                          color: Theme.of(context).primaryColor,
+                        )
+                      : null,
                   onTap: () {
                     onUpdate(item);
                     Get.back();
@@ -193,7 +225,9 @@ class DoctorsFilterList extends StatelessWidget {
 
     BottomSheetService.show(
       context: context,
-      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.8,
+      ),
       child: Column(
         children: [
           // شريط اختيار المنطقة الكبرى (وسطى، شرقية...)
@@ -201,34 +235,43 @@ class DoctorsFilterList extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.symmetric(horizontal: 14.w),
             child: Obx(
-                  () => Row(
+              () => Row(
                 children: ['الكل', ...controller.groupedRegions.keys]
-                    .map((m) => GestureDetector(
-                  onTap: () => controller.tempSelectedMainRegion.value = m,
-                  child: Container(
-                    margin: EdgeInsets.only(left: 8.w),
-                    padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
-                    decoration: BoxDecoration(
-                      color: controller.tempSelectedMainRegion.value == m
-                          ? Theme.of(context).primaryColor
-                          : Colors.grey[200],
-                      borderRadius: BorderRadius.circular(20.r),
-                    ),
-                    child: Text(
-                      m,
-                      style: TextStyle(
-                        color: controller.tempSelectedMainRegion.value == m ? Colors.white : Colors.black,
-                        fontSize: 12.sp,
+                    .map(
+                      (m) => GestureDetector(
+                        onTap: () =>
+                            controller.tempSelectedMainRegion.value = m,
+                        child: Container(
+                          margin: EdgeInsets.only(left: 8.w),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 14.w,
+                            vertical: 8.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: controller.tempSelectedMainRegion.value == m
+                                ? Theme.of(context).primaryColor
+                                : Colors.grey[200],
+                            borderRadius: BorderRadius.circular(20.r),
+                          ),
+                          child: Text(
+                            m,
+                            style: TextStyle(
+                              color:
+                                  controller.tempSelectedMainRegion.value == m
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ))
+                    )
                     .toList(),
               ),
             ),
           ),
           AppSearchBarWidget(
-            hintText: "بحث عن مدينة...",
+            hintText: tr(LocaleKeys.doctors_filter_city_search_hint),
             onChanged: (v) => controller.regionSearchText.value = v,
           ),
           Expanded(
@@ -241,7 +284,7 @@ class DoctorsFilterList extends StatelessWidget {
                 children: [
                   if (mainFilter == 'الكل' && query.isEmpty)
                     ListTile(
-                      title: Text("الكل"),
+                      title: Text(tr(LocaleKeys.doctors_filter_all)),
                       onTap: () {
                         controller.updateFilter(region: 'الكل');
                         Get.back();
@@ -250,36 +293,51 @@ class DoctorsFilterList extends StatelessWidget {
                   ...controller.groupedRegions.entries
                       .where((e) => mainFilter == 'الكل' || e.key == mainFilter)
                       .map((entry) {
-                    List<String> cities = entry.value.where((c) => c.contains(query)).toList();
-                    if (cities.isEmpty) return SizedBox.shrink();
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 10.h),
-                          child: Text(entry.key,
-                              style: TextStyle(
+                        List<String> cities = entry.value
+                            .where((c) => c.contains(query))
+                            .toList();
+                        if (cities.isEmpty) return SizedBox.shrink();
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(top: 10.h),
+                              child: Text(
+                                entry.key,
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12.sp,
-                                  color: Theme.of(context).primaryColor)),
-                        ),
-                        ...cities.map((city) => ListTile(
-                          title: Text(city,
-                              style: TextStyle(
-                                  color: controller.selectedRegion.value == city
-                                      ? context.theme.primaryColor
-                                      : null)),
-                          trailing: controller.selectedRegion.value == city
-                              ? Icon(Icons.check, color: context.theme.primaryColor)
-                              : null,
-                          onTap: () {
-                            controller.updateFilter(region: city);
-                            Get.back();
-                          },
-                        )),
-                      ],
-                    );
-                  }),
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                            ),
+                            ...cities.map(
+                              (city) => ListTile(
+                                title: Text(
+                                  city,
+                                  style: TextStyle(
+                                    color:
+                                        controller.selectedRegion.value == city
+                                        ? context.theme.primaryColor
+                                        : null,
+                                  ),
+                                ),
+                                trailing:
+                                    controller.selectedRegion.value == city
+                                    ? Icon(
+                                        Icons.check,
+                                        color: context.theme.primaryColor,
+                                      )
+                                    : null,
+                                onTap: () {
+                                  controller.updateFilter(region: city);
+                                  Get.back();
+                                },
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
                 ],
               );
             }),
@@ -296,16 +354,26 @@ class DoctorsFilterList extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 4.w),
         padding: EdgeInsets.symmetric(horizontal: 12.w),
         decoration: BoxDecoration(
-          color: Colors.red.withOpacity(0.1),
+          color: Colors.red.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(color: Colors.red.withOpacity(0.2)),
+          border: Border.all(color: Colors.red.withValues(alpha: 0.2)),
         ),
         child: Center(
           child: Row(
             children: [
-              Text('مسح', style: TextStyle(color: context.theme.colorScheme.error, fontSize: 12.sp)),
+              Text(
+                tr(LocaleKeys.doctors_filter_reset),
+                style: TextStyle(
+                  color: context.theme.colorScheme.error,
+                  fontSize: 12.sp,
+                ),
+              ),
               4.horizontalSpace,
-              Icon(Iconsax.filter_remove, size: 18.sp, color: context.theme.colorScheme.error),
+              Icon(
+                Iconsax.filter_remove,
+                size: 18.sp,
+                color: context.theme.colorScheme.error,
+              ),
             ],
           ),
         ),

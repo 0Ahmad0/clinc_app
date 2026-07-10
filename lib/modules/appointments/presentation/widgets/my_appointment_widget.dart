@@ -62,7 +62,8 @@ class MyAppointmentWidget extends GetView<AppointmentsController> {
       key: ValueKey(appointment.id), // مفتاح فريد للأنيميشن
       child: InkWell(
         borderRadius: BorderRadius.circular(14.r),
-        onTap: () => Get.toNamed(AppRoutes.myAppointmentDetails),
+        onTap: () =>
+            Get.toNamed(AppRoutes.myAppointmentDetails, arguments: appointment),
         child: Container(
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,

@@ -21,7 +21,12 @@ class LabReviewsWidget extends GetView<LabProfileController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(tr(LocaleKeys.labs_profile_reviews_title), style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+              Text(
+                tr(LocaleKeys.labs_profile_reviews_title),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              ),
               TextButton.icon(
                 onPressed: () => _showAddReviewSheet(context),
                 icon: const Icon(Iconsax.add_square),
@@ -31,7 +36,12 @@ class LabReviewsWidget extends GetView<LabProfileController> {
           ),
           10.verticalSpace,
           if (controller.lab.reviews.isEmpty)
-             Center(child: Text(tr(LocaleKeys.labs_profile_no_reviews), style: TextStyle(color: Colors.grey))),
+            Center(
+              child: Text(
+                tr(LocaleKeys.labs_profile_no_reviews),
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
           ...controller.lab.reviews.map((review) => ReviewItem(review: review)),
         ],
       ),
@@ -49,28 +59,37 @@ class LabReviewsWidget extends GetView<LabProfileController> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(tr(LocaleKeys.labs_profile_add_review), style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              tr(LocaleKeys.labs_profile_add_review),
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             20.verticalSpace,
             // نجوم التقييم (Custom Simple Implementation)
-            Obx(() => Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(5, (index) {
-                return IconButton(
-                  onPressed: () => controller.userRating.value = index + 1.0,
-                  icon: Icon(
-                    index < controller.userRating.value ? Icons.star : Icons.star_border,
-                    color: Colors.amber,
-                    size: 30.sp,
-                  ),
-                );
-              }),
-            )),
+            Obx(
+              () => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(5, (index) {
+                  return IconButton(
+                    onPressed: () => controller.userRating.value = index + 1.0,
+                    icon: Icon(
+                      index < controller.userRating.value
+                          ? Icons.star
+                          : Icons.star_border,
+                      color: Colors.amber,
+                      size: 30.sp,
+                    ),
+                  );
+                }),
+              ),
+            ),
             16.verticalSpace,
             TextField(
               controller: controller.reviewController,
               decoration: InputDecoration(
                 hintText: tr(LocaleKeys.labs_profile_write_review_hint),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
               ),
               maxLines: 3,
             ),

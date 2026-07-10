@@ -27,4 +27,3 @@ class LabsSearchBarWidget extends GetView<LabsController> {
     );
   }
 }
-

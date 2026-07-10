@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WorkingHoursCard extends StatelessWidget {
-  const WorkingHoursCard({super.key});
+  const WorkingHoursCard({super.key, required this.details});
+
+  final String details;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class WorkingHoursCard extends StatelessWidget {
           ),
           8.verticalSpace,
           Text(
-            tr(LocaleKeys.contact_us_working_hours_details),
+            details,
             textAlign: TextAlign.center,
             style: const TextStyle(color: Colors.grey, height: 1.5),
           ),

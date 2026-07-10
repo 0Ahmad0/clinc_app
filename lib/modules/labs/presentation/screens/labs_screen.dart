@@ -31,6 +31,9 @@ class LabsScreen extends GetView<LabsController> {
           // 3. القائمة
           Expanded(
             child: Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
               return ListView.separated(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                 itemCount: controller.filteredLabs.length,

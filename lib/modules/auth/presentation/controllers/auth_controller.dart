@@ -8,7 +8,6 @@ class AuthController extends GetxController {
   late final TextEditingController idTextController;
   final passwordController = TextEditingController();
 
-
   void changeCategory(UserCategory? category) {
     if (category != null) {
       selectedCategory.value = category;

@@ -8,10 +8,14 @@ class InitialBinding implements Bindings {
   void dependencies() {
     // 1. قم ببدء خدمة التخزين أولاً وانتظرها
     // (permanent: true) تعني أنها ستبقى في الذاكرة طوال فترة تشغيل التطبيق
-    Get.put(StorageService().init(), permanent: true);
+    if (!Get.isRegistered<StorageService>()) {
+      Get.put(StorageService.instance, permanent: true);
+    }
 
     // 2. قم ببدء كونترولر الإعدادات
     // (lazyPut) تعني أنه لن يتم إنشاؤه إلا عند أول استخدام له
-    Get.lazyPut(() => SettingsAppController(), fenix: true);
+    if (!Get.isRegistered<SettingsAppController>()) {
+      Get.lazyPut(() => SettingsAppController(), fenix: true);
+    }
   }
 }

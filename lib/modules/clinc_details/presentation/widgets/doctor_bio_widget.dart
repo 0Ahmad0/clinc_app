@@ -14,18 +14,17 @@ class DoctorBio extends StatelessWidget {
       children: [
         Text(
           tr(LocaleKeys.doctor_details_about_bio),
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium
-              ?.copyWith(fontWeight: FontWeight.bold, fontSize: 18.sp),
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 18.sp,
+          ),
         ),
         8.verticalSpace,
         Text(
           tr(LocaleKeys.doctor_details_about_desc),
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.grey,
-                height: 1.5,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: AppColors.grey, height: 1.5),
         ),
       ],
     );
