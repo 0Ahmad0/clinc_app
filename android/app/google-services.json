@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "815847296623-lt1j9ds0hd9ln495b0f8i6gcu4309ce8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.clinic.app",
+            "certificate_hash": "804dbc17c19ffd556d1d975242ce7caaf34c5a39"
+          }
+        },
+        {
           "client_id": "815847296623-4va1cdfoomgb5i89n6fjf1fugjd2o1vm.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -51,12 +51,6 @@ android {
     }
 
     signingConfigs {
-        debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-            keyAlias 'AndroidDebugKey'
-            keyPassword 'android'
-        }
         release {
             if (releaseKeystoreConfigured) {
                 keyAlias keystoreProperties['keyAlias']
@@ -68,14 +62,12 @@ android {
     }
 
     buildTypes {
-        debug {
-            signingConfig = signingConfigs.debug
-        }
         release {
             if (!releaseKeystoreConfigured) {
                 throw new GradleException("Release signing is not configured. Copy android/key.properties.example to android/key.properties and point it at the upload keystore.")
             }
             signingConfig = signingConfigs.getByName("release")
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }

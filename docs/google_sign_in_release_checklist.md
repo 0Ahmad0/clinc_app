@@ -11,16 +11,19 @@ Register these SHA-1 and SHA-256 fingerprints under the Android app
 `com.clinic.app` in Firebase project settings, then download a fresh
 `google-services.json` into `android/app/google-services.json`.
 
-### Repository debug keystore
+### Local debug keystore
 
-This keystore is committed at `android/app/debug.keystore` so debug Google
-Sign-In works on every developer machine.
+Debug builds use the standard Android debug keystore at
+`~/.android/debug.keystore`. Register the SHA-1 and SHA-256 from
+`./gradlew signingReport` for each developer machine that needs Google Sign-In.
+
+The current local machine fingerprints are:
 
 SHA-1:
-`82:5C:51:D4:00:58:24:D0:6B:BC:2C:78:45:D5:E9:8D:45:E0:04:0E`
+`80:4D:BC:17:C1:9F:FD:55:6D:1D:97:52:42:CE:7C:AA:F3:4C:5A:39`
 
 SHA-256:
-`D6:F7:A7:CD:8C:94:C5:13:B3:5B:75:3E:1F:7B:BE:70:5E:70:B7:77:87:97:A5:04:E3:AE:9B:77:43:1D:5A:FA`
+`8A:05:C4:42:A6:1E:3E:97:45:15:8E:27:B1:42:9A:DF:0D:94:CC:71:48:F9:E2:95:5C:E9:58:F4:D1:BF:BF:53`
 
 ### Upload/release keystore currently used locally
 
@@ -41,12 +44,32 @@ The upload key is not enough for app bundles distributed through Google Play.
 
 ## OAuth clients expected in google-services.json
 
-After the fingerprints are registered, the Android client in
-`google-services.json` must contain:
+Current downloaded Firebase config state:
 
-- One `client_type: 3` web OAuth client.
-- Android OAuth clients (`client_type: 1`) for every SHA-bound certificate:
-  repository debug, upload/release, and Play app signing.
+- Web OAuth client (`client_type: 3`):
+  `815847296623-4va1cdfoomgb5i89n6fjf1fugjd2o1vm.apps.googleusercontent.com`
+- Debug Android OAuth client (`client_type: 1`):
+  `815847296623-lt1j9ds0hd9ln495b0f8i6gcu4309ce8.apps.googleusercontent.com`
+  for SHA-1 `804dbc17c19ffd556d1d975242ce7caaf34c5a39`
+- Missing release Android OAuth client for SHA-1
+  `42fd0b5943e976f2181e0be5a4587b7f0f1cb113`
+
+Before release, Firebase/Google Cloud must emit an Android OAuth client
+(`client_type: 1`) for the upload/release certificate SHA-1 above. If Firebase
+Project settings shows the SHA but the downloaded config still omits the
+Android OAuth client, create or repair it in:
+
+`Google Cloud Console > APIs & Services > Credentials > Create credentials > OAuth client ID > Android`
+
+Use:
+
+- Package name: `com.clinic.app`
+- SHA-1 certificate fingerprint:
+  `42:FD:0B:59:43:E9:76:F2:18:1E:0B:E5:A4:58:7B:7F:0F:1C:B1:13`
+
+Then download a fresh `android/app/google-services.json`, rebuild release, and
+verify the release APK again. For an app bundle distributed through Google Play,
+also create/verify an Android OAuth client for the Play app-signing SHA-1.
 
 ## Android release signing
 
