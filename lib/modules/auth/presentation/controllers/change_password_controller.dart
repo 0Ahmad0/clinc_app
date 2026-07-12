@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../../../app/core/configuration/locator.dart';
 import '../../../../app/core/helper/response_helper.dart';
 import '../../../../app/domain/error_handler/network_exceptions.dart';
+import '../../../../generated/locale_keys.g.dart';
 import '../../domain/repositories/auth_repository.dart';
 
 class ChangePasswordController extends GetxController {
@@ -38,12 +40,19 @@ class ChangePasswordController extends GetxController {
     isCurrentPasswordVerified.value = true;
   }
 
+  void backToCurrentPasswordStep() {
+    newPasswordController.clear();
+    confirmPasswordController.clear();
+    formKey.currentState?.reset();
+    isCurrentPasswordVerified.value = false;
+  }
+
   // دالة تغيير كلمة المرور النهائية
   void changePassword() async {
     if (!formKey.currentState!.validate()) return;
 
     if (newPasswordController.text != confirmPasswordController.text) {
-      ResponseHelper.onFailure(message: "كلمة المرور الجديدة غير متطابقة");
+      ResponseHelper.onFailure(message: tr(LocaleKeys.auth_password_no_match));
       return;
     }
 

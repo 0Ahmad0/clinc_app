@@ -1,5 +1,7 @@
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_search_bar_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/section_shimmer_widgets.dart';
+import 'package:clinc_app_t1/app/core/widgets/shared_empty_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/labs/presentation/controllers/labs_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -26,13 +28,27 @@ class LabsScreen extends GetView<LabsController> {
             onChanged: controller.updateSearch,
           ),
           // 2. الفلتر
-          const LabsFilterListWidget(),
+          Obx(
+            () => controller.isFiltersLoading.value
+                ? const FiltersShimmer(itemCount: 3)
+                : const LabsFilterListWidget(),
+          ),
           10.verticalSpace,
           // 3. القائمة
           Expanded(
             child: Obx(() {
+              if (controller.isFiltersLoading.value) {
+                return const SizedBox.shrink();
+              }
               if (controller.isLoading.value) {
-                return const Center(child: CircularProgressIndicator());
+                return const LabsListShimmer();
+              }
+              if (controller.filteredLabs.isEmpty) {
+                return SharedEmptyWidget(
+                  icon: Icons.science_outlined,
+                  title: tr(LocaleKeys.labs_page_empty_title),
+                  subtitle: tr(LocaleKeys.labs_page_empty_subtitle),
+                );
               }
               return ListView.separated(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),

@@ -18,9 +18,16 @@ class InsuranceCard extends StatelessWidget {
       onTap: () {
         Get.toNamed(
           AppRoutes.search,
-          arguments: {'name': insurance.name, 'show': true},
+          arguments: {
+            'name': insurance.name,
+            'show': true,
+            'insurance_id': insurance.id.isNotEmpty
+                ? insurance.id
+                : insurance.key,
+          },
         );
       },
+
       borderRadius: BorderRadius.circular(16.r),
       child: Container(
         padding: EdgeInsets.all(8.w),

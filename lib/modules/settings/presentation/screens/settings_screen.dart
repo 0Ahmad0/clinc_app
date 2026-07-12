@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/core/helper/auth_required_helper.dart';
 import 'package:clinc_app_t1/app/core/utils/dialogs/app_dialog.dart';
 import 'package:clinc_app_t1/app/core/utils/dialogs/widgets/logout_dialog_widgets.dart';
 import 'package:clinc_app_t1/app/core/utils/share_helper.dart';
@@ -51,7 +52,11 @@ class SettingsScreen extends GetView<SettingsController> {
                     SettingsItemWidget(
                       titleKey: LocaleKeys.setting_payment_info,
                       icon: Iconsax.cards,
-                      route: AppRoutes.payment,
+                      onTap: () {
+                        if (AuthRequiredHelper.ensureAuthenticated()) {
+                          Get.toNamed(AppRoutes.payment);
+                        }
+                      },
                     ),
                     const Divider(thickness: .1),
                     SettingsItemWidget(
@@ -67,7 +72,11 @@ class SettingsScreen extends GetView<SettingsController> {
                     SettingsItemWidget(
                       titleKey: LocaleKeys.setting_notifications,
                       icon: Iconsax.notification,
-                      route: AppRoutes.notificationSettings,
+                      onTap: () {
+                        if (AuthRequiredHelper.ensureAuthenticated()) {
+                          Get.toNamed(AppRoutes.notificationSettings);
+                        }
+                      },
                     ),
                     SettingsItemWidget(
                       titleKey: LocaleKeys.setting_share_app,

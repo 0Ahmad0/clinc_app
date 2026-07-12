@@ -14,12 +14,14 @@ class StorageService extends GetxService {
   StorageService._();
 
   final GetStorage _box = GetStorage();
+  String? _sessionAccessToken;
 
   // مفاتيح التخزين
 
   static const String _themeKey = 'isDarkMode';
 
   ///Keys
+  static const String IS_FIRST_TIME = 'is_first_time';
   static const String TOKEN = 'access_token';
   static const String LANG_CODE = 'lang_code';
   static const String REFRESH_TOKEN_EXPIRE = 'refresh_token_expire_in_seconds';
@@ -33,6 +35,7 @@ class StorageService extends GetxService {
       'pending_registration_reference';
   static const String ROLE = 'role';
   static const String ACCOUNT_TYPE = 'account_type';
+  static const String IS_GUEST = 'is_guest';
   static const String APP_NOTIFICATIONS = 'app_notifications';
   static const String EMAIL_NOTIFICATIONS = 'email_notifications';
   static const String SMS_NOTIFICATIONS = 'sms_notifications';
@@ -49,6 +52,8 @@ class StorageService extends GetxService {
     // اقرأ اللغة، وإذا لم تكن موجودة، استخدم 'en' كافتراضي
     return _box.read(LANG_CODE) ?? 'en';
   }
+
+  bool isLanguageCode() => _box.read(LANG_CODE) != null;
 
   writeData(String key, dynamic value) async {
     await _box.write(key, value);
@@ -81,6 +86,12 @@ class StorageService extends GetxService {
     _box.write(LANG_CODE, languageCode);
   }
 
+  void skipFirstTime({bool skip = false}) {
+    saveBool(IS_FIRST_TIME, skip);
+  }
+
+  bool iSFirstTime() => readBool(IS_FIRST_TIME, fallback: true);
+
   // --- دوال الثيم ---
   bool get isDarkMode {
     // اقرأ الثيم، وافترض false (Light) كافتراضي
@@ -93,12 +104,23 @@ class StorageService extends GetxService {
     _box.write(_themeKey, isDarkMode);
   }
 
-  Future setAccessToken(String? token) async {
-    await writeData(TOKEN, token);
+  Future setAccessToken(String? token, {bool persist = true}) async {
+    _sessionAccessToken = token;
+    if (persist) {
+      await writeData(TOKEN, token);
+      return;
+    }
+    await removeData(TOKEN);
   }
 
+  Future setGuestMode(bool value) async {
+    await saveBool(IS_GUEST, value);
+  }
+
+  bool get isGuest => readBool(IS_GUEST, fallback: false);
+
   String getAccessToken() {
-    return readData(TOKEN) ?? '';
+    return _sessionAccessToken ?? readData(TOKEN) ?? '';
   }
 
   Future cacheUserModel(Map<String, dynamic>? userInfo) async {
@@ -154,20 +176,22 @@ class StorageService extends GetxService {
   }
 
   Future<void> depose() async {
+    _sessionAccessToken = null;
     await Future.wait(
       [
-        removeData(TOKEN),
-        removeData(LOGIN_TIME),
-        removeData(REFRESH_TOKEN),
-        removeData(REFRESH_TOKEN_EXPIRE),
-        removeData(USER),
-        removeData(CLINIC),
-        removeData(PROFILE_COMPLETED),
-        removeData(PENDING_REGISTRATION_REFERENCE),
-        removeData(ROLE),
-        removeData(ACCOUNT_TYPE),
-      ]
-      as Iterable<Future>,
+            removeData(TOKEN),
+            removeData(LOGIN_TIME),
+            removeData(REFRESH_TOKEN),
+            removeData(REFRESH_TOKEN_EXPIRE),
+            removeData(USER),
+            removeData(CLINIC),
+            removeData(PROFILE_COMPLETED),
+            removeData(PENDING_REGISTRATION_REFERENCE),
+            removeData(ROLE),
+            removeData(ACCOUNT_TYPE),
+            removeData(IS_GUEST),
+          ]
+          as Iterable<Future>,
     );
   }
 }

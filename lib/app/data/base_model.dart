@@ -43,6 +43,7 @@ class BaseModel<T> {
           finalizedJson['message'] ?? finalizedJson['error']?['message'];
     }
 
+
     return _$BaseModelFromJson(finalizedJson, fromJsonT);
   }
 
@@ -60,9 +61,18 @@ class BaseModels<T> {
     dynamic json,
     T Function(dynamic itemJson) fromJsonT,
   ) {
+
+
+
     if (json is List) {
       return BaseModels<T>(list: json.map((e) => fromJsonT(e)).toList());
-    } else {
+    }
+    else if(json is Map && json.containsKey('items') && json['items'] is List) {
+
+
+      return BaseModels<T>(list:[... json['items'].map((e) => fromJsonT(e)).toList()]);
+    }
+    else {
       return BaseModels<T>(list: []);
     }
   }

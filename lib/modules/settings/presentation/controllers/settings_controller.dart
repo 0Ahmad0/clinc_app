@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../../../app/core/configuration/locator.dart';
+import '../../../../app/core/helper/auth_required_helper.dart';
 import '../../../../app/core/helper/response_helper.dart';
 import '../../../../app/data/base_model.dart';
 import '../../../../app/data/user.dart';
@@ -23,9 +24,9 @@ class SettingsController extends GetxController {
         smsNotifications: false,
       ).obs;
 
-  String get userImage =>
-      profile.value?.avatar ??
-      'https://tse1.mm.bing.net/th/id/OIP._a40Z-w7EJez1OadYrvYAAHaJY?cb=ucfimgc2&w=560&h=710&rs=1&pid=ImgDetMain&o=7&rm=3';
+  bool get isGuest => StorageService.instance.isGuest;
+
+  String? get userImage => profile.value?.avatar;
 
   @override
   void onInit() {
@@ -36,6 +37,10 @@ class SettingsController extends GetxController {
 
   Future<void> loadSettings() async {
     if (isLoading.value) return;
+    if (isGuest) {
+      profile.value = null;
+      return;
+    }
     isLoading(true);
     await Future.wait([
       getProfile(isSplash: false),
@@ -45,6 +50,10 @@ class SettingsController extends GetxController {
   }
 
   Future<bool?> getProfile({bool isSplash = true}) async {
+    if (isGuest) {
+      if (isSplash) Get.offNamed(AppRoutes.navbar);
+      return false;
+    }
     final result = await _repository.getProfile();
     bool loaded = false;
     await result.when(
@@ -62,6 +71,7 @@ class SettingsController extends GetxController {
         if (isSplash) Get.offNamed(AppRoutes.navbar);
       },
       failure: (exception) async {
+        if (AuthRequiredHelper.handleFailure(exception)) return;
         if (isSplash) Get.offAllNamed(AppRoutes.login);
       },
     );
@@ -69,6 +79,7 @@ class SettingsController extends GetxController {
   }
 
   Future<void> loadNotificationSettings() async {
+    if (isGuest) return;
     final result = await _repository.getNotificationSettings();
     result.when(
       success: (response) {
@@ -76,13 +87,16 @@ class SettingsController extends GetxController {
         notificationSettings.value = response.result!;
         _persistNotificationSettings(response.result!);
       },
-      failure: (_) {},
+      failure: (exception) {
+        AuthRequiredHelper.handleFailure(exception);
+      },
     );
   }
 
   Future<void> updateNotificationSettings(
     NotificationSettingsModel settings,
   ) async {
+    if (!AuthRequiredHelper.ensureAuthenticated()) return;
     if (isSavingNotifications.value) return;
     final previous = notificationSettings.value;
     notificationSettings.value = settings;
@@ -103,6 +117,7 @@ class SettingsController extends GetxController {
         ResponseHelper.onSuccess(message: response.message);
       },
       failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(exception)) return;
         notificationSettings.value = previous;
         _persistNotificationSettings(previous);
         ResponseHelper.onFailure(
@@ -114,6 +129,12 @@ class SettingsController extends GetxController {
 
   Future<void> logout() async {
     if (isLoading.value) return;
+    if (isGuest) {
+      profile.value = null;
+      await StorageService.instance.depose();
+      Get.offAllNamed(AppRoutes.login);
+      return;
+    }
     isLoading(true);
     final result = await _repository.logout();
     isLoading(false);
@@ -123,18 +144,30 @@ class SettingsController extends GetxController {
           ResponseHelper.onFailure(message: response.message);
           return;
         }
+        profile.value = null;
         await StorageService.instance.depose();
         ResponseHelper.onSuccess(message: response.message);
-        Get.offAllNamed(AppRoutes.login);
+        Get.offAllNamed(AppRoutes.initial);
       },
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) async {
+        if (AuthRequiredHelper.handleFailure(exception)) return;
+        if (exception ==
+            NetworkExceptions.unauthorizedRequest('Unauthenticated')) {
+          profile.value = null;
+          await StorageService.instance.depose();
+          Get.offAllNamed(AppRoutes.initial);
+          return;
+        }
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
   Future<void> deleteAccount() async {
     if (isLoading.value) return;
+    if (!AuthRequiredHelper.ensureAuthenticated()) return;
     isLoading(true);
     final result = await _repository.deleteAccount();
     isLoading(false);
@@ -144,13 +177,17 @@ class SettingsController extends GetxController {
           ResponseHelper.onFailure(message: response.message);
           return;
         }
+        profile.value = null;
         await StorageService.instance.depose();
         ResponseHelper.onSuccess(message: response.message);
-        Get.offAllNamed(AppRoutes.login);
+        Get.offAllNamed(AppRoutes.initial);
       },
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(exception)) return;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 

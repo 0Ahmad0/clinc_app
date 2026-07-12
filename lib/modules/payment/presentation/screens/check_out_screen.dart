@@ -1,6 +1,7 @@
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/payment/presentation/controllers/checkout_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -9,10 +10,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-class CheckoutScreen extends StatelessWidget {
-  CheckoutScreen({super.key});
-
-  final controller = Get.put(CheckoutController());
+class CheckoutScreen extends GetView<CheckoutController> {
+  const CheckoutScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,7 @@ class CheckoutScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildDoctorCard(),
+            _buildCheckoutInfoCard(),
             24.verticalSpace,
 
             _buildSectionTitle(tr(LocaleKeys.checkout_payment_method_title)),
@@ -62,54 +61,75 @@ class CheckoutScreen extends StatelessWidget {
     );
   }
 
-  // --- 1. كرت الطبيب المحسن ---
-  Widget _buildDoctorCard() {
-    return Container(
-      padding: EdgeInsets.all(12.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10),
-        ],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12.r),
-            child: Image.network(
-              "https://th.bing.com/th/id/R.0a53959c5e90c15df01db99f127b0b3c?rik=KDuN6Q03CoYJgQ&riu=http%3a%2f%2fimg.youtube.com%2fvi%2fo2tq4RMcAJw%2fmaxresdefault.jpg&ehk=ciWnDc%2fAeilQEKuVt5UCf6ALd9TVmzdH3zszJbwSDeE%3d&risl=&pid=ImgRaw&r=0",
+  Widget _buildCheckoutInfoCard() {
+    return Obx(() {
+      final model = controller.checkout.value;
+      final isLab = model.isLab;
+      final title = isLab
+          ? _fallback(model.labName, tr(LocaleKeys.checkout_lab_title))
+          : _fallback(model.doctorName, tr(LocaleKeys.checkout_doctor_title));
+      final subtitle = isLab
+          ? tr(
+              LocaleKeys.checkout_lab_test_count,
+              args: [model.testCount.toString()],
+            )
+          : _fallback(model.specialty, model.clinicName);
+
+      return Container(
+        padding: EdgeInsets.all(12.w),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16.r),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10),
+          ],
+        ),
+        child: Row(
+          children: [
+            AppCachedImageWidget(
+              imageUrl: isLab ? model.labLogo : model.doctorLogo,
               width: 65.w,
               height: 65.h,
               fit: BoxFit.cover,
+              clipRadius: 12.r,
+              placeholderType: isLab
+                  ? AppImagePlaceholderType.lab
+                  : AppImagePlaceholderType.doctor,
             ),
-          ),
-          15.horizontalSpace,
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                tr(LocaleKeys.checkout_mock_doctor_name),
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.sp),
+            15.horizontalSpace,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.sp,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: TextStyle(color: Colors.grey, fontSize: 12.sp),
+                  ),
+                  5.verticalSpace,
+                  Text(
+                    isLab
+                        ? _fallback(model.labId, model.clinicName)
+                        : _fallback(model.bookingTime, model.clinicName),
+                    style: TextStyle(
+                      fontSize: 11.sp,
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                tr(LocaleKeys.checkout_mock_doctor_specialty),
-                style: TextStyle(color: Colors.grey, fontSize: 12.sp),
-              ),
-              5.verticalSpace,
-              Text(
-                tr(LocaleKeys.checkout_mock_booking_time),
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   // --- 2. خيارات الدفع الرئيسية (تفاعلية) ---
@@ -188,18 +208,63 @@ class CheckoutScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              TextButton(
-                onPressed: controller.applyCoupon,
-                child: Text(
-                  tr(LocaleKeys.checkout_apply_coupon),
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
+              Obx(
+                () => TextButton(
+                  onPressed: controller.isApplyingCoupon.value
+                      ? null
+                      : controller.applyCoupon,
+                  child: controller.isApplyingCoupon.value
+                      ? SizedBox(
+                          width: 18.sp,
+                          height: 18.sp,
+                          child: const CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : Text(
+                          tr(LocaleKeys.checkout_apply_coupon),
+                          style: TextStyle(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                 ),
               ),
             ],
           ),
+        ),
+        Obx(
+          () => controller.showCouponCelebration.value
+              ? Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.only(top: 10.h),
+                  padding: EdgeInsets.all(12.w),
+                  decoration: BoxDecoration(
+                    color: Colors.green.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Iconsax.discount_shape,
+                        color: Colors.green,
+                        size: 18.sp,
+                      ),
+                      8.horizontalSpace,
+                      Expanded(
+                        child: Text(
+                          tr(LocaleKeys.checkout_coupon_applied_success),
+                          style: TextStyle(
+                            color: Colors.green,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : const SizedBox.shrink(),
         ),
         Align(
           alignment: Alignment.centerLeft,
@@ -276,6 +341,7 @@ class CheckoutScreen extends StatelessWidget {
           isLoading: controller.isProcessingPayment.value,
           onPressed: () => controller.processPayment(context),
           text: controller.selectedPayment.value == 'cash'
+
               ? tr(LocaleKeys.checkout_confirm_booking)
               : tr(
                   LocaleKeys.checkout_confirm_and_pay,
@@ -407,4 +473,8 @@ class CheckoutScreen extends StatelessWidget {
       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp),
     ),
   );
+
+  String _fallback(String primary, String fallback) {
+    return primary.trim().isNotEmpty ? primary : fallback;
+  }
 }

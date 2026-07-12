@@ -10,22 +10,20 @@ class InsuranceRemoteDataSource implements InsuranceDataSource {
   final ApiServices _apiServices;
 
   @override
-  Future<BaseModel<List<InsuranceCompanyModel>>> getInsurances() async {
-    final response = await _apiServices.get(AppUrl.insurances, hasToken: false);
+  Future<BaseModel<BaseModels<InsuranceCompanyModel>>> getInsurances() async {
+    final response = await _apiServices.get(
+      AppUrl.userInsurances,
+      hasToken: false,
+    );
+
     return BaseModel.fromJson(
       Map<String, dynamic>.from(response as Map),
-      _insuranceListFromJson,
+      (json) => BaseModels<InsuranceCompanyModel>.fromJson(
+        json,
+        (itemJson) => InsuranceCompanyModel.fromJson(
+          Map<String, dynamic>.from(itemJson as Map),
+        ),
+      ),
     );
-  }
-
-  List<InsuranceCompanyModel> _insuranceListFromJson(dynamic json) {
-    if (json is! List) return <InsuranceCompanyModel>[];
-    return json
-        .whereType<Map>()
-        .map(
-          (item) =>
-              InsuranceCompanyModel.fromJson(Map<String, dynamic>.from(item)),
-        )
-        .toList();
   }
 }

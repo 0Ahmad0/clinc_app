@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../app/core/configuration/locator.dart';
+import '../../../app/core/helper/auth_required_helper.dart';
 import '../../../app/core/helper/response_helper.dart';
 import '../../../app/core/utils/app_validator.dart';
 import '../../../app/data/base_model.dart';
@@ -39,6 +40,9 @@ class ProfileController extends GetxController {
   }
 
   Future<void> loadProfile() async {
+    if (!AuthRequiredHelper.ensureAuthenticated(onAuthenticated: loadProfile)) {
+      return;
+    }
     isLoading(true);
     final result = await _repository.getProfile();
     isLoading(false);
@@ -50,18 +54,28 @@ class ProfileController extends GetxController {
         }
         _applyProfile(response.result!);
       },
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(
+          exception,
+          onAuthenticated: loadProfile,
+        )) {
+          return;
+        }
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
   Future<void> pickImageFromGallery() async {
+    if (!AuthRequiredHelper.ensureAuthenticated()) return;
     final image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) selectedImage.value = File(image.path);
   }
 
   Future<void> pickImageFromCamera() async {
+    if (!AuthRequiredHelper.ensureAuthenticated()) return;
     final image = await _picker.pickImage(source: ImageSource.camera);
     if (image != null) selectedImage.value = File(image.path);
   }
@@ -81,6 +95,9 @@ class ProfileController extends GetxController {
       AppValidator.validateSaudiPhone(value);
 
   Future<void> editProfile() async {
+    if (!AuthRequiredHelper.ensureAuthenticated(onAuthenticated: loadProfile)) {
+      return;
+    }
     if (isSaving.value || !(profileFormKey.currentState?.validate() ?? false)) {
       return;
     }
@@ -111,13 +128,22 @@ class ProfileController extends GetxController {
         }
         ResponseHelper.onSuccess(message: response.message);
       },
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(
+          exception,
+          onAuthenticated: loadProfile,
+        )) {
+          return;
+        }
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
   Future<void> deleteAccount() async {
+    if (!AuthRequiredHelper.ensureAuthenticated()) return;
     if (isSaving.value) return;
     isSaving(true);
     final result = await _repository.deleteAccount();
@@ -128,13 +154,19 @@ class ProfileController extends GetxController {
           ResponseHelper.onFailure(message: response.message);
           return;
         }
+        if (Get.isRegistered<SettingsController>()) {
+          Get.find<SettingsController>().profile.value = null;
+        }
         await StorageService.instance.depose();
         ResponseHelper.onSuccess(message: response.message);
         Get.offAllNamed(AppRoutes.login);
       },
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(exception)) return;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 

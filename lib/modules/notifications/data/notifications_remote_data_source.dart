@@ -33,13 +33,24 @@ class NotificationsRemoteDataSource implements NotificationsDataSource {
     );
   }
 
+
   List<NotificationModel> _notificationsFromJson(dynamic json) {
-    if (json is! List) return <NotificationModel>[];
-    return json
+
+    List<dynamic> items = [];
+
+    if (json is Map) {
+      items = json['items'] ?? [];
+    } else if (json is List) {
+      items = json;
+    }
+
+    return items
         .whereType<Map>()
         .map(
-          (item) => NotificationModel.fromJson(Map<String, dynamic>.from(item)),
-        )
+          (item) => NotificationModel.fromJson(
+        Map<String, dynamic>.from(item),
+      ),
+    )
         .toList();
   }
 }

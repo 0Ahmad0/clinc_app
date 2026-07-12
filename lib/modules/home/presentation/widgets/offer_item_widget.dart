@@ -1,3 +1,5 @@
+import 'package:clinc_app_t1/app/core/constants/app_assets.dart';
+import 'package:clinc_app_t1/app/core/utils/app_url.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,8 +28,9 @@ class OfferItemWidget extends StatelessWidget {
                 BlendMode.darken,
               ),
               child: Image.network(
-                offer.image,
-                fit: BoxFit.cover,
+                offer.image??"${baseServ}images/logo.png",
+                fit: BoxFit.contain,
+
                 width: double.maxFinite,
                 height: 120.h,
               ),

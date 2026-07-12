@@ -7,6 +7,9 @@ class CheckoutPaymentRequestModel {
     required this.discountAmount,
     required this.totalAmount,
     this.couponCode,
+    this.appointmentId,
+    this.labId,
+    this.itemIds = const <String>[],
   });
 
   final String paymentType;
@@ -16,6 +19,9 @@ class CheckoutPaymentRequestModel {
   final double discountAmount;
   final double totalAmount;
   final String? couponCode;
+  final String? appointmentId;
+  final String? labId;
+  final List<String> itemIds;
 
   Map<String, dynamic> toJson() => {
     'payment_type': paymentType,
@@ -24,6 +30,10 @@ class CheckoutPaymentRequestModel {
     'vat_amount': vatAmount,
     'discount_amount': discountAmount,
     'total_amount': totalAmount,
-    'coupon_code': couponCode,
+    if (couponCode != null && couponCode!.isNotEmpty) 'coupon_code': couponCode,
+    if (appointmentId != null && appointmentId!.isNotEmpty)
+      'appointment_id': appointmentId,
+    if (labId != null && labId!.isNotEmpty) 'lab_id': labId,
+    if (itemIds.isNotEmpty) 'item_ids': itemIds,
   };
 }

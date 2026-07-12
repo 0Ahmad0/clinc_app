@@ -1,4 +1,6 @@
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -12,11 +14,14 @@ class LogoutDialogWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GeneralAppDialog(
-      title: 'هل تريد بالفعل تسجيل الخروج ؟',
+      title: tr(LocaleKeys.logout_title),
       generalColor: AppColors.error,
       okOnTap: () {
         Get.back();
-        Get.find<SettingsController>().logout();
+        final controller = Get.isRegistered<SettingsController>()
+            ? Get.find<SettingsController>()
+            : Get.put(SettingsController());
+        controller.logout();
       },
       icon: Iconsax.logout,
     );

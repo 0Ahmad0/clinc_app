@@ -34,12 +34,12 @@ class InsuranceController extends GetxController {
   }
 
   void _handleInsurancesResponse(
-    BaseModel<List<InsuranceCompanyModel>> response,
+    BaseModel<BaseModels<InsuranceCompanyModel>> response,
   ) {
     if (!response.isSuccess || response.result == null) {
       ResponseHelper.onFailure(message: response.message);
       return;
     }
-    insurances.assignAll(response.result!);
+    insurances.assignAll(response.result!.list);
   }
 }

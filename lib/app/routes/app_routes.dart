@@ -43,4 +43,5 @@ abstract class AppRoutes {
   static const aboutApp = '/about_app';
   static const privacyPolicy = '/privacy_policy';
   static const payment = '/payment';
+  static const checkout = '/checkout';
 }

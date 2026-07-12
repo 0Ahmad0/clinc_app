@@ -2,6 +2,7 @@ import '../../../app/data/base_model.dart';
 import '../../../app/data/remote/api_response.dart';
 import '../../../app/domain/error_handler/network_exceptions.dart';
 import '../data/models/card_model.dart';
+import '../data/models/checkout_model.dart';
 import '../data/models/checkout_payment_request_model.dart';
 import '../data/models/payment_coupon_model.dart';
 import '../data/payment_data_source.dart';
@@ -36,10 +37,10 @@ class PaymentRepository {
     return _execute(_dataSource.getCoupons);
   }
 
-  Future<ApiResponse<BaseModel<Map<String, dynamic>>>> checkout(
+  Future<ApiResponse<BaseModel<CheckoutModel>>> labCartCheckout(
     CheckoutPaymentRequestModel request,
   ) {
-    return _execute(() => _dataSource.checkout(request));
+    return _execute(() => _dataSource.labCartCheckout(request));
   }
 
   Future<ApiResponse<BaseModel<T>>> _execute<T>(

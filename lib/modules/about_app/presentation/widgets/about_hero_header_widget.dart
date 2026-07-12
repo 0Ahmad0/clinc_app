@@ -12,7 +12,7 @@ class AboutHeroHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 50.h),
+      padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 50.h,top: 20.h),
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(

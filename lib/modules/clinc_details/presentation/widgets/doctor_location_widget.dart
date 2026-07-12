@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -30,21 +31,25 @@ class DoctorLocation extends StatelessWidget {
         Container(
           height: 150.h,
           width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16.r),
-            image: const DecorationImage(
-              image: NetworkImage(
-                "https://media.wired.com/photos/59269cd37034dc5f91bec0f1/191:100/w_1280,c_limit/GoogleMapTA.jpg",
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(16.r)),
+          clipBehavior: Clip.antiAlias,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              const AppCachedImageWidget(
+                imageUrl:
+                    "https://media.wired.com/photos/59269cd37034dc5f91bec0f1/191:100/w_1280,c_limit/GoogleMapTA.jpg",
+                fit: BoxFit.cover,
+                placeholderType: AppImagePlaceholderType.clinic,
               ),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Center(
-            child: Icon(
-              Icons.location_on,
-              color: Theme.of(context).primaryColor,
-              size: 40.sp,
-            ),
+              Center(
+                child: Icon(
+                  Icons.location_on,
+                  color: Theme.of(context).primaryColor,
+                  size: 40.sp,
+                ),
+              ),
+            ],
           ),
         ),
       ],

@@ -11,7 +11,7 @@ class HomeRemoteDataSource implements HomeDataSource {
 
   @override
   Future<BaseModel<HomeModel>> getHome() async {
-    final response = await _apiServices.get(AppUrl.userHome, hasToken: true);
+    final response = await _apiServices.get(AppUrl.userHome, hasToken: false);
     return BaseModel.fromJson(
       Map<String, dynamic>.from(response as Map),
       (json) => HomeModel.fromJson(Map<String, dynamic>.from(json as Map)),

@@ -1,4 +1,6 @@
 import 'package:clinc_app_t1/modules/labs/presentation/controllers/labs_test_controller.dart';
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -60,7 +62,9 @@ class LabsCategoryFilter extends GetView<LabsTestController> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          cat,
+                          cat.isEmpty
+                              ? tr(LocaleKeys.labs_page_filter_all)
+                              : cat,
                           style: TextStyle(
                             color: isSelected ? Colors.white : Colors.black,
                             fontSize: 14.sp,
@@ -70,7 +74,7 @@ class LabsCategoryFilter extends GetView<LabsTestController> {
                           ),
                         ),
 
-                        if (cat != 'الكل' && testCount > 0)
+                        if (cat.isNotEmpty && testCount > 0)
                           Container(
                             margin: EdgeInsets.only(left: 6.w),
                             padding: EdgeInsets.symmetric(

@@ -20,7 +20,14 @@
     "confirmPassword_empty": "الرجاء تأكيد كلمة المرور",
     "confirmPassword_noMatch": "كلمتا المرور غير متطابقتين",
     "emailOrUsername_empty": "الرجاء إدخال البريد الإلكتروني أو اسم المستخدم",
-    "emailOrUsername_invalid": "الصيغة المدخلة غير صالحة"
+    "emailOrUsername_invalid": "الصيغة المدخلة غير صالحة",
+    "password_no_spaces": "يجب ألا تحتوي كلمة المرور على مسافات",
+    "saudi_id_length": "رقم الهوية يجب أن يتكون من 10 أرقام",
+    "saudi_id_invalid": "رقم هوية غير صحيح",
+    "birth_date_future": "تاريخ الميلاد لا يمكن أن يكون في المستقبل",
+    "birth_date_min_age": "يجب أن يكون عمرك 18 سنة على الأقل",
+    "birth_date_check": "الرجاء التحقق من تاريخ الميلاد",
+    "birth_date_invalid": "صيغة تاريخ غير صحيحة"
   },
   "password_validation": {
     "requirements_title": "متطلبات كلمة المرور:",
@@ -33,6 +40,12 @@
     "req_special": "رمز خاص (!@#\\u0024%)",
     "req_no_spaces": "بدون مسافات"
   },
+  "toast": {
+    "success": "نجاح",
+    "error": "فشل",
+    "failure": "فشل",
+    "otp_sent_success": "تم إرسال رمز التحقق بنجاح"
+  },
   "core": {
     "yes": "نعم",
     "no": "لا",
@@ -43,7 +56,17 @@
     "send": "إرسال",
     "reset": "إعادة تعيين",
     "ar": "العربية",
-    "en": "الإنجليزية"
+    "en": "الإنجليزية",
+    "apply": "تطبيق",
+    "from": "من",
+    "to": "إلى",
+    "unsupported_type": "نوع غير مدعوم",
+    "unsupported_image_format": "صيغة الصورة غير مدعومة",
+    "whatsapp_not_installed": "تطبيق واتساب غير مثبت",
+    "form_invalid": "الرجاء التأكد من جميع الحقول المدخلة",
+    "cancel": "إلغاء",
+    "select": "تحديد",
+    "guest": "زائر"
   },
   "splash": {
     "description": "رفيقك الأول لتنظيم مواعيد الدواء والعناية بصحتك.",
@@ -90,11 +113,13 @@
     "continue_with_google": "جوجل",
     "hava_account": "لديك حساب بالفعل؟ ",
     "login": "تسجيل الدخول",
-    "visitor_register": "التسجيل كزائر"
+    "visitor_register": "التسجيل كزائر",
+    "terms_prefix": "أوافق على ",
+    "terms_link": "سياسة الخصوصية و شروط الاستخدام"
   },
   "forgetPassword": {
     "email": "البريد الالكتروني",
-    "welcome": "لا مشكلة, هذا يحدث للجميع\uD83D\uDE4C",
+    "welcome": "لا مشكلة, هذا يحدث للجميع🙌",
     "description": "أدخل بريدك الالكتروني لإعادة تعيين كلمة مرورك"
   },
   "auth": {
@@ -117,7 +142,8 @@
     "current_password_hint": "كلمة المرور الحالية",
     "verify": "تحقق",
     "confirm_new_password_hint": "تأكيد كلمة المرور الجديدة",
-    "password_no_match": "كلمة المرور غير متطابقة"
+    "password_no_match": "كلمة المرور غير متطابقة",
+    "google_login_failed": "فشل تسجيل الدخول عبر جوجل"
   },
   "home": {
     "app_bar": {
@@ -134,7 +160,9 @@
       "labs": "المختبرات",
       "insurance": "التأمين",
       "chatbot": "المساعد الطبي"
-    }
+    },
+    "empty_title": "لا توجد بيانات في الرئيسية",
+    "empty_subtitle": "ستظهر العروض والخدمات والمواعيد النشطة هنا."
   },
   "navbar": {
     "book_now": "احجز الآن",
@@ -142,7 +170,13 @@
     "doctors_text": "الأطباء",
     "medical_file_text": "ملفي الطبي",
     "appointments_text": "حجوزاتي",
-    "settings_text": "الإعدادات"
+    "settings_text": "الإعدادات",
+    "back_exit_title": "اضغط مرة أخرى للخروج",
+    "back_exit_message": "اضغط زر الرجوع مرة أخرى للخروج من التطبيق",
+    "exit_dialog_title": "هل أنت متأكد من الخروج؟",
+    "exit_dialog_message": "سيتم إغلاق التطبيق بالكامل. تأكد من حفظ جميع بياناتك قبل الخروج.",
+    "exit_dialog_cancel": "إلغاء",
+    "exit_dialog_confirm": "خروج"
   },
   "profile": {
     "title": "الملف الشخصي",
@@ -200,7 +234,10 @@
     "btn_send": "إرسال رسالة",
     "intro_desc": "حجز سريع هي بوابتك الرقمية الأسهل للوصول إلى نخبة الأطباء في المملكة. جئنا لنختصر لك الانتظار ونرتقي بتجربتك الصحية لتواكب رؤية 2030، حيث تجتمع السرعة، الدقة، والأمان في مكان واحد.",
     "intro_title": "بوابتك الرقمية للصحة",
-    "label_email": "البريد الإلكتروني"
+    "label_email": "البريد الإلكتروني",
+    "default_working_hours": "السبت - الخميس\n9:00 صباحاً - 10:00 مساءً",
+    "email_subject": "دعم التطبيق",
+    "email_body": "مرحباً، لدي استفسار..."
   },
   "privacy_policy": {
     "title": "الخصوصية والشروط",
@@ -245,13 +282,37 @@
     "no_results": "لا يوجد أطباء مطابقين للبحث",
     "currency": "SAR",
     "gender_male": "ذكر",
-    "gender_female": "أنثى"
+    "gender_female": "أنثى",
+    "filter_sort": "الترتيب",
+    "filter_price": "السعر",
+    "filter_price_from": "من",
+    "filter_price_to": "إلى",
+    "empty_subtitle": "غيّر التخصص أو المنطقة للعثور على أطباء آخرين.",
+    "title_with_specialty": "أطباء {}",
+    "sort_price_asc": "السعر: الأقل",
+    "sort_price_desc": "السعر: الأعلى",
+    "sort_rating_desc": "الأعلى تقييماً",
+    "regions_group": "المناطق"
   },
   "chatbot": {
     "title": "المساعد الطبي",
     "status_online": "متاح الآن للإجابة",
     "typing_indicator": "جاري الكتابة... 🩺",
-    "input_hint": "اكتب استشارتك الطبية..."
+    "input_hint": "اكتب استشارتك الطبية...",
+    "quick_book": "📅 كيف أحجز موعد؟",
+    "quick_hours": "⏰ أوقات عمل التيم؟",
+    "quick_location": "📍 موقع العيادة",
+    "quick_lab": "💊 هل لديكم مختبر؟",
+    "welcome_message": "مرحباً بك في المساعد الذكي لعياداتنا 👋\n\n⚠️ تنويه هام: أنا ذكاء اصطناعي مخصص للإجابة على الاستفسارات الطبية العامة ومساعدتك في خدمات العيادة. معلوماتي قد تحتمل الخطأ ولا تغني أبداً عن استشارة الطبيب المختص.",
+    "image_received": "لقد استلمت الصورة 📷.\nيمكنك إرسال سؤالك النصي الآن ليتم تمريره إلى نظام المساعدة في الخلفية.",
+    "image_analysis": "لقد استلمت الصورة 📷.\nبناءً على التحليل المبدئي، يبدو أن هناك احمراراً جلديًا. أنصحك بحجز موعد مع دكتور الجلدية للفحص الدقيق.",
+    "fallback_message": "تم استلام رسالتك. حالياً لم يتمكن النظام من توليد رد ذكي، وسيتم الرد اعتماداً على البيانات المتاحة في الخلفية.",
+    "non_medical": "عذراً، أنا بوت طبي متخصص 🩺. يمكنني الإجابة فقط على الأسئلة المتعلقة بالصحة أو خدمات العيادة.",
+    "book_response": "لحجز موعد، يمكنك استخدام زر 'حجز سريع' في الصفحة الرئيسية، أو أخبـرني بالتخصص الذي تريده وسأساعدك.",
+    "hours_response": "فريق الدعم متواجد لخدمتكم يومياً من الساعة 8:00 صباحاً وحتى 10:00 مساءً 🕙.",
+    "location_response": "نقع في الرياض، طريق الملك فهد، مبنى رقم 102.",
+    "headache_response": "سلامتك! الصداع قد يكون بسبب الإجهاد أو قلة النوم. ننصحك بشرب الماء والراحة. إذا استمر الألم، يرجى حجز موعد مع طبيب الباطنية.",
+    "default_response": "شكراً لاستفسارك. سأقوم بتحويل هذا السؤال لأحد موظفي الاستقبال للرد عليك بدقة أكبر، أو يمكنك الاتصال بنا مباشرة 📞."
   },
   "clinic_app_details": {
     "rating_count": "تقييم",
@@ -263,7 +324,15 @@
     "elite_doctors": "نخبة الأطباء",
     "view_all": "عرض الكل",
     "call_clinic": "اتصل بالعيادة",
-    "book_btn": "حجز"
+    "book_btn": "حجز",
+    "rate_clinic": "قيم العيادة",
+    "rate_clinic_subtitle": "شاركنا تجربتك لمساعدة الآخرين",
+    "patient_reviews": "آراء المرضى",
+    "no_reviews_title": "لا توجد آراء بعد",
+    "no_reviews_subtitle": "كن أول من يشارك تجربته مع هذه العيادة.",
+    "no_doctors_title": "لا يوجد أطباء حالياً",
+    "no_doctors_subtitle": "لا توجد أسماء متاحة ضمن هذا التخصص الآن.",
+    "all_reviews_title": "كل آراء المرضى ({})"
   },
   "doctor_details": {
     "app_bar_title": "أنف وأذن وحنجرة",
@@ -295,7 +364,9 @@
     "about_desc": "د. سارة العلي هي استشارية متخصصة في أمراض الأنف والأذن والحنجرة، تعمل حالياً في مستشفى الأمل. لديها خبرة طويلة تمتد لأكثر من 10 سنوات في تشخيص وعلاج الحالات المعقدة."
   },
   "insurance": {
-    "title": "التأمينات"
+    "title": "التأمينات",
+    "empty_title": "لا توجد شركات تأمين",
+    "empty_subtitle": "ستظهر شركات التأمين المتاحة هنا عند توفرها."
   },
   "setting": {
     "edit_profile": "تغيير المعلومات",
@@ -325,7 +396,10 @@
     "filter_insurance": "التأمين",
     "filter_gender": "الجنس",
     "filter_specialty": "التخصص",
+    "filter_rating": "التقييم",
     "filter_sort": "الفرز",
+    "filter_all": "الكل",
+    "filter_city_search_hint": "بحث عن مدينة...",
     "sort_price_asc": "الأقل سعراً",
     "sort_price_desc": "الأعلى سعراً",
     "sort_distance": "الأقرب",
@@ -334,7 +408,19 @@
     "accepts_insurance": "يقبل التأمين",
     "sar": "ر.س",
     "consultation": "استشارة",
-    "distance_km": "كم"
+    "distance_km": "كم",
+    "filter_price": "السعر",
+    "filter_open_now": "مفتوح الآن",
+    "filter_location": "الموقع",
+    "filter_location_selected": "الموقع محدد",
+    "filter_latitude": "خط العرض",
+    "filter_longitude": "خط الطول",
+    "empty_subtitle": "جرّب تغيير الفلاتر أو البحث باسم عيادة مختلفة.",
+    "sort_price_asc_full": "السعر: الأقل",
+    "sort_price_desc_full": "السعر: الأعلى",
+    "sort_rating_desc": "الأعلى تقييماً",
+    "sort_distance_asc": "الأقرب",
+    "regions_group": "المناطق"
   },
   "payment": {
     "settings_title": "إدارة البطاقات",
@@ -392,6 +478,9 @@
     "mock_doctor_name": "د. أحمد سليمان",
     "mock_doctor_specialty": "أخصائي جراحة العظام",
     "mock_booking_time": "الاثنين، 15 فبراير - 04:30 م",
+    "doctor_title": "موعد طبيب",
+    "lab_title": "طلب مختبر",
+    "lab_test_count": "{} فحوصات",
     "cash_at_clinic": "نقداً في العيادة",
     "online_payment": "دفع أونلاين",
     "bank_card": "بطاقة بنكية",
@@ -401,6 +490,7 @@
     "apply_coupon": "تطبيق",
     "my_coupons": "عرض كوبوناتي",
     "coupon_discount": "خصم الكوبون",
+    "coupon_applied_success": "رائع! تم تطبيق الخصم على طلبك.",
     "total_due": "الإجمالي المستحق",
     "currency": "ر.س",
     "confirm_booking": "تأكيد الحجز",
@@ -410,6 +500,10 @@
     "no_coupons_available": "لا توجد كوبونات متاحة حالياً",
     "pay_btn": "دفع",
     "success_msg": "تمت عملية الدفع بنجاح",
+    "doctor_success_msg": "تم حجز الموعد بنجاح",
+    "lab_success_msg": "تم دفع طلب المختبر بنجاح",
+    "lab_success_title": "تم دفع طلب المختبر",
+    "lab_success_subtitle": "تم تأكيد طلب الفحوصات بنجاح، ويمكنك متابعة تفاصيل الطلب من حسابك.",
     "select_method_error": "يرجى اختيار طريقة دفع"
   },
   "labs": {
@@ -419,6 +513,7 @@
     "view_all": "عرض الكل",
     "book_btn": "حجز",
     "add_to_cart": "إضافة",
+    "added_to_cart": "تمت الإضافة",
     "package_count": "تحليل",
     "currency": "ر.س",
     "cart_total": "المجموع",
@@ -435,12 +530,16 @@
     "cart_delete_item": "حذف",
     "cart_confirm_order": "تأكيد الطلب",
     "cart_summary": "ملخص الفاتورة",
-    "cart_total_price": "الإجمالي الكلي"
+    "cart_total_price": "الإجمالي الكلي",
+    "test_already_in_cart": "هذا الفحص موجود في السلة بالفعل"
   },
   "labs_page": {
     "title": "المختبرات الطبية",
     "search_hint": "ابحث عن مختبر...",
     "filter_all": "الكل",
+    "filter_category": "التصنيف",
+    "filter_area": "المنطقة",
+    "filter_reset": "مسح",
     "filter_analysis": "تحاليل شاملة",
     "filter_radiology": "أشعة",
     "filter_pathology": "أنسجة",
@@ -451,7 +550,12 @@
     "profile_services": "الخدمات المتاحة",
     "profile_location": "الموقع",
     "profile_contact": "تواصل معنا",
-    "call_now": "اتصال"
+    "call_now": "اتصال",
+    "empty_title": "لا توجد مختبرات حالياً",
+    "empty_subtitle": "عدّل الفلاتر أو جرّب البحث باسم مختبر آخر.",
+    "chat": "دردشة",
+    "no_services_title": "لا توجد خدمات متاحة",
+    "no_services_subtitle": "لم يضف المختبر خدماته بعد."
   },
   "labs_profile": {
     "location_title": "موقع المختبر",
@@ -464,7 +568,19 @@
     "coupon_copied": "تم نسخ الكود بنجاح",
     "write_review_hint": "اكتب تجربتك هنا...",
     "submit_review": "نشر التقييم",
-    "share_msg": "انظر لهذا المختبر المميز: "
+    "share_msg": "انظر لهذا المختبر المميز: ",
+    "share_title": "مشاركة",
+    "share_opened": "تم فتح نافذة المشاركة",
+    "copied_title": "تم",
+    "phone_unavailable": "رقم المختبر غير متوفر",
+    "call_open_failed": "تعذر فتح تطبيق الاتصال",
+    "location_unavailable": "موقع المختبر غير متوفر",
+    "map_open_failed": "تعذر فتح الخريطة",
+    "no_reviews_subtitle": "شارك تقييمك ليساعد المرضى الآخرين.",
+    "show_more": "عرض المزيد",
+    "share_address": "العنوان: {}",
+    "share_phone": "الهاتف: {}",
+    "share_rating": "التقييم: {}"
   },
   "booking": {
     "title": "حجز موعد",
@@ -495,6 +611,65 @@
     "status_accepted": "تم قبول الطلب",
     "status_pending": "قيد الانتظار",
     "status_rejected": "تم رفض الطلب",
-    "currency": "ريال"
+    "currency": "ريال",
+    "empty_title": "لا توجد مواعيد",
+    "empty_subtitle_all": "ستظهر مواعيدك هنا بعد إتمام أول حجز.",
+    "empty_subtitle_filtered": "لا توجد مواعيد ضمن هذا التصنيف حالياً.",
+    "rebook": "إعادة حجز",
+    "cancel_booking": "إلغاء الحجز",
+    "cancel_unavailable": "غير قابل للإلغاء (تجاوز الوقت المسموح)",
+    "cancel_dialog_title": "تأكيد الإلغاء",
+    "cancel_dialog_message": "هل أنت متأكد من رغبتك في إلغاء هذا الحجز؟",
+    "cancel_dialog_confirm": "نعم، إلغاء",
+    "cancel_dialog_back": "تراجع",
+    "rebook_snackbar_message": "جاري توجيهك لإعادة حجز {}",
+    "rebook_missing_target": "تعذر إعادة حجز هذا الموعد لعدم توفر بيانات العيادة أو الطبيب."
+  },
+  "my_appointment_details": {
+    "title": "تفاصيل الحجز",
+    "appointment_info": "معلومات الموعد",
+    "patient": "المريض",
+    "date": "التاريخ",
+    "time": "الوقت",
+    "phone": "الهاتف",
+    "visit_type": "نوع الزيارة",
+    "status": "الحالة",
+    "problem": "الشكوى",
+    "clinic_details": "تفاصيل العيادة",
+    "facility": "المنشأة",
+    "address": "العنوان",
+    "financial_summary": "الملخص المالي",
+    "consultation_fee": "رسوم الكشفية",
+    "payment_method": "طريقة الدفع",
+    "payment_status": "حالة الدفع",
+    "payment_reference": "مرجع الدفع",
+    "paid_amount": "المبلغ المدفوع",
+    "remaining_amount": "المبلغ المتبقي",
+    "rating_count": "({} تقييم)",
+    "cancel_booking": "إلغاء الحجز",
+    "rebook_appointment": "إعادة حجز موعد",
+    "cancel_unavailable_24h": "لا يمكن الإلغاء خلال 24 ساعة من موعد الحجز.",
+    "no_action_available": "لا يوجد إجراء متاح",
+    "not_available": "غير متوفر",
+    "cancel_dialog_title": "تأكيد الإلغاء",
+    "cancel_dialog_message": "هل أنت متأكد من إلغاء الموعد؟",
+    "cancel_dialog_confirm": "نعم",
+    "cancel_dialog_back": "تراجع",
+    "mock_doctor_name": "الدكتورة كارلي أنجلا",
+    "mock_specialty": "أخصائية | أمراض المناعة",
+    "mock_clinic_name": "مستشفى كريست الدولي",
+    "mock_clinic_address": "لندن، شارع باكر، مبنى 221B",
+    "mock_patient_name": "أحمد محمد العتوم",
+    "mock_date": "24 مايو 2024",
+    "mock_time": "10:30 صباحاً",
+    "mock_visit_type": "زيارة أولى",
+    "mock_payment_method": "بطاقة ائتمان"
+  },
+  "logout": {
+    "title": "هل تريد بالفعل تسجيل الخروج ؟"
+  },
+  "share": {
+    "app_text": "حمّل تطبيق حجز سريع الآن واستمتع بتجربة صحية أسهل\n{}",
+    "app_link": "رابط التطبيق: {}"
   }
 }

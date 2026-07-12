@@ -1,19 +1,26 @@
 import 'dart:io';
 
 import 'package:clinc_app_t1/app/core/constants/app_assets.dart';
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-
 class ShareHelper {
+  static const String appLink = "https://appName.com";
+
+  static Future<void> shareText({required String text, String? subject}) async {
+    final params = ShareParams(text: text, subject: subject);
+    await SharePlus.instance.share(params);
+  }
+
   static Future<void> shareAppWithImage({
     String url = AppAssets.appLogoPNG,
   }) async {
-    const appLink = "https://appName.com";
     String appImage = url;
-    const shareText = "حمّل تطبيق ---- الآن واستمتع بتجربة فريدة\n$appLink";
+    final shareText = tr(LocaleKeys.share_app_text, args: [appLink]);
 
     try {
       final byteData = await rootBundle.load(appImage);

@@ -1,5 +1,6 @@
 import '../../../app/data/base_model.dart';
 import 'models/card_model.dart';
+import 'models/checkout_model.dart';
 import 'models/checkout_payment_request_model.dart';
 import 'models/payment_coupon_model.dart';
 
@@ -17,7 +18,7 @@ abstract class PaymentDataSource {
 
   Future<BaseModel<List<PaymentCouponModel>>> getCoupons();
 
-  Future<BaseModel<Map<String, dynamic>>> checkout(
+  Future<BaseModel<CheckoutModel>> labCartCheckout(
     CheckoutPaymentRequestModel request,
   );
 }

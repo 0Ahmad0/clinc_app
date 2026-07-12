@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../app/core/configuration/locator.dart';
 import '../../../../app/core/helper/response_helper.dart';
 import '../../../../app/data/base_model.dart';
+import '../../../../app/data/models/filter_option_model.dart';
 import '../../../../app/data/pagination/pagination_params.dart';
 import '../../../../app/data/pagination/pagination_state.dart';
 import '../../../../app/domain/error_handler/network_exceptions.dart';
+import '../../../../generated/locale_keys.g.dart';
 import '../../data/models/doctor_model.dart';
 import '../../domain/doctors_repository.dart';
 
@@ -17,43 +20,49 @@ class DoctorsController extends GetxController {
   );
   final ScrollController scrollController = ScrollController();
   Worker? _searchWorker;
+  String? _pendingSpecialtyName;
 
   // 2. متغيرات الواجهة والبحث
   var currentSearchQuery = ''.obs;
   var isFilterBarVisible = true.obs;
+  final RxBool isFiltersLoading = false.obs;
 
   // --- الإضافات الجديدة ليتطابق مع الـ Search ---
-  var tempSelectedMainRegion = 'الكل'.obs; // المنطقة الكبرى المختارة داخل الشيت
+  var tempSelectedMainRegion = ''.obs; // المنطقة الكبرى المختارة داخل الشيت
   var regionSearchText =
       ''.obs; // نص البحث داخل الشيت (إذا أردت البحث عن مدينة)
 
   // توزيع المناطق (نفس الموجود في SearchController)
-  final Map<String, List<String>> groupedRegions = {
-    'المناطق الوسطى': ['الرياض', 'القصيم', 'حائل'],
-    'المناطق الشمالية': ['الحدود الشمالية', 'الجوف', 'تبوك'],
-    'المناطق الجنوبية': ['عسير', 'جازان', 'نجران', 'الباحة'],
-    'المناطق الغربية': ['مكة المكرمة', 'المدينة المنورة'],
-    'المنطقة الشرقية': ['المنطقة الشرقية'],
-  };
+  final RxMap<String, List<FilterOptionModel>> groupedRegions =
+      <String, List<FilterOptionModel>>{}.obs;
   // ------------------------------------------
 
   // 3. الفلاتر النشطة
-  var selectedRegion = 'الكل'.obs;
-  var selectedSpecialty = 'الكل'.obs;
-  var selectedGender = 'الكل'.obs;
-  var selectedRating = 'الكل'.obs;
+  var selectedRegion = ''.obs;
+  var selectedArea = ''.obs;
+  var selectedSpecialty = ''.obs;
+  var selectedGender = ''.obs;
+  var selectedRating = ''.obs;
+  var selectedSort = ''.obs;
+  var minPrice = ''.obs;
+  var maxPrice = ''.obs;
 
   // 4. القوائم الثابتة
-  final List<String> specialties = [
-    'الكل',
-    'قلب',
-    'جلدية',
-    'أسنان',
-    'عيون',
-    'باطنية',
+  final RxList<FilterOptionModel> specialties = <FilterOptionModel>[].obs;
+  final RxList<FilterOptionModel> genders = <FilterOptionModel>[].obs;
+  final RxList<FilterOptionModel> ratings = <FilterOptionModel>[].obs;
+  final RxList<FilterOptionModel> regions = <FilterOptionModel>[].obs;
+  final RxList<FilterOptionModel> areas = <FilterOptionModel>[].obs;
+  final List<FilterOptionModel> ratingOptions = const [
+    FilterOptionModel(id: '4.5', name: '4.5+'),
+    FilterOptionModel(id: '4.0', name: '4.0+'),
+    FilterOptionModel(id: '3.5', name: '3.5+'),
   ];
-  final List<String> genders = ['الكل', 'ذكر', 'أنثى'];
-  final List<String> ratings = ['الكل', '4.5+', '4.0+', '3.5+'];
+  final List<FilterOptionModel> sortOptions = const [
+    FilterOptionModel(id: 'price_asc', name: 'price_asc'),
+    FilterOptionModel(id: 'price_desc', name: 'price_desc'),
+    FilterOptionModel(id: 'rating_desc', name: 'rating_desc'),
+  ];
 
   RxList<DoctorModel> get filteredDoctors => doctorsPagination.items;
   bool get isInitialLoading => doctorsPagination.isInitialLoading.value;
@@ -71,7 +80,7 @@ class DoctorsController extends GetxController {
       (_) => reloadDoctors(),
       time: const Duration(milliseconds: 450),
     );
-    loadDoctors(refresh: true);
+    loadFiltersAndDoctors();
   }
 
   @override
@@ -91,33 +100,61 @@ class DoctorsController extends GetxController {
   // تحديث الفلاتر
   void updateFilter({
     String? region,
+    String? area,
     String? specialty,
     String? gender,
     String? rating,
+    String? sort,
+    String? minPrice,
+    String? maxPrice,
   }) {
     if (region != null) selectedRegion.value = region;
+    if (area != null) selectedArea.value = area;
     if (specialty != null) selectedSpecialty.value = specialty;
     if (gender != null) selectedGender.value = gender;
     if (rating != null) selectedRating.value = rating;
+    if (sort != null) selectedSort.value = sort;
+    if (minPrice != null) this.minPrice.value = minPrice;
+    if (maxPrice != null) this.maxPrice.value = maxPrice;
 
     reloadDoctors();
   }
 
   void resetFilters() {
-    selectedRegion.value = 'الكل';
-    tempSelectedMainRegion.value = 'الكل'; // ريسيت المنطقة الكبرى
-    selectedSpecialty.value = 'الكل';
-    selectedGender.value = 'الكل';
-    selectedRating.value = 'الكل';
+    selectedRegion.value = '';
+    selectedArea.value = '';
+    tempSelectedMainRegion.value = '';
+    selectedSpecialty.value = '';
+    selectedGender.value = '';
+    selectedRating.value = '';
+    selectedSort.value = '';
+    minPrice.value = '';
+    maxPrice.value = '';
     currentSearchQuery.value = '';
     reloadDoctors();
   }
 
   bool get hasActiveFilters {
-    return selectedRegion.value != 'الكل' ||
-        selectedSpecialty.value != 'الكل' ||
-        selectedGender.value != 'الكل' ||
-        selectedRating.value != 'الكل';
+    return selectedRegion.value.isNotEmpty ||
+        selectedArea.value.isNotEmpty ||
+        selectedSpecialty.value.isNotEmpty ||
+        selectedGender.value.isNotEmpty ||
+        selectedRating.value.isNotEmpty ||
+        selectedSort.value.isNotEmpty ||
+        minPrice.value.isNotEmpty ||
+        maxPrice.value.isNotEmpty;
+  }
+
+  Future<void> loadFiltersAndDoctors() async {
+    await loadFilters();
+    await loadDoctors(refresh: true);
+  }
+
+  Future<void> loadFilters() async {
+    isFiltersLoading(true);
+    final result = await _repository.getFilters();
+    isFiltersLoading(false);
+    result.when(success: _handleFiltersResponse, failure: (_) {});
   }
 
   Future<void> reloadDoctors() => loadDoctors(refresh: true);
@@ -185,25 +222,147 @@ class DoctorsController extends GetxController {
     if (args is! Map) return;
     final specialty = args['specialty']?.toString() ?? '';
     if (specialty.isNotEmpty) {
-      selectedSpecialty.value = specialty;
+      _pendingSpecialtyName = specialty;
     }
   }
 
   Map<String, dynamic> get _activeFilters => {
-    'query': currentSearchQuery.value,
-    'region': _valueOrNull(selectedRegion.value),
-    'specialty': _valueOrNull(selectedSpecialty.value),
+    'region_id': _valueOrNull(selectedRegion.value),
+    'area_id': _valueOrNull(selectedArea.value),
+    'specialization_id': _valueOrNull(selectedSpecialty.value),
     'gender': _valueOrNull(selectedGender.value),
-    'min_rating': _minRating,
+    'min_price': _numValue(minPrice.value),
+    'max_price': _numValue(maxPrice.value),
+    'rating': _minRating,
+    'sort_by': _sortBy,
+    'sort_direction': _sortDirection,
+    'search': _valueOrNull(currentSearchQuery.value),
   };
 
   String? _valueOrNull(String value) {
-    if (value == 'الكل' || value.trim().isEmpty) return null;
+    if (value.trim().isEmpty) return null;
     return value;
   }
 
   double? get _minRating {
-    if (selectedRating.value == 'الكل') return null;
+    if (selectedRating.value.isEmpty) return null;
     return double.tryParse(selectedRating.value.replaceAll('+', ''));
+  }
+
+  num? _numValue(String value) {
+    if (value.trim().isEmpty) return null;
+    return num.tryParse(value.trim());
+  }
+
+  String? get _sortBy {
+    switch (selectedSort.value) {
+      case 'price_asc':
+      case 'price_desc':
+        return 'price';
+      case 'rating_desc':
+        return 'rating';
+    }
+    return null;
+  }
+
+  String? get _sortDirection {
+    switch (selectedSort.value) {
+      case 'price_asc':
+        return 'asc';
+      case 'price_desc':
+      case 'rating_desc':
+        return 'desc';
+    }
+    return null;
+  }
+
+  void _handleFiltersResponse(BaseModel<FiltersModel> response) {
+    if (!response.isSuccess || response.result == null) return;
+    final filters = response.result!;
+    regions.assignAll(filters.regions);
+    areas.assignAll(filters.areas);
+    specialties.assignAll(filters.specializations);
+    genders.assignAll(filters.genders);
+    ratings.assignAll(ratingOptions);
+    groupedRegions.assignAll(_buildGroupedRegions(filters));
+    _applyPendingSpecialty();
+  }
+
+  Map<String, List<FilterOptionModel>> _buildGroupedRegions(
+    FiltersModel filters,
+  ) {
+    if (filters.regions.any((region) => region.children.isNotEmpty)) {
+      return {
+        for (final region in filters.regions)
+          region.name: region.children.isEmpty ? [region] : region.children,
+      };
+    }
+
+    if (filters.areas.isNotEmpty) {
+      if (filters.regions.isEmpty) {
+        return {tr(LocaleKeys.doctors_regions_group): filters.areas};
+      }
+      return {
+        for (final region in filters.regions)
+          region.name: filters.areas
+              .where(
+                (area) => area.parentId == null || area.parentId == region.id,
+              )
+              .toList(),
+      }..removeWhere((_, value) => value.isEmpty);
+    }
+
+    return {
+      for (final region in filters.regions)
+        region.name: <FilterOptionModel>[region],
+    };
+  }
+
+  void _applyPendingSpecialty() {
+    final pending = _pendingSpecialtyName;
+    if (pending == null || pending.isEmpty) return;
+    final match = _firstOption(
+      specialties,
+      (item) => item.name == pending || item.id == pending,
+    );
+    if (match != null) {
+      selectedSpecialty.value = match.id;
+      _pendingSpecialtyName = null;
+    }
+  }
+
+  String optionLabel(List<FilterOptionModel> options, String id, String label) {
+    if (id.isEmpty) return label;
+    final match = _firstOption(options, (item) => item.id == id);
+    return match?.name ?? id;
+  }
+
+  String get selectedRegionLabel {
+    if (selectedArea.value.isNotEmpty) {
+      final allAreas = groupedRegions.values.expand((items) => items);
+      final match = _firstOption(
+        allAreas,
+        (item) => item.id == selectedArea.value,
+      );
+      return match?.name ?? selectedArea.value;
+    }
+    if (selectedRegion.value.isEmpty) {
+      return tr(LocaleKeys.doctors_filter_region);
+    }
+    final match = _firstOption(
+      regions,
+      (item) => item.id == selectedRegion.value,
+    );
+    return match?.name ?? selectedRegion.value;
+  }
+
+  FilterOptionModel? _firstOption(
+    Iterable<FilterOptionModel> options,
+    bool Function(FilterOptionModel item) test,
+  ) {
+    for (final option in options) {
+      if (test(option)) return option;
+    }
+    return null;
   }
 }

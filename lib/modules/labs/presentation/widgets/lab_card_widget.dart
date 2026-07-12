@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/labs/data/models/lab_model.dart';
@@ -37,11 +38,12 @@ class LabCardWidget extends StatelessWidget {
                   borderRadius: BorderRadius.vertical(
                     top: Radius.circular(16.r),
                   ),
-                  child: Image.network(
-                    lab.imageUrl,
+                  child: AppCachedImageWidget(
+                    imageUrl: lab.imageUrl,
                     height: 140.h,
                     width: double.infinity,
                     fit: BoxFit.cover,
+                    placeholderType: AppImagePlaceholderType.lab,
                   ),
                 ),
                 // حالة الفتح/الإغلاق
@@ -58,6 +60,7 @@ class LabCardWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Text(
+
                       tr(
                         lab.isOpen
                             ? LocaleKeys.labs_page_status_open

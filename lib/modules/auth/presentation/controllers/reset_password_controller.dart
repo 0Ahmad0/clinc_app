@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../app/core/configuration/locator.dart';
+import '../../../../app/core/helper/focus_helper.dart';
 import '../../../../app/core/helper/response_helper.dart';
 import '../../../../app/domain/error_handler/network_exceptions.dart';
 import '../../../../app/routes/app_routes.dart';
@@ -34,8 +35,9 @@ class ResetPasswordController extends GetxController {
     );
     isLoading.value = false;
     result.when(
-      success: (model) {
+      success: (model) async {
         ResponseHelper.onSuccess(message: model.message);
+        await FocusHelper.clearPrimaryFocusBeforeNavigation();
         Get.offAllNamed(AppRoutes.login);
       },
       failure: (exception) => ResponseHelper.onFailure(

@@ -9,16 +9,31 @@ class MyAppointmentDetailsMockDataSource
     String appointmentId,
   ) async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
-    const details = MyAppointmentDetailsModel(
-      doctorName: 'الدكتورة كارلي أنجلا',
-      specialty: 'أخصائية | أمراض المناعة',
-      clinicName: 'مستشفى كريست الدولي',
-      clinicAddress: 'لندن، شارع باكر، مبنى 221B',
-      patientName: 'أحمد محمد العتوم',
-      appointmentDate: '24 مايو 2024',
-      appointmentTime: '10:30 صباحاً',
-      appointmentType: 'زيارة أولى',
-      paymentMethod: 'بطاقة ائتمان',
+    final details = MyAppointmentDetailsModel(
+      id: appointmentId,
+      doctorId: 'doctor-1',
+      clinicId: 'clinic-1',
+      doctorName: 'Dr. Carly Angela',
+      specialty: 'Specialist | Immunology',
+      doctorLogo:
+          'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=600',
+      clinicName: 'Christ International Hospital',
+      clinicAddress: 'London, Baker Street, Building 221B',
+      patientName: 'Ahmed Mohammad Al Atoum',
+      phone: '+966500000001',
+      appointmentDate: '2030-05-24',
+      appointmentTime: '10:30',
+      appointmentType: 'First visit',
+      status: 'accepted',
+      consultationFee: 850,
+      paymentMethod: 'Credit card',
+      paymentStatus: 'Paid',
+      paymentReference: 'PAY-$appointmentId',
+      paidAmount: 850,
+      remainingAmount: 0,
+      problem: 'Recurring fatigue and allergy symptoms',
+      ageRange: '26 - 30',
+      gender: 'Male',
     );
 
     return BaseModel.fromJson(

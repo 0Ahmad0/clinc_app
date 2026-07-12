@@ -24,7 +24,16 @@ class ChangePasswordScreen extends GetView<ChangePasswordController> {
     return AppScaffoldWidget(
       backgroundColor: Theme.of(context).primaryColor,
       useGradientBackground: true,
-      appBar: AppAppBarWidget(title: tr(LocaleKeys.auth_change_password_title)),
+      appBar: AppAppBarWidget(
+        title: tr(LocaleKeys.auth_change_password_title),
+        onBackPress: () {
+          if (controller.isCurrentPasswordVerified.value) {
+            controller.backToCurrentPasswordStep();
+            return;
+          }
+          Get.back();
+        },
+      ),
       body: SafeArea(
         child: Center(
           child: Stack(
@@ -58,7 +67,6 @@ class ChangePasswordScreen extends GetView<ChangePasswordController> {
                         ),
 
                         20.verticalSpace,
-
                         // منطقة الحقول المتغيرة
                         Obx(() {
                           // الحالة الأولى: لم يتم التحقق بعد

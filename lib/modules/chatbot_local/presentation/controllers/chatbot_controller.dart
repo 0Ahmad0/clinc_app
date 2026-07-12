@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:easy_localization/easy_localization.dart';
 
+import '../../../../generated/locale_keys.g.dart';
 import '../../data/models/chat_message_model.dart';
 
 class ChatbotController extends GetxController {
@@ -11,21 +13,26 @@ class ChatbotController extends GetxController {
   final ScrollController scrollController = ScrollController();
 
   // الأسئلة السريعة (Quick Replies)
-  final List<String> quickReplies = [
-    "📅 كيف أحجز موعد؟",
-    "⏰ أوقات عمل التيم؟",
-    "📍 موقع العيادة",
-    "💊 هل لديكم مختبر؟",
+  List<String> get quickReplies => [
+    tr(LocaleKeys.chatbot_quick_book),
+    tr(LocaleKeys.chatbot_quick_hours),
+    tr(LocaleKeys.chatbot_quick_location),
+    tr(LocaleKeys.chatbot_quick_lab),
   ];
 
   @override
   void onInit() {
     super.onInit();
-    // رسالة الترحيب وإخلاء المسؤولية
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _addWelcomeMessage();
+    });
+  }
+
+  void _addWelcomeMessage() {
+    if (messages.isNotEmpty) return;
     messages.add(
       ChatMessage(
-        text: "مرحباً بك في المساعد الذكي لعياداتنا 👋\n\n"
-            "⚠️ تنويه هام: أنا ذكاء اصطناعي مخصص للإجابة على الاستفسارات الطبية العامة ومساعدتك في خدمات العيادة. معلوماتي قد تحتمل الخطأ ولا تغني أبداً عن استشارة الطبيب المختص.",
+        text: tr(LocaleKeys.chatbot_welcome_message),
         isSender: false,
         time: DateTime.now(),
       ),
@@ -37,11 +44,7 @@ class ChatbotController extends GetxController {
     if (text.trim().isEmpty) return;
 
     // 1. إضافة رسالة المستخدم
-    messages.add(ChatMessage(
-      text: text,
-      isSender: true,
-      time: DateTime.now(),
-    ));
+    messages.add(ChatMessage(text: text, isSender: true, time: DateTime.now()));
     textController.clear();
     _scrollToBottom();
 
@@ -53,11 +56,9 @@ class ChatbotController extends GetxController {
     String response = _getAIResponse(text);
 
     isTyping.value = false;
-    messages.add(ChatMessage(
-      text: response,
-      isSender: false,
-      time: DateTime.now(),
-    ));
+    messages.add(
+      ChatMessage(text: response, isSender: false, time: DateTime.now()),
+    );
     _scrollToBottom();
   }
 
@@ -68,24 +69,28 @@ class ChatbotController extends GetxController {
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
-      messages.add(ChatMessage(
-        text: "",
-        isSender: true,
-        isImage: true,
-        imagePath: image.path,
-        time: DateTime.now(),
-      ));
+      messages.add(
+        ChatMessage(
+          text: "",
+          isSender: true,
+          isImage: true,
+          imagePath: image.path,
+          time: DateTime.now(),
+        ),
+      );
       _scrollToBottom();
 
       isTyping.value = true;
       await Future.delayed(const Duration(seconds: 2));
       isTyping.value = false;
 
-      messages.add(ChatMessage(
-        text: "لقد استلمت الصورة 📷.\nبناءً على التحليل المبدئي، يبدو أن هناك احمراراً جلديًا. أنصحك بحجز موعد مع دكتور الجلدية للفحص الدقيق.",
-        isSender: false,
-        time: DateTime.now(),
-      ));
+      messages.add(
+        ChatMessage(
+          text: tr(LocaleKeys.chatbot_image_analysis),
+          isSender: false,
+          time: DateTime.now(),
+        ),
+      );
       _scrollToBottom();
     }
   }
@@ -95,25 +100,43 @@ class ChatbotController extends GetxController {
     String text = input.toLowerCase();
 
     // 1. فلتر المواضيع غير الطبية
-    List<String> medicalKeywords = ['ألم', 'حجز', 'دكتور', 'عيادة', 'سعر', 'علاج', 'دواء', 'صداع', 'حرارة', 'تحليل', 'موعد', 'تيم', 'سوبورت', 'وقت', 'موقع'];
+    List<String> medicalKeywords = [
+      'ألم',
+      'حجز',
+      'دكتور',
+      'عيادة',
+      'سعر',
+      'علاج',
+      'دواء',
+      'صداع',
+      'حرارة',
+      'تحليل',
+      'موعد',
+      'تيم',
+      'سوبورت',
+      'وقت',
+      'موقع',
+    ];
     bool isMedical = medicalKeywords.any((word) => text.contains(word));
 
     if (!isMedical) {
-      return "عذراً، أنا بوت طبي متخصص 🩺. يمكنني الإجابة فقط على الأسئلة المتعلقة بالصحة أو خدمات العيادة.";
+      return tr(LocaleKeys.chatbot_non_medical);
     }
 
     // 2. الردود السريعة والطبية
     if (text.contains("حجز") || text.contains("موعد")) {
-      return "لحجز موعد، يمكنك استخدام زر 'حجز سريع' في الصفحة الرئيسية، أو أخبـرني بالتخصص الذي تريده وسأساعدك.";
-    } else if (text.contains("تيم") || text.contains("سوبورت") || text.contains("أوقات")) {
-      return "فريق الدعم متواجد لخدمتكم يومياً من الساعة 8:00 صباحاً وحتى 10:00 مساءً 🕙.";
+      return tr(LocaleKeys.chatbot_book_response);
+    } else if (text.contains("تيم") ||
+        text.contains("سوبورت") ||
+        text.contains("أوقات")) {
+      return tr(LocaleKeys.chatbot_hours_response);
     } else if (text.contains("موقع")) {
-      return "نقع في الرياض، طريق الملك فهد، مبنى رقم 102.";
+      return tr(LocaleKeys.chatbot_location_response);
     } else if (text.contains("صداع")) {
-      return "سلامتك! الصداع قد يكون بسبب الإجهاد أو قلة النوم. ننصحك بشرب الماء والراحة. إذا استمر الألم، يرجى حجز موعد مع طبيب الباطنية.";
+      return tr(LocaleKeys.chatbot_headache_response);
     }
 
-    return "شكراً لاستفسارك. سأقوم بتحويل هذا السؤال لأحد موظفي الاستقبال للرد عليك بدقة أكبر، أو يمكنك الاتصال بنا مباشرة 📞.";
+    return tr(LocaleKeys.chatbot_default_response);
   }
 
   void _scrollToBottom() {
@@ -126,5 +149,12 @@ class ChatbotController extends GetxController {
         );
       }
     });
+  }
+
+  @override
+  void onClose() {
+    textController.dispose();
+    scrollController.dispose();
+    super.onClose();
   }
 }

@@ -1,6 +1,6 @@
 import '../../../app/data/base_model.dart';
 import 'models/card_model.dart';
-import 'models/card_utils.dart';
+import 'models/checkout_model.dart';
 import 'models/checkout_payment_request_model.dart';
 import 'models/payment_coupon_model.dart';
 import 'payment_data_source.dart';
@@ -9,11 +9,14 @@ class PaymentMockDataSource implements PaymentDataSource {
   final List<CardModel> _cards = <CardModel>[
     CardModel(
       id: 'card-1',
-      holderName: 'AHMAD SALEH',
-      cardNumber: '4111 1111 1111 1111',
-      expiryDate: '12/28',
-      cvv: '123',
-      type: CardType.visa,
+      provider: 'stripe',
+      brand: 'visa',
+      last4: '1111',
+      cardHolderName: 'AHMAD SALEH',
+      expiryMonth: '12',
+      expiryYear: '2028',
+      isDefault: true,
+      createdAt: '2026-07-12T00:00:00Z',
     ),
   ];
 
@@ -36,7 +39,7 @@ class PaymentMockDataSource implements PaymentDataSource {
     return BaseModel.fromJson({
       'status': 'success',
       'message': 'Cards retrieved successfully',
-      'data': _cards.map((item) => item.toJson()).toList(),
+      'data': {'items': _cards.map((item) => item.toJson()).toList()},
       'meta': <String, dynamic>{},
     }, _cardListFromJson);
   }
@@ -48,7 +51,7 @@ class PaymentMockDataSource implements PaymentDataSource {
     return BaseModel.fromJson({
       'status': 'success',
       'message': 'Card added successfully',
-      'data': card.toJson(),
+      'data': {...card.toJson(), ...card.toCreateJson()},
       'meta': <String, dynamic>{},
     }, (json) => Map<String, dynamic>.from(json as Map));
   }
@@ -115,24 +118,34 @@ class PaymentMockDataSource implements PaymentDataSource {
   }
 
   @override
-  Future<BaseModel<Map<String, dynamic>>> checkout(
+  Future<BaseModel<CheckoutModel>> labCartCheckout(
     CheckoutPaymentRequestModel request,
   ) async {
     await Future<void>.delayed(const Duration(milliseconds: 400));
-    return BaseModel.fromJson({
-      'status': 'success',
-      'message': 'Payment processed successfully',
-      'data': {
-        'payment_id': 'PAY-${DateTime.now().millisecondsSinceEpoch}',
-        ...request.toJson(),
+    return BaseModel.fromJson(
+      {
+        'status': 'success',
+        'message': 'Payment processed successfully',
+        'data': {
+          'payment_id': 'PAY-${DateTime.now().millisecondsSinceEpoch}',
+          'summary': {
+            'subtotal': request.consultationPrice,
+            'vat_amount': request.vatAmount,
+            'discount_amount': request.discountAmount,
+            'total_amount': request.totalAmount,
+          },
+          ...request.toJson(),
+        },
+        'meta': <String, dynamic>{},
       },
-      'meta': <String, dynamic>{},
-    }, (json) => Map<String, dynamic>.from(json as Map));
+      (json) => CheckoutModel.fromJson(Map<String, dynamic>.from(json as Map)),
+    );
   }
 
   List<CardModel> _cardListFromJson(dynamic json) {
-    if (json is! List) return <CardModel>[];
-    return json
+    final items = json is Map<String, dynamic> ? json['items'] : json;
+    if (items is! List) return <CardModel>[];
+    return items
         .whereType<Map>()
         .map((item) => CardModel.fromJson(Map<String, dynamic>.from(item)))
         .toList();

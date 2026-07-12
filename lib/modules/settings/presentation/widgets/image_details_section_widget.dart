@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/controllers/settings_controller.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -11,8 +14,14 @@ import 'package:iconsax/iconsax.dart';
 class ImageDetailsSectionWidget extends GetView<SettingsController> {
   const ImageDetailsSectionWidget({super.key});
 
+  SettingsController get _settingsController =>
+      Get.isRegistered<SettingsController>()
+      ? Get.find<SettingsController>()
+      : Get.put(SettingsController());
+
   @override
   Widget build(BuildContext context) {
+    final settingsController = _settingsController;
     return SafeArea(
       child: Column(
         children: [
@@ -33,8 +42,14 @@ class ImageDetailsSectionWidget extends GetView<SettingsController> {
               gradient: AppColors.primaryGradient,
             ),
             child: Obx(() {
-              final profile = controller.profile.value;
-              final image = controller.userImage;
+              final profile = settingsController.profile.value;
+              if (settingsController.isGuest) {
+                return AppButtonWidget(
+                  text: tr(LocaleKeys.login_login),
+                  onPressed: () => Get.toNamed(AppRoutes.login),
+                );
+              }
+              final image = profile?.avatar;
               return Row(
                 children: [
                   Container(
@@ -47,9 +62,14 @@ class ImageDetailsSectionWidget extends GetView<SettingsController> {
                     ),
                     child: CircleAvatar(
                       radius: 30.sp,
-                      backgroundImage: image.startsWith('http')
+                      backgroundImage: image == null || image.isEmpty
+                          ? null
+                          : image.startsWith('http')
                           ? NetworkImage(image)
                           : FileImage(File(image)) as ImageProvider,
+                      child: image == null || image.isEmpty
+                          ? const Icon(Iconsax.user)
+                          : null,
                     ),
                   ),
                   12.horizontalSpace,

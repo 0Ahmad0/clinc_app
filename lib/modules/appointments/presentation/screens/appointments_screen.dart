@@ -1,4 +1,6 @@
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/section_shimmer_widgets.dart';
+import 'package:clinc_app_t1/app/core/widgets/shared_empty_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/appointments/presentation/controllers/appointments_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -20,49 +22,68 @@ class AppointmentsScreen extends GetView<AppointmentsController> {
         showBackButton: false,
       ),
       body: Obx(
-        () => controller.isLoading.value
-            ? const Center(child: CircularProgressIndicator())
-            : CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(child: 10.verticalSpace),
+        () => controller.shouldShowInitialShimmer
+            ? const AppointmentsShimmer()
+            : RefreshIndicator(
+                onRefresh: controller.refreshAppointments,
+                child: CustomScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  slivers: [
+                    SliverToBoxAdapter(child: 10.verticalSpace),
 
-                  // شريط الفلاتر
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: 40.h, // ارتفاع مناسب
-                      child: ListView.separated(
-                        padding: EdgeInsets.symmetric(horizontal: 14.w),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: controller.quotationsFilterList.length,
-                        separatorBuilder: (_, __) => 8.horizontalSpace,
-                        itemBuilder: (context, index) => FilterButtonWidget(
-                          onTap: () => controller.changeFilter(index),
-                          currentIndex: controller.currentFilterIndex.value,
-                          index: index,
-                          item: controller.quotationsFilterList[index],
-                          totalCount: controller.getCountByFilterIndex(index),
+                    // شريط الفلاتر
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 40.h, // ارتفاع مناسب
+                        child: ListView.separated(
+                          padding: EdgeInsets.symmetric(horizontal: 14.w),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: controller.quotationsFilterList.length,
+                          separatorBuilder: (_, __) => 8.horizontalSpace,
+                          itemBuilder: (context, index) => FilterButtonWidget(
+                            onTap: () => controller.changeFilter(index),
+                            currentIndex: controller.currentFilterIndex.value,
+                            index: index,
+                            item: controller.quotationsFilterList[index],
+                            totalCount: controller.getCountByFilterIndex(index),
+                          ),
                         ),
                       ),
                     ),
-                  ),
 
-                  // قائمة الحجوزات
-                  SliverPadding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 14.w,
-                      vertical: 16.h,
-                    ),
-                    sliver: SliverList.separated(
-                      separatorBuilder: (_, __) => 12.verticalSpace,
-                      itemCount: controller.filteredOrders.length,
-                      itemBuilder: (context, index) {
-                        final order = controller.filteredOrders[index];
-                        return MyAppointmentWidget(appointment: order);
-                      },
-                    ),
-                  ),
-                  SliverToBoxAdapter(child: 40.verticalSpace),
-                ],
+                    // قائمة الحجوزات
+                    if (controller.filteredOrders.isEmpty)
+                      SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: SharedEmptyWidget(
+                          icon: Icons.event_busy_outlined,
+                          title: tr(LocaleKeys.appointments_empty_title),
+                          subtitle: controller.currentFilterIndex.value == 0
+                              ? tr(LocaleKeys.appointments_empty_subtitle_all)
+                              : tr(
+                                  LocaleKeys
+                                      .appointments_empty_subtitle_filtered,
+                                ),
+                        ),
+                      )
+                    else
+                      SliverPadding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 14.w,
+                          vertical: 16.h,
+                        ),
+                        sliver: SliverList.separated(
+                          separatorBuilder: (_, __) => 12.verticalSpace,
+                          itemCount: controller.filteredOrders.length,
+                          itemBuilder: (context, index) {
+                            final order = controller.filteredOrders[index];
+                            return MyAppointmentWidget(appointment: order);
+                          },
+                        ),
+                      ),
+                    SliverToBoxAdapter(child: 40.verticalSpace),
+                  ],
+                ),
               ),
       ),
     );

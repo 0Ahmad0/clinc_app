@@ -2,21 +2,19 @@ import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
+import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/book_appointments/presentation/controllers/book_appointment_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
-import '../../../payment/presentation/screens/check_out_screen.dart';
 import '../widgets/AvailableTimeWidget.dart';
 import '../widgets/BookingFormWidget.dart';
 import '../widgets/DateTimeLineWidget.dart';
 
 class BookAppointmentScreen extends GetView<BookAppointmentController> {
   const BookAppointmentScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,9 +73,12 @@ class BookAppointmentScreen extends GetView<BookAppointmentController> {
         child: Obx(
           () => AppButtonWidget(
             isLoading: controller.isSubmitting.value,
-            onPressed: () async {
-              if (await controller.submitBooking()) {
-                Get.to(CheckoutScreen());
+            onPressed: () {
+              if (controller.canProceedToCheckout()) {
+                Get.toNamed(
+                  AppRoutes.checkout,
+                  arguments: controller.checkoutArguments(),
+                );
               }
             },
             text: tr(LocaleKeys.booking_btn_book_now),

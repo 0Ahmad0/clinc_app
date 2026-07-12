@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/shared_empty_widget.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/labs/presentation/controllers/lab_profile_controller.dart';
@@ -24,9 +25,16 @@ class LabServicesListWidget extends GetView<LabProfileController> {
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           12.verticalSpace,
-          ...controller.lab.services.map(
-            (service) => _ServiceTile(serviceName: service),
-          ),
+          if (controller.lab.services.isEmpty)
+            SharedEmptyWidget(
+              icon: Iconsax.note_remove,
+              title: tr(LocaleKeys.labs_page_no_services_title),
+              subtitle: tr(LocaleKeys.labs_page_no_services_subtitle),
+            )
+          else
+            ...controller.lab.services.map(
+              (service) => _ServiceTile(serviceName: service),
+            ),
         ],
       ),
     );
@@ -47,7 +55,7 @@ class _ServiceTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(14.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -58,11 +66,14 @@ class _ServiceTile extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(14.r),
           onTap: () {
+            final lab = Get.find<LabProfileController>().lab;
             // الانتقال لشاشة التحاليل المندرجة تحت هذه الخدمة
             Get.toNamed(
               AppRoutes.labsTest,
               arguments: {
-                'name': Get.find<LabProfileController>().lab.name,
+                'id': lab.id,
+                'lab_id': lab.id,
+                'name': lab.name,
                 'category': serviceName,
               },
             );
@@ -75,7 +86,9 @@ class _ServiceTile extends StatelessWidget {
                   height: 42.w,
                   width: 42.w,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor.withOpacity(0.08),
+                    color: Theme.of(
+                      context,
+                    ).primaryColor.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Icon(

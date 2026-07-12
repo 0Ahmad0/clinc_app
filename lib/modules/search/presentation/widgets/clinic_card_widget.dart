@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -33,40 +34,43 @@ class ClinicCardWidget extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Container(
+              SizedBox(
                 width: 110.w,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadiusDirectional.only(
-                    topStart: Radius.circular(16.r),
-                    bottomStart: Radius.circular(16.r),
-                  ),
-                  image: DecorationImage(
-                    image: NetworkImage(hospital.imageUrl),
-                    fit: BoxFit.cover,
-                    onError: (exception, stackTrace) {},
-                  ),
-                ),
-                child: Align(
-                  alignment: AlignmentDirectional.topStart,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 6.w,
-                      vertical: 4.h,
-                    ),
-                    margin: EdgeInsets.all(8.w),
-                    decoration: BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.circular(4.r),
-                    ),
-                    child: Text(
-                      "${hospital.rating} ★",
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: AppCachedImageWidget(
+                        imageUrl: hospital.imageUrl,
+                        width: 110.w,
+                        height: double.infinity,
+                        clipRadius: 16.r,
+                        fit: BoxFit.cover,
+                        placeholderType: AppImagePlaceholderType.clinic,
                       ),
                     ),
-                  ),
+                    Align(
+                      alignment: AlignmentDirectional.topStart,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 6.w,
+                          vertical: 4.h,
+                        ),
+                        margin: EdgeInsets.all(8.w),
+                        decoration: BoxDecoration(
+                          color: Colors.amber,
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                        child: Text(
+                          "${hospital.rating} ★",
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
 

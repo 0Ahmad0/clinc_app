@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../app/data/models/filter_option_model.dart';
 import '../../../../app/core/widgets/app_search_bar_widget.dart';
 
 class DoctorsFilterList extends StatelessWidget {
@@ -26,11 +27,14 @@ class DoctorsFilterList extends StatelessWidget {
       'female': tr(LocaleKeys.doctors_gender_female),
       'ذكر': tr(LocaleKeys.doctors_gender_male),
       'أنثى': tr(LocaleKeys.doctors_gender_female),
+      'price_asc': tr(LocaleKeys.doctors_sort_price_asc),
+      'price_desc': tr(LocaleKeys.doctors_sort_price_desc),
+      'rating_desc': tr(LocaleKeys.doctors_sort_rating_desc),
       '4.5+': tr(LocaleKeys.doctors_rating_45_plus),
       '4.0+': tr(LocaleKeys.doctors_rating_40_plus),
       '3.5+': tr(LocaleKeys.doctors_rating_35_plus),
     };
-    return map[value] ?? value;
+    return map[value] ?? label;
   }
 
   @override
@@ -54,9 +58,10 @@ class DoctorsFilterList extends StatelessWidget {
                 icon: Icons.location_on,
                 label: tr(LocaleKeys.doctors_filter_region),
                 selectedValue: controller.selectedRegion,
-                options: [],
+                options: const <FilterOptionModel>[],
                 onUpdate: (v) => controller.updateFilter(region: v),
                 isRegion: true,
+                labelBuilder: (_) => controller.selectedRegionLabel,
               ),
 
               // 2. فلتر التخصص
@@ -67,6 +72,11 @@ class DoctorsFilterList extends StatelessWidget {
                 options: controller.specialties,
                 selectedValue: controller.selectedSpecialty,
                 onUpdate: (v) => controller.updateFilter(specialty: v),
+                labelBuilder: (id) => controller.optionLabel(
+                  controller.specialties,
+                  id,
+                  tr(LocaleKeys.doctors_filter_specialty),
+                ),
               ),
 
               // 3. فلتر التقييم
@@ -74,9 +84,30 @@ class DoctorsFilterList extends StatelessWidget {
                 context: context,
                 icon: Icons.star,
                 label: tr(LocaleKeys.doctors_filter_rating),
-                options: controller.ratings,
+                options: controller.ratingOptions,
                 selectedValue: controller.selectedRating,
                 onUpdate: (v) => controller.updateFilter(rating: v),
+                labelBuilder: (id) => controller.optionLabel(
+                  controller.ratingOptions,
+                  id,
+                  tr(LocaleKeys.doctors_filter_rating),
+                ),
+              ),
+
+              _buildPriceFilterItem(context),
+
+              _buildFilterItem(
+                context: context,
+                icon: Iconsax.sort,
+                label: tr(LocaleKeys.doctors_filter_sort),
+                options: controller.sortOptions,
+                selectedValue: controller.selectedSort,
+                onUpdate: (v) => controller.updateFilter(sort: v),
+                labelBuilder: (id) => controller.optionLabel(
+                  controller.sortOptions,
+                  id,
+                  tr(LocaleKeys.doctors_filter_sort),
+                ),
               ),
 
               // 4. فلتر الجنس
@@ -84,9 +115,14 @@ class DoctorsFilterList extends StatelessWidget {
                 context: context,
                 icon: Icons.wc,
                 label: tr(LocaleKeys.doctors_filter_gender),
-                options: ['الكل', 'ذكر', 'أنثى'],
+                options: controller.genders,
                 selectedValue: controller.selectedGender,
                 onUpdate: (v) => controller.updateFilter(gender: v),
+                labelBuilder: (id) => controller.optionLabel(
+                  controller.genders,
+                  id,
+                  tr(LocaleKeys.doctors_filter_gender),
+                ),
               ),
             ],
           ),
@@ -100,13 +136,13 @@ class DoctorsFilterList extends StatelessWidget {
     required IconData icon,
     required String label,
     required RxString selectedValue,
-    required List<String> options,
+    required List<FilterOptionModel> options,
     required Function(String) onUpdate,
     bool isRegion = false,
+    String Function(String id)? labelBuilder,
   }) {
     return Obx(() {
-      bool isSelected =
-          selectedValue.value != 'الكل' && selectedValue.value.isNotEmpty;
+      bool isSelected = selectedValue.value.isNotEmpty;
 
       return GestureDetector(
         onTap: () => isRegion
@@ -145,7 +181,8 @@ class DoctorsFilterList extends StatelessWidget {
               4.horizontalSpace,
               Expanded(
                 child: Text(
-                  _mapTechnicalToArabic(selectedValue.value, label),
+                  labelBuilder?.call(selectedValue.value) ??
+                      _mapTechnicalToArabic(selectedValue.value, label),
                   style: TextStyle(
                     fontSize: 11.sp,
                     fontWeight: isSelected
@@ -167,7 +204,7 @@ class DoctorsFilterList extends StatelessWidget {
   void _showGenericBottomSheet(
     BuildContext context,
     String title,
-    List<String> options,
+    List<FilterOptionModel> options,
     RxString selectedValue,
     Function(String) onUpdate,
   ) {
@@ -188,11 +225,11 @@ class DoctorsFilterList extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               itemBuilder: (context, index) {
                 final item = options[index];
-                final bool isSelected = selectedValue.value == item;
+                final bool isSelected = selectedValue.value == item.id;
                 return ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(
-                    _mapTechnicalToArabic(item, item),
+                    _mapTechnicalToArabic(item.id, item.name),
                     style: TextStyle(
                       color: isSelected ? Theme.of(context).primaryColor : null,
                       fontSize: 14.sp,
@@ -206,7 +243,7 @@ class DoctorsFilterList extends StatelessWidget {
                         )
                       : null,
                   onTap: () {
-                    onUpdate(item);
+                    onUpdate(item.id);
                     Get.back();
                   },
                 );
@@ -214,6 +251,133 @@ class DoctorsFilterList extends StatelessWidget {
             ),
           ),
         ],
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  Widget _buildPriceFilterItem(BuildContext context) {
+    return Obx(() {
+      final isSelected =
+          controller.minPrice.value.isNotEmpty ||
+          controller.maxPrice.value.isNotEmpty;
+      final label = isSelected
+          ? '${controller.minPrice.value.isEmpty ? '0' : controller.minPrice.value} - ${controller.maxPrice.value.isEmpty ? '∞' : controller.maxPrice.value}'
+          : tr(LocaleKeys.doctors_filter_price);
+      return GestureDetector(
+        onTap: () => _showPriceBottomSheet(context),
+        child: Container(
+          width: 140.w,
+          margin: EdgeInsets.symmetric(horizontal: 4.w),
+          padding: EdgeInsets.symmetric(horizontal: 8.w),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
+                : Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(8.r),
+            border: Border.all(
+              color: isSelected
+                  ? Theme.of(context).primaryColor
+                  : Theme.of(context).dividerColor,
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Iconsax.money,
+                size: 16.sp,
+                color: isSelected
+                    ? Theme.of(context).primaryColor
+                    : Colors.grey,
+              ),
+              4.horizontalSpace,
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 11.sp,
+                    fontWeight: isSelected
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              Icon(Icons.arrow_drop_down, size: 18.sp, color: Colors.grey),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  void _showPriceBottomSheet(BuildContext context) {
+    final minController = TextEditingController(
+      text: controller.minPrice.value,
+    );
+    final maxController = TextEditingController(
+      text: controller.maxPrice.value,
+    );
+    BottomSheetService.show(
+      context: context,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              tr(LocaleKeys.doctors_filter_price),
+              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+            ),
+            12.verticalSpace,
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: minController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: tr(LocaleKeys.doctors_filter_price_from),
+                    ),
+                  ),
+                ),
+                12.horizontalSpace,
+                Expanded(
+                  child: TextField(
+                    controller: maxController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: tr(LocaleKeys.doctors_filter_price_to),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            16.verticalSpace,
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    controller.updateFilter(minPrice: '', maxPrice: '');
+                    Get.back();
+                  },
+                  child: Text(tr(LocaleKeys.doctors_filter_all)),
+                ),
+                const Spacer(),
+                ElevatedButton(
+                  onPressed: () {
+                    controller.updateFilter(
+                      minPrice: minController.text,
+                      maxPrice: maxController.text,
+                    );
+                    Get.back();
+                  },
+                  child: Text(tr(LocaleKeys.core_apply)),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
       isScrollControlled: true,
     );
@@ -236,7 +400,7 @@ class DoctorsFilterList extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 14.w),
             child: Obx(
               () => Row(
-                children: ['الكل', ...controller.groupedRegions.keys]
+                children: ['', ...controller.groupedRegions.keys]
                     .map(
                       (m) => GestureDetector(
                         onTap: () =>
@@ -254,7 +418,7 @@ class DoctorsFilterList extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20.r),
                           ),
                           child: Text(
-                            m,
+                            m.isEmpty ? tr(LocaleKeys.doctors_filter_all) : m,
                             style: TextStyle(
                               color:
                                   controller.tempSelectedMainRegion.value == m
@@ -282,19 +446,19 @@ class DoctorsFilterList extends StatelessWidget {
               return ListView(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 children: [
-                  if (mainFilter == 'الكل' && query.isEmpty)
+                  if (mainFilter.isEmpty && query.isEmpty)
                     ListTile(
                       title: Text(tr(LocaleKeys.doctors_filter_all)),
                       onTap: () {
-                        controller.updateFilter(region: 'الكل');
+                        controller.updateFilter(region: '', area: '');
                         Get.back();
                       },
                     ),
                   ...controller.groupedRegions.entries
-                      .where((e) => mainFilter == 'الكل' || e.key == mainFilter)
+                      .where((e) => mainFilter.isEmpty || e.key == mainFilter)
                       .map((entry) {
-                        List<String> cities = entry.value
-                            .where((c) => c.contains(query))
+                        final cities = entry.value
+                            .where((c) => c.name.contains(query))
                             .toList();
                         if (cities.isEmpty) return SizedBox.shrink();
                         return Column(
@@ -314,23 +478,31 @@ class DoctorsFilterList extends StatelessWidget {
                             ...cities.map(
                               (city) => ListTile(
                                 title: Text(
-                                  city,
+                                  city.name,
                                   style: TextStyle(
                                     color:
-                                        controller.selectedRegion.value == city
+                                        controller.selectedArea.value == city.id
                                         ? context.theme.primaryColor
                                         : null,
                                   ),
                                 ),
                                 trailing:
-                                    controller.selectedRegion.value == city
+                                    controller.selectedArea.value == city.id
                                     ? Icon(
                                         Icons.check,
                                         color: context.theme.primaryColor,
                                       )
                                     : null,
                                 onTap: () {
-                                  controller.updateFilter(region: city);
+                                  final isRegionOnly =
+                                      city.parentId == null &&
+                                      controller.areas.isEmpty;
+                                  controller.updateFilter(
+                                    region: isRegionOnly
+                                        ? city.id
+                                        : city.parentId ?? '',
+                                    area: isRegionOnly ? '' : city.id,
+                                  );
                                   Get.back();
                                 },
                               ),

@@ -5,6 +5,7 @@ class Hospital {
   final double consultationFee;
   final double distanceKm;
   final String imageUrl;
+  final String?    phone ;
   final double rating;
   final List<String> specialties; // قائمة التخصصات للفلترة
   final List<String> supportedInsurances; // قائمة شركات التأمين
@@ -23,12 +24,15 @@ class Hospital {
     required this.supportedInsurances,
     required this.workTime,
     required this.isOpen,
+  this.phone ,
   });
 
   // خاصية مساعدة للـ UI: هل يقبل أي تأمين؟
   bool get isInsuranceAccepted => supportedInsurances.isNotEmpty;
 
   factory Hospital.fromJson(Map<String, dynamic> json) {
+
+
     return Hospital(
       id: json['id']?.toString() ?? '',
       name: json['name']?.toString() ?? '',
@@ -41,6 +45,7 @@ class Hospital {
       specialties: _stringList(json['specialties']),
       supportedInsurances: _stringList(json['supported_insurances']),
       workTime: json['work_time']?.toString() ?? '',
+      phone: json['phone'],
       isOpen: json['is_open'] == true,
     );
   }
@@ -57,6 +62,7 @@ class Hospital {
     'supported_insurances': supportedInsurances,
     'work_time': workTime,
     'is_open': isOpen,
+    'phone': phone,
   };
 
   static List<String> _stringList(dynamic value) {

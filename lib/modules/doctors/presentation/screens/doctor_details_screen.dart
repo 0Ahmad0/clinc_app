@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/extension/localization_extension.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
@@ -175,12 +176,17 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-            child: Image.network(
-              doc.imageUrl,
+            child: Container(
               height: 200.h,
               width: double.infinity,
-              fit: BoxFit.cover,
-              alignment: Alignment.topCenter,
+              color: Colors.grey.myOpacity(0.12),
+              child: AppCachedImageWidget(
+                imageUrl: doc.imageUrl,
+                height: 200.h,
+                fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
+                placeholderType: AppImagePlaceholderType.doctor,
+              ),
             ),
           ),
           Padding(

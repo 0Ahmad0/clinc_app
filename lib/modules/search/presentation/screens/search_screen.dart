@@ -1,5 +1,6 @@
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_search_bar_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/section_shimmer_widgets.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/search/presentation/controllers/search_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -35,7 +36,11 @@ class SearchScreen extends GetView<SearchAndFilterController> {
           ),
           Visibility(
             visible: !isShow,
-            child: SearchFilterList(controller: controller),
+            child: Obx(
+              () => controller.isFiltersLoading.value
+                  ? const FiltersShimmer(itemCount: 5)
+                  : SearchFilterList(controller: controller),
+            ),
           ),
 
           Expanded(child: SearchResultsList(controller: controller)),

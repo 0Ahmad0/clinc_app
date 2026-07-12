@@ -1,5 +1,9 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/shared_empty_widget.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -26,16 +30,17 @@ class HospitalDoctorsListSection extends GetView<ClinicDetailsController> {
               if (controller.selectedSpecialty.value.isNotEmpty)
                 TextButton(
                   onPressed: () => controller.selectedSpecialty.value = '',
-                  child: const Text("عرض الكل"),
+                  child: Text(tr(LocaleKeys.clinic_app_details_view_all)),
                 ),
             ],
           ),
           15.verticalSpace,
           doctors.isEmpty
-              ? Center(
-                  child: Text(
-                    "لا يوجد أطباء لهذا التخصص حالياً",
-                    style: TextStyle(color: Colors.grey, fontSize: 14.sp),
+              ? SharedEmptyWidget(
+                  icon: Icons.person_off_outlined,
+                  title: tr(LocaleKeys.clinic_app_details_no_doctors_title),
+                  subtitle: tr(
+                    LocaleKeys.clinic_app_details_no_doctors_subtitle,
                   ),
                 )
               : ListView.builder(
@@ -72,11 +77,13 @@ class HospitalDoctorsListSection extends GetView<ClinicDetailsController> {
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(12.r),
-                                child: Image.network(
-                                  'https://tse3.mm.bing.net/th/id/OIP.vBr6HkqxXZtRojTpNJTFhgAAAA?w=309&h=466&rs=1&pid=ImgDetMain&o=7&rm=3',
+                                child: AppCachedImageWidget(
+                                  imageUrl: doc.imageUrl,
                                   width: 60.w,
                                   height: 60.w,
                                   fit: BoxFit.cover,
+                                  placeholderType:
+                                      AppImagePlaceholderType.doctor,
                                 ),
                               ),
                               15.horizontalSpace,

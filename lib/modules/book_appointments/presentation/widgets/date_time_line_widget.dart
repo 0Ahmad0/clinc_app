@@ -1,4 +1,6 @@
 import 'package:easy_date_timeline/easy_date_timeline.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:flutter/material.dart';
 
 class DateTimeLineWidget extends StatelessWidget {
@@ -18,8 +20,8 @@ class DateTimeLineWidget extends StatelessWidget {
     return EasyDateTimeLinePicker(
       timelineOptions: TimelineOptions(padding: EdgeInsets.zero),
       monthYearPickerOptions: MonthYearPickerOptions(
-        cancelText: 'إلغاء',
-        confirmText: 'تحديد',
+        cancelText: tr(LocaleKeys.core_cancel),
+        confirmText: tr(LocaleKeys.core_select),
         cancelTextStyle: Theme.of(context).textTheme.bodyMedium,
         confirmTextStyle: Theme.of(context).textTheme.bodyMedium,
       ),
@@ -27,7 +29,7 @@ class DateTimeLineWidget extends StatelessWidget {
       firstDate: DateTime.now(),
       focusedDate: selectedDate,
       lastDate: DateTime(2030),
-      locale: Locale('ar'),
+      locale: Locale(context.locale.languageCode),
       onDateChange: onDateChange,
     );
   }

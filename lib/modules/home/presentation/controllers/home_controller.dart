@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:clinc_app_t1/app/core/configuration/locator.dart';
 import 'package:clinc_app_t1/app/core/helper/response_helper.dart';
 import 'package:clinc_app_t1/app/data/base_model.dart';
@@ -6,7 +8,13 @@ import 'package:clinc_app_t1/modules/home/data/models/home_model.dart';
 import 'package:clinc_app_t1/modules/home/data/models/main_home_item_model.dart';
 import 'package:clinc_app_t1/modules/home/data/models/offer_model.dart';
 import 'package:clinc_app_t1/modules/home/domain/home_repository.dart';
+import 'package:clinc_app_t1/modules/settings/data/models/user_settings_model.dart';
+import 'package:clinc_app_t1/modules/settings/presentation/controllers/settings_controller.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
+
+import '../../../../app/services/storage_service.dart';
+import '../../../../generated/locale_keys.g.dart';
 
 class HomeController extends GetxController {
   late final HomeRepository _repository;
@@ -15,14 +23,15 @@ class HomeController extends GetxController {
   final Rxn<HomeModel> home = Rxn<HomeModel>();
   final RxList<MainHomeItemModel> mainSectionList = <MainHomeItemModel>[].obs;
   final RxList<OfferModel> offersList = <OfferModel>[].obs;
+  final RxString displayUserName = tr(LocaleKeys.core_guest).obs;
+  final RxString displayUserAvatar = ''.obs;
+  Worker? _profileWorker;
 
   bool get hasHomeData => home.value != null;
 
-  String get userName => home.value?.user.fullName ?? '';
+  String get userName => displayUserName.value;
 
-  String get userAvatar =>
-      home.value?.user.avatar ??
-      'https://tse1.mm.bing.net/th/id/OIP.lj2NFJ7HSEsDqn7er7BuDAHaHa?cb=ucfimg2&ucfimg=1&w=626&h=626&rs=1&pid=ImgDetMain&o=7&rm=3';
+  String get userAvatar => displayUserAvatar.value;
 
   int get unreadNotificationsCount => home.value?.unreadNotificationsCount ?? 0;
 
@@ -32,7 +41,15 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     _repository = locator<HomeRepository>();
+    _bindCurrentUserProfile();
+    _loadCurrentUserProfile();
     loadHome();
+  }
+
+  @override
+  void onClose() {
+    _profileWorker?.dispose();
+    super.onClose();
   }
 
   Future<void> loadHome() async {
@@ -55,6 +72,99 @@ class HomeController extends GetxController {
     }
     home.value = response.result;
     mainSectionList.assignAll(response.result!.mainServices);
+
     offersList.assignAll(response.result!.offers);
+  }
+
+  SettingsController? get _settingsController {
+    if (StorageService.instance.isGuest ||
+        StorageService.instance.getAccessToken().isEmpty) {
+      return null;
+    }
+    if (Get.isRegistered<SettingsController>()) {
+      return Get.find<SettingsController>();
+    }
+    return Get.put(SettingsController());
+  }
+
+  void _bindCurrentUserProfile() {
+    final settingsController = _settingsController;
+    if (settingsController == null) {
+      _applyProfile(null);
+      return;
+    }
+
+    _applyCachedUser();
+    _applyProfile(settingsController.profile.value);
+    _profileWorker?.dispose();
+    _profileWorker = ever<UserSettingsProfileModel?>(
+      settingsController.profile,
+      _applyProfile,
+    );
+  }
+
+  Future<void> _loadCurrentUserProfile() async {
+    final settingsController = _settingsController;
+    if (settingsController == null) return;
+    if (settingsController.profile.value != null ||
+        settingsController.isLoading.value) {
+      return;
+    }
+
+    await settingsController.getProfile(isSplash: false);
+  }
+
+  void _applyProfile(UserSettingsProfileModel? profile) {
+    if (profile == null) {
+      if (StorageService.instance.isGuest ||
+          StorageService.instance.getAccessToken().isEmpty) {
+        displayUserName.value = tr(LocaleKeys.core_guest);
+        displayUserAvatar.value = '';
+      }
+      return;
+    }
+
+    final fullName = profile.fullName.trim();
+    final username = profile.username.trim();
+    displayUserName.value = fullName.isNotEmpty
+        ? fullName
+        : username.isNotEmpty
+        ? username
+        : tr(LocaleKeys.core_guest);
+    displayUserAvatar.value = profile.avatar?.trim() ?? '';
+  }
+
+  void _applyCachedUser() {
+    try {
+      final data = StorageService.instance.readData(StorageService.USER);
+      if (data == null || data.isEmpty || data == 'null') return;
+      final decoded = jsonDecode(data);
+      if (decoded is! Map) return;
+      final user = Map<String, dynamic>.from(decoded);
+      final fullName = (user['full_name'] ?? user['name'])?.toString().trim();
+      final firstName = user['first_name']?.toString().trim() ?? '';
+      final lastName = user['last_name']?.toString().trim() ?? '';
+      final composedName = '$firstName $lastName'.trim();
+      final username = user['username']?.toString().trim();
+      final avatar =
+          (user['avatar'] ??
+                  user['profile_image'] ??
+                  user['personal_photo'] ??
+                  user['image_url'])
+              ?.toString()
+              .trim();
+
+      final name = fullName?.isNotEmpty == true
+          ? fullName!
+          : composedName.isNotEmpty
+          ? composedName
+          : username?.isNotEmpty == true
+          ? username!
+          : '';
+      if (name.isNotEmpty) displayUserName.value = name;
+      if (avatar?.isNotEmpty == true) displayUserAvatar.value = avatar!;
+    } catch (_) {
+      return;
+    }
   }
 }

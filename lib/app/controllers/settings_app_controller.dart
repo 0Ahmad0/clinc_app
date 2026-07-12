@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../services/storage_service.dart';
+
 class SettingsAppController extends GetxController {
   static SettingsAppController get instance => Get.find();
 
@@ -54,6 +56,7 @@ class SettingsAppController extends GetxController {
         ? const Locale(AppConstants.enLang)
         : const Locale(AppConstants.arLang);
 
+    StorageService.instance.saveLanguage(newLocale.languageCode);
     await context.setLocale(newLocale);
 
     Get.updateLocale(newLocale);

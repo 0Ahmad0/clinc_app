@@ -75,7 +75,10 @@ class AppValidator {
   }
 
   /// التحقق من كلمة المرور - النسخة المحسنة
-  static String? validatePassword(String? value, {bool showDetailedErrors = true}) {
+  static String? validatePassword(
+    String? value, {
+    bool showDetailedErrors = true,
+  }) {
     if (value == null || value.trim().isEmpty) {
       return tr(LocaleKeys.validation_password_empty);
     }
@@ -84,7 +87,7 @@ class AppValidator {
 
     // Check for spaces
     if (!noSpacesRegex.hasMatch(value)) {
-      return 'Password should not contain spaces';
+      return tr(LocaleKeys.validation_password_no_spaces);
     }
 
     // Check minimum length
@@ -118,7 +121,7 @@ class AppValidator {
     } else {
       // Single regex for all requirements
       final strongPasswordRegex = RegExp(
-          r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$'
+        r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$',
       );
 
       if (!strongPasswordRegex.hasMatch(trimmedValue)) {
@@ -153,7 +156,8 @@ class AppValidator {
 
     // 2. هل هو اسم مستخدم صالح؟
     final usernameRegex = RegExp(r'^[a-zA-Z0-9_]+$');
-    final bool isUsername = usernameRegex.hasMatch(trimmedValue) && trimmedValue.length >= 4;
+    final bool isUsername =
+        usernameRegex.hasMatch(trimmedValue) && trimmedValue.length >= 4;
 
     // 3. إذا لم يكن أي منهما، أظهر الخطأ
     if (!isEmail && !isUsername) {
@@ -173,12 +177,12 @@ class AppValidator {
 
     // يجب أن يكون 10 أرقام
     if (!RegExp(r'^\d{10}$').hasMatch(trimmedValue)) {
-      return 'رقم الهوية يجب أن يتكون من 10 أرقام';
+      return tr(LocaleKeys.validation_saudi_id_length);
     }
 
     // خوارزمية التحقق من رقم الهوية السعودية
     if (!_isValidSaudiId(trimmedValue)) {
-      return 'رقم هوية غير صحيح';
+      return tr(LocaleKeys.validation_saudi_id_invalid);
     }
 
     return null;
@@ -195,20 +199,19 @@ class AppValidator {
       final now = DateTime.now();
 
       if (date.isAfter(now)) {
-        return 'تاريخ الميلاد لا يمكن أن يكون في المستقبل';
+        return tr(LocaleKeys.validation_birth_date_future);
       }
 
       final age = now.year - date.year;
       if (age < 18) {
-        return 'يجب أن يكون عمرك 18 سنة على الأقل';
+        return tr(LocaleKeys.validation_birth_date_min_age);
       }
 
       if (age > 120) {
-        return 'الرجاء التحقق من تاريخ الميلاد';
+        return tr(LocaleKeys.validation_birth_date_check);
       }
-
     } catch (e) {
-      return 'صيغة تاريخ غير صحيحة';
+      return tr(LocaleKeys.validation_birth_date_invalid);
     }
 
     return null;
@@ -227,7 +230,10 @@ class AppValidator {
         int digit = int.parse(id[i]);
         if (i % 2 == 0) {
           String doubled = (digit * 2).toString();
-          sum += doubled.split('').map((d) => int.parse(d)).reduce((a, b) => a + b);
+          sum += doubled
+              .split('')
+              .map((d) => int.parse(d))
+              .reduce((a, b) => a + b);
         } else {
           sum += digit;
         }
@@ -263,12 +269,7 @@ class AppValidator {
 }
 
 /// مستوى قوة كلمة المرور
-enum PasswordStrength {
-  veryWeak,
-  weak,
-  medium,
-  strong,
-}
+enum PasswordStrength { veryWeak, weak, medium, strong }
 
 /// معلومات إضافية عن قوة كلمة المرور
 class PasswordStrengthInfo {

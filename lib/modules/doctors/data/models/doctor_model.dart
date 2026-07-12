@@ -22,13 +22,30 @@ class DoctorModel {
   factory DoctorModel.fromJson(Map<String, dynamic> json) {
     return DoctorModel(
       id: json['id']?.toString() ?? '',
-      name: json['name']?.toString() ?? '',
-      specialty: json['specialty']?.toString() ?? '',
-      region: json['region']?.toString() ?? '',
+      name:
+          (json['name'] ?? json['full_name'] ?? json['fullName'])?.toString() ??
+          '',
+      specialty:
+          (json['specialty'] ??
+                  json['specialization'] ??
+                  json['specialty_name'])
+              ?.toString() ??
+          '',
+      region:
+          (json['region'] ?? json['area'] ?? json['city'])?.toString() ?? '',
       gender: json['gender']?.toString() ?? '',
       rating: double.tryParse(json['rating']?.toString() ?? '') ?? 0,
-      price: double.tryParse(json['price']?.toString() ?? '') ?? 0,
-      imageUrl: json['image_url']?.toString() ?? '',
+      price:
+          double.tryParse(
+            (json['price'] ?? json['consultation_fee'] ?? json['fee'])
+                    ?.toString() ??
+                '',
+          ) ??
+          0,
+      imageUrl:
+          (json['image_url'] ?? json['imageUrl'] ?? json['avatar'])
+              ?.toString() ??
+          '',
     );
   }
 

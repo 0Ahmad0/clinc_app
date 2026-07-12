@@ -10,9 +10,19 @@ class BookAppointmentRepository {
   final BookAppointmentDataSource _dataSource;
 
   Future<ApiResponse<BaseModel<List<String>>>> getAvailableTimes(
-    DateTime date,
-  ) {
-    return _execute(() => _dataSource.getAvailableTimes(date));
+    DateTime date, {
+    String? doctorId,
+    String? clinicId,
+    String? labId,
+  }) {
+    return _execute(
+      () => _dataSource.getAvailableTimes(
+        doctorId: doctorId,
+        clinicId: clinicId,
+        labId: labId,
+        date: date,
+      ),
+    );
   }
 
   Future<ApiResponse<BaseModel<Map<String, dynamic>>>> bookAppointment(

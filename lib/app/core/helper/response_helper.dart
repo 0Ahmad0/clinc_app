@@ -1,3 +1,5 @@
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -208,37 +210,28 @@ class ResponseHelper {
       ),
     );
   }
-static void onSuccess({String? message, String? title}) {
-  String displayMessage;
 
-  if (message == null || message.isEmpty) {
-    displayMessage = '';
-  } 
-  else if (
-      message.contains('resent OTP.messages.success') ||
-      message.contains('OTP.messages.success') ||
-      message.contains('messages.success')) {
-    displayMessage = 'toast.otp_sent_success'.tr;
-  } 
-  else {
-    displayMessage = MessageApi.findTextToast(message);
+  static void onSuccess({String? message, String? title}) {
+    final displayMessage = _isOtpSuccessMessage(message)
+        ? tr(LocaleKeys.toast_otp_sent_success)
+        : message ?? '';
+
+    _showCoolerSnackbar(
+      title: title ?? tr(LocaleKeys.toast_success),
+      message: displayMessage,
+      assetPath: AppAssets.snackbarSuccess,
+      lineColor: const Color(0xFF4FA35A),
+    );
   }
 
-  _showCoolerSnackbar(
-    title: title ?? 'toast.success'.tr,
-    message: displayMessage,
-    assetPath: AppAssets.snackbarSuccess,
-    lineColor: const Color(0xFF4FA35A),
-  );
-}
   static void onFailure({String? message, String? title}) {
-  _showCoolerSnackbar(
-    title: title ?? 'toast.error'.tr,
-    message: MessageApi.findTextToast(message ?? ''),
-    assetPath: AppAssets.snackbarFailure,
-    lineColor: Colors.red,
-  );
-}
+    _showCoolerSnackbar(
+      title: title ?? tr(LocaleKeys.toast_failure),
+      message: MessageApi.findTextToast(message ?? ''),
+      assetPath: AppAssets.snackbarFailure,
+      lineColor: Colors.red,
+    );
+  }
 
   static void onWarning({String? message, String? title}) {
     _showCoolerSnackbar(
@@ -249,13 +242,19 @@ static void onSuccess({String? message, String? title}) {
     );
   }
 
+  static bool _isOtpSuccessMessage(String? message) {
+    if (message == null || message.isEmpty) return false;
+    return message.contains('resent OTP.messages.success') ||
+        message.contains('OTP.messages.success') ||
+        message.contains('messages.success');
+  }
+
   static void _showCoolerSnackbar({
     required String title,
     required String message,
     required String assetPath,
     required Color lineColor,
   }) {
-
     Get.rawSnackbar(
       duration: const Duration(seconds: 3),
       snackPosition: SnackPosition.TOP,

@@ -20,7 +20,14 @@
     "confirmPassword_empty": "Please confirm password",
     "confirmPassword_noMatch": "Passwords do not match",
     "emailOrUsername_empty": "Please enter email or username",
-    "emailOrUsername_invalid": "Invalid input format"
+    "emailOrUsername_invalid": "Invalid input format",
+    "password_no_spaces": "Password should not contain spaces",
+    "saudi_id_length": "Saudi ID must be 10 digits",
+    "saudi_id_invalid": "Invalid Saudi ID",
+    "birth_date_future": "Birth date cannot be in the future",
+    "birth_date_min_age": "You must be at least 18 years old",
+    "birth_date_check": "Please check the birth date",
+    "birth_date_invalid": "Invalid date format"
   },
   "password_validation": {
     "requirements_title": "Password Requirements:",
@@ -33,6 +40,12 @@
     "req_special": "Special character (!@#\\u0024%)",
     "req_no_spaces": "No spaces"
   },
+  "toast": {
+    "success": "Success",
+    "error": "Failure",
+    "failure": "Failure",
+    "otp_sent_success": "OTP sent successfully"
+  },
   "core": {
     "yes": "Yes",
     "no": "No",
@@ -43,7 +56,17 @@
     "send": "Send",
     "reset": "Reset",
     "ar": "Arabic",
-    "en": "English"
+    "en": "English",
+    "apply": "Apply",
+    "from": "From",
+    "to": "To",
+    "unsupported_type": "Unsupported type",
+    "unsupported_image_format": "Unsupported image format",
+    "whatsapp_not_installed": "WhatsApp is not installed",
+    "form_invalid": "Please check all entered fields",
+    "cancel": "Cancel",
+    "select": "Select",
+    "guest": "Guest"
   },
   "splash": {
     "description": "Your first companion for organizing medication schedules and taking care of your health.",
@@ -62,7 +85,7 @@
     "sub_title3": "Rest assured.. Your privacy and medical records are in safe, fully encrypted hands. Our goal is to be your permanent companion in your recovery journey, so your health always remains safe and with you wherever you are."
   },
   "login": {
-    "welcome_back": "Hi, Welcome Back! \uD83D\uDC4B",
+    "welcome_back": "Hi, Welcome Back! 👋",
     "description": "Login to keep track of your appointments.",
     "email_or_user_name": "User name or Email",
     "password": "Password",
@@ -77,7 +100,7 @@
     "visitor_register": "Register as Visitor"
   },
   "signup": {
-    "welcome": "Welcome! \uD83D\uDC8A",
+    "welcome": "Welcome! 💊",
     "description": "Your first step towards commitment",
     "name": "Name",
     "user_name": "User name",
@@ -90,11 +113,13 @@
     "continue_with_google": "Google",
     "hava_account": "Already have an account? ",
     "login": "Login",
-    "visitor_register": "Register as Visitor"
+    "visitor_register": "Register as Visitor",
+    "terms_prefix": "I agree to ",
+    "terms_link": "Privacy Policy and Terms of Use"
   },
   "forgetPassword": {
     "email": "Email",
-    "welcome": "No problem, this happens to everyone\uD83D\uDE4C",
+    "welcome": "No problem, this happens to everyone🙌",
     "description": "Enter your email below to reset your password"
   },
   "auth": {
@@ -117,7 +142,8 @@
     "current_password_hint": "Current password",
     "verify": "Verify",
     "confirm_new_password_hint": "Confirm new password",
-    "password_no_match": "Passwords do not match"
+    "password_no_match": "Passwords do not match",
+    "google_login_failed": "Google sign-in failed"
   },
   "home": {
     "app_bar": {
@@ -134,7 +160,9 @@
       "labs": "Labs",
       "insurance": "Insurance",
       "chatbot": "Medical Assistant"
-    }
+    },
+    "empty_title": "No home data yet",
+    "empty_subtitle": "Offers, services, and active appointments will appear here."
   },
   "navbar": {
     "book_now": "Book now",
@@ -142,7 +170,13 @@
     "medical_file_text": "Medical file",
     "doctors_text": "Doctors",
     "appointments_text": "Appointments",
-    "settings_text": "Settings"
+    "settings_text": "Settings",
+    "back_exit_title": "Press again to exit",
+    "back_exit_message": "Press back again to exit the app",
+    "exit_dialog_title": "Are you sure you want to exit?",
+    "exit_dialog_message": "The app will close completely. Make sure all your data is saved before exiting.",
+    "exit_dialog_cancel": "Cancel",
+    "exit_dialog_confirm": "Exit"
   },
   "profile": {
     "title": "Profile",
@@ -200,7 +234,10 @@
     "btn_send": "Send Message",
     "intro_title": "Your Digital Health Gateway",
     "intro_desc": "Fast Booking is your easiest digital gateway to access top-tier doctors in the Kingdom. We exist to shorten your wait time and elevate your healthcare experience in line with Vision 2030, where speed, accuracy, and security meet in one place.",
-    "label_email": "Email Address"
+    "label_email": "Email Address",
+    "default_working_hours": "Saturday - Thursday\n9:00 AM - 10:00 PM",
+    "email_subject": "App support",
+    "email_body": "Hello, I have an inquiry..."
   },
   "privacy_policy": {
     "title": "Privacy & Terms",
@@ -245,13 +282,37 @@
     "no_results": "No doctors match the search",
     "currency": "SAR",
     "gender_male": "Male",
-    "gender_female": "Female"
+    "gender_female": "Female",
+    "filter_sort": "Sort by",
+    "filter_price": "Price",
+    "filter_price_from": "From",
+    "filter_price_to": "To",
+    "empty_subtitle": "Change the specialty or region to find other doctors.",
+    "title_with_specialty": "{} Doctors",
+    "sort_price_asc": "Price: lowest",
+    "sort_price_desc": "Price: highest",
+    "sort_rating_desc": "Highest rated",
+    "regions_group": "Regions"
   },
   "chatbot": {
     "title": "Medical Assistant",
     "status_online": "Available now for answering",
     "typing_indicator": "Typing... 🩺",
-    "input_hint": "Type your medical consultation..."
+    "input_hint": "Type your medical consultation...",
+    "quick_book": "📅 How do I book an appointment?",
+    "quick_hours": "⏰ Team working hours?",
+    "quick_location": "📍 Clinic location",
+    "quick_lab": "💊 Do you have a lab?",
+    "welcome_message": "Welcome to our smart clinic assistant 👋\n\n⚠️ Important note: I am an AI assistant for general medical questions and clinic services. My information may be inaccurate and never replaces consulting a specialist doctor.",
+    "image_received": "I received the image 📷.\nYou can send your text question now so it can be passed to the backend assistant system.",
+    "image_analysis": "I received the image 📷.\nBased on the initial analysis, there appears to be skin redness. I recommend booking an appointment with a dermatologist for an accurate examination.",
+    "fallback_message": "Your message has been received. The system could not generate a smart reply right now, and the response will rely on the available backend data.",
+    "non_medical": "Sorry, I am a specialized medical bot 🩺. I can only answer questions related to health or clinic services.",
+    "book_response": "To book an appointment, use the Quick Booking button on the home page, or tell me the specialty you need and I will help you.",
+    "hours_response": "The support team is available daily from 8:00 AM to 10:00 PM 🕙.",
+    "location_response": "We are located in Riyadh, King Fahd Road, building 102.",
+    "headache_response": "Wishing you safety! Headaches may be caused by stress or lack of sleep. We recommend drinking water and resting. If the pain continues, please book an appointment with an internal medicine doctor.",
+    "default_response": "Thank you for your inquiry. I will forward this question to a receptionist for a more accurate response, or you can contact us directly 📞."
   },
   "clinic_app_details": {
     "rating_count": "Rating",
@@ -263,7 +324,15 @@
     "elite_doctors": "Elite Doctors",
     "view_all": "View All",
     "call_clinic": "Call the Clinic",
-    "book_btn": "Book"
+    "book_btn": "Book",
+    "rate_clinic": "Rate clinic",
+    "rate_clinic_subtitle": "Share your experience to help others",
+    "patient_reviews": "Patient Reviews",
+    "no_reviews_title": "No reviews yet",
+    "no_reviews_subtitle": "Be the first to share your experience with this clinic.",
+    "no_doctors_title": "No doctors available",
+    "no_doctors_subtitle": "No doctors are available for this specialty right now.",
+    "all_reviews_title": "All Patient Reviews ({})"
   },
   "doctor_details": {
     "app_bar_title": "Ear, Nose and Throat",
@@ -295,7 +364,9 @@
     "about_desc": "Dr. Sara Al-Ali is a specialist consultant in ear, nose and throat diseases, currently working at Al-Amal Hospital. She has extensive experience spanning over 10 years in diagnosing and treating complex cases."
   },
   "insurance": {
-    "title": "Insurance"
+    "title": "Insurance",
+    "empty_title": "No insurance companies",
+    "empty_subtitle": "Available insurance companies will appear here when ready."
   },
   "setting": {
     "edit_profile": "Edit Profile",
@@ -325,7 +396,10 @@
     "filter_insurance": "Insurance",
     "filter_gender": "Gender",
     "filter_specialty": "Specialty",
+    "filter_rating": "Rating",
     "filter_sort": "Sort by",
+    "filter_all": "All",
+    "filter_city_search_hint": "Search for a city...",
     "sort_price_asc": "Lowest Price",
     "sort_price_desc": "Highest Price",
     "sort_distance": "Nearest",
@@ -334,7 +408,19 @@
     "accepts_insurance": "Accepts Insurance",
     "sar": "SAR",
     "consultation": "Consultation",
-    "distance_km": "km"
+    "distance_km": "km",
+    "filter_price": "Price",
+    "filter_open_now": "Open now",
+    "filter_location": "Location",
+    "filter_location_selected": "Location selected",
+    "filter_latitude": "Latitude",
+    "filter_longitude": "Longitude",
+    "empty_subtitle": "Try changing filters or searching for another clinic name.",
+    "sort_price_asc_full": "Price: lowest",
+    "sort_price_desc_full": "Price: highest",
+    "sort_rating_desc": "Highest rated",
+    "sort_distance_asc": "Nearest",
+    "regions_group": "Regions"
   },
   "payment": {
     "settings_title": "Manage Cards",
@@ -392,6 +478,9 @@
     "mock_doctor_name": "Dr. Ahmed Suleiman",
     "mock_doctor_specialty": "Orthopedic Specialist",
     "mock_booking_time": "Monday, February 15 - 04:30 PM",
+    "doctor_title": "Doctor appointment",
+    "lab_title": "Lab order",
+    "lab_test_count": "{} tests",
     "cash_at_clinic": "Cash at Clinic",
     "online_payment": "Online Payment",
     "bank_card": "Bank Card",
@@ -401,6 +490,7 @@
     "apply_coupon": "Apply",
     "my_coupons": "My Coupons",
     "coupon_discount": "Coupon Discount",
+    "coupon_applied_success": "Great! Your discount has been applied.",
     "total_due": "Total Due",
     "currency": "SAR",
     "confirm_booking": "Confirm Booking",
@@ -410,6 +500,10 @@
     "no_coupons_available": "No coupons available right now",
     "pay_btn": "Pay",
     "success_msg": "Payment Successful",
+    "doctor_success_msg": "Appointment booked successfully",
+    "lab_success_msg": "Lab order payment completed successfully",
+    "lab_success_title": "Lab order paid",
+    "lab_success_subtitle": "Your lab tests order has been confirmed successfully. You can follow its details from your account.",
     "select_method_error": "Please select a payment method"
   },
   "labs": {
@@ -419,6 +513,7 @@
     "view_all": "View All",
     "book_btn": "Book",
     "add_to_cart": "Add",
+    "added_to_cart": "Added",
     "package_count": "test",
     "currency": "SAR",
     "cart_total": "Total",
@@ -435,12 +530,16 @@
     "cart_delete_item": "Delete",
     "cart_confirm_order": "Confirm Order",
     "cart_summary": "Invoice Summary",
-    "cart_total_price": "Total Amount"
+    "cart_total_price": "Total Amount",
+    "test_already_in_cart": "This test is already in the cart"
   },
   "labs_page": {
     "title": "Medical Laboratories",
     "search_hint": "Search for a laboratory...",
     "filter_all": "All",
+    "filter_category": "Category",
+    "filter_area": "Area",
+    "filter_reset": "Clear",
     "filter_analysis": "Comprehensive Analysis",
     "filter_radiology": "Radiology",
     "filter_pathology": "Pathology",
@@ -451,7 +550,12 @@
     "profile_services": "Available Services",
     "profile_location": "Location",
     "profile_contact": "Contact Us",
-    "call_now": "Call Now"
+    "call_now": "Call Now",
+    "empty_title": "No labs available",
+    "empty_subtitle": "Adjust filters or try searching for another lab name.",
+    "chat": "Chat",
+    "no_services_title": "No services available",
+    "no_services_subtitle": "This lab has not added services yet."
   },
   "labs_profile": {
     "location_title": "Laboratory Location",
@@ -464,7 +568,19 @@
     "coupon_copied": "Code copied successfully",
     "write_review_hint": "Write your experience here...",
     "submit_review": "Post Review",
-    "share_msg": "Check out this excellent laboratory: "
+    "share_msg": "Check out this excellent laboratory: ",
+    "share_title": "Share",
+    "share_opened": "Share sheet opened",
+    "copied_title": "Done",
+    "phone_unavailable": "Lab phone number is unavailable",
+    "call_open_failed": "Could not open the phone app",
+    "location_unavailable": "Lab location is unavailable",
+    "map_open_failed": "Could not open the map",
+    "no_reviews_subtitle": "Share your review to help other patients.",
+    "show_more": "Show more",
+    "share_address": "Address: {}",
+    "share_phone": "Phone: {}",
+    "share_rating": "Rating: {}"
   },
   "booking": {
     "title": "Book Appointment",
@@ -495,6 +611,65 @@
     "status_accepted": "Accepted",
     "status_pending": "Pending",
     "status_rejected": "Rejected",
-    "currency": "SAR"
+    "currency": "SAR",
+    "empty_title": "No appointments",
+    "empty_subtitle_all": "Your appointments will appear here after your first booking.",
+    "empty_subtitle_filtered": "No appointments in this category right now.",
+    "rebook": "Rebook",
+    "cancel_booking": "Cancel booking",
+    "cancel_unavailable": "Cannot cancel (allowed time has passed)",
+    "cancel_dialog_title": "Confirm cancellation",
+    "cancel_dialog_message": "Are you sure you want to cancel this booking?",
+    "cancel_dialog_confirm": "Yes, cancel",
+    "cancel_dialog_back": "Back",
+    "rebook_snackbar_message": "Redirecting you to rebook {}",
+    "rebook_missing_target": "Unable to rebook this appointment because its clinic or doctor data is missing."
+  },
+  "my_appointment_details": {
+    "title": "Booking Details",
+    "appointment_info": "Appointment Info",
+    "patient": "Patient",
+    "date": "Date",
+    "time": "Time",
+    "phone": "Phone",
+    "visit_type": "Visit Type",
+    "status": "Status",
+    "problem": "Complaint",
+    "clinic_details": "Clinic Details",
+    "facility": "Facility",
+    "address": "Address",
+    "financial_summary": "Financial Summary",
+    "consultation_fee": "Consultation Fee",
+    "payment_method": "Payment Method",
+    "payment_status": "Payment Status",
+    "payment_reference": "Payment Reference",
+    "paid_amount": "Paid Amount",
+    "remaining_amount": "Remaining Amount",
+    "rating_count": "({} reviews)",
+    "cancel_booking": "Cancel booking",
+    "rebook_appointment": "Rebook appointment",
+    "cancel_unavailable_24h": "Cancellation is unavailable within 24 hours of the appointment.",
+    "no_action_available": "No action available",
+    "not_available": "N/A",
+    "cancel_dialog_title": "Confirm cancellation",
+    "cancel_dialog_message": "Are you sure you want to cancel this appointment?",
+    "cancel_dialog_confirm": "Yes",
+    "cancel_dialog_back": "Back",
+    "mock_doctor_name": "Dr. Carly Angela",
+    "mock_specialty": "Specialist | Immunology",
+    "mock_clinic_name": "Christ International Hospital",
+    "mock_clinic_address": "London, Baker Street, Building 221B",
+    "mock_patient_name": "Ahmed Mohammad Al Atoum",
+    "mock_date": "May 24, 2024",
+    "mock_time": "10:30 AM",
+    "mock_visit_type": "First visit",
+    "mock_payment_method": "Credit card"
+  },
+  "logout": {
+    "title": "Do you really want to log out?"
+  },
+  "share": {
+    "app_text": "Download Hajz Saree now and enjoy an easier healthcare experience\n{}",
+    "app_link": "App link: {}"
   }
 }

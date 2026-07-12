@@ -398,9 +398,7 @@ class PackageCard extends GetView<LabsTestController> {
                 ),
                 SizedBox(width: 12.w),
                 IconButton(
-                  onPressed: () {
-                    // مشاركة الباقة
-                  },
+                  onPressed: () => controller.shareTest(test),
                   style: IconButton.styleFrom(
                     backgroundColor: Colors.grey[100],
                     padding: EdgeInsets.all(12.w),

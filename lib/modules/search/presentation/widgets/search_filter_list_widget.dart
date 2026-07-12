@@ -1,10 +1,13 @@
 import 'package:clinc_app_t1/app/services/bottom_sheet_service.dart';
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/search/presentation/controllers/search_controller.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../app/data/models/filter_option_model.dart';
 import '../../../../app/core/widgets/app_search_bar_widget.dart';
 
 // افترضت وجود الـ Service والـ Extension والـ Controller في مشروعك
@@ -20,13 +23,20 @@ class SearchFilterList extends StatelessWidget {
     if (value == 'الكل' || value.isEmpty) return label;
 
     final map = {
-      'priceAsc': 'السعر: من الأقل للأعلى',
-      'priceDesc': 'السعر: من الأعلى للأقل',
-      'distanceAsc': 'الأقرب مسافةً',
-      'male': 'ذكر',
-      'female': 'أنثى',
+      'priceAsc': tr(LocaleKeys.search_sort_price_asc),
+      'priceDesc': tr(LocaleKeys.search_sort_price_desc),
+      'distanceAsc': tr(LocaleKeys.search_sort_distance),
+      'price_asc': tr(LocaleKeys.search_sort_price_asc_full),
+      'price_desc': tr(LocaleKeys.search_sort_price_desc_full),
+      'rating_desc': tr(LocaleKeys.search_sort_rating_desc),
+      'distance_asc': tr(LocaleKeys.search_sort_distance_asc),
+      'male': tr(LocaleKeys.doctors_gender_male),
+      'female': tr(LocaleKeys.doctors_gender_female),
+      '4.5+': tr(LocaleKeys.doctors_rating_45_plus),
+      '4.0+': tr(LocaleKeys.doctors_rating_40_plus),
+      '3.5+': tr(LocaleKeys.doctors_rating_35_plus),
     };
-    return map[value] ?? value;
+    return map[value] ?? label;
   }
 
   @override
@@ -48,11 +58,12 @@ class SearchFilterList extends StatelessWidget {
               _buildFilterItem(
                 context: context,
                 icon: Icons.location_on,
-                label: 'المنطقة',
+                label: tr(LocaleKeys.search_filter_region),
                 selectedValue: controller.selectedRegion,
-                options: [],
+                options: const <FilterOptionModel>[],
                 onUpdate: (v) => controller.updateFilter(region: v),
                 isRegion: true,
+                labelBuilder: (_) => controller.selectedRegionLabel,
               ),
 
               // فلتر شركات التأمين
@@ -60,40 +71,78 @@ class SearchFilterList extends StatelessWidget {
                 _buildFilterItem(
                   context: context,
                   icon: Icons.verified_user,
-                  label: 'التأمين',
+                  label: tr(LocaleKeys.search_filter_insurance),
                   options: controller.insuranceCompanies,
                   selectedValue: controller.selectedInsurance,
                   onUpdate: (v) => controller.updateFilter(insurance: v),
+                  labelBuilder: (id) => controller.optionLabel(
+                    controller.insuranceCompanies,
+                    id,
+                    tr(LocaleKeys.search_filter_insurance),
+                  ),
                 ),
 
               // فلتر التخصص
               _buildFilterItem(
                 context: context,
                 icon: Icons.medical_services,
-                label: 'التخصص',
+                label: tr(LocaleKeys.search_filter_specialty),
                 options: controller.specialties,
                 selectedValue: controller.selectedSpecialty,
                 onUpdate: (v) => controller.updateFilter(specialty: v),
+                labelBuilder: (id) => controller.optionLabel(
+                  controller.specialties,
+                  id,
+                  tr(LocaleKeys.search_filter_specialty),
+                ),
               ),
 
-              // فلتر الجنس
+              _buildFilterItem(
+                context: context,
+                icon: Icons.star,
+                label: tr(LocaleKeys.search_filter_rating),
+                options: controller.ratingOptions,
+                selectedValue: controller.selectedRating,
+                onUpdate: (v) => controller.updateFilter(rating: v),
+                labelBuilder: (id) => controller.optionLabel(
+                  controller.ratingOptions,
+                  id,
+                  tr(LocaleKeys.search_filter_rating),
+                ),
+              ),
+
               _buildFilterItem(
                 context: context,
                 icon: Icons.wc,
-                label: 'الجنس',
-                options: ['الكل', 'male', 'female'],
+                label: tr(LocaleKeys.search_filter_gender),
+                options: controller.genders,
                 selectedValue: controller.selectedGender,
                 onUpdate: (v) => controller.updateFilter(gender: v),
+                labelBuilder: (id) => controller.optionLabel(
+                  controller.genders,
+                  id,
+                  tr(LocaleKeys.search_filter_gender),
+                ),
               ),
 
-              // فلتر الترتيب
+              _buildPriceFilterItem(context),
+
+              _buildOpenNowFilterItem(context),
+
+              _buildLocationFilterItem(context),
+
               _buildFilterItem(
                 context: context,
-                icon: Icons.sort,
-                label: 'الترتيب',
-                options: ['priceAsc', 'priceDesc', 'distanceAsc'],
+                icon: Iconsax.sort,
+                label: tr(LocaleKeys.search_filter_sort),
+                options: controller.sortOptions,
                 selectedValue: controller.sortCriteria,
                 onUpdate: (v) => controller.updateFilter(sort: v),
+                labelBuilder: (id) => controller.optionLabel(
+                  controller.sortOptions,
+                  id,
+                  tr(LocaleKeys.search_filter_sort),
+                ),
               ),
             ],
           ),
@@ -107,15 +156,13 @@ class SearchFilterList extends StatelessWidget {
     required IconData icon,
     required String label,
     required RxString selectedValue,
-    required List<String> options,
+    required List<FilterOptionModel> options,
     required Function(String) onUpdate,
     bool isRegion = false,
+    String Function(String id)? labelBuilder,
   }) {
     return Obx(() {
-      bool isSelected =
-          selectedValue.value != 'الكل' &&
-          selectedValue.value != 'priceAsc' &&
-          selectedValue.value.isNotEmpty;
+      bool isSelected = selectedValue.value.isNotEmpty;
 
       return GestureDetector(
         onTap: () => isRegion
@@ -154,7 +201,8 @@ class SearchFilterList extends StatelessWidget {
               4.horizontalSpace,
               Expanded(
                 child: Text(
-                  _mapTechnicalToArabic(selectedValue.value, label),
+                  labelBuilder?.call(selectedValue.value) ??
+                      _mapTechnicalToArabic(selectedValue.value, label),
                   style: TextStyle(
                     fontSize: 11.sp,
                     fontWeight: isSelected
@@ -175,7 +223,7 @@ class SearchFilterList extends StatelessWidget {
   void _showGenericBottomSheet(
     BuildContext context,
     String title,
-    List<String> options,
+    List<FilterOptionModel> options,
     RxString selectedValue,
     Function(String) onUpdate,
   ) {
@@ -196,11 +244,11 @@ class SearchFilterList extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               itemBuilder: (context, index) {
                 final item = options[index];
-                final bool isSelected = selectedValue.value == item;
+                final bool isSelected = selectedValue.value == item.id;
                 return ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(
-                    _mapTechnicalToArabic(item, item),
+                    _mapTechnicalToArabic(item.id, item.name),
                     style: TextStyle(
                       color: isSelected ? Theme.of(context).primaryColor : null,
                       fontSize: 14.sp,
@@ -214,7 +262,7 @@ class SearchFilterList extends StatelessWidget {
                         )
                       : null,
                   onTap: () {
-                    onUpdate(item);
+                    onUpdate(item.id);
                     Get.back();
                   },
                 );
@@ -222,6 +270,246 @@ class SearchFilterList extends StatelessWidget {
             ),
           ),
         ],
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  Widget _buildPriceFilterItem(BuildContext context) {
+    return Obx(() {
+      final isSelected =
+          controller.minPrice.value.isNotEmpty ||
+          controller.maxPrice.value.isNotEmpty;
+      final label = isSelected
+          ? '${controller.minPrice.value.isEmpty ? '0' : controller.minPrice.value} - ${controller.maxPrice.value.isEmpty ? '∞' : controller.maxPrice.value}'
+          : tr(LocaleKeys.search_filter_price);
+      return _buildPlainFilterItem(
+        context: context,
+        icon: Iconsax.money,
+        label: label,
+        isSelected: isSelected,
+        onTap: () => _showPriceBottomSheet(context),
+      );
+    });
+  }
+
+  Widget _buildOpenNowFilterItem(BuildContext context) {
+    return Obx(
+      () => _buildPlainFilterItem(
+        context: context,
+        icon: Iconsax.clock,
+        label: tr(LocaleKeys.search_filter_open_now),
+        isSelected: controller.openNow.value,
+        onTap: () =>
+            controller.updateFilter(openNow: !controller.openNow.value),
+      ),
+    );
+  }
+
+  Widget _buildLocationFilterItem(BuildContext context) {
+    return Obx(() {
+      final isSelected =
+          controller.latitude.value.isNotEmpty &&
+          controller.longitude.value.isNotEmpty;
+      return _buildPlainFilterItem(
+        context: context,
+        icon: Iconsax.location,
+        label: isSelected
+            ? tr(LocaleKeys.search_filter_location_selected)
+            : tr(LocaleKeys.search_filter_location),
+        isSelected: isSelected,
+        onTap: () => _showLocationBottomSheet(context),
+      );
+    });
+  }
+
+  Widget _buildPlainFilterItem({
+    required BuildContext context,
+    required IconData icon,
+    required String label,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 140.w,
+        margin: EdgeInsets.symmetric(horizontal: 4.w),
+        padding: EdgeInsets.symmetric(horizontal: 8.w),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? Theme.of(context).primaryColor.withValues(alpha: 0.1)
+              : Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(8.r),
+          border: Border.all(
+            color: isSelected
+                ? Theme.of(context).primaryColor
+                : Theme.of(context).dividerColor,
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              size: 16.sp,
+              color: isSelected ? Theme.of(context).primaryColor : Colors.grey,
+            ),
+            4.horizontalSpace,
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 11.sp,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Icon(Icons.arrow_drop_down, size: 18.sp, color: Colors.grey),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showPriceBottomSheet(BuildContext context) {
+    final minController = TextEditingController(
+      text: controller.minPrice.value,
+    );
+    final maxController = TextEditingController(
+      text: controller.maxPrice.value,
+    );
+    BottomSheetService.show(
+      context: context,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              tr(LocaleKeys.search_filter_price),
+              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+            ),
+            12.verticalSpace,
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: minController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: tr(LocaleKeys.core_from),
+                    ),
+                  ),
+                ),
+                12.horizontalSpace,
+                Expanded(
+                  child: TextField(
+                    controller: maxController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: tr(LocaleKeys.core_to),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            16.verticalSpace,
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    controller.updateFilter(minPrice: '', maxPrice: '');
+                    Get.back();
+                  },
+                  child: Text(tr(LocaleKeys.search_filter_all)),
+                ),
+                const Spacer(),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      controller.updateFilter(
+                        minPrice: minController.text,
+                        maxPrice: maxController.text,
+                      );
+                      Get.back();
+                    },
+                    child: Text(tr(LocaleKeys.core_apply)),
+                  ),
+                ),
+              ],
+            ),
+            16.verticalSpace,
+          ],
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  void _showLocationBottomSheet(BuildContext context) {
+    final latController = TextEditingController(
+      text: controller.latitude.value,
+    );
+    final lngController = TextEditingController(
+      text: controller.longitude.value,
+    );
+    BottomSheetService.show(
+      context: context,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              tr(LocaleKeys.search_filter_location),
+              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+            ),
+            12.verticalSpace,
+            TextField(
+              controller: latController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: tr(LocaleKeys.search_filter_latitude),
+              ),
+            ),
+            8.verticalSpace,
+            TextField(
+              controller: lngController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: tr(LocaleKeys.search_filter_longitude),
+              ),
+            ),
+            16.verticalSpace,
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    controller.updateFilter(latitude: '', longitude: '');
+                    Get.back();
+                  },
+                  child: Text(tr(LocaleKeys.search_filter_all)),
+                ),
+                const Spacer(),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      controller.updateFilter(
+                        latitude: latController.text,
+                        longitude: lngController.text,
+                      );
+                      Get.back();
+                    },
+                    child: Text(tr(LocaleKeys.core_apply)),
+                  ),
+                ),
+              ],
+            ),
+            16.verticalSpace,
+          ],
+
+        ),
       ),
       isScrollControlled: true,
     );
@@ -242,7 +530,7 @@ class SearchFilterList extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                'مسح',
+                tr(LocaleKeys.search_filter_reset),
                 style: TextStyle(color: context.theme.colorScheme.error),
               ),
               Icon(
@@ -276,7 +564,7 @@ class SearchFilterList extends StatelessWidget {
 
             child: Obx(
               () => Row(
-                children: ['الكل', ...controller.groupedRegions.keys]
+                children: ['', ...controller.groupedRegions.keys]
                     .map(
                       (m) => GestureDetector(
                         onTap: () =>
@@ -300,7 +588,7 @@ class SearchFilterList extends StatelessWidget {
                           ),
 
                           child: Text(
-                            m,
+                            m.isEmpty ? tr(LocaleKeys.search_filter_all) : m,
 
                             style: TextStyle(
                               color:
@@ -320,7 +608,7 @@ class SearchFilterList extends StatelessWidget {
           ),
 
           AppSearchBarWidget(
-            hintText: "بحث عن مدينة...",
+            hintText: tr(LocaleKeys.search_filter_city_search_hint),
 
             onChanged: (v) => controller.regionSearchText.value = v,
           ),
@@ -335,22 +623,22 @@ class SearchFilterList extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
 
                 children: [
-                  if (mainFilter == 'الكل' && query.isEmpty)
+                  if (mainFilter.isEmpty && query.isEmpty)
                     ListTile(
-                      title: Text("الكل"),
+                      title: Text(tr(LocaleKeys.search_filter_all)),
 
                       onTap: () {
-                        controller.updateFilter(region: 'الكل');
+                        controller.updateFilter(region: '', area: '');
 
                         Get.back();
                       },
                     ),
 
                   ...controller.groupedRegions.entries
-                      .where((e) => mainFilter == 'الكل' || e.key == mainFilter)
+                      .where((e) => mainFilter.isEmpty || e.key == mainFilter)
                       .map((entry) {
-                        List<String> cities = entry.value
-                            .where((c) => c.contains(query))
+                        final cities = entry.value
+                            .where((c) => c.name.contains(query))
                             .toList();
 
                         if (cities.isEmpty) return SizedBox.shrink();
@@ -374,18 +662,18 @@ class SearchFilterList extends StatelessWidget {
                             ...cities.map(
                               (city) => ListTile(
                                 title: Text(
-                                  city,
+                                  city.name,
 
                                   style: TextStyle(
                                     color:
-                                        controller.selectedRegion.value == city
+                                        controller.selectedArea.value == city.id
                                         ? context.theme.primaryColor
                                         : null,
                                   ),
                                 ),
 
                                 trailing:
-                                    controller.selectedRegion.value == city
+                                    controller.selectedArea.value == city.id
                                     ? Icon(
                                         Icons.check,
 
@@ -394,7 +682,15 @@ class SearchFilterList extends StatelessWidget {
                                     : null,
 
                                 onTap: () {
-                                  controller.updateFilter(region: city);
+                                  final isRegionOnly =
+                                      city.parentId == null &&
+                                      controller.areas.isEmpty;
+                                  controller.updateFilter(
+                                    region: isRegionOnly
+                                        ? city.id
+                                        : city.parentId ?? '',
+                                    area: isRegionOnly ? '' : city.id,
+                                  );
 
                                   Get.back();
                                 },

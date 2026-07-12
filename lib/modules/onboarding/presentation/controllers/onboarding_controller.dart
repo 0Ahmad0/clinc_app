@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../app/services/storage_service.dart';
 import '../../../../generated/locale_keys.g.dart';
 
 import '../../../../app/core/constants/app_assets.dart';
@@ -74,14 +75,15 @@ class OnboardingController extends GetxController {
   /// 9. دالة لتخطي كل الصفحات
   void skip() {
     //TODO : Fix Process
-
-    Get.offAllNamed(AppRoutes.navbar);
+    StorageService.instance.skipFirstTime();
+    Get.offAllNamed(AppRoutes.login);
   }
 
   /// 10. دالة الذهاب لصفحة الدخول (مع إغلاق شاشة الـ Onboarding)
   void goToLogin() {
     // TODO: يجب إضافة كود لحفظ أن المستخدم "شاهد" هذه الشاشة
     // (مثال: Get.find<StorageService>().write('seenOnboarding', true))
+    StorageService.instance.skipFirstTime();
     Get.offAllNamed(AppRoutes.login); // اذهب للدخول وألغِ كل الصفحات السابقة
   }
 

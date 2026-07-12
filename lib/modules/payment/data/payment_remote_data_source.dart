@@ -2,6 +2,7 @@ import '../../../app/core/utils/app_url.dart';
 import '../../../app/data/base_model.dart';
 import '../../../app/domain/services/api_service.dart';
 import 'models/card_model.dart';
+import 'models/checkout_model.dart';
 import 'models/checkout_payment_request_model.dart';
 import 'models/payment_coupon_model.dart';
 import 'payment_data_source.dart';
@@ -28,7 +29,7 @@ class PaymentRemoteDataSource implements PaymentDataSource {
     final response = await _apiServices.post(
       AppUrl.userPaymentCards,
       hasToken: true,
-      body: card.toJson(),
+      body: card.toCreateJson(),
     );
     return BaseModel.fromJson(
       Map<String, dynamic>.from(response as Map),
@@ -39,7 +40,7 @@ class PaymentRemoteDataSource implements PaymentDataSource {
   @override
   Future<BaseModel<Map<String, dynamic>>> deleteCard(String cardId) async {
     final response = await _apiServices.delete(
-      '${AppUrl.userPaymentCards}/$cardId',
+      AppUrl.userPaymentCard(cardId),
       hasToken: true,
     );
     return BaseModel.fromJson(
@@ -56,7 +57,7 @@ class PaymentRemoteDataSource implements PaymentDataSource {
     final response = await _apiServices.post(
       AppUrl.userPaymentApplyCoupon,
       hasToken: true,
-      body: {'code': code, if (subtotal != null) 'subtotal': subtotal},
+      body: {'coupon_code': code, if (subtotal != null) 'amount': subtotal},
     );
     return BaseModel.fromJson(
       Map<String, dynamic>.from(response as Map),
@@ -78,23 +79,30 @@ class PaymentRemoteDataSource implements PaymentDataSource {
   }
 
   @override
-  Future<BaseModel<Map<String, dynamic>>> checkout(
+  Future<BaseModel<CheckoutModel>> labCartCheckout(
     CheckoutPaymentRequestModel request,
   ) async {
     final response = await _apiServices.post(
-      AppUrl.userCheckout,
+      AppUrl.userLabCartCheckout,
       hasToken: true,
       body: request.toJson(),
     );
     return BaseModel.fromJson(
       Map<String, dynamic>.from(response as Map),
-      (json) => Map<String, dynamic>.from(json as Map),
+      (json) => CheckoutModel.fromJson(Map<String, dynamic>.from(json as Map)),
     );
   }
 
   List<CardModel> _cardListFromJson(dynamic json) {
-    if (json is! List) return <CardModel>[];
-    return json
+    List<dynamic> items = [];
+
+    if (json is Map<String, dynamic>) {
+      items = json['items'] ?? [];
+    } else if (json is List) {
+      items = json;
+    }
+
+    return items
         .whereType<Map>()
         .map((item) => CardModel.fromJson(Map<String, dynamic>.from(item)))
         .toList();

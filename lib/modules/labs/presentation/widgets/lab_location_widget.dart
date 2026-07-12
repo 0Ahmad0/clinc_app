@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/labs/presentation/controllers/lab_profile_controller.dart';
@@ -32,42 +33,47 @@ class LabLocationWidget extends GetView<LabProfileController> {
               decoration: BoxDecoration(
                 border: Border.all(color: AppColors.success),
                 borderRadius: BorderRadius.circular(16.r),
-                image: const DecorationImage(
-                  // صورة وهمية للخريطة
-                  image: NetworkImage(
-                    "https://media.wired.com/photos/59269cd37034dc5f91becd80/master/pass/GoogleMapTA.jpg",
-                  ),
-                  fit: BoxFit.cover,
-                ),
               ),
-              child: Center(
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 8.h,
+              clipBehavior: Clip.antiAlias,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  const AppCachedImageWidget(
+                    imageUrl:
+                        "https://media.wired.com/photos/59269cd37034dc5f91becd80/master/pass/GoogleMapTA.jpg",
+                    fit: BoxFit.cover,
+                    placeholderType: AppImagePlaceholderType.clinic,
                   ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20.r),
-                    boxShadow: [
-                      BoxShadow(color: Colors.black26, blurRadius: 10),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Iconsax.map, color: Colors.blue),
-                      8.horizontalSpace,
-                      Text(
-                        tr(LocaleKeys.labs_profile_view_map),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12.sp,
-                        ),
+                  Center(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 8.h,
                       ),
-                    ],
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20.r),
+                        boxShadow: [
+                          BoxShadow(color: Colors.black26, blurRadius: 10),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Iconsax.map, color: Colors.blue),
+                          8.horizontalSpace,
+                          Text(
+                            tr(LocaleKeys.labs_profile_view_map),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),

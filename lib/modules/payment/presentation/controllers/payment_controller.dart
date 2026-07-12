@@ -1,5 +1,6 @@
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/app/core/configuration/locator.dart';
+import 'package:clinc_app_t1/app/core/helper/auth_required_helper.dart';
 import 'package:clinc_app_t1/app/core/helper/response_helper.dart';
 import 'package:clinc_app_t1/app/data/base_model.dart';
 import 'package:clinc_app_t1/app/domain/error_handler/network_exceptions.dart';
@@ -69,14 +70,24 @@ class PaymentController extends GetxController {
 
   // دالة الحفظ
   Future<void> saveCard() async {
+    if (!AuthRequiredHelper.ensureAuthenticated(
+      onAuthenticated: loadSavedCards,
+    )) {
+      return;
+    }
     if (isSaving.value || !formKey.currentState!.validate()) return;
+    final expiryParts = expiryController.text.split('/');
+    final cardNumber = numberController.text;
     final newCard = CardModel(
       id: DateTime.now().toString(),
-      holderName: nameController.text,
-      cardNumber: numberController.text,
-      expiryDate: expiryController.text,
+      provider: 'manual',
+      brand: previewType.value.name,
+      last4: _lastFourDigits(cardNumber),
+      cardHolderName: nameController.text,
+      expiryMonth: expiryParts.isNotEmpty ? expiryParts.first : '',
+      expiryYear: expiryParts.length > 1 ? expiryParts[1] : '',
+      rawCardNumber: cardNumber,
       cvv: cvvController.text,
-      type: previewType.value,
     );
     isSaving(true);
     final result = await _repository.addCard(newCard);
@@ -92,13 +103,26 @@ class PaymentController extends GetxController {
         ResponseHelper.onSuccess(message: response.message);
         _clearForm();
       },
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(
+          exception,
+          onAuthenticated: loadSavedCards,
+        )) {
+          return;
+        }
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
   Future<void> removeCard(String id) async {
+    if (!AuthRequiredHelper.ensureAuthenticated(
+      onAuthenticated: loadSavedCards,
+    )) {
+      return;
+    }
     final result = await _repository.deleteCard(id);
     result.when(
       success: (response) {
@@ -108,22 +132,34 @@ class PaymentController extends GetxController {
         }
         savedCards.removeWhere((card) => card.id == id);
       },
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(
+          exception,
+          onAuthenticated: loadSavedCards,
+        )) {
+          return;
+        }
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
   Future<void> loadSavedCards() async {
+    if (AuthRequiredHelper.isGuest) return;
     if (isLoading.value) return;
     isLoading(true);
     final result = await _repository.getSavedCards();
     isLoading(false);
     result.when(
       success: _handleCardsResponse,
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(exception)) return;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
@@ -175,6 +211,12 @@ class PaymentController extends GetxController {
       return tr(LocaleKeys.payment_pay_validation_cvv_invalid);
     }
     return null;
+  }
+
+  String _lastFourDigits(String value) {
+    final digits = value.replaceAll(RegExp(r'\D'), '');
+    if (digits.length < 4) return '';
+    return digits.substring(digits.length - 4);
   }
 
   @override

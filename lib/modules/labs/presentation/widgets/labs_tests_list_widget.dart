@@ -1,6 +1,8 @@
 import 'package:clinc_app_t1/app/enums/loading.dart';
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/labs/data/models/lab_test_model.dart';
 import 'package:clinc_app_t1/modules/labs/presentation/controllers/labs_test_controller.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -230,37 +232,7 @@ class LabsTestsList extends GetView<LabsTestController> {
                           ),
 
                           // زر الإضافة
-                          GestureDetector(
-                            onTap: () => controller.addToCart(test),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 16.w,
-                                vertical: 8.h,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                borderRadius: BorderRadius.circular(10.r),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Iconsax.add,
-                                    size: 16.sp,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: 4.w),
-                                  Text(
-                                    "إضافة",
-                                    style: TextStyle(
-                                      fontSize: 12.sp,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          Obx(() => _buildAddButton(test, context)),
                         ],
                       ),
                     ],
@@ -452,29 +424,10 @@ class LabsTestsList extends GetView<LabsTestController> {
             // الأزرار
             Row(
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => controller.addToCart(test),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      padding: EdgeInsets.symmetric(vertical: 16.h),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                    ),
-                    child: Text(
-                      "إضافة للسلة - ${test.price.toInt()} ريال",
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
+                Expanded(child: Obx(() => _buildSheetAddButton(test, context))),
                 SizedBox(width: 12.w),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () => controller.shareTest(test),
                   style: IconButton.styleFrom(
                     backgroundColor: Colors.grey[100],
                     padding: EdgeInsets.all(12.w),
@@ -485,6 +438,111 @@ class LabsTestsList extends GetView<LabsTestController> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildAddButton(LabTest test, BuildContext context) {
+    final isLoading = controller.isCartItemLoading(test.id);
+    final isAdded = controller.isInCart(test.id);
+    final color = isAdded ? Colors.green : Theme.of(context).primaryColor;
+
+    return GestureDetector(
+      onTap: isLoading || isAdded ? null : () => controller.addToCart(test),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(10.r),
+        ),
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 180),
+          child: isLoading
+              ? SizedBox(
+                  key: const ValueKey('loading'),
+                  width: 16.sp,
+                  height: 16.sp,
+                  child: const CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ),
+                )
+              : Row(
+                  key: ValueKey(isAdded),
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      isAdded ? Iconsax.tick_circle : Iconsax.add,
+                      size: 16.sp,
+                      color: Colors.white,
+                    ),
+                    SizedBox(width: 4.w),
+                    Text(
+                      isAdded
+                          ? tr(LocaleKeys.labs_added_to_cart)
+                          : tr(LocaleKeys.labs_add_to_cart),
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSheetAddButton(LabTest test, BuildContext context) {
+    final isLoading = controller.isCartItemLoading(test.id);
+    final isAdded = controller.isInCart(test.id);
+
+    return ElevatedButton(
+      onPressed: isLoading || isAdded ? null : () => controller.addToCart(test),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: isAdded
+            ? Colors.green
+            : Theme.of(context).primaryColor,
+        disabledBackgroundColor: isAdded ? Colors.green : Colors.grey.shade300,
+        padding: EdgeInsets.symmetric(vertical: 16.h),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+      ),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 180),
+        child: isLoading
+            ? SizedBox(
+                key: const ValueKey('loading'),
+                width: 18.sp,
+                height: 18.sp,
+                child: const CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.white,
+                ),
+              )
+            : Row(
+                key: ValueKey(isAdded),
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (isAdded) ...[
+                    Icon(Iconsax.tick_circle, color: Colors.white, size: 18.sp),
+                    SizedBox(width: 6.w),
+                  ],
+                  Text(
+                    isAdded
+                        ? tr(LocaleKeys.labs_added_to_cart)
+                        : "${tr(LocaleKeys.labs_add_to_cart)} - ${test.price.toInt()} ${tr(LocaleKeys.labs_currency)}",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
       ),
     );
   }

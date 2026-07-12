@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../app/core/configuration/locator.dart';
 import '../../../../app/core/helper/response_helper.dart';
 import '../../../../app/core/utils/app_validator.dart';
 import '../../../../app/domain/error_handler/network_exceptions.dart';
 import '../../../../app/routes/app_routes.dart';
+import '../../../../generated/locale_keys.g.dart';
 import '../../domain/repositories/auth_repository.dart';
 
 class SignupController extends GetxController {
@@ -73,7 +75,7 @@ class SignupController extends GetxController {
     final isValid = formKey.currentState!.validate() && isAgreed.value;
 
     if (!isValid) {
-      ResponseHelper.onFailure(message: "الرجاء التأكد من جميع الحقول المدخلة");
+      ResponseHelper.onFailure(message: tr(LocaleKeys.core_form_invalid));
       return;
     }
     isLoading.value = true;

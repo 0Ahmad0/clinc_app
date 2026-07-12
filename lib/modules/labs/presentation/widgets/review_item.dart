@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../app/core/widgets/app_network_image_widget.dart';
 import '../../../../app/data/review_model.dart';
 
 class ReviewItem extends StatelessWidget {
@@ -21,9 +22,12 @@ class ReviewItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(review.userImage),
-                radius: 16.r,
+              AppCachedImageWidget(
+                imageUrl: review.userImage,
+                width: 32.r,
+                height: 32.r,
+                clipRadius: 16.r,
+                placeholderType: AppImagePlaceholderType.doctor,
               ),
               8.horizontalSpace,
               Text(

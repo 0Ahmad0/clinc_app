@@ -1,4 +1,3 @@
-import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -39,12 +38,7 @@ class HomeAppBarWidget extends StatelessWidget {
             // السطر الأول: الترحيب والصورة والإشعار
             ListTile(
               contentPadding: EdgeInsets.zero,
-              leading: AppCachedImageWidget(
-                imageUrl: userImage,
-                width: 50.sp,
-                height: 50.sp,
-                clipRadius: 50.r,
-              ),
+              leading: _buildUserAvatar(theme),
               title: Text(
                 tr(LocaleKeys.home_app_bar_welcome),
                 style: theme.textTheme.bodyMedium?.copyWith(
@@ -103,6 +97,32 @@ class HomeAppBarWidget extends StatelessWidget {
             ),
             16.verticalSpace,
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUserAvatar(ThemeData theme) {
+    final image = userImage.trim();
+    if (image.isEmpty) {
+      return CircleAvatar(
+        radius: 25.sp,
+        backgroundColor: Colors.white.withValues(alpha: 0.2),
+        child: Icon(Iconsax.user, color: Colors.white, size: 26.sp),
+      );
+    }
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(50.r),
+      child: Image.network(
+        image,
+        width: 50.sp,
+        height: 50.sp,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => CircleAvatar(
+          radius: 25.sp,
+          backgroundColor: Colors.white.withValues(alpha: 0.2),
+          child: Icon(Iconsax.user, color: Colors.white, size: 26.sp),
         ),
       ),
     );

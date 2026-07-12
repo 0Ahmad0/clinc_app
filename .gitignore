@@ -42,3 +42,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /To-DO
+
+storage/app/firebase/*.json
+
+# Android release signing secrets. Keep android/key.properties.example tracked.
+/android/key.properties
+/upload-keystore.jks

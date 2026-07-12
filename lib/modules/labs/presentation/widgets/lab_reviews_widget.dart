@@ -1,5 +1,6 @@
-import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/section_shimmer_widgets.dart';
+import 'package:clinc_app_t1/app/core/widgets/shared_empty_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/labs/presentation/controllers/lab_profile_controller.dart';
 import 'package:clinc_app_t1/modules/labs/presentation/widgets/review_item.dart';
@@ -28,79 +29,41 @@ class LabReviewsWidget extends GetView<LabProfileController> {
                 ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
               TextButton.icon(
-                onPressed: () => _showAddReviewSheet(context),
+                onPressed: () => controller.showRatingSheet(context),
                 icon: const Icon(Iconsax.add_square),
                 label: Text(tr(LocaleKeys.labs_profile_add_review)),
               ),
             ],
           ),
           10.verticalSpace,
-          if (controller.lab.reviews.isEmpty)
-            Center(
-              child: Text(
-                tr(LocaleKeys.labs_profile_no_reviews),
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
-          ...controller.lab.reviews.map((review) => ReviewItem(review: review)),
-        ],
-      ),
-    );
-  }
-
-  void _showAddReviewSheet(BuildContext context) {
-    Get.bottomSheet(
-      Container(
-        padding: EdgeInsets.all(20.w),
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              tr(LocaleKeys.labs_profile_add_review),
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            20.verticalSpace,
-            // نجوم التقييم (Custom Simple Implementation)
-            Obx(
-              () => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(5, (index) {
-                  return IconButton(
-                    onPressed: () => controller.userRating.value = index + 1.0,
-                    icon: Icon(
-                      index < controller.userRating.value
-                          ? Icons.star
-                          : Icons.star_border,
-                      color: Colors.amber,
-                      size: 30.sp,
-                    ),
-                  );
-                }),
-              ),
-            ),
-            16.verticalSpace,
-            TextField(
-              controller: controller.reviewController,
-              decoration: InputDecoration(
-                hintText: tr(LocaleKeys.labs_profile_write_review_hint),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+          Obx(
+            () => Column(
+              children: [
+                if (controller.reviewsPagination.isInitialLoading.value ||
+                    (controller.reviewsPagination.isRefreshing.value &&
+                        controller.reviews.isEmpty))
+                  const SectionListShimmer(itemCount: 2)
+                else if (controller.reviews.isEmpty)
+                  SharedEmptyWidget(
+                    icon: Iconsax.message_remove,
+                    title: tr(LocaleKeys.labs_profile_no_reviews),
+                    subtitle: tr(LocaleKeys.labs_profile_no_reviews_subtitle),
+                  ),
+                ...controller.reviews.map(
+                  (review) => ReviewItem(review: review),
                 ),
-              ),
-              maxLines: 3,
+                if (controller.reviewsPagination.isLoadingMore.value)
+                  const Center(child: CircularProgressIndicator()),
+                if (controller.reviewsPagination.hasMore &&
+                    !controller.reviewsPagination.isLoadingMore.value)
+                  TextButton(
+                    onPressed: controller.loadMoreLabReviews,
+                    child: Text(tr(LocaleKeys.labs_profile_show_more)),
+                  ),
+              ],
             ),
-            20.verticalSpace,
-            AppButtonWidget(
-              text: tr(LocaleKeys.labs_profile_submit_review),
-              onPressed: controller.submitReview,
-            ),
-            20.verticalSpace,
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

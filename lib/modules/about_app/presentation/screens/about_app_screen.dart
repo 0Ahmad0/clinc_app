@@ -29,7 +29,7 @@ class AboutAppScreen extends GetView<AboutAppController> {
               children: [
                 const AboutHeroHeader(),
                 Positioned(
-                  bottom: -120.h,
+                  bottom: -180.h,
                   right: 0,
                   left: 0,
                   child: const AppPaddingWidget(child: AboutIntroCard()),
@@ -39,7 +39,7 @@ class AboutAppScreen extends GetView<AboutAppController> {
             AppPaddingWidget(
               child: Column(
                 children: [
-                  120.verticalSpace,
+                  180.verticalSpace,
 
                   // عنوان القسم
                   Align(

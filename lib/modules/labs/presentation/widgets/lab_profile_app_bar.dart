@@ -1,3 +1,4 @@
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/modules/labs/presentation/controllers/lab_profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -41,7 +42,12 @@ class LabProfileAppBar extends GetView<LabProfileController> {
         background: Stack(
           fit: StackFit.expand,
           children: [
-            Image.network(controller.lab.imageUrl, fit: BoxFit.cover),
+            AppCachedImageWidget(
+              imageUrl: controller.lab.imageUrl,
+              height: double.infinity,
+              fit: BoxFit.cover,
+              placeholderType: AppImagePlaceholderType.lab,
+            ),
             // تدرج لوني لجمال النص
             Container(
               decoration: BoxDecoration(

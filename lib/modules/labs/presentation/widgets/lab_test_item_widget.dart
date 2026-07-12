@@ -76,20 +76,62 @@ class LabTestItem extends StatelessWidget {
             ),
           ),
           8.horizontalSpace,
-          GestureDetector(
-            onTap: () => Get.find<LabsTestController>().addToCart(test),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(8.r),
+          Obx(() {
+            final controller = Get.find<LabsTestController>();
+            final isLoading = controller.isCartItemLoading(test.id);
+            final isAdded = controller.isInCart(test.id);
+            final color = isAdded
+                ? Colors.green
+                : Theme.of(context).primaryColor;
+            return GestureDetector(
+              onTap: isLoading || isAdded
+                  ? null
+                  : () => controller.addToCart(test),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 180),
+                  child: isLoading
+                      ? SizedBox(
+                          key: const ValueKey('loading'),
+                          width: 14.sp,
+                          height: 14.sp,
+                          child: const CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Row(
+                          key: ValueKey(isAdded),
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (isAdded) ...[
+                              Icon(
+                                Iconsax.tick_circle,
+                                size: 14.sp,
+                                color: Colors.white,
+                              ),
+                              4.horizontalSpace,
+                            ],
+                            Text(
+                              isAdded
+                                  ? tr(LocaleKeys.labs_added_to_cart)
+                                  : tr(LocaleKeys.labs_add_to_cart),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12.sp,
+                              ),
+                            ),
+                          ],
+                        ),
+                ),
               ),
-              child: Text(
-                tr(LocaleKeys.labs_book_btn),
-                style: TextStyle(color: Colors.white, fontSize: 12.sp),
-              ),
-            ),
-          ),
+            );
+          }),
         ],
       ),
     );

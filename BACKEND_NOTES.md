@@ -49,7 +49,7 @@ Required notifications/jobs/policies:
 
 ## User Auth
 - Add APIs: `POST /api/user/login`, `/api/user/social-login`, `/api/user/guest-login`, `/api/user/register`, `/api/user/verify-otp`, `/api/user/resend-otp`, `/api/user/forgot-password`, `/api/user/reset-password`, `/api/user/change-password`, `/api/user/logout`, and `GET /api/user/profile`.
-- Login identifier accepts email or username; social providers are Google and Apple; guest login returns a limited guest token/session.
+- Login identifier accepts email or username; social providers are Google and Apple; guest login returns success only and must not require/store a token or fake user.
 - Registration requires full name, username, email, phone, password, and password confirmation, then requires email OTP verification.
 - OTPs must be hashed, expiring, single-use, purpose-scoped (`email_verification`, `password_reset`), and rate-limited.
 - Responses must use the unified contract: `status`, `message`, `data`, `meta`; auth success returns `user`, `token`, optional `refresh_token`.
@@ -71,7 +71,7 @@ Required notifications/jobs/policies:
 - Add/confirm APIs: `GET /api/user/appointments`, `GET /api/user/appointments/{id}`, `POST /api/user/appointments`, `POST /api/user/appointments/{id}/cancel`, `GET /api/user/appointments/available-times`.
 - Appointment list fields currently consumed by app: `id|appointment_id`, `price|consultation_fee`, `status` (`accepted|pending|rejected`).
 - Appointment details fields currently consumed by app: `doctor_name`, `specialty`, `clinic_name`, `clinic_address`, `patient_name`, `appointment_date`, `appointment_time`, `appointment_type`, `payment_method`.
-- Booking request payload currently sent by app: `date`, `time`, `full_name`, `phone`, `problem`, `age_range`, `gender`, `is_pregnant`, `is_breastfeeding`.
+- Booking request payload currently sent by app: optional `doctor_id`, `clinic_id`, `specialty_id`, plus `date` (`yyyy-MM-dd`), `time`, `full_name`, `phone`, `problem`, `age_range`, `gender`, `is_pregnant`, `is_breastfeeding`.
 - Cancellation rule reminder from product requirements: cancellation should be blocked after 24h window (frontend currently mock-allows; backend must enforce).
 
 ## User Clinics / Labs
@@ -87,7 +87,11 @@ Required notifications/jobs/policies:
 
 ## User Insurance
 - Insurance screen is prepared to consume insurance list with unified contract; current fields consumed: `name`, `logo|logo_url`, `key|code`.
-- Current remote data source points to `GET /api/insurances` (public/no token); confirm whether final endpoint should be user-scoped.
+- Current remote data source points to `GET /api/user/insurances` (public/no token for guest browsing).
+
+## User Guest Access
+- Guest browsing APIs must allow requests without Authorization: home, clinics/list/details, doctors/list/details/reviews, available-times, insurances, labs, lab-tests, and lab tests by lab.
+- Protected APIs should return `401` with `error.code=login_required` for booking, profile/settings, favorites, reviews, cart/checkout/payment/cards/coupons, notifications, and medical records/results.
 
 ## User Chatbot
 - Add API: `POST /api/user/chatbot/message` (token-authenticated).

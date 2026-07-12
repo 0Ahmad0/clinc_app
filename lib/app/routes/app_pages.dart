@@ -37,7 +37,9 @@ import '../../modules/my_appointment_details/presentation/bindings/my_appointmen
 import '../../modules/my_appointment_details/presentation/screens/my_appointment_details_screen.dart';
 import '../../modules/notifications/presentation/bindings/notifications_binding.dart';
 import '../../modules/notifications/presentation/screens/notifications_screen.dart';
+import '../../modules/payment/presentation/bindings/checkout_binding.dart';
 import '../../modules/payment/presentation/bindings/payment_binding.dart';
+import '../../modules/payment/presentation/screens/check_out_screen.dart';
 import '../../modules/payment/presentation/screens/payment_screen.dart';
 import '../../modules/privacy_policy/presentation/bindings/privacy_policy_binding.dart';
 import '../../modules/privacy_policy/presentation/screens/privacy_policy_screen.dart';
@@ -190,6 +192,11 @@ class AppPages {
       binding: PaymentBinding(),
     ),
     GetPage(
+      name: AppRoutes.checkout,
+      page: () => const CheckoutScreen(),
+      binding: CheckoutBinding(),
+    ),
+    GetPage(
       name: AppRoutes.doctors,
       page: () => const DoctorsScreen(),
       binding: DoctorsBinding(),
@@ -199,6 +206,7 @@ class AppPages {
       page: () => const DoctorDetailsScreen(),
       binding: DoctorDetailsBinding(),
     ),
+
     GetPage(
       name: AppRoutes.chatbot,
       page: () => const ChatbotScreen(),
@@ -209,6 +217,7 @@ class AppPages {
       page: () => const LabsScreen(),
       binding: LabsBinding(),
     ),
+
     GetPage(
       name: AppRoutes.labsTest,
       page: () => const LabsTestScreen(),

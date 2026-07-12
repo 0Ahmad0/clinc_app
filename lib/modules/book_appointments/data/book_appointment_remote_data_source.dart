@@ -10,11 +10,21 @@ class BookAppointmentRemoteDataSource implements BookAppointmentDataSource {
   final ApiServices _apiServices;
 
   @override
-  Future<BaseModel<List<String>>> getAvailableTimes(DateTime date) async {
+  Future<BaseModel<List<String>>> getAvailableTimes({
+    String? doctorId,
+    String? clinicId,
+    String? labId,
+    required DateTime date,
+  }) async {
     final response = await _apiServices.get(
       AppUrl.userAppointmentAvailableTimes,
-      hasToken: true,
-      queryParams: {'date': date.toIso8601String()},
+      hasToken: false,
+      queryParams: _availableTimesParams(
+        doctorId: doctorId,
+        clinicId: clinicId,
+        labId: labId,
+        date: date,
+      ),
     );
     return BaseModel.fromJson(
       Map<String, dynamic>.from(response as Map),
@@ -38,7 +48,30 @@ class BookAppointmentRemoteDataSource implements BookAppointmentDataSource {
   }
 
   List<String> _stringList(dynamic json) {
+    if (json is Map && json['times'] is List) {
+      return (json['times'] as List).map((item) => item.toString()).toList();
+    }
     if (json is! List) return <String>[];
     return json.map((item) => item.toString()).toList();
+  }
+
+  String _dateOnly(DateTime value) {
+    final month = value.month.toString().padLeft(2, '0');
+    final day = value.day.toString().padLeft(2, '0');
+    return '${value.year}-$month-$day';
+  }
+
+  Map<String, dynamic> _availableTimesParams({
+    String? doctorId,
+    String? clinicId,
+    String? labId,
+    required DateTime date,
+  }) {
+    return {
+      if (doctorId != null && doctorId.isNotEmpty) 'doctor_id': doctorId,
+      if (clinicId != null && clinicId.isNotEmpty) 'clinic_id': clinicId,
+      if (labId != null && labId.isNotEmpty) 'lab_id': labId,
+      'date': _dateOnly(date),
+    };
   }
 }

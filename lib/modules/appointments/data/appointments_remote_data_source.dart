@@ -15,6 +15,7 @@ class AppointmentsRemoteDataSource implements AppointmentsDataSource {
       AppUrl.userAppointments,
       hasToken: true,
     );
+
     return BaseModel.fromJson(
       Map<String, dynamic>.from(response as Map),
       _appointmentsFromJson,
@@ -26,7 +27,7 @@ class AppointmentsRemoteDataSource implements AppointmentsDataSource {
     String appointmentId,
   ) async {
     final response = await _apiServices.post(
-      '${AppUrl.userAppointments}/$appointmentId/cancel',
+      AppUrl.userAppointmentCancel(appointmentId),
       hasToken: true,
     );
     return BaseModel.fromJson(
@@ -36,8 +37,15 @@ class AppointmentsRemoteDataSource implements AppointmentsDataSource {
   }
 
   List<AppointmentModel> _appointmentsFromJson(dynamic json) {
-    if (json is! List) return <AppointmentModel>[];
-    return json
+    List<dynamic> items = [];
+
+    if (json is Map<String, dynamic>) {
+      items = json['items'] ?? [];
+    } else if (json is List) {
+      items = json;
+    }
+
+    return items
         .whereType<Map>()
         .map(
           (item) => AppointmentModel.fromJson(Map<String, dynamic>.from(item)),

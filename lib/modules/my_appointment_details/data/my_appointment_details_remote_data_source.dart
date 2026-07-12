@@ -15,7 +15,7 @@ class MyAppointmentDetailsRemoteDataSource
     String appointmentId,
   ) async {
     final response = await _apiServices.get(
-      '${AppUrl.userAppointments}/$appointmentId',
+      AppUrl.userAppointmentDetails(appointmentId),
       hasToken: true,
     );
     return BaseModel.fromJson(
@@ -31,7 +31,7 @@ class MyAppointmentDetailsRemoteDataSource
     String appointmentId,
   ) async {
     final response = await _apiServices.post(
-      '${AppUrl.userAppointments}/$appointmentId/cancel',
+      AppUrl.userAppointmentCancel(appointmentId),
       hasToken: true,
     );
     return BaseModel.fromJson(

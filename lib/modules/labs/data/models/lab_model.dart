@@ -16,6 +16,7 @@ class LabModel {
   final List<LabOfferModel> offers;
   final double latitude;
   final double longitude;
+  final bool isFavorite;
 
   LabModel({
     required this.id,
@@ -32,6 +33,7 @@ class LabModel {
     required this.offers,
     required this.latitude,
     required this.longitude,
+    this.isFavorite = false,
   });
 
   // --- إضافة دالة التحويل من Map ---
@@ -39,20 +41,27 @@ class LabModel {
     return LabModel(
       id: map['id']?.toString() ?? '',
       name: map['name']?.toString() ?? '',
-      imageUrl: map['imageUrl']?.toString() ?? '',
-      address: map['address']?.toString() ?? '',
+      imageUrl:
+          (map['image_url'] ?? map['imageUrl'] ?? map['cover_image'])
+              ?.toString() ??
+          '',
+      address: (map['address'] ?? map['location'])?.toString() ?? '',
       rating: _parseDouble(map['rating']),
-      isOpen: map['isOpen'] == true || map['isOpen'].toString() == 'true',
+      isOpen: _parseBool(map['is_open'] ?? map['isOpen']),
       category: map['category']?.toString() ?? '',
       description: map['description']?.toString() ?? '',
-      services: map['services'] != null
-          ? List<String>.from(map['services'].map((x) => x.toString()))
-          : <String>[],
-      phoneNumber: map['phoneNumber']?.toString() ?? '',
+      services: _stringList(map['services']),
+      phoneNumber:
+          (map['phone_number'] ?? map['phoneNumber'] ?? map['phone'])
+              ?.toString() ??
+          '',
       reviews: _reviewList(map['reviews']),
       offers: _offerList(map['offers']),
       latitude: _parseDouble(map['latitude'] ?? 0),
       longitude: _parseDouble(map['longitude'] ?? 0),
+      isFavorite: _parseBool(
+        map['is_favorite'] ?? map['isFavorite'] ?? map['favorite'],
+      ),
     );
   }
 
@@ -93,6 +102,7 @@ class LabModel {
         .toList(),
     'latitude': latitude,
     'longitude': longitude,
+    'is_favorite': isFavorite,
   };
 
   // دالة مساعدة لتحويل الأرقام
@@ -104,14 +114,27 @@ class LabModel {
     return 0.0;
   }
 
+  static bool _parseBool(dynamic value) {
+    return value == true || value == 1 || value?.toString() == 'true';
+  }
+
+  static List<String> _stringList(dynamic value) {
+    if (value is! List) return <String>[];
+    return value.map((item) => item.toString()).toList();
+  }
+
   static List<ReviewModel> _reviewList(dynamic value) {
     if (value is! List) return <ReviewModel>[];
     return value
         .whereType<Map>()
         .map(
           (item) => ReviewModel(
-            userName: item['userName']?.toString() ?? '',
-            userImage: item['userImage']?.toString() ?? '',
+            userName:
+                (item['user_name'] ?? item['userName'] ?? item['name'])
+                    ?.toString() ??
+                '',
+            userImage:
+                (item['user_image'] ?? item['userImage'])?.toString() ?? '',
             rating: _parseDouble(item['rating']),
             comment: item['comment']?.toString() ?? '',
             date: item['date']?.toString() ?? '',

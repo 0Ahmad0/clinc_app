@@ -1,10 +1,38 @@
 import '../../../app/data/base_model.dart';
+import '../../../app/data/models/filter_option_model.dart';
 import '../../../app/data/pagination/pagination_params.dart';
 import 'models/property_model.dart';
 import 'search_data_source.dart';
 
 class SearchMockDataSource implements SearchDataSource {
   final List<Hospital> _hospitals = Hospital.mockHospitals;
+
+  @override
+  Future<BaseModel<FiltersModel>> getFilters() async {
+    await Future<void>.delayed(const Duration(milliseconds: 200));
+    final regions = _uniqueOptions(
+      _hospitals.map((hospital) => hospital.region),
+    );
+    final specializations = _uniqueOptions(
+      _hospitals.expand((hospital) => hospital.specialties),
+    );
+    final insurances = _uniqueOptions(
+      _hospitals.expand((hospital) => hospital.supportedInsurances),
+    );
+    return BaseModel.fromJson({
+      'status': 'success',
+      'message': 'Clinic filters retrieved successfully',
+      'data': {
+        'regions': regions.map((item) => item.toJson()).toList(),
+        'areas': regions.map((item) => item.toJson()).toList(),
+        'specializations': specializations
+            .map((item) => item.toJson())
+            .toList(),
+        'insurances': insurances.map((item) => item.toJson()).toList(),
+      },
+      'meta': <String, dynamic>{},
+    }, (json) => FiltersModel.fromJson(Map<String, dynamic>.from(json as Map)));
+  }
 
   @override
   Future<BaseModel<BaseModels<Hospital>>> searchClinics(
@@ -46,17 +74,11 @@ class SearchMockDataSource implements SearchDataSource {
     Map<String, dynamic> filters,
   ) {
     var results = hospitals;
-    final query = filters['query']?.toString().trim().toLowerCase();
-    final region = filters['region']?.toString();
-    final insurance = filters['insurance']?.toString();
-    final specialty = filters['specialty']?.toString();
-    final sort = filters['sort']?.toString() ?? 'priceAsc';
+    final region = filters['region_id']?.toString();
+    final insurance = filters['insurance_id']?.toString();
+    final specialty = filters['specialization_id']?.toString();
+    final rating = double.tryParse(filters['rating']?.toString() ?? '') ?? 0;
 
-    if (query != null && query.isNotEmpty) {
-      results = results
-          .where((hospital) => hospital.name.toLowerCase().contains(query))
-          .toList();
-    }
     if (region != null && region.isNotEmpty) {
       results = results.where((hospital) => hospital.region == region).toList();
     }
@@ -70,20 +92,19 @@ class SearchMockDataSource implements SearchDataSource {
           .where((hospital) => hospital.supportedInsurances.contains(insurance))
           .toList();
     }
-
-    results = [...results];
-    results.sort((a, b) {
-      switch (sort) {
-        case 'priceDesc':
-          return b.consultationFee.compareTo(a.consultationFee);
-        case 'distanceAsc':
-          return a.distanceKm.compareTo(b.distanceKm);
-        case 'priceAsc':
-        default:
-          return a.consultationFee.compareTo(b.consultationFee);
-      }
-    });
+    if (rating > 0) {
+      results = results.where((hospital) => hospital.rating >= rating).toList();
+    }
 
     return results;
+  }
+
+  List<FilterOptionModel> _uniqueOptions(Iterable<String> values) {
+    final seen = <String>{};
+    return values
+        .where((value) => value.trim().isNotEmpty)
+        .where(seen.add)
+        .map((value) => FilterOptionModel(id: value, name: value))
+        .toList();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -24,7 +25,13 @@ class ReviewItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              CircleAvatar(radius: 20.r, backgroundImage: NetworkImage(imgUrl)),
+              AppCachedImageWidget(
+                imageUrl: imgUrl,
+                width: 40.r,
+                height: 40.r,
+                clipRadius: 20.r,
+                placeholderType: AppImagePlaceholderType.doctor,
+              ),
               10.horizontalSpace,
               Expanded(
                 child: Column(

@@ -1,5 +1,7 @@
 import 'package:clinc_app_t1/app/core/configuration/locator.dart';
+import 'package:clinc_app_t1/app/core/helper/auth_required_helper.dart';
 import 'package:clinc_app_t1/app/core/helper/response_helper.dart';
+import 'package:clinc_app_t1/app/core/utils/share_helper.dart';
 import 'package:clinc_app_t1/app/data/base_model.dart';
 import 'package:clinc_app_t1/app/domain/error_handler/network_exceptions.dart';
 import 'package:clinc_app_t1/app/enums/loading.dart';
@@ -22,7 +24,7 @@ class LabsTestController extends GetxController {
   final RxList<LabTest> specialOffers = <LabTest>[].obs;
   final RxList<LabTest> packages = <LabTest>[].obs;
   final RxList<String> categories = <String>[].obs;
-  final RxString selectedCategory = 'الكل'.obs;
+  final RxString selectedCategory = ''.obs;
   final RxList<LabTest> cartItems = <LabTest>[].obs;
   final Rx<Offset> fabPosition = Offset.zero.obs;
   final RxBool isDragging = false.obs;
@@ -46,7 +48,7 @@ class LabsTestController extends GetxController {
     _repository = locator<LabsRepository>();
     _readRouteArgs();
     loadData();
-    loadCart();
+    if (!AuthRequiredHelper.isGuest) loadCart();
   }
 
   Future<void> loadData() async {
@@ -64,20 +66,24 @@ class LabsTestController extends GetxController {
   }
 
   Future<void> loadCart() async {
+    if (AuthRequiredHelper.isGuest) return;
     cartLoadingState.value = GeneralLoading.loading;
     final result = await _repository.getLabCart();
     cartLoadingState.value = GeneralLoading.initial;
     result.when(
       success: _handleCartResponse,
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(exception)) return;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
   void initializeCategories() {
     // استخراج التصنيفات الفريدة من البيانات
-    final Set<String> uniqueCategories = {'الكل'};
+    final Set<String> uniqueCategories = {''};
     for (var test in allTests) {
       if (test.category != 'عروض خاصة') {
         uniqueCategories.add(test.category);
@@ -117,7 +123,7 @@ class LabsTestController extends GetxController {
 
   // جلب الفحوصات حسب التصنيف
   List<LabTest> get filteredTests {
-    if (selectedCategory.value == 'الكل') {
+    if (selectedCategory.value.isEmpty) {
       return allTests.where((test) => !test.isSpecialOffer).toList();
     }
     return allTests
@@ -146,7 +152,7 @@ class LabsTestController extends GetxController {
 
   // جلب عدد الفحوصات في التصنيف
   int getTestsCountByCategory(String category) {
-    if (category == 'الكل') {
+    if (category.isEmpty) {
       return allTests.where((test) => !test.isSpecialOffer).length;
     }
     return allTests.where((test) => test.category == category).length;
@@ -155,35 +161,68 @@ class LabsTestController extends GetxController {
   // إدارة السلة
   double get cartTotal => cartItems.fold(0, (sum, item) => sum + item.price);
 
+  bool isInCart(String testId) => cartItems.any((item) => item.id == testId);
+
+  bool isCartItemLoading(String testId) => cartItemLoadingIds.contains(testId);
+
   Future<void> addToCart(LabTest test) async {
-    if (cartItems.any((item) => item.id == test.id)) {
-      ResponseHelper.onWarning(message: 'This test is already in cart');
+    if (!AuthRequiredHelper.ensureAuthenticated(onAuthenticated: loadCart)) {
       return;
     }
-    if (cartItemLoadingIds.contains(test.id)) return;
+    if (isInCart(test.id)) {
+      ResponseHelper.onWarning(
+        message: tr(LocaleKeys.labs_test_already_in_cart),
+      );
+      return;
+    }
+    if (isCartItemLoading(test.id)) return;
 
     cartItemLoadingIds.add(test.id);
+    cartItemLoadingIds.refresh();
     final result = await _repository.addLabTestToCart(test.id);
     cartItemLoadingIds.remove(test.id);
+    cartItemLoadingIds.refresh();
     result.when(
       success: (response) {
-        _handleCartResponse(response);
+        if (!response.isSuccess) {
+          ResponseHelper.onFailure(message: response.message);
+          return;
+        }
+        if (response.result != null) {
+          _handleCartResponse(response);
+        }
+        if (!isInCart(test.id)) {
+          cartItems.add(test);
+        }
         if (response.isSuccess) {
           ResponseHelper.onSuccess(message: response.message);
         }
       },
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(
+          exception,
+          onAuthenticated: loadCart,
+        )) {
+          return;
+        }
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
   Future<void> removeFromCart(String testId) async {
+    if (!AuthRequiredHelper.ensureAuthenticated(onAuthenticated: loadCart)) {
+      return;
+    }
     if (cartItemLoadingIds.contains(testId)) return;
 
     cartItemLoadingIds.add(testId);
+    cartItemLoadingIds.refresh();
     final result = await _repository.removeLabTestFromCart(testId);
     cartItemLoadingIds.remove(testId);
+    cartItemLoadingIds.refresh();
     result.when(
       success: (response) {
         _handleCartResponse(response);
@@ -191,9 +230,17 @@ class LabsTestController extends GetxController {
           ResponseHelper.onSuccess(message: response.message);
         }
       },
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(
+          exception,
+          onAuthenticated: loadCart,
+        )) {
+          return;
+        }
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
@@ -202,12 +249,23 @@ class LabsTestController extends GetxController {
   }
 
   Future<void> clearCart() async {
+    if (!AuthRequiredHelper.ensureAuthenticated(onAuthenticated: loadCart)) {
+      return;
+    }
     final result = await _repository.clearLabCart();
     result.when(
       success: _handleCartResponse,
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(
+          exception,
+          onAuthenticated: loadCart,
+        )) {
+          return;
+        }
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
@@ -232,8 +290,24 @@ class LabsTestController extends GetxController {
     // يمكن إضافة مفضلة
   }
 
-  void shareTest(LabTest test) {
-    // مشاركة الفحص
+  Future<void> shareTest(LabTest test) async {
+    final labName = (test.labName?.trim().isNotEmpty == true)
+        ? test.labName!.trim()
+        : labData['name']?.toString().trim() ?? '';
+    final shareLines = <String>[
+      if (labName.isNotEmpty)
+        '${tr(LocaleKeys.labs_profile_share_msg)}$labName',
+      test.title,
+      if (test.category.trim().isNotEmpty) test.category.trim(),
+      if (test.description.trim().isNotEmpty) test.description.trim(),
+      '${test.price.toStringAsFixed(test.price.truncateToDouble() == test.price ? 0 : 2)} ${tr(LocaleKeys.labs_currency)}',
+      tr(LocaleKeys.share_app_link, args: [_shareLink(test)]),
+    ];
+
+    await ShareHelper.shareText(
+      text: shareLines.join('\n'),
+      subject: test.title,
+    );
   }
 
   List<LabTest> getPopularTests() {
@@ -260,10 +334,13 @@ class LabsTestController extends GetxController {
     }
 
     Get.toNamed(
-      AppRoutes.payment,
+      AppRoutes.checkout,
       arguments: {
+        'flow_type': 'lab',
         'items': cartItems.toList(),
+        'test_count': cartItems.length,
         'total': cartTotal,
+        'lab_id': _labId,
         'labName': labData['name'],
       },
     );
@@ -279,5 +356,21 @@ class LabsTestController extends GetxController {
     if (args['name'] != null) {
       labData['name'] = args['name'];
     }
+  }
+
+  String _shareLink(LabTest test) {
+    final appUri = Uri.tryParse(ShareHelper.appLink);
+    if (appUri == null || _labId == null || _labId!.isEmpty) {
+      return ShareHelper.appLink;
+    }
+    return appUri
+        .replace(
+          queryParameters: <String, String>{
+            ...appUri.queryParameters,
+            'lab_id': _labId!,
+            'test_id': test.id,
+          },
+        )
+        .toString();
   }
 }

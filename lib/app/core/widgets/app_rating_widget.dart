@@ -11,6 +11,7 @@ class AppRatingWidget extends StatefulWidget {
   final String hintText;
   final String buttonText;
   final double initialRating;
+  final bool isLoading;
   final Function(double rating, String comment) onSubmit;
 
   const AppRatingWidget({
@@ -19,6 +20,7 @@ class AppRatingWidget extends StatefulWidget {
     this.hintText = "اكتب رأيك بصراحة...",
     this.buttonText = "إرسال التقييم",
     this.initialRating = 0.0,
+    this.isLoading = false,
     required this.onSubmit,
   });
 
@@ -79,6 +81,7 @@ class _AppRatingWidgetState extends State<AppRatingWidget> {
           ),
           20.verticalSpace,
           AppButtonWidget(
+            isLoading: widget.isLoading,
             backgroundColor: _currentRating == 0
                 ? Colors.grey
                 : Theme.of(context).primaryColor,

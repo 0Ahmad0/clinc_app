@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:developer';
 
@@ -6,7 +5,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart' as gett;
 import 'package:http/http.dart' as http;
-
 
 import '../../core/utils/app_url.dart';
 import '../../services/storage_service.dart';
@@ -28,13 +26,15 @@ class ApiServicesImp implements ApiServices {
   }
 
   Future<void> setHeaders(bool hasToken) async {
+    final token = StorageService.instance.getAccessToken();
+    final shouldSendToken =
+        hasToken && token.isNotEmpty && !StorageService.instance.isGuest;
     _headers = {
       "Accept": "application/json",
       "accept-timezone": DateTime.now().timeZoneName,
-      "Authorization": hasToken
-          ? "Bearer ${(StorageService.instance.getAccessToken())}"
-          : null,
+      if (shouldSendToken) "Authorization": "Bearer $token",
       // "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhaG1hZDEiLCJleHAiOjE2NzE4Nzc2MTMsImlhdCI6MTY3MTUxNzYxM30.ipa9KNJP2QhloBMtC0g0P0lwfGZlhGw9aWXQTC02G74":null,
+      "Accept-Language": "${gett.Get.locale?.languageCode}",
       "accept-language": "${gett.Get.locale?.languageCode}",
     };
   }

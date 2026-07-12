@@ -19,7 +19,12 @@ class BookAppointmentMockDataSource implements BookAppointmentDataSource {
   ];
 
   @override
-  Future<BaseModel<List<String>>> getAvailableTimes(DateTime date) async {
+  Future<BaseModel<List<String>>> getAvailableTimes({
+    String? doctorId,
+    String? clinicId,
+    String? labId,
+    required DateTime date,
+  }) async {
     await Future<void>.delayed(const Duration(milliseconds: 250));
     final isWeekend = date.weekday == DateTime.friday;
     final slots = isWeekend ? _defaultSlots.take(6).toList() : _defaultSlots;
@@ -48,6 +53,9 @@ class BookAppointmentMockDataSource implements BookAppointmentDataSource {
   }
 
   List<String> _stringList(dynamic json) {
+    if (json is Map && json['times'] is List) {
+      return (json['times'] as List).map((item) => item.toString()).toList();
+    }
     if (json is! List) return <String>[];
     return json.map((item) => item.toString()).toList();
   }

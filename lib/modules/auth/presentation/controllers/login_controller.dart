@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../../../app/core/configuration/locator.dart';
+import '../../../../app/core/helper/focus_helper.dart';
 import '../../../../app/core/helper/response_helper.dart';
 import '../../../../app/core/utils/app_validator.dart';
 import '../../../../app/domain/error_handler/network_exceptions.dart';
 import '../../../../app/routes/app_routes.dart';
 import '../../../../app/services/storage_service.dart';
+import '../../../../generated/locale_keys.g.dart';
 import '../../data/models/user_auth_model.dart';
 import '../../domain/repositories/auth_repository.dart';
+import 'google_auth_service.dart';
 
 class LoginController extends GetxController {
   final TextEditingController passwordController = TextEditingController();
@@ -66,7 +70,7 @@ class LoginController extends GetxController {
     final isValid = formKey.currentState!.validate();
 
     if (!isValid) {
-      ResponseHelper.onFailure(message: "الرجاء التأكد من جميع الحقول المدخلة");
+      ResponseHelper.onFailure(message: tr(LocaleKeys.core_form_invalid));
       return;
     }
     isLoading.value = true;
@@ -89,6 +93,26 @@ class LoginController extends GetxController {
     );
   }
 
+  Future<void> signWithGoogle() async {
+    if (isLoading.value) return;
+    final googleAuth = GoogleAuthService();
+    // await googleAuth.signInAndGetIdToken();
+    isLoading.value = true;
+    try {
+      final idToken = await googleAuth.signInAndGetIdToken();
+      isLoading.value = false;
+      if (idToken != null) {
+        await loginWithProvider('google|$idToken');
+      }
+    } catch (e) {
+      isLoading.value = false;
+      ResponseHelper.onFailure(
+        message: tr(LocaleKeys.auth_google_login_failed),
+      );
+      return;
+    }
+  }
+
   Future<void> loginWithProvider(String provider) async {
     if (isLoading.value) return;
     isLoading.value = true;
@@ -98,6 +122,10 @@ class LoginController extends GetxController {
     isLoading.value = false;
     result.when(
       success: (model) async {
+        if (provider == 'guest') {
+          await _completeGuestLogin(model.message);
+          return;
+        }
         if (model.result == null) {
           ResponseHelper.onFailure(message: model.message);
           return;
@@ -111,7 +139,29 @@ class LoginController extends GetxController {
   }
 
   Future<void> _completeLogin(AuthSessionModel session, String? message) async {
-    await StorageService.instance.setAccessToken(session.token);
+    await StorageService.instance.setGuestMode(false);
+    await _saveLoginSession(session);
+    ResponseHelper.onSuccess(message: message);
+    await FocusHelper.clearPrimaryFocusBeforeNavigation();
+    Get.offAllNamed(AppRoutes.navbar);
+  }
+
+  Future<void> _saveLoginSession(AuthSessionModel session) async {
+    final shouldRemember = rememberMe.value;
+    await StorageService.instance.setAccessToken(
+      session.token,
+      persist: shouldRemember,
+    );
+
+    if (!shouldRemember) {
+      await Future.wait([
+        StorageService.instance.removeData(StorageService.REFRESH_TOKEN),
+        StorageService.instance.removeData(StorageService.LOGIN_TIME),
+        StorageService.instance.removeData(StorageService.USER),
+      ]);
+      return;
+    }
+
     await StorageService.instance.writeData(
       StorageService.REFRESH_TOKEN,
       session.refreshToken,
@@ -123,7 +173,13 @@ class LoginController extends GetxController {
       StorageService.LOGIN_TIME,
       DateTime.now().toIso8601String(),
     );
+  }
+
+  Future<void> _completeGuestLogin(String? message) async {
+    await StorageService.instance.depose();
+    await StorageService.instance.setGuestMode(true);
     ResponseHelper.onSuccess(message: message);
+    await FocusHelper.clearPrimaryFocusBeforeNavigation();
     Get.offAllNamed(AppRoutes.navbar);
   }
 

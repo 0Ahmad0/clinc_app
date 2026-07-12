@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -17,13 +18,14 @@ class DoctorHeader extends StatelessWidget {
           height: 70.w,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            image: const DecorationImage(
-              image: NetworkImage(
-                "https://img.freepik.com/free-photo/woman-doctor-wearing-lab-coat-with-stethoscope-isolated_1303-29791.jpg",
-              ),
-              fit: BoxFit.cover,
-            ),
             border: Border.all(color: AppColors.grey.myOpacity(0.2)),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: const AppCachedImageWidget(
+            imageUrl:
+                "https://img.freepik.com/free-photo/woman-doctor-wearing-lab-coat-with-stethoscope-isolated_1303-29791.jpg",
+            fit: BoxFit.cover,
+            placeholderType: AppImagePlaceholderType.doctor,
           ),
         ),
         15.horizontalSpace,

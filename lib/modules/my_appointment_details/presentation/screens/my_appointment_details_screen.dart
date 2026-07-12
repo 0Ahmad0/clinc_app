@@ -1,16 +1,20 @@
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_scaffold_widget.dart';
 import 'package:clinc_app_t1/app/extension/localization_extension.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/my_appointment_details/presentation/controllers/my_appointment_details_controller.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../app/core/theme/app_colors.dart';
+import '../../../appointments/data/enum/appointment_status.dart';
 
 class MyAppointmentDetailsScreen
     extends GetView<MyAppointmentDetailsController> {
@@ -20,7 +24,9 @@ class MyAppointmentDetailsScreen
     return Obx(
       () => AppScaffoldWidget(
         applyBodyPadding: false,
-        appBar: AppAppBarWidget(title: 'تفاصيل الحجز'),
+        appBar: AppAppBarWidget(
+          title: tr(LocaleKeys.my_appointment_details_title),
+        ),
         body: controller.isLoading.value
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
@@ -31,57 +37,105 @@ class MyAppointmentDetailsScreen
                       _buildDoctorCard(), // كرت الدكتور (الموجود عندك أصلاً)
                       20.verticalSpace,
 
-                      _buildSectionTitle("معلومات الموعد"),
+                      _buildSectionTitle(
+                        tr(LocaleKeys.my_appointment_details_appointment_info),
+                      ),
                       _buildInfoCard([
                         _buildInfoRow(
                           Iconsax.user,
-                          "المريض",
+                          tr(LocaleKeys.my_appointment_details_patient),
                           controller.patientName,
                         ),
+                        if (controller.phone.isNotEmpty)
+                          _buildInfoRow(
+                            Iconsax.call,
+                            tr(LocaleKeys.my_appointment_details_phone),
+                            controller.phone,
+                          ),
                         _buildInfoRow(
                           Iconsax.calendar_1,
-                          "التاريخ",
+                          tr(LocaleKeys.my_appointment_details_date),
                           controller.appointmentDate,
                         ),
                         _buildInfoRow(
                           Iconsax.clock,
-                          "الوقت",
+                          tr(LocaleKeys.my_appointment_details_time),
                           controller.appointmentTime,
                         ),
                         _buildInfoRow(
                           Iconsax.info_circle,
-                          "نوع الزيارة",
+                          tr(LocaleKeys.my_appointment_details_visit_type),
                           controller.appointmentType,
+                        ),
+                        _buildInfoRow(
+                          Iconsax.tick_circle,
+                          tr(LocaleKeys.my_appointment_details_status),
+                          _statusText(controller.status),
+                        ),
+                        _buildInfoRow(
+                          Iconsax.document_text,
+                          tr(LocaleKeys.my_appointment_details_problem),
+                          controller.problem,
                         ),
                       ]),
 
                       20.verticalSpace,
-                      _buildSectionTitle("تفاصيل العيادة"),
+                      _buildSectionTitle(
+                        tr(LocaleKeys.my_appointment_details_clinic_details),
+                      ),
                       _buildInfoCard([
                         _buildInfoRow(
                           Iconsax.hospital,
-                          "المنشأة",
+                          tr(LocaleKeys.my_appointment_details_facility),
                           controller.clinicName,
                         ),
                         _buildInfoRow(
                           Iconsax.location,
-                          "العنوان",
+                          tr(LocaleKeys.my_appointment_details_address),
                           controller.clinicAddress,
                         ),
                       ]),
 
                       20.verticalSpace,
-                      _buildSectionTitle("الملخص المالي"),
+                      _buildSectionTitle(
+                        tr(LocaleKeys.my_appointment_details_financial_summary),
+                      ),
                       _buildInfoCard([
                         _buildInfoRow(
                           Iconsax.money_send,
-                          "رسوم الكشفية",
-                          "${controller.appointment.price} ر.س",
+                          tr(
+                            LocaleKeys.my_appointment_details_consultation_fee,
+                          ),
+                          _money(controller.consultationFee),
                         ),
                         _buildInfoRow(
                           Iconsax.card_pos,
-                          "طريقة الدفع",
+                          tr(LocaleKeys.my_appointment_details_payment_method),
                           controller.paymentMethod,
+                        ),
+                        _buildInfoRow(
+                          Iconsax.receipt_1,
+                          tr(LocaleKeys.my_appointment_details_payment_status),
+                          controller.paymentStatus,
+                        ),
+                        _buildInfoRow(
+                          Iconsax.receipt_text,
+                          tr(
+                            LocaleKeys.my_appointment_details_payment_reference,
+                          ),
+                          controller.paymentReference,
+                        ),
+                        _buildInfoRow(
+                          Iconsax.money_recive,
+                          tr(LocaleKeys.my_appointment_details_paid_amount),
+                          _money(controller.paidAmount),
+                        ),
+                        _buildInfoRow(
+                          Iconsax.money_time,
+                          tr(
+                            LocaleKeys.my_appointment_details_remaining_amount,
+                          ),
+                          _money(controller.remainingAmount),
                         ),
                       ]),
                     ],
@@ -108,14 +162,21 @@ class MyAppointmentDetailsScreen
             child: Icon(icon, size: 18.sp, color: AppColors.primary),
           ),
           12.horizontalSpace,
-          Text(
-            label,
-            style: TextStyle(color: Colors.grey, fontSize: 13.sp),
+          Expanded(
+            flex: 2,
+            child: Text(
+              label,
+              style: TextStyle(color: Colors.grey, fontSize: 13.sp),
+            ),
           ),
-          const Spacer(),
-          Text(
-            value,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.sp),
+          8.horizontalSpace,
+          Expanded(
+            flex: 3,
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.sp),
+            ),
           ),
         ],
       ),
@@ -160,15 +221,14 @@ class MyAppointmentDetailsScreen
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            child: Image.network(
-              'https://tse3.mm.bing.net/th/id/OIP.oE3nZ-YMw5_n3fFaJjCedQHaJQ?rs=1&pid=ImgDetMain&o=7&rm=3',
-              height: 200,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              alignment: Alignment.topCenter,
-            ),
+          AppCachedImageWidget(
+            imageUrl: controller.doctorLogo,
+            height: 200,
+            width: double.infinity,
+            fit: BoxFit.cover,
+            alignment: Alignment.topCenter,
+            clipRadius: 20,
+            placeholderType: AppImagePlaceholderType.doctor,
           ),
 
           // المعلومات أسفل الصورة
@@ -211,7 +271,10 @@ class MyAppointmentDetailsScreen
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      "(50 تقييم)".trNumbers(),
+                      tr(
+                        LocaleKeys.my_appointment_details_rating_count,
+                        args: ['50'],
+                      ).trNumbers(),
                       style: TextStyle(fontSize: 12, color: Colors.grey[500]),
                     ),
                   ],
@@ -240,8 +303,6 @@ class MyAppointmentDetailsScreen
 
   // الزر السفلي الذكي
   Widget _buildBottomAction() {
-    bool isAccepted = controller.isAccepted;
-
     return Container(
       padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
@@ -256,10 +317,39 @@ class MyAppointmentDetailsScreen
       ),
       child: AppButtonWidget(
         isLoading: controller.isCancelling.value,
-        onPressed: isAccepted ? controller.cancelAction : () => Get.back(),
-        backgroundColor: isAccepted ? Colors.redAccent : AppColors.primary,
-        text: isAccepted ? "إلغاء الحجز" : "إعادة حجز موعد",
+        onPressed: controller.showCancelAction
+            ? controller.cancelAction
+            : controller.showRebookAction
+            ? controller.reBookAction
+            : null,
+        backgroundColor: controller.showCancelAction
+            ? Colors.redAccent
+            : controller.showRebookAction
+            ? AppColors.primary
+            : Colors.grey,
+        text: controller.showCancelAction
+            ? tr(LocaleKeys.my_appointment_details_cancel_booking)
+            : controller.showRebookAction
+            ? tr(LocaleKeys.my_appointment_details_rebook_appointment)
+            : controller.isAccepted
+            ? tr(LocaleKeys.my_appointment_details_cancel_unavailable_24h)
+            : tr(LocaleKeys.my_appointment_details_no_action_available),
       ),
     );
+  }
+
+  String _money(double value) {
+    return '$value ${tr(LocaleKeys.appointments_currency)}';
+  }
+
+  String _statusText(AppointmentStatus status) {
+    switch (status) {
+      case AppointmentStatus.accepted:
+        return tr(LocaleKeys.appointments_status_accepted);
+      case AppointmentStatus.pending:
+        return tr(LocaleKeys.appointments_status_pending);
+      case AppointmentStatus.rejected:
+        return tr(LocaleKeys.appointments_status_rejected);
+    }
   }
 }

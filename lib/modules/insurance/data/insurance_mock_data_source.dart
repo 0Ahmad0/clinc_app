@@ -41,24 +41,27 @@ class InsuranceMockDataSource implements InsuranceDataSource {
   ];
 
   @override
-  Future<BaseModel<List<InsuranceCompanyModel>>> getInsurances() async {
+  Future<BaseModel<BaseModels<InsuranceCompanyModel>>> getInsurances() async {
     await Future<void>.delayed(const Duration(milliseconds: 250));
-    return BaseModel.fromJson({
-      'status': 'success',
-      'message': 'Insurances retrieved successfully',
-      'data': _insurances.map((item) => item.toJson()).toList(),
-      'meta': <String, dynamic>{},
-    }, _insuranceListFromJson);
-  }
-
-  List<InsuranceCompanyModel> _insuranceListFromJson(dynamic json) {
-    if (json is! List) return <InsuranceCompanyModel>[];
-    return json
-        .whereType<Map>()
-        .map(
-          (item) =>
-              InsuranceCompanyModel.fromJson(Map<String, dynamic>.from(item)),
-        )
-        .toList();
+    return BaseModel.fromJson(
+      {
+        'status': 'success',
+        'message': 'Insurances retrieved successfully',
+        'data': _insurances.map((item) => item.toJson()).toList(),
+        'meta': {
+          'current_page': 1,
+          'from': _insurances.isEmpty ? 0 : 1,
+          'to': _insurances.length,
+          'per_page': _insurances.length,
+          'total': _insurances.length,
+        },
+      },
+      (json) => BaseModels<InsuranceCompanyModel>.fromJson(
+        json,
+        (itemJson) => InsuranceCompanyModel.fromJson(
+          Map<String, dynamic>.from(itemJson as Map),
+        ),
+      ),
+    );
   }
 }

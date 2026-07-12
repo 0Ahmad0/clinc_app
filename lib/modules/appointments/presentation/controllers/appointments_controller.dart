@@ -1,13 +1,15 @@
 import 'package:clinc_app_t1/app/core/constants/app_assets.dart';
 import 'package:clinc_app_t1/app/core/configuration/locator.dart';
+import 'package:clinc_app_t1/app/core/helper/auth_required_helper.dart';
 import 'package:clinc_app_t1/app/core/helper/response_helper.dart';
 import 'package:clinc_app_t1/app/data/base_model.dart';
 import 'package:clinc_app_t1/app/domain/error_handler/network_exceptions.dart';
+import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/appointments/data/enum/appointment_status.dart';
 import 'package:clinc_app_t1/modules/appointments/data/models/filter_model.dart';
 import 'package:clinc_app_t1/modules/appointments/data/models/order_model.dart';
-import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 
 import '../../domain/appointments_repository.dart';
@@ -33,9 +35,12 @@ class AppointmentsController extends GetxController {
   ];
 
   final RxBool isLoading = false.obs;
+  final RxBool isRefreshing = false.obs;
   RxInt currentFilterIndex = 0.obs;
 
   final RxList<AppointmentModel> allOrders = <AppointmentModel>[].obs;
+  // bool get shouldShowInitialShimmer => isLoading.value || isRefreshing.value;
+  bool get shouldShowInitialShimmer => isLoading.value && !isRefreshing.value;
 
   @override
   void onInit() {
@@ -86,20 +91,54 @@ class AppointmentsController extends GetxController {
     currentFilterIndex.value = index;
   }
 
-  Future<void> loadAppointments() async {
-    if (isLoading.value) return;
-    isLoading(true);
+  Future<void> refreshAppointments() {
+    return loadAppointments(refresh: true);
+  }
+
+  Future<void> loadAppointments({bool refresh = false}) async {
+    if (!AuthRequiredHelper.ensureAuthenticated(
+      onAuthenticated: () => loadAppointments(refresh: refresh),
+    )) {
+      return;
+    }
+    if (isLoading.value || isRefreshing.value) return;
+
+    if (refresh) {
+      isRefreshing(true);
+    } else {
+      isLoading(true);
+    }
+
     final result = await _repository.getAppointments();
-    isLoading(false);
+
+    if (refresh) {
+      isRefreshing(false);
+    } else {
+      isLoading(false);
+    }
+
     result.when(
       success: _handleAppointmentsResponse,
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(
+          exception,
+          onAuthenticated: loadAppointments,
+        )) {
+          return;
+        }
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
   Future<void> cancelAppointment(String id) async {
+    if (!AuthRequiredHelper.ensureAuthenticated(
+      onAuthenticated: loadAppointments,
+    )) {
+      return;
+    }
     final result = await _repository.cancelAppointment(id);
     result.when(
       success: (response) {
@@ -111,9 +150,17 @@ class AppointmentsController extends GetxController {
         _markAsRejected(index);
         ResponseHelper.onSuccess(message: response.message);
       },
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(
+          exception,
+          onAuthenticated: loadAppointments,
+        )) {
+          return;
+        }
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
@@ -134,20 +181,42 @@ class AppointmentsController extends GetxController {
   }
 
   void reBookAppointment(AppointmentModel appointment) {
-    // منطق إعادة الحجز - مثلاً توجيه المستخدم لصفحة الحجز مع بيانات المختبر
-    Get.snackbar(
-      "إعادة حجز",
-      "جاري توجيهك لإعادة حجز ${appointment.id}",
-      backgroundColor: Colors.green.withOpacity(0.1),
-      colorText: Colors.green,
-      snackPosition: SnackPosition.BOTTOM,
-    );
-    // Get.toNamed(AppRoutes.labProfile, arguments: ...);
+    final args = {
+      'rebook': true,
+      'appointment_id': appointment.id,
+      'doctor_id': appointment.doctorId,
+      'clinic_id': appointment.clinicId,
+      'lab_id': appointment.labId,
+      'specialty_id': appointment.specialtyId,
+      'patient_name': appointment.patientName,
+      'phone': appointment.phone,
+      'problem': appointment.problem,
+      'age_range': appointment.ageRange,
+      'gender': appointment.gender,
+      'date': appointment.date,
+      'time': appointment.time,
+      'is_pregnant': appointment.isPregnant,
+      'is_breastfeeding': appointment.isBreastfeeding,
+    };
+
+    if (!_hasAppointmentTarget(args)) {
+      ResponseHelper.onFailure(
+        message: tr(LocaleKeys.appointments_rebook_missing_target),
+      );
+      return;
+    }
+    Get.toNamed(AppRoutes.bookAppointments, arguments: args);
   }
 
-  // دالة التحقق من إمكانية الإلغاء (حسب طلبك: فردي/زوجي كمحاكاة للوقت)
-  bool canCancel(int index) {
-    // هنا Admin Logic: مثلاً لو الـ index زوجي مسموح، فردي ممنوع
-    return index % 2 == 0;
+  bool canCancel(AppointmentModel appointment) {
+    return appointment.isBeforeCancellationDeadline;
+  }
+
+  bool _hasAppointmentTarget(Map<String, dynamic> args) {
+    return [
+      args['doctor_id']?.toString().trim() ?? '',
+      args['clinic_id']?.toString().trim() ?? '',
+      args['lab_id']?.toString().trim() ?? '',
+    ].any((value) => value.isNotEmpty);
   }
 }

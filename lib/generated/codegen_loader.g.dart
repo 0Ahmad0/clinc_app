@@ -36,7 +36,14 @@ class CodegenLoader extends AssetLoader{
     "confirmPassword_empty": "Please confirm password",
     "confirmPassword_noMatch": "Passwords do not match",
     "emailOrUsername_empty": "Please enter email or username",
-    "emailOrUsername_invalid": "Invalid input format"
+    "emailOrUsername_invalid": "Invalid input format",
+    "password_no_spaces": "Password should not contain spaces",
+    "saudi_id_length": "Saudi ID must be 10 digits",
+    "saudi_id_invalid": "Invalid Saudi ID",
+    "birth_date_future": "Birth date cannot be in the future",
+    "birth_date_min_age": "You must be at least 18 years old",
+    "birth_date_check": "Please check the birth date",
+    "birth_date_invalid": "Invalid date format"
   },
   "password_validation": {
     "requirements_title": "Password Requirements:",
@@ -49,6 +56,12 @@ class CodegenLoader extends AssetLoader{
     "req_special": "Special character (!@#\\u0024%)",
     "req_no_spaces": "No spaces"
   },
+  "toast": {
+    "success": "Success",
+    "error": "Failure",
+    "failure": "Failure",
+    "otp_sent_success": "OTP sent successfully"
+  },
   "core": {
     "yes": "Yes",
     "no": "No",
@@ -59,7 +72,17 @@ class CodegenLoader extends AssetLoader{
     "send": "Send",
     "reset": "Reset",
     "ar": "Arabic",
-    "en": "English"
+    "en": "English",
+    "apply": "Apply",
+    "from": "From",
+    "to": "To",
+    "unsupported_type": "Unsupported type",
+    "unsupported_image_format": "Unsupported image format",
+    "whatsapp_not_installed": "WhatsApp is not installed",
+    "form_invalid": "Please check all entered fields",
+    "cancel": "Cancel",
+    "select": "Select",
+    "guest": "Guest"
   },
   "splash": {
     "description": "Your first companion for organizing medication schedules and taking care of your health.",
@@ -106,7 +129,9 @@ class CodegenLoader extends AssetLoader{
     "continue_with_google": "Google",
     "hava_account": "Already have an account? ",
     "login": "Login",
-    "visitor_register": "Register as Visitor"
+    "visitor_register": "Register as Visitor",
+    "terms_prefix": "I agree to ",
+    "terms_link": "Privacy Policy and Terms of Use"
   },
   "forgetPassword": {
     "email": "Email",
@@ -133,7 +158,8 @@ class CodegenLoader extends AssetLoader{
     "current_password_hint": "Current password",
     "verify": "Verify",
     "confirm_new_password_hint": "Confirm new password",
-    "password_no_match": "Passwords do not match"
+    "password_no_match": "Passwords do not match",
+    "google_login_failed": "Google sign-in failed"
   },
   "home": {
     "app_bar": {
@@ -150,7 +176,9 @@ class CodegenLoader extends AssetLoader{
       "labs": "Labs",
       "insurance": "Insurance",
       "chatbot": "Medical Assistant"
-    }
+    },
+    "empty_title": "No home data yet",
+    "empty_subtitle": "Offers, services, and active appointments will appear here."
   },
   "navbar": {
     "book_now": "Book now",
@@ -158,7 +186,13 @@ class CodegenLoader extends AssetLoader{
     "medical_file_text": "Medical file",
     "doctors_text": "Doctors",
     "appointments_text": "Appointments",
-    "settings_text": "Settings"
+    "settings_text": "Settings",
+    "back_exit_title": "Press again to exit",
+    "back_exit_message": "Press back again to exit the app",
+    "exit_dialog_title": "Are you sure you want to exit?",
+    "exit_dialog_message": "The app will close completely. Make sure all your data is saved before exiting.",
+    "exit_dialog_cancel": "Cancel",
+    "exit_dialog_confirm": "Exit"
   },
   "profile": {
     "title": "Profile",
@@ -216,7 +250,10 @@ class CodegenLoader extends AssetLoader{
     "btn_send": "Send Message",
     "intro_title": "Your Digital Health Gateway",
     "intro_desc": "Fast Booking is your easiest digital gateway to access top-tier doctors in the Kingdom. We exist to shorten your wait time and elevate your healthcare experience in line with Vision 2030, where speed, accuracy, and security meet in one place.",
-    "label_email": "Email Address"
+    "label_email": "Email Address",
+    "default_working_hours": "Saturday - Thursday\n9:00 AM - 10:00 PM",
+    "email_subject": "App support",
+    "email_body": "Hello, I have an inquiry..."
   },
   "privacy_policy": {
     "title": "Privacy & Terms",
@@ -261,13 +298,37 @@ class CodegenLoader extends AssetLoader{
     "no_results": "No doctors match the search",
     "currency": "SAR",
     "gender_male": "Male",
-    "gender_female": "Female"
+    "gender_female": "Female",
+    "filter_sort": "Sort by",
+    "filter_price": "Price",
+    "filter_price_from": "From",
+    "filter_price_to": "To",
+    "empty_subtitle": "Change the specialty or region to find other doctors.",
+    "title_with_specialty": "{} Doctors",
+    "sort_price_asc": "Price: lowest",
+    "sort_price_desc": "Price: highest",
+    "sort_rating_desc": "Highest rated",
+    "regions_group": "Regions"
   },
   "chatbot": {
     "title": "Medical Assistant",
     "status_online": "Available now for answering",
     "typing_indicator": "Typing... 🩺",
-    "input_hint": "Type your medical consultation..."
+    "input_hint": "Type your medical consultation...",
+    "quick_book": "📅 How do I book an appointment?",
+    "quick_hours": "⏰ Team working hours?",
+    "quick_location": "📍 Clinic location",
+    "quick_lab": "💊 Do you have a lab?",
+    "welcome_message": "Welcome to our smart clinic assistant 👋\n\n⚠️ Important note: I am an AI assistant for general medical questions and clinic services. My information may be inaccurate and never replaces consulting a specialist doctor.",
+    "image_received": "I received the image 📷.\nYou can send your text question now so it can be passed to the backend assistant system.",
+    "image_analysis": "I received the image 📷.\nBased on the initial analysis, there appears to be skin redness. I recommend booking an appointment with a dermatologist for an accurate examination.",
+    "fallback_message": "Your message has been received. The system could not generate a smart reply right now, and the response will rely on the available backend data.",
+    "non_medical": "Sorry, I am a specialized medical bot 🩺. I can only answer questions related to health or clinic services.",
+    "book_response": "To book an appointment, use the Quick Booking button on the home page, or tell me the specialty you need and I will help you.",
+    "hours_response": "The support team is available daily from 8:00 AM to 10:00 PM 🕙.",
+    "location_response": "We are located in Riyadh, King Fahd Road, building 102.",
+    "headache_response": "Wishing you safety! Headaches may be caused by stress or lack of sleep. We recommend drinking water and resting. If the pain continues, please book an appointment with an internal medicine doctor.",
+    "default_response": "Thank you for your inquiry. I will forward this question to a receptionist for a more accurate response, or you can contact us directly 📞."
   },
   "clinic_app_details": {
     "rating_count": "Rating",
@@ -279,7 +340,15 @@ class CodegenLoader extends AssetLoader{
     "elite_doctors": "Elite Doctors",
     "view_all": "View All",
     "call_clinic": "Call the Clinic",
-    "book_btn": "Book"
+    "book_btn": "Book",
+    "rate_clinic": "Rate clinic",
+    "rate_clinic_subtitle": "Share your experience to help others",
+    "patient_reviews": "Patient Reviews",
+    "no_reviews_title": "No reviews yet",
+    "no_reviews_subtitle": "Be the first to share your experience with this clinic.",
+    "no_doctors_title": "No doctors available",
+    "no_doctors_subtitle": "No doctors are available for this specialty right now.",
+    "all_reviews_title": "All Patient Reviews ({})"
   },
   "doctor_details": {
     "app_bar_title": "Ear, Nose and Throat",
@@ -311,7 +380,9 @@ class CodegenLoader extends AssetLoader{
     "about_desc": "Dr. Sara Al-Ali is a specialist consultant in ear, nose and throat diseases, currently working at Al-Amal Hospital. She has extensive experience spanning over 10 years in diagnosing and treating complex cases."
   },
   "insurance": {
-    "title": "Insurance"
+    "title": "Insurance",
+    "empty_title": "No insurance companies",
+    "empty_subtitle": "Available insurance companies will appear here when ready."
   },
   "setting": {
     "edit_profile": "Edit Profile",
@@ -341,7 +412,10 @@ class CodegenLoader extends AssetLoader{
     "filter_insurance": "Insurance",
     "filter_gender": "Gender",
     "filter_specialty": "Specialty",
+    "filter_rating": "Rating",
     "filter_sort": "Sort by",
+    "filter_all": "All",
+    "filter_city_search_hint": "Search for a city...",
     "sort_price_asc": "Lowest Price",
     "sort_price_desc": "Highest Price",
     "sort_distance": "Nearest",
@@ -350,7 +424,19 @@ class CodegenLoader extends AssetLoader{
     "accepts_insurance": "Accepts Insurance",
     "sar": "SAR",
     "consultation": "Consultation",
-    "distance_km": "km"
+    "distance_km": "km",
+    "filter_price": "Price",
+    "filter_open_now": "Open now",
+    "filter_location": "Location",
+    "filter_location_selected": "Location selected",
+    "filter_latitude": "Latitude",
+    "filter_longitude": "Longitude",
+    "empty_subtitle": "Try changing filters or searching for another clinic name.",
+    "sort_price_asc_full": "Price: lowest",
+    "sort_price_desc_full": "Price: highest",
+    "sort_rating_desc": "Highest rated",
+    "sort_distance_asc": "Nearest",
+    "regions_group": "Regions"
   },
   "payment": {
     "settings_title": "Manage Cards",
@@ -408,6 +494,9 @@ class CodegenLoader extends AssetLoader{
     "mock_doctor_name": "Dr. Ahmed Suleiman",
     "mock_doctor_specialty": "Orthopedic Specialist",
     "mock_booking_time": "Monday, February 15 - 04:30 PM",
+    "doctor_title": "Doctor appointment",
+    "lab_title": "Lab order",
+    "lab_test_count": "{} tests",
     "cash_at_clinic": "Cash at Clinic",
     "online_payment": "Online Payment",
     "bank_card": "Bank Card",
@@ -417,6 +506,7 @@ class CodegenLoader extends AssetLoader{
     "apply_coupon": "Apply",
     "my_coupons": "My Coupons",
     "coupon_discount": "Coupon Discount",
+    "coupon_applied_success": "Great! Your discount has been applied.",
     "total_due": "Total Due",
     "currency": "SAR",
     "confirm_booking": "Confirm Booking",
@@ -426,6 +516,10 @@ class CodegenLoader extends AssetLoader{
     "no_coupons_available": "No coupons available right now",
     "pay_btn": "Pay",
     "success_msg": "Payment Successful",
+    "doctor_success_msg": "Appointment booked successfully",
+    "lab_success_msg": "Lab order payment completed successfully",
+    "lab_success_title": "Lab order paid",
+    "lab_success_subtitle": "Your lab tests order has been confirmed successfully. You can follow its details from your account.",
     "select_method_error": "Please select a payment method"
   },
   "labs": {
@@ -435,6 +529,7 @@ class CodegenLoader extends AssetLoader{
     "view_all": "View All",
     "book_btn": "Book",
     "add_to_cart": "Add",
+    "added_to_cart": "Added",
     "package_count": "test",
     "currency": "SAR",
     "cart_total": "Total",
@@ -451,12 +546,16 @@ class CodegenLoader extends AssetLoader{
     "cart_delete_item": "Delete",
     "cart_confirm_order": "Confirm Order",
     "cart_summary": "Invoice Summary",
-    "cart_total_price": "Total Amount"
+    "cart_total_price": "Total Amount",
+    "test_already_in_cart": "This test is already in the cart"
   },
   "labs_page": {
     "title": "Medical Laboratories",
     "search_hint": "Search for a laboratory...",
     "filter_all": "All",
+    "filter_category": "Category",
+    "filter_area": "Area",
+    "filter_reset": "Clear",
     "filter_analysis": "Comprehensive Analysis",
     "filter_radiology": "Radiology",
     "filter_pathology": "Pathology",
@@ -467,7 +566,12 @@ class CodegenLoader extends AssetLoader{
     "profile_services": "Available Services",
     "profile_location": "Location",
     "profile_contact": "Contact Us",
-    "call_now": "Call Now"
+    "call_now": "Call Now",
+    "empty_title": "No labs available",
+    "empty_subtitle": "Adjust filters or try searching for another lab name.",
+    "chat": "Chat",
+    "no_services_title": "No services available",
+    "no_services_subtitle": "This lab has not added services yet."
   },
   "labs_profile": {
     "location_title": "Laboratory Location",
@@ -480,7 +584,19 @@ class CodegenLoader extends AssetLoader{
     "coupon_copied": "Code copied successfully",
     "write_review_hint": "Write your experience here...",
     "submit_review": "Post Review",
-    "share_msg": "Check out this excellent laboratory: "
+    "share_msg": "Check out this excellent laboratory: ",
+    "share_title": "Share",
+    "share_opened": "Share sheet opened",
+    "copied_title": "Done",
+    "phone_unavailable": "Lab phone number is unavailable",
+    "call_open_failed": "Could not open the phone app",
+    "location_unavailable": "Lab location is unavailable",
+    "map_open_failed": "Could not open the map",
+    "no_reviews_subtitle": "Share your review to help other patients.",
+    "show_more": "Show more",
+    "share_address": "Address: {}",
+    "share_phone": "Phone: {}",
+    "share_rating": "Rating: {}"
   },
   "booking": {
     "title": "Book Appointment",
@@ -511,7 +627,66 @@ class CodegenLoader extends AssetLoader{
     "status_accepted": "Accepted",
     "status_pending": "Pending",
     "status_rejected": "Rejected",
-    "currency": "SAR"
+    "currency": "SAR",
+    "empty_title": "No appointments",
+    "empty_subtitle_all": "Your appointments will appear here after your first booking.",
+    "empty_subtitle_filtered": "No appointments in this category right now.",
+    "rebook": "Rebook",
+    "cancel_booking": "Cancel booking",
+    "cancel_unavailable": "Cannot cancel (allowed time has passed)",
+    "cancel_dialog_title": "Confirm cancellation",
+    "cancel_dialog_message": "Are you sure you want to cancel this booking?",
+    "cancel_dialog_confirm": "Yes, cancel",
+    "cancel_dialog_back": "Back",
+    "rebook_snackbar_message": "Redirecting you to rebook {}",
+    "rebook_missing_target": "Unable to rebook this appointment because its clinic or doctor data is missing."
+  },
+  "my_appointment_details": {
+    "title": "Booking Details",
+    "appointment_info": "Appointment Info",
+    "patient": "Patient",
+    "date": "Date",
+    "time": "Time",
+    "phone": "Phone",
+    "visit_type": "Visit Type",
+    "status": "Status",
+    "problem": "Complaint",
+    "clinic_details": "Clinic Details",
+    "facility": "Facility",
+    "address": "Address",
+    "financial_summary": "Financial Summary",
+    "consultation_fee": "Consultation Fee",
+    "payment_method": "Payment Method",
+    "payment_status": "Payment Status",
+    "payment_reference": "Payment Reference",
+    "paid_amount": "Paid Amount",
+    "remaining_amount": "Remaining Amount",
+    "rating_count": "({} reviews)",
+    "cancel_booking": "Cancel booking",
+    "rebook_appointment": "Rebook appointment",
+    "cancel_unavailable_24h": "Cancellation is unavailable within 24 hours of the appointment.",
+    "no_action_available": "No action available",
+    "not_available": "N/A",
+    "cancel_dialog_title": "Confirm cancellation",
+    "cancel_dialog_message": "Are you sure you want to cancel this appointment?",
+    "cancel_dialog_confirm": "Yes",
+    "cancel_dialog_back": "Back",
+    "mock_doctor_name": "Dr. Carly Angela",
+    "mock_specialty": "Specialist | Immunology",
+    "mock_clinic_name": "Christ International Hospital",
+    "mock_clinic_address": "London, Baker Street, Building 221B",
+    "mock_patient_name": "Ahmed Mohammad Al Atoum",
+    "mock_date": "May 24, 2024",
+    "mock_time": "10:30 AM",
+    "mock_visit_type": "First visit",
+    "mock_payment_method": "Credit card"
+  },
+  "logout": {
+    "title": "Do you really want to log out?"
+  },
+  "share": {
+    "app_text": "Download Hajz Saree now and enjoy an easier healthcare experience\n{}",
+    "app_link": "App link: {}"
   }
 };
 static const Map<String,dynamic> _ar = {
@@ -536,7 +711,14 @@ static const Map<String,dynamic> _ar = {
     "confirmPassword_empty": "الرجاء تأكيد كلمة المرور",
     "confirmPassword_noMatch": "كلمتا المرور غير متطابقتين",
     "emailOrUsername_empty": "الرجاء إدخال البريد الإلكتروني أو اسم المستخدم",
-    "emailOrUsername_invalid": "الصيغة المدخلة غير صالحة"
+    "emailOrUsername_invalid": "الصيغة المدخلة غير صالحة",
+    "password_no_spaces": "يجب ألا تحتوي كلمة المرور على مسافات",
+    "saudi_id_length": "رقم الهوية يجب أن يتكون من 10 أرقام",
+    "saudi_id_invalid": "رقم هوية غير صحيح",
+    "birth_date_future": "تاريخ الميلاد لا يمكن أن يكون في المستقبل",
+    "birth_date_min_age": "يجب أن يكون عمرك 18 سنة على الأقل",
+    "birth_date_check": "الرجاء التحقق من تاريخ الميلاد",
+    "birth_date_invalid": "صيغة تاريخ غير صحيحة"
   },
   "password_validation": {
     "requirements_title": "متطلبات كلمة المرور:",
@@ -549,6 +731,12 @@ static const Map<String,dynamic> _ar = {
     "req_special": "رمز خاص (!@#\\u0024%)",
     "req_no_spaces": "بدون مسافات"
   },
+  "toast": {
+    "success": "نجاح",
+    "error": "فشل",
+    "failure": "فشل",
+    "otp_sent_success": "تم إرسال رمز التحقق بنجاح"
+  },
   "core": {
     "yes": "نعم",
     "no": "لا",
@@ -559,7 +747,17 @@ static const Map<String,dynamic> _ar = {
     "send": "إرسال",
     "reset": "إعادة تعيين",
     "ar": "العربية",
-    "en": "الإنجليزية"
+    "en": "الإنجليزية",
+    "apply": "تطبيق",
+    "from": "من",
+    "to": "إلى",
+    "unsupported_type": "نوع غير مدعوم",
+    "unsupported_image_format": "صيغة الصورة غير مدعومة",
+    "whatsapp_not_installed": "تطبيق واتساب غير مثبت",
+    "form_invalid": "الرجاء التأكد من جميع الحقول المدخلة",
+    "cancel": "إلغاء",
+    "select": "تحديد",
+    "guest": "زائر"
   },
   "splash": {
     "description": "رفيقك الأول لتنظيم مواعيد الدواء والعناية بصحتك.",
@@ -606,7 +804,9 @@ static const Map<String,dynamic> _ar = {
     "continue_with_google": "جوجل",
     "hava_account": "لديك حساب بالفعل؟ ",
     "login": "تسجيل الدخول",
-    "visitor_register": "التسجيل كزائر"
+    "visitor_register": "التسجيل كزائر",
+    "terms_prefix": "أوافق على ",
+    "terms_link": "سياسة الخصوصية و شروط الاستخدام"
   },
   "forgetPassword": {
     "email": "البريد الالكتروني",
@@ -633,7 +833,8 @@ static const Map<String,dynamic> _ar = {
     "current_password_hint": "كلمة المرور الحالية",
     "verify": "تحقق",
     "confirm_new_password_hint": "تأكيد كلمة المرور الجديدة",
-    "password_no_match": "كلمة المرور غير متطابقة"
+    "password_no_match": "كلمة المرور غير متطابقة",
+    "google_login_failed": "فشل تسجيل الدخول عبر جوجل"
   },
   "home": {
     "app_bar": {
@@ -650,7 +851,9 @@ static const Map<String,dynamic> _ar = {
       "labs": "المختبرات",
       "insurance": "التأمين",
       "chatbot": "المساعد الطبي"
-    }
+    },
+    "empty_title": "لا توجد بيانات في الرئيسية",
+    "empty_subtitle": "ستظهر العروض والخدمات والمواعيد النشطة هنا."
   },
   "navbar": {
     "book_now": "احجز الآن",
@@ -658,7 +861,13 @@ static const Map<String,dynamic> _ar = {
     "doctors_text": "الأطباء",
     "medical_file_text": "ملفي الطبي",
     "appointments_text": "حجوزاتي",
-    "settings_text": "الإعدادات"
+    "settings_text": "الإعدادات",
+    "back_exit_title": "اضغط مرة أخرى للخروج",
+    "back_exit_message": "اضغط زر الرجوع مرة أخرى للخروج من التطبيق",
+    "exit_dialog_title": "هل أنت متأكد من الخروج؟",
+    "exit_dialog_message": "سيتم إغلاق التطبيق بالكامل. تأكد من حفظ جميع بياناتك قبل الخروج.",
+    "exit_dialog_cancel": "إلغاء",
+    "exit_dialog_confirm": "خروج"
   },
   "profile": {
     "title": "الملف الشخصي",
@@ -716,7 +925,10 @@ static const Map<String,dynamic> _ar = {
     "btn_send": "إرسال رسالة",
     "intro_desc": "حجز سريع هي بوابتك الرقمية الأسهل للوصول إلى نخبة الأطباء في المملكة. جئنا لنختصر لك الانتظار ونرتقي بتجربتك الصحية لتواكب رؤية 2030، حيث تجتمع السرعة، الدقة، والأمان في مكان واحد.",
     "intro_title": "بوابتك الرقمية للصحة",
-    "label_email": "البريد الإلكتروني"
+    "label_email": "البريد الإلكتروني",
+    "default_working_hours": "السبت - الخميس\n9:00 صباحاً - 10:00 مساءً",
+    "email_subject": "دعم التطبيق",
+    "email_body": "مرحباً، لدي استفسار..."
   },
   "privacy_policy": {
     "title": "الخصوصية والشروط",
@@ -761,13 +973,37 @@ static const Map<String,dynamic> _ar = {
     "no_results": "لا يوجد أطباء مطابقين للبحث",
     "currency": "SAR",
     "gender_male": "ذكر",
-    "gender_female": "أنثى"
+    "gender_female": "أنثى",
+    "filter_sort": "الترتيب",
+    "filter_price": "السعر",
+    "filter_price_from": "من",
+    "filter_price_to": "إلى",
+    "empty_subtitle": "غيّر التخصص أو المنطقة للعثور على أطباء آخرين.",
+    "title_with_specialty": "أطباء {}",
+    "sort_price_asc": "السعر: الأقل",
+    "sort_price_desc": "السعر: الأعلى",
+    "sort_rating_desc": "الأعلى تقييماً",
+    "regions_group": "المناطق"
   },
   "chatbot": {
     "title": "المساعد الطبي",
     "status_online": "متاح الآن للإجابة",
     "typing_indicator": "جاري الكتابة... 🩺",
-    "input_hint": "اكتب استشارتك الطبية..."
+    "input_hint": "اكتب استشارتك الطبية...",
+    "quick_book": "📅 كيف أحجز موعد؟",
+    "quick_hours": "⏰ أوقات عمل التيم؟",
+    "quick_location": "📍 موقع العيادة",
+    "quick_lab": "💊 هل لديكم مختبر؟",
+    "welcome_message": "مرحباً بك في المساعد الذكي لعياداتنا 👋\n\n⚠️ تنويه هام: أنا ذكاء اصطناعي مخصص للإجابة على الاستفسارات الطبية العامة ومساعدتك في خدمات العيادة. معلوماتي قد تحتمل الخطأ ولا تغني أبداً عن استشارة الطبيب المختص.",
+    "image_received": "لقد استلمت الصورة 📷.\nيمكنك إرسال سؤالك النصي الآن ليتم تمريره إلى نظام المساعدة في الخلفية.",
+    "image_analysis": "لقد استلمت الصورة 📷.\nبناءً على التحليل المبدئي، يبدو أن هناك احمراراً جلديًا. أنصحك بحجز موعد مع دكتور الجلدية للفحص الدقيق.",
+    "fallback_message": "تم استلام رسالتك. حالياً لم يتمكن النظام من توليد رد ذكي، وسيتم الرد اعتماداً على البيانات المتاحة في الخلفية.",
+    "non_medical": "عذراً، أنا بوت طبي متخصص 🩺. يمكنني الإجابة فقط على الأسئلة المتعلقة بالصحة أو خدمات العيادة.",
+    "book_response": "لحجز موعد، يمكنك استخدام زر 'حجز سريع' في الصفحة الرئيسية، أو أخبـرني بالتخصص الذي تريده وسأساعدك.",
+    "hours_response": "فريق الدعم متواجد لخدمتكم يومياً من الساعة 8:00 صباحاً وحتى 10:00 مساءً 🕙.",
+    "location_response": "نقع في الرياض، طريق الملك فهد، مبنى رقم 102.",
+    "headache_response": "سلامتك! الصداع قد يكون بسبب الإجهاد أو قلة النوم. ننصحك بشرب الماء والراحة. إذا استمر الألم، يرجى حجز موعد مع طبيب الباطنية.",
+    "default_response": "شكراً لاستفسارك. سأقوم بتحويل هذا السؤال لأحد موظفي الاستقبال للرد عليك بدقة أكبر، أو يمكنك الاتصال بنا مباشرة 📞."
   },
   "clinic_app_details": {
     "rating_count": "تقييم",
@@ -779,7 +1015,15 @@ static const Map<String,dynamic> _ar = {
     "elite_doctors": "نخبة الأطباء",
     "view_all": "عرض الكل",
     "call_clinic": "اتصل بالعيادة",
-    "book_btn": "حجز"
+    "book_btn": "حجز",
+    "rate_clinic": "قيم العيادة",
+    "rate_clinic_subtitle": "شاركنا تجربتك لمساعدة الآخرين",
+    "patient_reviews": "آراء المرضى",
+    "no_reviews_title": "لا توجد آراء بعد",
+    "no_reviews_subtitle": "كن أول من يشارك تجربته مع هذه العيادة.",
+    "no_doctors_title": "لا يوجد أطباء حالياً",
+    "no_doctors_subtitle": "لا توجد أسماء متاحة ضمن هذا التخصص الآن.",
+    "all_reviews_title": "كل آراء المرضى ({})"
   },
   "doctor_details": {
     "app_bar_title": "أنف وأذن وحنجرة",
@@ -811,7 +1055,9 @@ static const Map<String,dynamic> _ar = {
     "about_desc": "د. سارة العلي هي استشارية متخصصة في أمراض الأنف والأذن والحنجرة، تعمل حالياً في مستشفى الأمل. لديها خبرة طويلة تمتد لأكثر من 10 سنوات في تشخيص وعلاج الحالات المعقدة."
   },
   "insurance": {
-    "title": "التأمينات"
+    "title": "التأمينات",
+    "empty_title": "لا توجد شركات تأمين",
+    "empty_subtitle": "ستظهر شركات التأمين المتاحة هنا عند توفرها."
   },
   "setting": {
     "edit_profile": "تغيير المعلومات",
@@ -841,7 +1087,10 @@ static const Map<String,dynamic> _ar = {
     "filter_insurance": "التأمين",
     "filter_gender": "الجنس",
     "filter_specialty": "التخصص",
+    "filter_rating": "التقييم",
     "filter_sort": "الفرز",
+    "filter_all": "الكل",
+    "filter_city_search_hint": "بحث عن مدينة...",
     "sort_price_asc": "الأقل سعراً",
     "sort_price_desc": "الأعلى سعراً",
     "sort_distance": "الأقرب",
@@ -850,7 +1099,19 @@ static const Map<String,dynamic> _ar = {
     "accepts_insurance": "يقبل التأمين",
     "sar": "ر.س",
     "consultation": "استشارة",
-    "distance_km": "كم"
+    "distance_km": "كم",
+    "filter_price": "السعر",
+    "filter_open_now": "مفتوح الآن",
+    "filter_location": "الموقع",
+    "filter_location_selected": "الموقع محدد",
+    "filter_latitude": "خط العرض",
+    "filter_longitude": "خط الطول",
+    "empty_subtitle": "جرّب تغيير الفلاتر أو البحث باسم عيادة مختلفة.",
+    "sort_price_asc_full": "السعر: الأقل",
+    "sort_price_desc_full": "السعر: الأعلى",
+    "sort_rating_desc": "الأعلى تقييماً",
+    "sort_distance_asc": "الأقرب",
+    "regions_group": "المناطق"
   },
   "payment": {
     "settings_title": "إدارة البطاقات",
@@ -908,6 +1169,9 @@ static const Map<String,dynamic> _ar = {
     "mock_doctor_name": "د. أحمد سليمان",
     "mock_doctor_specialty": "أخصائي جراحة العظام",
     "mock_booking_time": "الاثنين، 15 فبراير - 04:30 م",
+    "doctor_title": "موعد طبيب",
+    "lab_title": "طلب مختبر",
+    "lab_test_count": "{} فحوصات",
     "cash_at_clinic": "نقداً في العيادة",
     "online_payment": "دفع أونلاين",
     "bank_card": "بطاقة بنكية",
@@ -917,6 +1181,7 @@ static const Map<String,dynamic> _ar = {
     "apply_coupon": "تطبيق",
     "my_coupons": "عرض كوبوناتي",
     "coupon_discount": "خصم الكوبون",
+    "coupon_applied_success": "رائع! تم تطبيق الخصم على طلبك.",
     "total_due": "الإجمالي المستحق",
     "currency": "ر.س",
     "confirm_booking": "تأكيد الحجز",
@@ -926,6 +1191,10 @@ static const Map<String,dynamic> _ar = {
     "no_coupons_available": "لا توجد كوبونات متاحة حالياً",
     "pay_btn": "دفع",
     "success_msg": "تمت عملية الدفع بنجاح",
+    "doctor_success_msg": "تم حجز الموعد بنجاح",
+    "lab_success_msg": "تم دفع طلب المختبر بنجاح",
+    "lab_success_title": "تم دفع طلب المختبر",
+    "lab_success_subtitle": "تم تأكيد طلب الفحوصات بنجاح، ويمكنك متابعة تفاصيل الطلب من حسابك.",
     "select_method_error": "يرجى اختيار طريقة دفع"
   },
   "labs": {
@@ -935,6 +1204,7 @@ static const Map<String,dynamic> _ar = {
     "view_all": "عرض الكل",
     "book_btn": "حجز",
     "add_to_cart": "إضافة",
+    "added_to_cart": "تمت الإضافة",
     "package_count": "تحليل",
     "currency": "ر.س",
     "cart_total": "المجموع",
@@ -951,12 +1221,16 @@ static const Map<String,dynamic> _ar = {
     "cart_delete_item": "حذف",
     "cart_confirm_order": "تأكيد الطلب",
     "cart_summary": "ملخص الفاتورة",
-    "cart_total_price": "الإجمالي الكلي"
+    "cart_total_price": "الإجمالي الكلي",
+    "test_already_in_cart": "هذا الفحص موجود في السلة بالفعل"
   },
   "labs_page": {
     "title": "المختبرات الطبية",
     "search_hint": "ابحث عن مختبر...",
     "filter_all": "الكل",
+    "filter_category": "التصنيف",
+    "filter_area": "المنطقة",
+    "filter_reset": "مسح",
     "filter_analysis": "تحاليل شاملة",
     "filter_radiology": "أشعة",
     "filter_pathology": "أنسجة",
@@ -967,7 +1241,12 @@ static const Map<String,dynamic> _ar = {
     "profile_services": "الخدمات المتاحة",
     "profile_location": "الموقع",
     "profile_contact": "تواصل معنا",
-    "call_now": "اتصال"
+    "call_now": "اتصال",
+    "empty_title": "لا توجد مختبرات حالياً",
+    "empty_subtitle": "عدّل الفلاتر أو جرّب البحث باسم مختبر آخر.",
+    "chat": "دردشة",
+    "no_services_title": "لا توجد خدمات متاحة",
+    "no_services_subtitle": "لم يضف المختبر خدماته بعد."
   },
   "labs_profile": {
     "location_title": "موقع المختبر",
@@ -980,7 +1259,19 @@ static const Map<String,dynamic> _ar = {
     "coupon_copied": "تم نسخ الكود بنجاح",
     "write_review_hint": "اكتب تجربتك هنا...",
     "submit_review": "نشر التقييم",
-    "share_msg": "انظر لهذا المختبر المميز: "
+    "share_msg": "انظر لهذا المختبر المميز: ",
+    "share_title": "مشاركة",
+    "share_opened": "تم فتح نافذة المشاركة",
+    "copied_title": "تم",
+    "phone_unavailable": "رقم المختبر غير متوفر",
+    "call_open_failed": "تعذر فتح تطبيق الاتصال",
+    "location_unavailable": "موقع المختبر غير متوفر",
+    "map_open_failed": "تعذر فتح الخريطة",
+    "no_reviews_subtitle": "شارك تقييمك ليساعد المرضى الآخرين.",
+    "show_more": "عرض المزيد",
+    "share_address": "العنوان: {}",
+    "share_phone": "الهاتف: {}",
+    "share_rating": "التقييم: {}"
   },
   "booking": {
     "title": "حجز موعد",
@@ -1011,7 +1302,66 @@ static const Map<String,dynamic> _ar = {
     "status_accepted": "تم قبول الطلب",
     "status_pending": "قيد الانتظار",
     "status_rejected": "تم رفض الطلب",
-    "currency": "ريال"
+    "currency": "ريال",
+    "empty_title": "لا توجد مواعيد",
+    "empty_subtitle_all": "ستظهر مواعيدك هنا بعد إتمام أول حجز.",
+    "empty_subtitle_filtered": "لا توجد مواعيد ضمن هذا التصنيف حالياً.",
+    "rebook": "إعادة حجز",
+    "cancel_booking": "إلغاء الحجز",
+    "cancel_unavailable": "غير قابل للإلغاء (تجاوز الوقت المسموح)",
+    "cancel_dialog_title": "تأكيد الإلغاء",
+    "cancel_dialog_message": "هل أنت متأكد من رغبتك في إلغاء هذا الحجز؟",
+    "cancel_dialog_confirm": "نعم، إلغاء",
+    "cancel_dialog_back": "تراجع",
+    "rebook_snackbar_message": "جاري توجيهك لإعادة حجز {}",
+    "rebook_missing_target": "تعذر إعادة حجز هذا الموعد لعدم توفر بيانات العيادة أو الطبيب."
+  },
+  "my_appointment_details": {
+    "title": "تفاصيل الحجز",
+    "appointment_info": "معلومات الموعد",
+    "patient": "المريض",
+    "date": "التاريخ",
+    "time": "الوقت",
+    "phone": "الهاتف",
+    "visit_type": "نوع الزيارة",
+    "status": "الحالة",
+    "problem": "الشكوى",
+    "clinic_details": "تفاصيل العيادة",
+    "facility": "المنشأة",
+    "address": "العنوان",
+    "financial_summary": "الملخص المالي",
+    "consultation_fee": "رسوم الكشفية",
+    "payment_method": "طريقة الدفع",
+    "payment_status": "حالة الدفع",
+    "payment_reference": "مرجع الدفع",
+    "paid_amount": "المبلغ المدفوع",
+    "remaining_amount": "المبلغ المتبقي",
+    "rating_count": "({} تقييم)",
+    "cancel_booking": "إلغاء الحجز",
+    "rebook_appointment": "إعادة حجز موعد",
+    "cancel_unavailable_24h": "لا يمكن الإلغاء خلال 24 ساعة من موعد الحجز.",
+    "no_action_available": "لا يوجد إجراء متاح",
+    "not_available": "غير متوفر",
+    "cancel_dialog_title": "تأكيد الإلغاء",
+    "cancel_dialog_message": "هل أنت متأكد من إلغاء الموعد؟",
+    "cancel_dialog_confirm": "نعم",
+    "cancel_dialog_back": "تراجع",
+    "mock_doctor_name": "الدكتورة كارلي أنجلا",
+    "mock_specialty": "أخصائية | أمراض المناعة",
+    "mock_clinic_name": "مستشفى كريست الدولي",
+    "mock_clinic_address": "لندن، شارع باكر، مبنى 221B",
+    "mock_patient_name": "أحمد محمد العتوم",
+    "mock_date": "24 مايو 2024",
+    "mock_time": "10:30 صباحاً",
+    "mock_visit_type": "زيارة أولى",
+    "mock_payment_method": "بطاقة ائتمان"
+  },
+  "logout": {
+    "title": "هل تريد بالفعل تسجيل الخروج ؟"
+  },
+  "share": {
+    "app_text": "حمّل تطبيق حجز سريع الآن واستمتع بتجربة صحية أسهل\n{}",
+    "app_link": "رابط التطبيق: {}"
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en": _en, "ar": _ar};

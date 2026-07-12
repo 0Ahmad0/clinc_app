@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:clinc_app_t1/app/core/constants/app_assets.dart';
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
@@ -79,23 +80,56 @@ class MyAppointmentWidget extends GetView<AppointmentsController> {
           child: Column(
             children: [
               ListTile(
-                leading: AppSvgWidget(
-                  assetsUrl: AppAssets.appLogoIcon,
-                  width: 32.sp,
-                  height: 32.sp,
+                leading: AppCachedImageWidget(
+                  imageUrl: appointment.doctorLogo,
+                  width: 44.sp,
+                  height: 44.sp,
+                  clipRadius: 12.r,
+                  placeholderType: AppImagePlaceholderType.doctor,
                 ),
                 title: Text(
-                  tr(LocaleKeys.appointments_order_id),
+                  appointment.doctorName.isNotEmpty
+                      ? appointment.doctorName
+                      : tr(LocaleKeys.appointments_order_id),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                subtitle: Text(
-                  '#${appointment.id}',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(fontSize: 12.sp),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    4.verticalSpace,
+                    Text(
+                      '${tr(LocaleKeys.appointments_order_id)} $_displayOrderId',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodySmall?.copyWith(fontSize: 12.sp),
+                    ),
+                    if (_displayDateTime.isNotEmpty) ...[
+                      2.verticalSpace,
+                      Row(
+                        children: [
+                          Icon(
+                            Iconsax.calendar_1,
+                            size: 12.sp,
+                            color: Colors.grey,
+                          ),
+                          4.horizontalSpace,
+                          Expanded(
+                            child: Text(
+                              _displayDateTime,
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    fontSize: 12.sp,
+                                    color: Colors.grey.shade600,
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
                 ),
                 trailing: Icon(
                   Icons.arrow_forward_ios,
@@ -174,7 +208,7 @@ class MyAppointmentWidget extends GetView<AppointmentsController> {
                   if (appointment.status == AppointmentStatus.rejected)
                     Expanded(
                       child: _buildActionButton(
-                        label: "إعادة حجز",
+                        label: tr(LocaleKeys.appointments_rebook),
                         icon: Iconsax.refresh,
                         color: AppColors.primary,
                         onTap: () => controller.reBookAppointment(appointment),
@@ -183,10 +217,10 @@ class MyAppointmentWidget extends GetView<AppointmentsController> {
 
                   // زر الإلغاء يظهر فقط إذا كان المنطق (فردي/زوجي) يسمح
                   if (appointment.status == AppointmentStatus.accepted &&
-                      controller.canCancel(1))
+                      controller.canCancel(appointment))
                     Expanded(
                       child: _buildActionButton(
-                        label: "إلغاء الحجز",
+                        label: tr(LocaleKeys.appointments_cancel_booking),
                         icon: Iconsax.close_circle,
                         color: Colors.redAccent,
                         onTap: () => _showCancelDialog(context, appointment.id),
@@ -195,9 +229,9 @@ class MyAppointmentWidget extends GetView<AppointmentsController> {
 
                   // إذا كان لا يمكن الإلغاء (شرط الإدمن)
                   if (appointment.status == AppointmentStatus.accepted &&
-                      !controller.canCancel(1))
+                      !controller.canCancel(appointment))
                     Text(
-                      "غير قابل للإلغاء (تجاوز الوقت المسموح)",
+                      tr(LocaleKeys.appointments_cancel_unavailable),
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 10.sp,
@@ -213,12 +247,25 @@ class MyAppointmentWidget extends GetView<AppointmentsController> {
     );
   }
 
+  String get _displayOrderId {
+    final orderNumber = appointment.orderNumber.trim();
+    return '#${orderNumber.isNotEmpty ? orderNumber : appointment.id}';
+  }
+
+  String get _displayDateTime {
+    final values = [
+      appointment.date.trim(),
+      appointment.time.trim(),
+    ].where((value) => value.isNotEmpty);
+    return values.join(' - ');
+  }
+
   void _showCancelDialog(BuildContext context, String id) {
     Get.defaultDialog(
-      title: "تأكيد الإلغاء",
-      middleText: "هل أنت متأكد من رغبتك في إلغاء هذا الحجز؟",
-      textConfirm: "نعم، إلغاء",
-      textCancel: "تراجع",
+      title: tr(LocaleKeys.appointments_cancel_dialog_title),
+      middleText: tr(LocaleKeys.appointments_cancel_dialog_message),
+      textConfirm: tr(LocaleKeys.appointments_cancel_dialog_confirm),
+      textCancel: tr(LocaleKeys.appointments_cancel_dialog_back),
       confirmTextColor: Colors.white,
       buttonColor: Colors.redAccent,
       onConfirm: () {
@@ -239,7 +286,7 @@ class MyAppointmentWidget extends GetView<AppointmentsController> {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 8.h),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.08),
+          color: color.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(10.r),
         ),
         child: Row(

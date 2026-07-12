@@ -1,13 +1,19 @@
 import 'package:clinc_app_t1/app/core/widgets/app_rating_widget.dart';
 import 'package:clinc_app_t1/app/services/bottom_sheet_service.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../app/core/configuration/locator.dart';
+import '../../../../app/core/helper/auth_required_helper.dart';
 import '../../../../app/core/helper/response_helper.dart';
 import '../../../../app/data/base_model.dart';
+import '../../../../app/data/pagination/pagination_params.dart';
+import '../../../../app/data/pagination/pagination_state.dart';
 import '../../../../app/domain/error_handler/network_exceptions.dart';
+import '../../../../generated/locale_keys.g.dart';
 import '../../../search/data/models/property_model.dart';
 import '../../domain/clinic_details_repository.dart';
 import '../../data/models/clinic_details_model.dart';
@@ -19,6 +25,7 @@ class ClinicDetailsController extends GetxController {
   late final ClinicDetailsRepository _repository;
 
   final RxBool isLoading = false.obs;
+  final RxBool isSubmittingReview = false.obs;
   final Rxn<Hospital> clinic = Rxn<Hospital>();
   var selectedRating = 0.0.obs;
   var commentController = TextEditingController();
@@ -26,8 +33,15 @@ class ClinicDetailsController extends GetxController {
   // التخصص المختار (فارغ يعني عرض الكل)
   var selectedSpecialty = ''.obs;
 
-  final RxList<DoctorModel> allDoctors = <DoctorModel>[].obs;
-  final RxList<ClinicReviewModel> allReviews = <ClinicReviewModel>[].obs;
+  final PaginationState<DoctorModel> doctorsPagination = PaginationState(
+    perPage: 10,
+  );
+  final PaginationState<ClinicReviewModel> reviewsPagination = PaginationState(
+    perPage: 10,
+  );
+
+  RxList<DoctorModel> get allDoctors => doctorsPagination.items;
+  RxList<ClinicReviewModel> get allReviews => reviewsPagination.items;
 
   @override
   void onInit() {
@@ -88,6 +102,9 @@ class ClinicDetailsController extends GetxController {
   }
 
   void showAllReviews() {
+    if (allReviews.isEmpty && !reviewsPagination.isBusy) {
+      loadClinicReviews(refresh: true);
+    }
     Get.bottomSheet(
       Container(
         padding: EdgeInsets.all(20.w),
@@ -108,14 +125,35 @@ class ClinicDetailsController extends GetxController {
             ),
             20.verticalSpace,
             Text(
-              "كل آراء المرضى (${allReviews.length})",
+              tr(
+                LocaleKeys.clinic_app_details_all_reviews_title,
+                args: [allReviews.length.toString()],
+              ),
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             20.verticalSpace,
             Expanded(
-              child: ListView.builder(
-                itemCount: allReviews.length,
-                itemBuilder: (context, index) => reviewCard(allReviews[index]),
+              child: Obx(
+                () => NotificationListener<ScrollNotification>(
+                  onNotification: (notification) {
+                    if (notification.metrics.pixels >=
+                        notification.metrics.maxScrollExtent - 80) {
+                      loadMoreClinicReviews();
+                    }
+                    return false;
+                  },
+                  child: ListView.builder(
+                    itemCount:
+                        allReviews.length +
+                        (reviewsPagination.isLoadingMore.value ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index >= allReviews.length) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      return reviewCard(allReviews[index]);
+                    },
+                  ),
+                ),
               ),
             ),
           ],
@@ -123,6 +161,27 @@ class ClinicDetailsController extends GetxController {
       ),
       isScrollControlled: true,
     );
+  }
+
+  Future<void> openWhatsApp(String phoneNumber) async {
+    var whatsappUrl = "whatsapp://send?phone=$phoneNumber";
+    // للويب أو في حال عدم وجود التطبيق يمكن استخدام https://wa.me/$phoneNumber
+    if (await canLaunchUrl(Uri.parse(whatsappUrl))) {
+      await launchUrl(Uri.parse(whatsappUrl));
+    } else {
+      final url = Uri(scheme: 'tel', path: phoneNumber);
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url);
+      } else {
+        ResponseHelper.onWarning(
+          message: tr(LocaleKeys.labs_profile_call_open_failed),
+        );
+      }
+
+      // ResponseHelper.onWarning(
+      //   message: tr(LocaleKeys.core_whatsapp_not_installed),
+      // );
+    }
   }
 
   Future<void> loadClinicDetails() async {
@@ -145,8 +204,17 @@ class ClinicDetailsController extends GetxController {
       return;
     }
     selectedSpecialty.value = '';
-    allDoctors.assignAll(response.result!.doctors);
-    allReviews.assignAll(response.result!.reviews);
+    doctorsPagination.setPage(
+      data: response.result!.doctors.result?.list ?? <DoctorModel>[],
+      page: response.result!.doctors.meta?.currentPage ?? 1,
+      meta: response.result!.doctors.meta,
+    );
+    reviewsPagination.setPage(
+      data: response.result!.reviews.result?.list ?? <ClinicReviewModel>[],
+      page: response.result!.reviews.meta?.currentPage ?? 1,
+      meta: response.result!.reviews.meta,
+    );
+    loadClinicReviews(refresh: true);
   }
 
   // دالة لتغيير التخصص المختار
@@ -168,20 +236,137 @@ class ClinicDetailsController extends GetxController {
         .toList();
   }
 
+  List<String> get availableSpecialties {
+    final doctorSpecialties = allDoctors
+        .map((doctor) => doctor.specialty.trim())
+        .where((specialty) => specialty.isNotEmpty)
+        .toSet()
+        .toList();
+
+    if (doctorSpecialties.isNotEmpty) return doctorSpecialties;
+    return clinic.value?.specialties ?? <String>[];
+  }
+
+  int doctorsCountForSpecialty(String specialty) {
+    return allDoctors.where((doctor) => doctor.specialty == specialty).length;
+  }
+
   void showRatingSheet(BuildContext context) {
+    if (!AuthRequiredHelper.ensureAuthenticated()) return;
     BottomSheetService.show(
       context: context,
-      child: AppRatingWidget(
-        onSubmit: (rating, comment) {
-          selectedRating.value = rating;
-          commentController.text = comment;
-          Get.back();
-          SnackBarService.showSuccess(
-            context: context,
-            title: "تم التقييم بنجاح",
-          );
-        },
+      child: Obx(
+        () => AppRatingWidget(
+          isLoading: isSubmittingReview.value,
+          onSubmit: (rating, comment) {
+            submitReview(context: context, rating: rating, comment: comment);
+          },
+        ),
       ),
+    );
+  }
+
+  Future<void> loadClinicReviews({bool refresh = false}) async {
+    final clinicId = clinic.value?.id ?? '';
+    if (clinicId.isEmpty || reviewsPagination.isBusy) return;
+    final page = refresh ? 1 : reviewsPagination.currentPage;
+    if (refresh) {
+      reviewsPagination.isRefreshing(true);
+    } else if (page == 1 && allReviews.isEmpty) {
+      reviewsPagination.isInitialLoading(true);
+    }
+    final result = await _repository.getClinicReviews(
+      clinicId,
+      PaginationParams(page: page, perPage: reviewsPagination.perPage),
+    );
+    reviewsPagination.isRefreshing(false);
+    reviewsPagination.isInitialLoading(false);
+    result.when(
+      success: (response) {
+        if (!response.isSuccess || response.result == null) {
+          ResponseHelper.onFailure(message: response.message);
+          return;
+        }
+        reviewsPagination.setPage(
+          data: response.result!.list,
+          page: response.meta?.currentPage ?? page,
+          meta: response.meta,
+        );
+      },
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
+
+  Future<void> loadMoreClinicReviews() async {
+    final clinicId = clinic.value?.id ?? '';
+    if (clinicId.isEmpty ||
+        !reviewsPagination.hasMore ||
+        reviewsPagination.isBusy) {
+      return;
+    }
+    reviewsPagination.isLoadingMore(true);
+    final page = reviewsPagination.currentPage + 1;
+    final result = await _repository.getClinicReviews(
+      clinicId,
+      PaginationParams(page: page, perPage: reviewsPagination.perPage),
+    );
+    reviewsPagination.isLoadingMore(false);
+    result.when(
+      success: (response) {
+        if (!response.isSuccess || response.result == null) {
+          ResponseHelper.onFailure(message: response.message);
+          return;
+        }
+        reviewsPagination.setPage(
+          data: response.result!.list,
+          page: response.meta?.currentPage ?? page,
+          meta: response.meta,
+        );
+      },
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
+  }
+
+  Future<void> submitReview({
+    required BuildContext context,
+    required double rating,
+    required String comment,
+  }) async {
+    if (!AuthRequiredHelper.ensureAuthenticated()) return;
+    if (isSubmittingReview.value) return;
+    isSubmittingReview(true);
+    final result = await _repository.addClinicReview(
+      clinicId: clinic.value?.id ?? '',
+      rating: rating,
+      comment: comment,
+    );
+    isSubmittingReview(false);
+    result.when(
+      success: (response) async {
+        if (!response.isSuccess || response.result == null) {
+          ResponseHelper.onFailure(message: response.message);
+          return;
+        }
+        selectedRating.value = rating;
+        commentController.text = comment;
+        Get.back();
+        await loadClinicReviews(refresh: true);
+        if (!context.mounted) return;
+        SnackBarService.showSuccess(
+          context: context,
+          title: tr(LocaleKeys.doctor_details_rating_success),
+        );
+      },
+      failure: (exception) {
+        // if (AuthRequiredHelper.handleFailure(exception)) return;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 }

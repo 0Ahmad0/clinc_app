@@ -19,6 +19,7 @@ class ChatbotScreen extends GetView<ChatbotController> {
       appBar: AppAppBarWidget(
         title: tr(LocaleKeys.chatbot_title),
         actions: [
+          if(false)
           IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}),
         ],
       ),

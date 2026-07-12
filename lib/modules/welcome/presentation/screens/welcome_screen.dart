@@ -49,7 +49,7 @@ class WelcomeScreen extends GetView<WelcomeController> {
                   child: FadeInUp(
                     child: AppButtonWidget(
                       text: tr(LocaleKeys.core_get_started),
-                      onPressed: () => Get.toNamed(AppRoutes.onboarding),
+                      onPressed: () =>   Get.offAllNamed(AppRoutes.onboarding),
                     ),
                   ),
                 ),

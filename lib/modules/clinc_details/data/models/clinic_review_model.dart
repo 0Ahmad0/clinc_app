@@ -13,11 +13,17 @@ class ClinicReviewModel {
 
   factory ClinicReviewModel.fromJson(Map<String, dynamic> json) {
     return ClinicReviewModel(
-      name: json['name']?.toString() ?? '',
+      name:
+          (json['name'] ?? json['user_name'] ?? json['userName'])?.toString() ??
+          '',
       rating: double.tryParse(json['rating']?.toString() ?? '') ?? 0,
-      comment: json['comment']?.toString() ?? '',
+      comment: (json['comment'] ?? json['description'])?.toString() ?? '',
       dateLabel:
-          (json['date_label'] ?? json['date'] ?? json['created_at'])
+          (json['date_label'] ??
+                  json['dateLabel'] ??
+                  json['date'] ??
+                  json['created_at'] ??
+                  json['createdAt'])
               ?.toString() ??
           '',
     );

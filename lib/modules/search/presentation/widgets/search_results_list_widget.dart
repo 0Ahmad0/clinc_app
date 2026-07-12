@@ -1,3 +1,5 @@
+import 'package:clinc_app_t1/app/core/widgets/section_shimmer_widgets.dart';
+import 'package:clinc_app_t1/app/core/widgets/shared_empty_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/search/presentation/controllers/search_controller.dart';
 import 'package:clinc_app_t1/modules/search/presentation/widgets/clinic_card_widget.dart';
@@ -15,12 +17,20 @@ class SearchResultsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+      if (controller.isFiltersLoading.value) {
+        return const SizedBox.shrink();
+      }
+
       if (controller.isInitialLoading) {
-        return const LoadingDataBaseView();
+        return const ClinicsListShimmer();
       }
 
       if (controller.filteredHospitals.isEmpty) {
-        return Center(child: Text(tr(LocaleKeys.search_no_results)));
+        return SharedEmptyWidget(
+          icon: Icons.local_hospital_outlined,
+          title: tr(LocaleKeys.search_no_results),
+          subtitle: tr(LocaleKeys.search_empty_subtitle),
+        );
       }
       return RefreshIndicator(
         onRefresh: controller.reloadClinics,

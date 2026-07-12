@@ -173,9 +173,11 @@ class SignupScreen extends GetView<SignupController> {
                                 style: Theme.of(context).textTheme.bodyMedium
                                     ?.copyWith(fontSize: 11.sp),
                                 children: [
-                                  TextSpan(text: 'أوافق على '),
                                   TextSpan(
-                                    text: 'سياسة الخصوصية و شروط الاستخدام',
+                                    text: tr(LocaleKeys.signup_terms_prefix),
+                                  ),
+                                  TextSpan(
+                                    text: tr(LocaleKeys.signup_terms_link),
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium

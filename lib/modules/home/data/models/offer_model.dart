@@ -1,5 +1,5 @@
 class OfferModel {
-  final String image;
+  final String? image;
   final String title;
   final String? subTitle;
 
@@ -7,9 +7,11 @@ class OfferModel {
 
   factory OfferModel.fromJson(Map<String, dynamic> json) {
     return OfferModel(
-      image: json['image']?.toString() ?? '',
+      image:
+          (json['image'] ?? json['image_url'] ?? json['imageUrl']),
       title: json['title']?.toString() ?? '',
-      subTitle: json['sub_title']?.toString(),
+      subTitle: (json['sub_title'] ?? json['subTitle'] ?? json['description'])
+          ?.toString(),
     );
   }
 

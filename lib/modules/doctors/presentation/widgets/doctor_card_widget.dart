@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/doctors/data/models/doctor_model.dart';
@@ -34,22 +35,12 @@ class DoctorCard extends StatelessWidget {
         child: Row(
           children: [
             // صورة الطبيب
-            Container(
+            AppCachedImageWidget(
+              imageUrl: doctor.imageUrl,
               width: 70.w,
               height: 70.w,
-              decoration: BoxDecoration(
-                color: Theme.of(context).disabledColor.myOpacity(.2),
-                borderRadius: BorderRadius.circular(12.r),
-                image: doctor.imageUrl.isNotEmpty
-                    ? DecorationImage(
-                        image: NetworkImage(doctor.imageUrl),
-                        fit: BoxFit.cover,
-                      )
-                    : null,
-              ),
-              child: doctor.imageUrl.isEmpty
-                  ? Icon(Icons.person, size: 30.sp, color: Colors.grey)
-                  : null,
+              clipRadius: 12.r,
+              placeholderType: AppImagePlaceholderType.doctor,
             ),
             12.horizontalSpace,
             // تفاصيل الطبيب
@@ -117,7 +108,7 @@ class DoctorCard extends StatelessWidget {
                       Icon(
                         // التحقق من الجنس
                         (doctor.gender == tr(LocaleKeys.doctors_gender_male) ||
-                                doctor.gender == 'ذكر')
+                                doctor.gender == 'male')
                             ? Icons.male
                             : Icons.female,
                         size: 16.sp,

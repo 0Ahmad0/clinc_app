@@ -10,6 +10,8 @@ class InsuranceGridList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
     return GridView.builder(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       itemCount: controller.insurances.length,

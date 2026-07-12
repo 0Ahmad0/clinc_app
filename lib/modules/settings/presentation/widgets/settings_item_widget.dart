@@ -48,9 +48,10 @@ class SettingsItemWidget extends StatelessWidget {
       trailing:
           trailing ??
           Icon(
-            context.locale.languageCode == AppConstants.arLang
-                ? Icons.arrow_forward_ios
-                : Icons.arrow_back_ios,
+            Icons.arrow_forward_ios,
+            // context.locale.languageCode != AppConstants.arLang
+            //     ? Icons.arrow_forward_ios
+            //     : Icons.arrow_back_ios,
             size: 15.sp,
             color: effectiveColor,
           ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import '../../../../app/controllers/app_settings_controller.dart';
 import '../widgets/container_shape_widget.dart';
 import '../widgets/logo_shape_widget.dart';
 import '../../../../app/core/constants/app_assets.dart';
@@ -24,6 +25,7 @@ class LoginScreen extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     // final authController = Get.find<AuthController>();
+    final appSettingsController = Get.find<AppSettingsController>();
     return AppScaffoldWidget(
       resizeToAvoidBottomInset: false,
       useGradientBackground: true,
@@ -178,44 +180,65 @@ class LoginScreen extends GetView<LoginController> {
                         text: tr(LocaleKeys.login_visitor_login),
                       ).fadeIn(),
 
-                      12.verticalSpace,
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          const Divider(thickness: .2),
-                          Positioned(
-                            child: CircleAvatar(
-                              backgroundColor: Get.theme.cardColor,
-                              child: Text(
-                                tr(LocaleKeys.core_or),
-                                style: Theme.of(context).textTheme.bodyMedium,
-                              ),
+                      Obx(() {
+                        final showGoogle =
+                            appSettingsController.allowGoogleLogin;
+                        final showApple = appSettingsController.allowAppleLogin;
+                        if (!showGoogle && !showApple) {
+                          return const SizedBox.shrink();
+                        }
+
+                        return Column(
+                          children: [
+                            12.verticalSpace,
+                            Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                const Divider(thickness: .2),
+                                Positioned(
+                                  child: CircleAvatar(
+                                    backgroundColor: Get.theme.cardColor,
+                                    child: Text(
+                                      tr(LocaleKeys.core_or),
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodyMedium,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      12.verticalSpace,
-                      Row(
-                        children: [
-                          Expanded(
-                            child: SocialButtonWidget(
-                              onPressed: () =>
-                                  controller.loginWithProvider('google'),
-                              text: tr(LocaleKeys.login_continue_with_google),
-                              icon: AppAssets.googleLogoIcon,
-                            ).fadeIn(),
-                          ),
-                          10.horizontalSpace,
-                          Expanded(
-                            child: SocialButtonWidget(
-                              onPressed: () =>
-                                  controller.loginWithProvider('apple'),
-                              text: tr(LocaleKeys.login_continue_with_apple),
-                              icon: AppAssets.appleLogoIcon,
-                            ).fadeIn(),
-                          ),
-                        ],
-                      ),
+                            12.verticalSpace,
+                            Row(
+                              children: [
+                                if (showGoogle)
+                                  Expanded(
+                                    child: SocialButtonWidget(
+                                      onPressed: () =>
+                                          controller.signWithGoogle(),
+                                      text: tr(
+                                        LocaleKeys.login_continue_with_google,
+                                      ),
+                                      icon: AppAssets.googleLogoIcon,
+                                    ).fadeIn(),
+                                  ),
+                                if (showGoogle && showApple) 10.horizontalSpace,
+                                if (showApple)
+                                  Expanded(
+                                    child: SocialButtonWidget(
+                                      onPressed: () =>
+                                          controller.loginWithProvider('apple'),
+                                      text: tr(
+                                        LocaleKeys.login_continue_with_apple,
+                                      ),
+                                      icon: AppAssets.appleLogoIcon,
+                                    ).fadeIn(),
+                                  ),
+                              ],
+                            ),
+                          ],
+                        );
+                      }),
                     ],
                   ),
                 ),

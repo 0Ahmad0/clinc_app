@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../app/core/configuration/locator.dart';
+import '../../../../app/core/helper/focus_helper.dart';
 import '../../../../app/core/helper/response_helper.dart';
 import '../../../../app/domain/error_handler/network_exceptions.dart';
 import '../../../../app/routes/app_routes.dart';
@@ -58,6 +59,7 @@ class OtpController extends GetxController {
           return;
         }
         if (isPasswordReset) {
+          await FocusHelper.clearPrimaryFocusBeforeNavigation();
           Get.offNamed(
             AppRoutes.resetPassword,
             arguments: {'reset_token': data.resetToken},
@@ -94,6 +96,7 @@ class OtpController extends GetxController {
   }
 
   Future<void> _completeLogin(AuthSessionModel session, String? message) async {
+    await StorageService.instance.setGuestMode(false);
     await StorageService.instance.setAccessToken(session.token);
     await StorageService.instance.writeData(
       StorageService.REFRESH_TOKEN,
@@ -107,6 +110,7 @@ class OtpController extends GetxController {
       DateTime.now().toIso8601String(),
     );
     ResponseHelper.onSuccess(message: message);
+    await FocusHelper.clearPrimaryFocusBeforeNavigation();
     Get.offAllNamed(AppRoutes.navbar);
   }
 

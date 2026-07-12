@@ -9,7 +9,8 @@ class InsuranceRepository {
 
   final InsuranceDataSource _dataSource;
 
-  Future<ApiResponse<BaseModel<List<InsuranceCompanyModel>>>> getInsurances() {
+  Future<ApiResponse<BaseModel<BaseModels<InsuranceCompanyModel>>>>
+  getInsurances() {
     return _execute(_dataSource.getInsurances);
   }
 

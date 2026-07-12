@@ -31,10 +31,10 @@ class ChatbotInputArea extends StatelessWidget {
             ),
           ),
           4.horizontalSpace,
-          IconButton(
-            onPressed: controller.sendImage,
-            icon: Icon(Icons.camera_alt_rounded, color: Get.theme.primaryColor),
-          ),
+          // IconButton(
+          //   onPressed: controller.sendImage,
+          //   icon: Icon(Icons.camera_alt_rounded, color: Get.theme.primaryColor),
+          // ),
         ],
       ),
     );

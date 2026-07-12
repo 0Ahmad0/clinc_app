@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:clinc_app_t1/app/core/configuration/locator.dart';
+import 'package:clinc_app_t1/app/core/helper/auth_required_helper.dart';
 import 'package:clinc_app_t1/app/core/helper/response_helper.dart';
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/data/base_model.dart';
@@ -12,10 +13,14 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../app/core/utils/dialogs/app_dialog.dart';
+import '../../../book_appointments/data/models/book_appointment_request.dart';
+import '../../../book_appointments/domain/book_appointment_repository.dart';
 import '../../../book_appointments/presentation/widgets/success_book_appointment_widget.dart';
+import '../../data/models/checkout_model.dart';
 import '../../data/models/checkout_payment_request_model.dart';
 import '../../data/models/payment_coupon_model.dart';
 import '../../domain/payment_repository.dart';
+import '../widgets/success_lab_payment_widget.dart';
 //
 // class CheckoutController extends GetxController {
 //   final double consultationPrice = 100.0;
@@ -66,9 +71,9 @@ import '../../domain/payment_repository.dart';
 
 class CheckoutController extends GetxController {
   late final PaymentRepository _repository;
+  late final BookAppointmentRepository _bookAppointmentRepository;
+  Map<String, dynamic> _checkoutArguments = <String, dynamic>{};
 
-  // قيم ثابتة للكشفية والضريبة
-  final double consultationPrice = 200.0;
   final double vatPercentage = 0.15;
 
   // إدارة حالة الدفع
@@ -80,19 +85,36 @@ class CheckoutController extends GetxController {
   var isCouponApplied = false.obs;
   final RxBool isApplyingCoupon = false.obs;
   final RxBool isProcessingPayment = false.obs;
+  final RxBool showCouponCelebration = false.obs;
   final RxList<PaymentCouponModel> coupons = <PaymentCouponModel>[].obs;
   final RxDouble couponDiscount = 0.0.obs;
+  final Rx<CheckoutModel> checkout = const CheckoutModel().obs;
 
   // الحسابات المالية
-  double get vatAmount => consultationPrice * vatPercentage;
-  double get discountAmount =>
-      isCouponApplied.value ? couponDiscount.value : 0.0;
-  double get totalAmount => consultationPrice + vatAmount - discountAmount;
+  double get consultationPrice => checkout.value.summary.subtotal == 0
+      ? 200
+      : checkout.value.summary.subtotal;
+  double get vatAmount => checkout.value.summary.vatAmount == 0
+      ? consultationPrice * vatPercentage
+      : checkout.value.summary.vatAmount;
+  double get discountAmount => isCouponApplied.value
+      ? couponDiscount.value
+      : checkout.value.summary.discountAmount;
+  double get totalAmount => checkout.value.summary.totalAmount == 0
+      ? consultationPrice + vatAmount - discountAmount
+      : checkout.value.summary.totalAmount;
+  bool get isLabCheckout => checkout.value.isLab;
 
   @override
   void onInit() {
     super.onInit();
     _repository = locator<PaymentRepository>();
+    _bookAppointmentRepository = locator<BookAppointmentRepository>();
+    final args = Get.arguments;
+    _checkoutArguments = args is Map
+        ? Map<String, dynamic>.from(args)
+        : <String, dynamic>{};
+    checkout.value = CheckoutModel.fromRouteArguments(_checkoutArguments);
     loadCoupons();
   }
 
@@ -100,6 +122,9 @@ class CheckoutController extends GetxController {
   void selectSubMethod(String method) => selectedSubMethod.value = method;
 
   Future<void> applyCoupon() async {
+    if (!AuthRequiredHelper.ensureAuthenticated(onAuthenticated: loadCoupons)) {
+      return;
+    }
     final code = couponController.text.trim();
     if (code.isEmpty || isApplyingCoupon.value) return;
     isApplyingCoupon(true);
@@ -118,21 +143,39 @@ class CheckoutController extends GetxController {
         }
         isCouponApplied(true);
         couponDiscount.value = response.result!.discountAmount;
+        checkout.value = checkout.value.copyWith(
+          summary:
+              response.result!.checkoutSummary ??
+              checkout.value.summary.copyWithCoupon(couponDiscount.value),
+        );
+        showCouponCelebration(true);
         ResponseHelper.onSuccess(message: response.message);
       },
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(
+          exception,
+          onAuthenticated: loadCoupons,
+        )) {
+          return;
+        }
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
   Future<void> loadCoupons() async {
+    if (AuthRequiredHelper.isGuest) return;
     final result = await _repository.getCoupons();
     result.when(
       success: _handleCouponsResponse,
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(exception)) return;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
@@ -186,11 +229,15 @@ class CheckoutController extends GetxController {
       },
     );
   }
-
   Future<void> processPayment(BuildContext context) async {
+    if (!AuthRequiredHelper.ensureAuthenticated()) return;
     if (isProcessingPayment.value) return;
+    if (!isLabCheckout) {
+      await _processDoctorBooking(context);
+      return;
+    }
     isProcessingPayment(true);
-    final result = await _repository.checkout(
+    final result = await _repository.labCartCheckout(
       CheckoutPaymentRequestModel(
         paymentType: selectedPayment.value,
         subMethod: selectedSubMethod.value,
@@ -198,6 +245,9 @@ class CheckoutController extends GetxController {
         vatAmount: vatAmount,
         discountAmount: discountAmount,
         totalAmount: totalAmount,
+        appointmentId: checkout.value.appointmentId,
+        labId: checkout.value.labId,
+        itemIds: checkout.value.items.map((item) => item.id).toList(),
         couponCode: couponController.text.trim().isEmpty
             ? null
             : couponController.text.trim(),
@@ -210,17 +260,122 @@ class CheckoutController extends GetxController {
           ResponseHelper.onFailure(message: response.message);
           return;
         }
-        AppDialog.showAppDialog(
-          context,
-          widget: const SuccessBookAppointmentWidget().bounceIn(),
-          barrierColor: Theme.of(context).primaryColor.withValues(alpha: 0.2),
-        );
-        ResponseHelper.onSuccess(message: response.message);
+        if (response.result != null) {
+          checkout.value = _mergeCheckoutResponse(response.result!);
+        }
+        _showLabPaymentSuccess(context);
       },
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(exception)) return;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
+  }
+
+  Future<void> _processDoctorBooking(BuildContext context) async {
+    isProcessingPayment(true);
+    final result = await _bookAppointmentRepository.bookAppointment(
+      _doctorBookingRequest(),
+    );
+    isProcessingPayment(false);
+    result.when(
+      success: (response) {
+        if (!response.isSuccess) {
+          ResponseHelper.onFailure(message: response.message);
+          return;
+        }
+        final appointment = response.result ?? <String, dynamic>{};
+        checkout.value = CheckoutModel.fromRouteArguments({
+          ..._checkoutArguments,
+          ...appointment,
+          'flow_type': 'doctor',
+          'appointment': appointment,
+        }).copyWith(message: response.message);
+        _showDoctorBookingSuccess(context);
+      },
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(exception)) return;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
+    );
+  }
+
+  BookAppointmentRequest _doctorBookingRequest() {
+    return BookAppointmentRequest(
+      doctorId: _argString('doctor_id') ?? checkout.value.doctorId,
+      clinicId: _argString('clinic_id') ?? checkout.value.clinicId,
+      labId: _argString('lab_id') ?? checkout.value.labId,
+      specialtyId: _argString('specialty_id'),
+      date:
+          DateTime.tryParse(
+            _argString('date') ?? _argString('appointment_date') ?? '',
+          ) ??
+          DateTime.now(),
+      time: _argString('time') ?? checkout.value.bookingTime,
+      fullName: _argString('full_name') ?? _argString('patient_name') ?? '',
+      phone: _argString('phone') ?? _argString('phone_number') ?? '',
+      problem: _argString('problem') ?? _argString('complaint') ?? '',
+      ageRange: _argString('age_range') ?? '',
+      gender: _argString('gender') ?? '',
+      isPregnant: _argBool('is_pregnant') ?? false,
+      isBreastfeeding: _argBool('is_breastfeeding') ?? false,
+      paymentType: selectedPayment.value,
+      couponCode: couponController.text.trim().isEmpty
+          ? null
+          : couponController.text.trim(),
+    );
+  }
+
+  void _showDoctorBookingSuccess(BuildContext context) {
+    AppDialog.showAppDialog(
+      context,
+      widget: const SuccessBookAppointmentWidget().bounceIn(),
+      barrierColor: Theme.of(context).primaryColor.withValues(alpha: 0.2),
+    );
+    ResponseHelper.onSuccess(
+      message: checkout.value.message.isNotEmpty
+          ? checkout.value.message
+          : tr(LocaleKeys.checkout_doctor_success_msg),
+    );
+  }
+
+  void _showLabPaymentSuccess(BuildContext context) {
+    AppDialog.showAppDialog(
+      context,
+      widget: const SuccessLabPaymentWidget().bounceIn(),
+      barrierColor: Theme.of(context).primaryColor.withValues(alpha: 0.2),
+    );
+    ResponseHelper.onSuccess(message: tr(LocaleKeys.checkout_lab_success_msg));
+  }
+
+  CheckoutModel _mergeCheckoutResponse(CheckoutModel response) {
+    return checkout.value.copyWith(
+      summary: response.hasSummaryData
+          ? response.summary
+          : checkout.value.summary,
+      paymentId: response.paymentId,
+      message: response.message,
+    );
+  }
+
+  String? _argString(String key) {
+    final value = _checkoutArguments[key];
+    final text = value?.toString();
+    return text == null || text.isEmpty ? null : text;
+  }
+
+  bool? _argBool(String key) {
+    if (!_checkoutArguments.containsKey(key)) return null;
+    final value = _checkoutArguments[key];
+    if (value is bool) return value;
+    final text = value?.toString().toLowerCase();
+    if (text == 'true' || text == '1' || text == 'yes') return true;
+    if (text == 'false' || text == '0' || text == 'no') return false;
+    return null;
   }
 
   @override

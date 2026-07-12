@@ -1,5 +1,7 @@
 import '../../../app/data/base_model.dart';
+import '../../../app/data/models/filter_option_model.dart';
 import '../../../app/data/offer_model.dart';
+import '../../../app/data/pagination/pagination_params.dart';
 import '../../../app/data/review_model.dart';
 import 'labs_data_source.dart';
 import 'models/lab_model.dart';
@@ -7,6 +9,7 @@ import 'models/lab_test_model.dart';
 
 class LabsMockDataSource implements LabsDataSource {
   static final Set<String> _cartIds = <String>{};
+  static final Set<String> _favoriteLabIds = <String>{};
 
   static final List<LabModel> _labs = <LabModel>[
     LabModel(
@@ -219,14 +222,66 @@ class LabsMockDataSource implements LabsDataSource {
   ];
 
   @override
-  Future<BaseModel<List<LabModel>>> getLabs() async {
-    await Future<void>.delayed(const Duration(milliseconds: 300));
+  Future<BaseModel<FiltersModel>> getFilters() async {
+    await Future<void>.delayed(const Duration(milliseconds: 200));
+    final categories = _uniqueOptions(_labs.map((lab) => lab.category));
+    final services = _uniqueOptions(_labTests.map((test) => test.category));
     return BaseModel.fromJson({
       'status': 'success',
-      'message': 'Labs retrieved successfully',
-      'data': _labs.map((item) => item.toJson()).toList(),
+      'message': 'Lab filters retrieved successfully',
+      'data': {
+        'categories': categories.map((item) => item.toJson()).toList(),
+        'services': services.map((item) => item.toJson()).toList(),
+      },
       'meta': <String, dynamic>{},
-    }, _labsFromJson);
+    }, (json) => FiltersModel.fromJson(Map<String, dynamic>.from(json as Map)));
+  }
+
+  @override
+  Future<BaseModel<BaseModels<LabModel>>> getLabs(
+    PaginationParams params,
+  ) async {
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+    final labs = _applyFilters(_labs, params.filters);
+    return BaseModel.fromJson(
+      {
+        'status': 'success',
+        'message': 'Labs retrieved successfully',
+        'data': labs.map((item) => item.toJson()).toList(),
+        'meta': {
+          'current_page': params.page,
+          'from': labs.isEmpty ? 0 : 1,
+          'to': labs.length,
+          'per_page': params.perPage,
+          'total': labs.length,
+        },
+      },
+      (json) => BaseModels<LabModel>.fromJson(
+        json,
+        (itemJson) =>
+            LabModel.fromJson(Map<String, dynamic>.from(itemJson as Map)),
+      ),
+    );
+  }
+
+  List<LabModel> _applyFilters(
+    List<LabModel> labs,
+    Map<String, dynamic> filters,
+  ) {
+    var results = labs;
+    final search = filters['search']?.toString().trim().toLowerCase();
+    final category = filters['category_id']?.toString();
+
+    if (search != null && search.isNotEmpty) {
+      results = results
+          .where((lab) => lab.name.toLowerCase().contains(search))
+          .toList();
+    }
+    if (category != null && category.isNotEmpty) {
+      results = results.where((lab) => lab.category == category).toList();
+    }
+
+    return results;
   }
 
   @override
@@ -279,12 +334,74 @@ class LabsMockDataSource implements LabsDataSource {
     );
   }
 
-  List<LabModel> _labsFromJson(dynamic json) {
-    if (json is! List) return <LabModel>[];
-    return json
-        .whereType<Map>()
-        .map((item) => LabModel.fromJson(Map<String, dynamic>.from(item)))
-        .toList();
+  @override
+  Future<BaseModel<BaseModels<ReviewModel>>> getLabReviews(
+    String labId,
+    PaginationParams params,
+  ) async {
+    await Future<void>.delayed(const Duration(milliseconds: 250));
+    final lab = _labs.firstWhere(
+      (item) => item.id == labId,
+      orElse: () => _labs.first,
+    );
+    final start = (params.page - 1) * params.perPage;
+    final pageItems = lab.reviews.skip(start).take(params.perPage).toList();
+    return BaseModel.fromJson(
+      {
+        'status': 'success',
+        'message': 'Lab reviews retrieved successfully',
+        'data': pageItems.map((review) => review.toJson()).toList(),
+        'meta': _meta(pageItems.length, params, lab.reviews.length),
+      },
+      (json) => BaseModels<ReviewModel>.fromJson(
+        json,
+        (itemJson) =>
+            ReviewModel.fromJson(Map<String, dynamic>.from(itemJson as Map)),
+      ),
+    );
+  }
+
+  @override
+  Future<BaseModel<Map<String, dynamic>>> toggleLabFavorite(
+    String labId,
+  ) async {
+    await Future<void>.delayed(const Duration(milliseconds: 200));
+    if (_favoriteLabIds.contains(labId)) {
+      _favoriteLabIds.remove(labId);
+    } else {
+      _favoriteLabIds.add(labId);
+    }
+    return BaseModel.fromJson({
+      'status': 'success',
+      'message': 'Lab favorite updated successfully',
+      'data': {'is_favorite': _favoriteLabIds.contains(labId)},
+    }, (json) => Map<String, dynamic>.from(json as Map));
+  }
+
+  @override
+  Future<BaseModel<ReviewModel>> addLabReview({
+    required String labId,
+    required double rating,
+    required String comment,
+  }) async {
+    await Future<void>.delayed(const Duration(milliseconds: 250));
+    final lab = _labs.firstWhere(
+      (item) => item.id == labId,
+      orElse: () => _labs.first,
+    );
+    final review = ReviewModel(
+      userName: 'مستخدم حالي',
+      userImage: 'https://i.pravatar.cc/150?img=3',
+      rating: rating,
+      comment: comment,
+      date: 'الآن',
+    );
+    lab.reviews.insert(0, review);
+    return BaseModel.fromJson({
+      'status': 'success',
+      'message': 'Lab review submitted successfully',
+      'data': review.toJson(),
+    }, (json) => ReviewModel.fromJson(Map<String, dynamic>.from(json as Map)));
   }
 
   List<LabTest> get _cartTests {
@@ -314,5 +431,25 @@ class LabsMockDataSource implements LabsDataSource {
             LabTest.fromJson(Map<String, dynamic>.from(itemJson as Map)),
       ),
     );
+  }
+
+  Map<String, dynamic> _meta(int count, PaginationParams params, int total) {
+    final from = total == 0 ? 0 : ((params.page - 1) * params.perPage) + 1;
+    return {
+      'current_page': params.page,
+      'from': count == 0 ? 0 : from,
+      'to': count == 0 ? 0 : from + count - 1,
+      'per_page': params.perPage,
+      'total': total,
+    };
+  }
+
+  List<FilterOptionModel> _uniqueOptions(Iterable<String> values) {
+    final seen = <String>{};
+    return values
+        .where((value) => value.trim().isNotEmpty)
+        .where(seen.add)
+        .map((value) => FilterOptionModel(id: value, name: value))
+        .toList();
   }
 }

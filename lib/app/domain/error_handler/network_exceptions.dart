@@ -7,7 +7,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 
 part 'network_exceptions.freezed.dart';
-
 @freezed
 abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
   const factory NetworkExceptions.requestCancelled() = RequestCancelled;
@@ -56,6 +55,8 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
   const factory NetworkExceptions.unexpectedError(String? error) =
       UnexpectedError;
 
+  static String? _loggingInRequiredMessage;
+
   static List<NetworkExceptions> getAllNetworkExceptions() {
     return [
       const NetworkExceptions.badRequest(),
@@ -90,11 +91,14 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
         );
       // case 400:
       case 401:
+        if (_isLoginRequired(response?.data)) {
+          return _buildLoggingInRequired(message);
+        }
         return NetworkExceptions.unauthorizedRequest(
           message ?? 'Un Authorized Request',
         );
       case 403:
-        return const NetworkExceptions.loggingInRequired();
+        return _buildLoggingInRequired(message);
       case 404:
         return NetworkExceptions.notFound(message ?? 'Not Found');
       case 405:
@@ -119,6 +123,21 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
           "Received invalid status code: $responseCode",
         );
     }
+  }
+
+  static bool _isLoginRequired(dynamic responseData) {
+    final data = _decodeResponseData(responseData);
+    if (data is! Map) return false;
+    final error = data['error'];
+    if (error is Map && error['code']?.toString() == 'login_required') {
+      return true;
+    }
+    return data['code']?.toString() == 'login_required';
+  }
+
+  static NetworkExceptions _buildLoggingInRequired(String? message) {
+    _loggingInRequiredMessage = _cleanMessage(message);
+    return const NetworkExceptions.loggingInRequired();
   }
 
   static String? extractBackendErrorMessage(dynamic responseData) {
@@ -271,7 +290,8 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
             errorMessage = "Request Cancelled";
           },
           loggingInRequired: () {
-            errorMessage = "Un Authorized Request";
+            errorMessage = _loggingInRequiredMessage ?? "Un Authorized Request";
+            _loggingInRequiredMessage = null;
             // errorMessage = "Log in First";
           },
           internalServerError: (String reason) {

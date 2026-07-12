@@ -1,7 +1,7 @@
 // const baseServ = "http://192.168.1.114/";
 
-const baseServ = "https://api-dev.litaskunu.com/";
-const baseServSlashLess = "https://api-dev.litaskunu.com/";
+const baseServ = "https://clinic.hivetech.space/";
+const baseServSlashLess = "https://clinic.hivetech.space/";
 // const baseServ = "http://127.0.0.1:8000/";
 
 const baseUrl = "${baseServSlashLess}api/";
@@ -16,6 +16,8 @@ const psychologist = "psychologist/";
 const app = "app/";
 
 class AppUrl {
+  static const appSettings = "${baseUrl}app/settings";
+
   static const clinicRegister = "${baseUrl}clinic/register";
   static const clinicForgotPassword = "${baseUrl}clinic/forgot-password";
   static const clinicVerifyOtp = "${baseUrl}clinic/verify-otp";
@@ -37,25 +39,34 @@ class AppUrl {
 
   static const login = "${baseUrl}login";
   static const loginWithGoogle = "${baseUrl}auth/google";
+  static const userSocialLogin = "${baseUrl}user/social-login";
+  static const userGuestLogin = "${baseUrl}user/guest-login";
   static const signup = "${baseUrl}register";
 
-  static const logout = "${baseUrl}logout/";
+  static const logout = "${baseUrl}logout";
 
   static const getProfile = '${baseUrl}profile';
   static const userProfile = '${baseUrl}user/profile';
   static const userHome = '${baseUrl}user/home';
   static const userDoctors = '${baseUrl}user/doctors';
+  static const userDoctorFilters = '${baseUrl}user/doctors/filters';
   static const userClinics = '${baseUrl}user/clinics';
+  static const userClinicFilters = '${baseUrl}user/clinics/filters';
   static const userLabs = '${baseUrl}user/labs';
+  static const userLabFilters = '${baseUrl}user/labs/filters';
+  static const userSalons = '${baseUrl}user/salons';
+  static const userSalonFilters = '${baseUrl}user/salons/filters';
+  static const userInsurances = '${baseUrl}user/insurances';
   static const userLabCart = '${baseUrl}user/lab-cart';
   static const userAppointments = '${baseUrl}user/appointments';
   static const userPaymentCards = '${baseUrl}user/payment/cards';
   static const userPaymentCoupons = '${baseUrl}user/payment/coupons';
   static const userPaymentApplyCoupon = '${baseUrl}user/payment/apply-coupon';
-  static const userCheckout = '${baseUrl}user/checkout';
+  static const userLabCartCheckout = '${baseUrl}user/lab-cart/checkout';
   static const userChatbotMessage = '${baseUrl}user/chatbot/message';
   static const userAppointmentAvailableTimes =
       '${baseUrl}user/appointments/available-times';
+  static const userResetPassword = '${baseUrl}user/reset-password';
   static const userNotificationSettings =
       '${baseUrl}user/notification-settings';
   static const userAccount = '${baseUrl}user/account';
@@ -84,6 +95,25 @@ class AppUrl {
   }
 
   static String userLabCartItem(String testId) => '$userLabCart/$testId';
+
+  static String userClinicDetails(String clinicId) => '$userClinics/$clinicId';
+
+  static String userClinicReviews(String clinicId) =>
+      '${baseUrl}user/clinics/$clinicId/reviews';
+
+  static String userLabReviews(String labId) =>
+      '${baseUrl}user/labs/$labId/reviews';
+
+  static String userLabFavorite(String labId) =>
+      '${baseUrl}user/labs/$labId/favorite';
+
+  static String userAppointmentDetails(String appointmentId) =>
+      '$userAppointments/$appointmentId';
+
+  static String userAppointmentCancel(String appointmentId) =>
+      '${userAppointmentDetails(appointmentId)}/cancel';
+
+  static String userPaymentCard(String cardId) => '$userPaymentCards/$cardId';
 
   static String userDoctorDetails(String doctorId) =>
       '${baseUrl}user/doctors/$doctorId';

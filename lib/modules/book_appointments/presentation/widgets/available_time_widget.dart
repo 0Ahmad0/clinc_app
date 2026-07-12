@@ -17,8 +17,10 @@ class AvailableTimeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final morningTimes = availableTimes.where((t) => t.contains('AM')).toList();
-    final eveningTimes = availableTimes.where((t) => t.contains('PM')).toList();
+    final morningTimes = availableTimes.where(_isMorningTime).toList();
+    final eveningTimes = availableTimes
+        .where((t) => !_isMorningTime(t))
+        .toList();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -67,5 +69,13 @@ class AvailableTimeWidget extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  bool _isMorningTime(String time) {
+    final normalized = time.trim().toUpperCase();
+    if (normalized.contains('AM')) return true;
+    if (normalized.contains('PM')) return false;
+    final hour = int.tryParse(normalized.split(':').first);
+    return hour != null && hour < 12;
   }
 }

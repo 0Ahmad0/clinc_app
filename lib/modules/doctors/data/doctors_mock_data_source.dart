@@ -1,4 +1,5 @@
 import '../../../app/data/base_model.dart';
+import '../../../app/data/models/filter_option_model.dart';
 import '../../../app/data/pagination/pagination_params.dart';
 import 'doctors_data_source.dart';
 import 'models/doctor_details_model.dart';
@@ -28,6 +29,33 @@ class DoctorsMockDataSource implements DoctorsDataSource {
       ),
     ],
   };
+
+  @override
+  Future<BaseModel<FiltersModel>> getFilters() async {
+    await Future<void>.delayed(const Duration(milliseconds: 200));
+    final regions = _uniqueOptions(_doctors.map((doctor) => doctor.region));
+    final specializations = _uniqueOptions(
+      _doctors.map((doctor) => doctor.specialty),
+    );
+    final genders = _uniqueOptions(_doctors.map((doctor) => doctor.gender));
+    final ratings = _uniqueOptions(
+      _doctors.map((doctor) => doctor.rating.toString()),
+    );
+    return BaseModel.fromJson({
+      'status': 'success',
+      'message': 'Doctor filters retrieved successfully',
+      'data': {
+        'regions': regions.map((item) => item.toJson()).toList(),
+        'areas': regions.map((item) => item.toJson()).toList(),
+        'specializations': specializations
+            .map((item) => item.toJson())
+            .toList(),
+        'genders': genders.map((item) => item.toJson()).toList(),
+        'ratings': ratings.map((item) => item.toJson()).toList(),
+      },
+      'meta': <String, dynamic>{},
+    }, (json) => FiltersModel.fromJson(Map<String, dynamic>.from(json as Map)));
+  }
 
   @override
   Future<BaseModel<BaseModels<DoctorModel>>> getDoctors(
@@ -172,18 +200,10 @@ class DoctorsMockDataSource implements DoctorsDataSource {
     Map<String, dynamic> filters,
   ) {
     var results = doctors;
-    final query = filters['query']?.toString().trim().toLowerCase();
-    final region = filters['region']?.toString();
-    final specialty = filters['specialty']?.toString();
-    final gender = filters['gender']?.toString();
-    final minRating =
-        double.tryParse(filters['min_rating']?.toString() ?? '') ?? 0;
+    final region = filters['region_id']?.toString();
+    final specialty = filters['specialization_id']?.toString();
+    final rating = double.tryParse(filters['rating']?.toString() ?? '') ?? 0;
 
-    if (query != null && query.isNotEmpty) {
-      results = results
-          .where((doctor) => doctor.name.toLowerCase().contains(query))
-          .toList();
-    }
     if (region != null && region.isNotEmpty) {
       results = results.where((doctor) => doctor.region == region).toList();
     }
@@ -192,11 +212,8 @@ class DoctorsMockDataSource implements DoctorsDataSource {
           .where((doctor) => doctor.specialty == specialty)
           .toList();
     }
-    if (gender != null && gender.isNotEmpty) {
-      results = results.where((doctor) => doctor.gender == gender).toList();
-    }
-    if (minRating > 0) {
-      results = results.where((doctor) => doctor.rating >= minRating).toList();
+    if (rating > 0) {
+      results = results.where((doctor) => doctor.rating >= rating).toList();
     }
 
     return results;
@@ -231,5 +248,14 @@ class DoctorsMockDataSource implements DoctorsDataSource {
         ),
       ],
     );
+  }
+
+  List<FilterOptionModel> _uniqueOptions(Iterable<String> values) {
+    final seen = <String>{};
+    return values
+        .where((value) => value.trim().isNotEmpty)
+        .where(seen.add)
+        .map((value) => FilterOptionModel(id: value, name: value))
+        .toList();
   }
 }

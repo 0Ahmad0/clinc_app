@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/configuration/locator.dart';
+import 'package:clinc_app_t1/app/core/helper/auth_required_helper.dart';
 import 'package:clinc_app_t1/app/core/helper/response_helper.dart';
 import 'package:clinc_app_t1/app/data/base_model.dart';
 import 'package:clinc_app_t1/app/domain/error_handler/network_exceptions.dart';
@@ -16,9 +17,10 @@ import '../../data/models/doctor_model.dart';
 import '../../data/models/doctor_review_model.dart';
 import '../../domain/doctors_repository.dart';
 
+
 class DoctorDetailsController extends GetxController {
   late final DoctorsRepository _repository;
-  late DoctorModel doctor;
+  DoctorModel doctor = DoctorModel.mockDoctors.first;
   final Rxn<DoctorDetailsModel> details = Rxn<DoctorDetailsModel>();
   final Rx<GeneralLoading> loadingState = GeneralLoading.initial.obs;
   final RxSet<String> favoriteLoadingIds = <String>{}.obs;
@@ -39,11 +41,15 @@ class DoctorDetailsController extends GetxController {
   void onInit() {
     super.onInit();
     _repository = locator<DoctorsRepository>();
-    doctor = Get.arguments as DoctorModel;
+    _readRouteDoctor();
     loadDoctorDetails();
   }
 
   Future<void> loadDoctorDetails() async {
+    if (doctor.id.isEmpty) {
+      loadingState.value = GeneralLoading.empty;
+      return;
+    }
     loadingState.value = GeneralLoading.loading;
     final result = await _repository.getDoctorDetails(doctor.id);
     result.when(
@@ -70,7 +76,26 @@ class DoctorDetailsController extends GetxController {
     loadingState.value = GeneralLoading.success;
   }
 
+  void _readRouteDoctor() {
+    final args = Get.arguments;
+    if (args is DoctorModel) {
+      doctor = args;
+      return;
+    }
+    if (args is Map) {
+      if (args['doctor'] is DoctorModel) {
+        doctor = args['doctor'] as DoctorModel;
+        return;
+      }
+      final doctorJson = args['doctor'] is Map ? args['doctor'] : args;
+      doctor = DoctorModel.fromJson(
+        Map<String, dynamic>.from(doctorJson as Map),
+      );
+    }
+  }
+
   Future<void> toggleFavorite() async {
+    if (!AuthRequiredHelper.ensureAuthenticated()) return;
     if (favoriteLoadingIds.contains(doctor.id)) return;
     favoriteLoadingIds.add(doctor.id);
     final result = await _repository.toggleDoctorFavorite(doctor.id);
@@ -84,9 +109,12 @@ class DoctorDetailsController extends GetxController {
         isFavorite.value = response.result!['is_favorite'] == true;
         ResponseHelper.onSuccess(message: response.message);
       },
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(exception)) return;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
@@ -182,12 +210,16 @@ class DoctorDetailsController extends GetxController {
   }
 
   void showRatingSheet(BuildContext context) {
+    if (!AuthRequiredHelper.ensureAuthenticated()) return;
     BottomSheetService.show(
       context: context,
-      child: AppRatingWidget(
-        onSubmit: (rating, comment) {
-          submitReview(context: context, rating: rating, comment: comment);
-        },
+      child: Obx(
+        () => AppRatingWidget(
+          isLoading: isSubmittingReview.value,
+          onSubmit: (rating, comment) {
+            submitReview(context: context, rating: rating, comment: comment);
+          },
+        ),
       ),
     );
   }
@@ -197,6 +229,7 @@ class DoctorDetailsController extends GetxController {
     required double rating,
     required String comment,
   }) async {
+    if (!AuthRequiredHelper.ensureAuthenticated()) return;
     if (isSubmittingReview.value) return;
     isSubmittingReview(true);
     final result = await _repository.addDoctorReview(
@@ -220,9 +253,12 @@ class DoctorDetailsController extends GetxController {
           title: tr(LocaleKeys.doctor_details_rating_success),
         );
       },
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        // if (AuthRequiredHelper.handleFailure(exception)) return;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 

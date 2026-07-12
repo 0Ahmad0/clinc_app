@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 
 import '../../../../app/core/configuration/locator.dart';
+import '../../../../app/core/helper/auth_required_helper.dart';
 import '../../../../app/core/helper/response_helper.dart';
 import '../../../../app/data/base_model.dart';
 import '../../../../app/domain/error_handler/network_exceptions.dart';
@@ -53,19 +54,37 @@ class NotificationsController extends GetxController {
   }
 
   Future<void> loadNotifications() async {
+    if (!AuthRequiredHelper.ensureAuthenticated(
+      onAuthenticated: loadNotifications,
+    )) {
+      return;
+    }
     if (isLoading.value) return;
     isLoading(true);
     final result = await _repository.getNotifications();
     isLoading(false);
     result.when(
       success: _handleNotificationsResponse,
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(
+          exception,
+          onAuthenticated: loadNotifications,
+        )) {
+          return;
+        }
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
   Future<void> markAllAsRead() async {
+    if (!AuthRequiredHelper.ensureAuthenticated(
+      onAuthenticated: loadNotifications,
+    )) {
+      return;
+    }
     if (isMarkingAllRead.value || notifications.isEmpty) return;
     isMarkingAllRead(true);
     final result = await _repository.markAllAsRead();
@@ -81,9 +100,17 @@ class NotificationsController extends GetxController {
         }
         notifications.refresh();
       },
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        if (AuthRequiredHelper.handleFailure(
+          exception,
+          onAuthenticated: loadNotifications,
+        )) {
+          return;
+        }
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 

@@ -1,5 +1,6 @@
 import '../../../app/core/utils/app_url.dart';
 import '../../../app/data/base_model.dart';
+import '../../../app/data/models/filter_option_model.dart';
 import '../../../app/data/pagination/pagination_params.dart';
 import '../../../app/domain/services/api_service.dart';
 import 'doctors_data_source.dart';
@@ -11,6 +12,18 @@ class DoctorsRemoteDataSource implements DoctorsDataSource {
   DoctorsRemoteDataSource(this._apiServices);
 
   final ApiServices _apiServices;
+
+  @override
+  Future<BaseModel<FiltersModel>> getFilters() async {
+    final response = await _apiServices.get(
+      AppUrl.userDoctorFilters,
+      hasToken: true,
+    );
+    return BaseModel.fromJson(
+      Map<String, dynamic>.from(response as Map),
+      (json) => FiltersModel.fromJson(Map<String, dynamic>.from(json as Map)),
+    );
+  }
 
   @override
   Future<BaseModel<BaseModels<DoctorModel>>> getDoctors(

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../controllers/app_settings_controller.dart';
 import '../controllers/settings_app_controller.dart';
 import '../services/storage_service.dart';
 
@@ -16,6 +17,10 @@ class InitialBinding implements Bindings {
     // (lazyPut) تعني أنه لن يتم إنشاؤه إلا عند أول استخدام له
     if (!Get.isRegistered<SettingsAppController>()) {
       Get.lazyPut(() => SettingsAppController(), fenix: true);
+    }
+
+    if (!Get.isRegistered<AppSettingsController>()) {
+      Get.put(AppSettingsController(), permanent: true);
     }
   }
 }

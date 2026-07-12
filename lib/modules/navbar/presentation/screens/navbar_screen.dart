@@ -22,33 +22,6 @@ class NavbarScreen extends GetView<NavbarController> {
   Widget build(BuildContext context) {
     final activeColor = Theme.of(context).primaryColor;
     final inactiveColor = Theme.of(context).disabledColor;
-    DateTime? currentBackPressTime;
-    Future<bool> _onWillPop() async {
-      DateTime now = DateTime.now();
-
-      // إذا كان أول مرة يضغط أو مر أكثر من ثانيتين
-      if (currentBackPressTime == null ||
-          now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
-        currentBackPressTime = now;
-
-        // رسالة تأكيد
-        Get.snackbar(
-          "اضغط مرة أخرى للخروج",
-          "اضغط زر الرجوع مرة أخرى للخروج من التطبيق",
-          backgroundColor: Colors.black87,
-          colorText: Colors.white,
-          duration: Duration(seconds: 2),
-          snackPosition: SnackPosition.BOTTOM,
-          margin: EdgeInsets.all(16.w),
-          borderRadius: 12.r,
-          isDismissible: true,
-          dismissDirection: DismissDirection.horizontal,
-        );
-
-        return false; // لا تخرج
-      }
-      return await _showExitDialog(context);
-    }
 
     return PopScope(
       canPop: false, // مهم! تعطيل الـ pop الافتراضي
@@ -169,7 +142,7 @@ class NavbarScreen extends GetView<NavbarController> {
                   ),
                   SizedBox(height: 10.h),
                   Text(
-                    "هل أنت متأكد من الخروج؟",
+                    tr(LocaleKeys.navbar_exit_dialog_title),
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
@@ -180,7 +153,7 @@ class NavbarScreen extends GetView<NavbarController> {
                 ],
               ),
               content: Text(
-                "سيتم إغلاق التطبيق بالكامل. تأكد من حفظ جميع بياناتك قبل الخروج.",
+                tr(LocaleKeys.navbar_exit_dialog_message),
                 style: TextStyle(
                   fontSize: 14.sp,
                   color: Colors.grey[700],
@@ -200,7 +173,7 @@ class NavbarScreen extends GetView<NavbarController> {
                     ),
                   ),
                   child: Text(
-                    "إلغاء",
+                    tr(LocaleKeys.navbar_exit_dialog_cancel),
                     style: TextStyle(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w600,
@@ -227,7 +200,7 @@ class NavbarScreen extends GetView<NavbarController> {
                     elevation: 0,
                   ),
                   child: Text(
-                    "خروج",
+                    tr(LocaleKeys.navbar_exit_dialog_confirm),
                     style: TextStyle(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w600,

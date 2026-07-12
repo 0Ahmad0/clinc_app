@@ -2,6 +2,12 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:clinc_app_t1/app/core/widgets/action_rating_card_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/section_shimmer_widgets.dart';
+import 'package:clinc_app_t1/app/core/widgets/shared_empty_widget.dart';
+import 'package:clinc_app_t1/app/routes/app_routes.dart';
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -12,6 +18,7 @@ import '../widgets/hospital_specialties_grid.dart';
 import '../widgets/hospital_info_section_widget.dart';
 import '../widgets/doctor_location_widget.dart';
 import '../widgets/hospital_about_section_widget.dart';
+import '../widgets/hospital_doctors_list_section.dart';
 
 class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
   const ClinicDetailsScreen({super.key});
@@ -25,7 +32,7 @@ class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
       backgroundColor: Colors.white,
       body: Obx(
         () => controller.isLoading.value
-            ? const Center(child: CircularProgressIndicator())
+            ? const ClinicDetailsShimmer()
             : CustomScrollView(
                 slivers: [
                   // الرأس: صورة غلاف + لوجو دائري
@@ -46,9 +53,10 @@ class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
                         children: [
                           // صورة الباك جراوند
                           Positioned.fill(
-                            child: Image.network(
-                              hospital.imageUrl,
+                            child: AppCachedImageWidget(
+                              imageUrl: hospital.imageUrl,
                               fit: BoxFit.cover,
+                              placeholderType: AppImagePlaceholderType.clinic,
                             ),
                           ),
                           // طبقة تظليل خفيفة للصورة
@@ -81,12 +89,13 @@ class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
                                   color: Colors.white,
                                   shape: BoxShape.circle,
                                 ),
-                                child: CircleAvatar(
-                                  radius: 45.r,
-                                  backgroundColor: Colors.white,
-                                  backgroundImage: const NetworkImage(
-                                    "https://cdn-icons-png.flaticon.com/512/3306/3306526.png",
-                                  ), // استبدله بلوجو المشفى
+                                child: AppCachedImageWidget(
+                                  imageUrl: null,
+                                  width: 90.r,
+                                  height: 90.r,
+                                  clipRadius: 45.r,
+                                  placeholderType:
+                                      AppImagePlaceholderType.clinic,
                                 ),
                               ),
                             ),
@@ -108,8 +117,13 @@ class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
 
                           20.verticalSpace,
                           ActionRatingCardWidget(
-                            title: 'قيم العيادة',
-                            subtitle: 'شاركنا تجربتك لمساعدة الآخرين',
+                            title: tr(
+                              LocaleKeys.clinic_app_details_rate_clinic,
+                            ),
+                            subtitle: tr(
+                              LocaleKeys
+                                  .clinic_app_details_rate_clinic_subtitle,
+                            ),
                             onTap: () => controller.showRatingSheet(context),
                           ).fadeInLeft(),
                           25.verticalSpace,
@@ -126,14 +140,19 @@ class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
                           ),
 
                           25.verticalSpace,
+                          const HospitalDoctorsListSection(),
+
+                          25.verticalSpace,
                           // الموقع الخريطة
                           const DoctorLocation(),
                           25.verticalSpace,
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
-                                "آراء المرضى",
+                              Text(
+                                tr(
+                                  LocaleKeys.clinic_app_details_patient_reviews,
+                                ),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
@@ -141,15 +160,30 @@ class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
                               ),
                               TextButton(
                                 onPressed: () => controller.showAllReviews(),
-                                child: const Text("عرض الكل"),
+                                child: Text(
+                                  tr(LocaleKeys.clinic_app_details_view_all),
+                                ),
                               ),
                             ],
                           ),
                           10.verticalSpace,
                           // عرض أول 3 تقييمات فقط كمعاينة
-                          ...controller.allReviews
-                              .take(3)
-                              .map((review) => controller.reviewCard(review)),
+                          if (controller.allReviews.isEmpty)
+                            SharedEmptyWidget(
+                              icon: Icons.rate_review_outlined,
+                              title: tr(
+                                LocaleKeys.clinic_app_details_no_reviews_title,
+                              ),
+                              subtitle: tr(
+                                LocaleKeys
+                                    .clinic_app_details_no_reviews_subtitle,
+                              ),
+                            )
+                          else
+                            ...controller.allReviews
+                                .take(3)
+                                .map((review) => controller.reviewCard(review)),
+                          150.verticalSpace,
                         ],
                       ),
                     ),
@@ -159,22 +193,50 @@ class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
       ),
 
       // زر الاتصال السفلي
-      bottomSheet: Container(
-        padding: EdgeInsets.all(20.w),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 20,
-              offset: const Offset(0, -5),
-            ),
-          ],
-        ),
-        child: AppButtonWidget(
-          onPressed: () {},
-          icon: const Icon(Iconsax.call, color: Colors.white),
-          text: "اتصال بالعيادة",
+      bottomSheet: Visibility(
+        visible: hospital.id.isNotEmpty,
+        child: Container(
+          padding: EdgeInsets.all(20.w),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 20,
+                offset: const Offset(0, -5),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              if (hospital.phone?.isNotEmpty == true) ...[
+                Expanded(
+                  child: AppButtonWidget(
+                    onPressed: () {
+                      controller.openWhatsApp(hospital.phone ?? '');
+                    },
+                    icon: const Icon(Iconsax.call, color: Colors.white),
+                    text: tr(LocaleKeys.clinic_app_details_call_clinic),
+                  ),
+                ),
+                12.horizontalSpace,
+              ],
+              if(false)
+              Expanded(
+                child: AppButtonWidget(
+                  onPressed: () => Get.toNamed(
+                    AppRoutes.bookAppointments,
+                    arguments: {
+                      'clinic_id': hospital.id,
+                      'name': hospital.name,
+                    },
+                  ),
+                  icon: const Icon(Iconsax.calendar_add, color: Colors.white),
+                  text: tr(LocaleKeys.clinic_app_details_book_btn),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
