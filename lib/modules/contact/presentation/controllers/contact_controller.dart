@@ -109,7 +109,7 @@ class ContactController extends GetxController {
       ContactMessageRequest(
         name: nameController.text.trim(),
         phone: phoneController.text.trim(),
-        email: emailController.text.trim(),
+        email: emailController.text.trim().toLowerCase(),
         subject: subjectController.text.trim(),
         message: messageController.text.trim(),
       ),

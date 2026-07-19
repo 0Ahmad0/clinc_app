@@ -79,10 +79,11 @@ class SignupController extends GetxController {
       return;
     }
     isLoading.value = true;
+    final email = emailController.text.trim().toLowerCase();
     final result = await _repository.register(
       fullName: nameController.text.trim(),
       username: userNameController.text.trim(),
-      email: emailController.text.trim(),
+      email: email,
       phone: phoneController.text.trim(),
       password: passwordController.text,
       passwordConfirmation: confirmPasswordController.text,
@@ -98,8 +99,9 @@ class SignupController extends GetxController {
         Get.toNamed(
           AppRoutes.otp,
           arguments: {
-            'identifier': emailController.text.trim(),
+            'identifier': email,
             'purpose': model.result!.purpose,
+            'expiresIn': model.result!.expiresIn,
           },
         );
       },

@@ -46,7 +46,7 @@ class ContactMessageRequest {
   Map<String, dynamic> toJson() => {
     'name': name,
     'phone': phone,
-    'email': email,
+    'email': email.trim().toLowerCase(),
     'subject': subject,
     'message': message,
   };

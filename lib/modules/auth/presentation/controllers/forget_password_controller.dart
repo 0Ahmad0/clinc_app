@@ -30,9 +30,8 @@ class ForgetPasswordController extends GetxController {
       return;
     }
     isLoading.value = true;
-    final result = await _repository.requestPasswordReset(
-      emailController.text.trim(),
-    );
+    final email = emailController.text.trim().toLowerCase();
+    final result = await _repository.requestPasswordReset(email);
     isLoading.value = false;
     result.when(
       success: (model) async {
@@ -44,10 +43,7 @@ class ForgetPasswordController extends GetxController {
         await FocusHelper.clearPrimaryFocusBeforeNavigation();
         Get.toNamed(
           AppRoutes.otp,
-          arguments: {
-            'identifier': emailController.text.trim(),
-            'purpose': 'password_reset',
-          },
+          arguments: {'identifier': email, 'purpose': 'password_reset'},
         );
       },
       failure: (exception) => ResponseHelper.onFailure(

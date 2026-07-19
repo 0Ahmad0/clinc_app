@@ -16,7 +16,11 @@ class SettingsRepository {
   Future<ApiResponse<BaseModel<UserSettingsProfileModel>>> updateProfile(
     UserSettingsProfileModel profile,
   ) {
-    return _execute(() => _dataSource.updateProfile(profile));
+    return _execute(
+      () => _dataSource.updateProfile(
+        profile.copyWith(email: profile.email.trim().toLowerCase()),
+      ),
+    );
   }
 
   Future<ApiResponse<BaseModel<NotificationSettingsModel>>>

@@ -6,7 +6,10 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 
+import 'email_verification_challenge.dart';
+
 part 'network_exceptions.freezed.dart';
+
 @freezed
 abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
   const factory NetworkExceptions.requestCancelled() = RequestCancelled;
@@ -56,6 +59,7 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
       UnexpectedError;
 
   static String? _loggingInRequiredMessage;
+  static EmailVerificationChallenge? _emailVerificationChallenge;
 
   static List<NetworkExceptions> getAllNetworkExceptions() {
     return [
@@ -98,6 +102,10 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
           message ?? 'Un Authorized Request',
         );
       case 403:
+        final challenge = _extractEmailVerificationChallenge(response?.data);
+        if (challenge != null) {
+          return _buildEmailVerificationRequired(challenge);
+        }
         return _buildLoggingInRequired(message);
       case 404:
         return NetworkExceptions.notFound(message ?? 'Not Found');
@@ -111,6 +119,10 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
         return NetworkExceptions.unprocessableEntity(
           message ?? 'Un Processable Entity',
         );
+      case 429:
+        return NetworkExceptions.defaultError(
+          message ?? 'Too many requests. Please try again later.',
+        );
       case 500:
         return NetworkExceptions.internalServerError(
           message ?? 'Internal Server Error',
@@ -120,7 +132,7 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
       default:
         var responseCode = statusCode;
         return NetworkExceptions.defaultError(
-          "Received invalid status code: $responseCode",
+          message ?? "Received invalid status code: $responseCode",
         );
     }
   }
@@ -135,9 +147,68 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
     return data['code']?.toString() == 'login_required';
   }
 
+  static EmailVerificationChallenge? _extractEmailVerificationChallenge(
+    dynamic responseData,
+  ) {
+    final data = _decodeResponseData(responseData);
+    if (data is! Map) return null;
+
+    final error = data['error'];
+    final errorMap = error is Map ? error : data;
+    final code = errorMap['code']?.toString();
+    final requiresEmailVerification =
+        errorMap['requires_email_verification'] == true;
+    if (code != 'email_not_verified' && !requiresEmailVerification) {
+      return null;
+    }
+
+    final user = errorMap['user'] is Map
+        ? Map<String, dynamic>.from(errorMap['user'] as Map)
+        : null;
+    final otp = errorMap['otp'] is Map
+        ? Map<String, dynamic>.from(errorMap['otp'] as Map)
+        : const <String, dynamic>{};
+    final otpIdentifier = _cleanMessage(otp['identifier']);
+    final userEmail = _cleanMessage(user?['email']);
+    final identifier = otpIdentifier ?? userEmail ?? '';
+
+    return EmailVerificationChallenge(
+      identifier: identifier,
+      email: userEmail ?? otpIdentifier,
+      purpose: otp['purpose']?.toString() ?? 'email_verification',
+      expiresIn: int.tryParse(otp['expires_in']?.toString() ?? '') ?? 300,
+      user: user,
+      message: extractBackendErrorMessage(data),
+    );
+  }
+
   static NetworkExceptions _buildLoggingInRequired(String? message) {
     _loggingInRequiredMessage = _cleanMessage(message);
     return const NetworkExceptions.loggingInRequired();
+  }
+
+  static NetworkExceptions buildEmailVerificationRequired(
+    EmailVerificationChallenge challenge,
+  ) {
+    return _buildEmailVerificationRequired(challenge);
+  }
+
+  static EmailVerificationChallenge? takeEmailVerificationChallenge(
+    NetworkExceptions exception,
+  ) {
+    final challenge = _emailVerificationChallenge;
+    if (challenge == null) return null;
+    _emailVerificationChallenge = null;
+    return challenge;
+  }
+
+  static NetworkExceptions _buildEmailVerificationRequired(
+    EmailVerificationChallenge challenge,
+  ) {
+    _emailVerificationChallenge = challenge;
+    return NetworkExceptions.defaultError(
+      challenge.message ?? 'Email verification required',
+    );
   }
 
   static String? extractBackendErrorMessage(dynamic responseData) {
@@ -214,10 +285,6 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
         NetworkExceptions networkExceptions;
 
         if (error is DioException) {
-          print("type: ${error.type}");
-          print("message: ${error.message}");
-          print('response ${error.response}');
-
           switch (error.type) {
             case DioExceptionType.transformTimeout:
               networkExceptions = const NetworkExceptions.requestTimeout();
@@ -281,7 +348,6 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
   static String getErrorMessage(NetworkExceptions? networkExceptions) {
     //  return getErrorMessageTr(networkExceptions);
     var errorMessage = "";
-    print(networkExceptions.runtimeType);
     networkExceptions?.whenOrNull(
           notImplemented: () {
             errorMessage = "Not Implemented";

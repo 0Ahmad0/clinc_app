@@ -19,6 +19,8 @@ class OtpController extends GetxController {
   late final AuthRepository _repository;
   late final String identifier;
   late final String purpose;
+  String? loginIdentifier;
+  String? loginPassword;
 
   bool get isPasswordReset => purpose == 'password_reset';
 
@@ -30,6 +32,8 @@ class OtpController extends GetxController {
     purpose = args is Map
         ? args['purpose']?.toString() ?? 'email_verification'
         : 'email_verification';
+    loginIdentifier = args is Map ? args['loginIdentifier']?.toString() : null;
+    loginPassword = args is Map ? args['loginPassword']?.toString() : null;
     super.onInit();
   }
 
@@ -66,12 +70,30 @@ class OtpController extends GetxController {
           );
           return;
         }
-        final session = data.session;
-        if (session == null) {
+        if (!data.emailVerified) {
           ResponseHelper.onFailure(message: model.message);
           return;
         }
-        await _completeLogin(session, model.message);
+        await _cacheVerifiedUser(data.user);
+        final session = data.session;
+        if (session != null) {
+          await _completeLogin(session, model.message);
+          return;
+        }
+        if (StorageService.instance.getAccessToken().isNotEmpty &&
+            data.user?.hasVerifiedEmail == true) {
+          ResponseHelper.onSuccess(message: model.message);
+          await FocusHelper.clearPrimaryFocusBeforeNavigation();
+          Get.offAllNamed(AppRoutes.navbar);
+          return;
+        }
+        if ((loginPassword ?? '').isNotEmpty) {
+          await _loginAfterVerification(model.message);
+          return;
+        }
+        ResponseHelper.onSuccess(message: model.message);
+        await FocusHelper.clearPrimaryFocusBeforeNavigation();
+        Get.offAllNamed(AppRoutes.login);
       },
       failure: (exception) => ResponseHelper.onFailure(
         message: NetworkExceptions.getErrorMessage(exception),
@@ -96,6 +118,10 @@ class OtpController extends GetxController {
   }
 
   Future<void> _completeLogin(AuthSessionModel session, String? message) async {
+    if (!session.canEnterApp) {
+      ResponseHelper.onFailure(message: message);
+      return;
+    }
     await StorageService.instance.setGuestMode(false);
     await StorageService.instance.setAccessToken(session.token);
     await StorageService.instance.writeData(
@@ -112,6 +138,35 @@ class OtpController extends GetxController {
     ResponseHelper.onSuccess(message: message);
     await FocusHelper.clearPrimaryFocusBeforeNavigation();
     Get.offAllNamed(AppRoutes.navbar);
+  }
+
+  Future<void> _cacheVerifiedUser(AuthUserModel? user) async {
+    if (user == null || !user.hasVerifiedEmail) return;
+    await StorageService.instance.cacheUserModel(user.toUserModel().toJson());
+  }
+
+  Future<void> _loginAfterVerification(String? verificationMessage) async {
+    final result = await _repository.login(
+      identifier: (loginIdentifier ?? identifier).trim(),
+      password: loginPassword ?? '',
+    );
+    await result.when(
+      success: (model) async {
+        final session = model.result;
+        if (session == null || !session.canEnterApp) {
+          ResponseHelper.onSuccess(message: verificationMessage);
+          await FocusHelper.clearPrimaryFocusBeforeNavigation();
+          Get.offAllNamed(AppRoutes.login);
+          return;
+        }
+        await _completeLogin(session, model.message ?? verificationMessage);
+      },
+      failure: (exception) async {
+        ResponseHelper.onSuccess(message: verificationMessage);
+        await FocusHelper.clearPrimaryFocusBeforeNavigation();
+        Get.offAllNamed(AppRoutes.login);
+      },
+    );
   }
 
   @override

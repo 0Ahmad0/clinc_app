@@ -2,7 +2,8 @@
 
 const baseServ = "https://clinic.hivetech.space/";
 const baseServSlashLess = "https://clinic.hivetech.space/";
-// const baseServ = "http://127.0.0.1:8000/";
+// const baseServ = "http://192.168.1.101:8000/";
+// const baseServSlashLess = "http://192.168.1.101:8000/";
 
 const baseUrl = "${baseServSlashLess}api/";
 const storageUrl = "${baseServSlashLess}storage/";

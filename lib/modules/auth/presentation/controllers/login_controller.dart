@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../../../app/core/configuration/locator.dart';
+import '../../../../app/core/helper/email_verification_navigation_helper.dart';
 import '../../../../app/core/helper/focus_helper.dart';
 import '../../../../app/core/helper/response_helper.dart';
 import '../../../../app/core/utils/app_validator.dart';
+import '../../../../app/domain/error_handler/email_verification_challenge.dart';
 import '../../../../app/domain/error_handler/network_exceptions.dart';
 import '../../../../app/routes/app_routes.dart';
 import '../../../../app/services/storage_service.dart';
@@ -74,8 +76,11 @@ class LoginController extends GetxController {
       return;
     }
     isLoading.value = true;
+    final identifier = usernameOrEmail.text.trim();
     final result = await _repository.login(
-      identifier: usernameOrEmail.text.trim(),
+      identifier: identifier.contains('@')
+          ? identifier.toLowerCase()
+          : identifier,
       password: passwordController.text,
     );
     isLoading.value = false;
@@ -87,9 +92,7 @@ class LoginController extends GetxController {
         }
         await _completeLogin(model.result!, model.message);
       },
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: _handleLoginFailure,
     );
   }
 
@@ -132,13 +135,25 @@ class LoginController extends GetxController {
         }
         await _completeLogin(model.result!, model.message);
       },
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: _handleLoginFailure,
     );
   }
 
   Future<void> _completeLogin(AuthSessionModel session, String? message) async {
+    if (!session.canEnterApp) {
+      await EmailVerificationNavigationHelper.clearSessionAndOpen(
+        EmailVerificationChallenge(
+          identifier: session.user.email,
+          email: session.user.email,
+          purpose: 'email_verification',
+          expiresIn: 300,
+          user: session.user.toJson(),
+          message: message,
+        ),
+        clearStack: true,
+      );
+      return;
+    }
     await StorageService.instance.setGuestMode(false);
     await _saveLoginSession(session);
     ResponseHelper.onSuccess(message: message);
@@ -181,6 +196,24 @@ class LoginController extends GetxController {
     ResponseHelper.onSuccess(message: message);
     await FocusHelper.clearPrimaryFocusBeforeNavigation();
     Get.offAllNamed(AppRoutes.navbar);
+  }
+
+  Future<void> _handleLoginFailure(NetworkExceptions exception) async {
+    final challenge = NetworkExceptions.takeEmailVerificationChallenge(
+      exception,
+    );
+    if (challenge != null) {
+      await EmailVerificationNavigationHelper.clearSessionAndOpen(
+        challenge,
+        clearStack: true,
+        loginIdentifier: usernameOrEmail.text.trim(),
+        loginPassword: passwordController.text,
+      );
+      return;
+    }
+    ResponseHelper.onFailure(
+      message: NetworkExceptions.getErrorMessage(exception),
+    );
   }
 
   // Get strength info for UI

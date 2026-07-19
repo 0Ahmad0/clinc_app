@@ -1,6 +1,7 @@
 import '../../../../app/data/base_model.dart';
 import '../../../../app/data/remote/api_response.dart';
 import '../../../../app/data/user.dart';
+import '../../../../app/domain/error_handler/email_verification_challenge.dart';
 import '../../../../app/domain/error_handler/network_exceptions.dart';
 import '../../data/data_sources/auth_data_source.dart';
 import '../../data/models/user_auth_model.dart';
@@ -15,7 +16,10 @@ class AuthRepository {
     required String password,
   }) {
     return _execute(() {
-      return _dataSource.login(identifier: identifier, password: password);
+      return _dataSource.login(
+        identifier: _normalizeIdentifier(identifier),
+        password: password,
+      );
     });
   }
 
@@ -42,7 +46,7 @@ class AuthRepository {
         UserRegisterRequest(
           fullName: fullName,
           username: username,
-          email: email,
+          email: _normalizeEmail(email),
           phone: phone,
           password: password,
           passwordConfirmation: passwordConfirmation,
@@ -58,7 +62,7 @@ class AuthRepository {
   }) {
     return _execute(() {
       return _dataSource.verifyOtp(
-        identifier: identifier,
+        identifier: _normalizeIdentifier(identifier),
         otp: otp,
         purpose: purpose,
       );
@@ -70,7 +74,7 @@ class AuthRepository {
     String? code,
   }) {
     return verifyOtp(
-      identifier: email ?? '',
+      identifier: _normalizeEmail(email ?? ''),
       otp: code ?? '',
       purpose: 'email_verification',
     );
@@ -81,7 +85,7 @@ class AuthRepository {
     String? code,
   }) {
     return verifyOtp(
-      identifier: email ?? '',
+      identifier: _normalizeEmail(email ?? ''),
       otp: code ?? '',
       purpose: 'password_reset',
     );
@@ -92,25 +96,38 @@ class AuthRepository {
     required String purpose,
   }) {
     return _execute(() {
-      return _dataSource.resendOtp(identifier: identifier, purpose: purpose);
+      return _dataSource.resendOtp(
+        identifier: _normalizeIdentifier(identifier),
+        purpose: purpose,
+      );
     });
   }
 
   Future<ApiResponse<BaseModel<Map<String, dynamic>>>> resendEmailOtpCode(
     String? email,
   ) {
-    return resendOtp(identifier: email ?? '', purpose: 'email_verification');
+    return resendOtp(
+      identifier: _normalizeEmail(email ?? ''),
+      purpose: 'email_verification',
+    );
   }
 
   Future<ApiResponse<BaseModel<Map<String, dynamic>>>> resendPasswordResetOtp(
     String? email,
   ) {
-    return resendOtp(identifier: email ?? '', purpose: 'password_reset');
+    return resendOtp(
+      identifier: _normalizeEmail(email ?? ''),
+      purpose: 'password_reset',
+    );
   }
 
   Future<ApiResponse<BaseModel<PasswordResetRequestModel>>>
   requestPasswordReset(String? identifier) {
-    return _execute(() => _dataSource.requestPasswordReset(identifier ?? ''));
+    return _execute(
+      () => _dataSource.requestPasswordReset(
+        _normalizeIdentifier(identifier ?? ''),
+      ),
+    );
   }
 
   Future<ApiResponse<BaseModel<PasswordResetRequestModel>>>
@@ -161,6 +178,29 @@ class AuthRepository {
   ) async {
     try {
       final response = await action();
+      final result = response.result;
+      if (result is AuthSessionModel) {
+        if (result.user.isGuest) return ApiResponse.success(response);
+        if (!result.user.hasVerifiedEmail || result.needsEmailVerification) {
+          return ApiResponse.failure(
+            NetworkExceptions.buildEmailVerificationRequired(
+              EmailVerificationChallenge(
+                identifier: result.user.email,
+                email: result.user.email,
+                purpose: 'email_verification',
+                expiresIn: 300,
+                user: result.user.toJson(),
+                message: response.message,
+              ),
+            ),
+          );
+        }
+        if (!result.canEnterApp) {
+          return ApiResponse.failure(
+            NetworkExceptions.defaultError(response.message ?? ''),
+          );
+        }
+      }
       if (response.status == 'error') {
         return ApiResponse.failure(
           NetworkExceptions.defaultError(response.message ?? ''),
@@ -170,5 +210,12 @@ class AuthRepository {
     } catch (error) {
       return ApiResponse.failure(NetworkExceptions.getException(error));
     }
+  }
+
+  String _normalizeEmail(String email) => email.trim().toLowerCase();
+
+  String _normalizeIdentifier(String identifier) {
+    final trimmed = identifier.trim();
+    return trimmed.contains('@') ? trimmed.toLowerCase() : trimmed;
   }
 }

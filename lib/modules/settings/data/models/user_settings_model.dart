@@ -8,6 +8,8 @@ class UserSettingsProfileModel {
     required this.email,
     required this.phone,
     this.avatar,
+    this.emailVerified = false,
+    this.emailVerifiedAt,
   });
 
   final String id;
@@ -16,6 +18,10 @@ class UserSettingsProfileModel {
   final String email;
   final String phone;
   final String? avatar;
+  final bool emailVerified;
+  final DateTime? emailVerifiedAt;
+
+  bool get hasVerifiedEmail => emailVerified && emailVerifiedAt != null;
 
   factory UserSettingsProfileModel.fromJson(Map<String, dynamic> json) {
     return UserSettingsProfileModel(
@@ -25,6 +31,8 @@ class UserSettingsProfileModel {
       email: json['email']?.toString() ?? '',
       phone: json['phone']?.toString() ?? '',
       avatar: json['avatar']?.toString(),
+      emailVerified: json['email_verified'] == true,
+      emailVerifiedAt: _parseDateTime(json['email_verified_at']),
     );
   }
 
@@ -35,6 +43,8 @@ class UserSettingsProfileModel {
     'email': email,
     'phone': phone,
     'avatar': avatar,
+    'email_verified': emailVerified,
+    'email_verified_at': emailVerifiedAt?.toIso8601String(),
   };
 
   UserSettingsProfileModel copyWith({
@@ -51,6 +61,8 @@ class UserSettingsProfileModel {
       email: email ?? this.email,
       phone: phone ?? this.phone,
       avatar: avatar ?? this.avatar,
+      emailVerified: emailVerified,
+      emailVerifiedAt: emailVerifiedAt,
     );
   }
 
@@ -63,9 +75,17 @@ class UserSettingsProfileModel {
       email: email,
       phone: phone,
       profileImage: avatar,
+      isVerified: emailVerified,
+      emailVerifiedAt: emailVerifiedAt,
       accountStatus: 'active',
     );
   }
+}
+
+DateTime? _parseDateTime(dynamic value) {
+  final text = value?.toString().trim();
+  if (text == null || text.isEmpty || text == 'null') return null;
+  return DateTime.tryParse(text);
 }
 
 class NotificationSettingsModel {

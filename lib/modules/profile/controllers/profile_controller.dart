@@ -6,9 +6,11 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../app/core/configuration/locator.dart';
 import '../../../app/core/helper/auth_required_helper.dart';
+import '../../../app/core/helper/email_verification_navigation_helper.dart';
 import '../../../app/core/helper/response_helper.dart';
 import '../../../app/core/utils/app_validator.dart';
 import '../../../app/data/base_model.dart';
+import '../../../app/domain/error_handler/email_verification_challenge.dart';
 import '../../../app/domain/error_handler/network_exceptions.dart';
 import '../../../app/routes/app_routes.dart';
 import '../../../app/services/storage_service.dart';
@@ -52,9 +54,23 @@ class ProfileController extends GetxController {
           ResponseHelper.onFailure(message: response.message);
           return;
         }
+        if (!response.result!.hasVerifiedEmail) {
+          _openEmailVerification(response.result!);
+          return;
+        }
         _applyProfile(response.result!);
       },
       failure: (exception) {
+        final challenge = NetworkExceptions.takeEmailVerificationChallenge(
+          exception,
+        );
+        if (challenge != null) {
+          EmailVerificationNavigationHelper.clearSessionAndOpen(
+            challenge,
+            clearStack: true,
+          );
+          return;
+        }
         if (AuthRequiredHelper.handleFailure(
           exception,
           onAuthenticated: loadProfile,
@@ -106,7 +122,7 @@ class ProfileController extends GetxController {
     final updated = current.copyWith(
       fullName: fullNameController.text.trim(),
       username: usernameController.text.trim(),
-      email: emailController.text.trim(),
+      email: emailController.text.trim().toLowerCase(),
       phone: phoneController.text.trim(),
       avatar: selectedImage.value?.path ?? current.avatar,
     );
@@ -119,6 +135,10 @@ class ProfileController extends GetxController {
           ResponseHelper.onFailure(message: response.message);
           return;
         }
+        if (!response.result!.hasVerifiedEmail) {
+          await _openEmailVerification(response.result!);
+          return;
+        }
         _applyProfile(response.result!);
         await StorageService.instance.cacheUserModel(
           response.result!.toUserModel().toJson(),
@@ -129,6 +149,16 @@ class ProfileController extends GetxController {
         ResponseHelper.onSuccess(message: response.message);
       },
       failure: (exception) {
+        final challenge = NetworkExceptions.takeEmailVerificationChallenge(
+          exception,
+        );
+        if (challenge != null) {
+          EmailVerificationNavigationHelper.clearSessionAndOpen(
+            challenge,
+            clearStack: true,
+          );
+          return;
+        }
         if (AuthRequiredHelper.handleFailure(
           exception,
           onAuthenticated: loadProfile,
@@ -176,6 +206,20 @@ class ProfileController extends GetxController {
     usernameController.text = profile.username;
     emailController.text = profile.email;
     phoneController.text = profile.phone;
+  }
+
+  Future<void> _openEmailVerification(UserSettingsProfileModel user) async {
+    profile.value = null;
+    await EmailVerificationNavigationHelper.clearSessionAndOpen(
+      EmailVerificationChallenge(
+        identifier: user.email,
+        email: user.email,
+        purpose: 'email_verification',
+        expiresIn: 300,
+        user: user.toJson(),
+      ),
+      clearStack: true,
+    );
   }
 
   @override

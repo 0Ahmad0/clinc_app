@@ -65,7 +65,7 @@ class SettingsRemoteDataSource implements SettingsDataSource {
 
   BaseModel<UserSettingsProfileModel> _profileResponse(dynamic response) {
     return BaseModel.fromJson(
-      _normalizedEnvelope(response),
+      _normalizedProfileEnvelope(response),
       (json) => UserSettingsProfileModel.fromJson(
         Map<String, dynamic>.from(json as Map),
       ),
@@ -100,5 +100,33 @@ class SettingsRemoteDataSource implements SettingsDataSource {
     map['data'] ??= <String, dynamic>{};
     map['meta'] ??= <String, dynamic>{};
     return map;
+  }
+
+  Map<String, dynamic> _normalizedProfileEnvelope(dynamic response) {
+    final map = _normalizedEnvelope(response);
+    final data = map['data'];
+    final userJson = data is Map
+        ? data['user'] ?? data['profile'] ?? data
+        : data;
+    map['data'] = _normalizedProfileJson(userJson);
+    return map;
+  }
+
+  Map<String, dynamic> _normalizedProfileJson(dynamic json) {
+    final user = Map<String, dynamic>.from(json as Map);
+    final fullName =
+        user['full_name'] ??
+        user['name'] ??
+        '${user['first_name'] ?? ''} ${user['last_name'] ?? ''}'.trim();
+    return {
+      ...user,
+      'full_name': fullName,
+      'username': user['username'] ?? user['user_name'] ?? '',
+      'email': user['email'] ?? '',
+      'phone': user['phone'] ?? user['phone_number'] ?? '',
+      'avatar': user['avatar'] ?? user['profile_image'],
+      'email_verified': user['email_verified'] == true,
+      'email_verified_at': user['email_verified_at'],
+    };
   }
 }

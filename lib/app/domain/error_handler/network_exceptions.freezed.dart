@@ -917,6 +917,7 @@ class _$BadRequestImpl with DiagnosticableTreeMixin implements BadRequest {
     return badRequest();
   }
 
+
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({

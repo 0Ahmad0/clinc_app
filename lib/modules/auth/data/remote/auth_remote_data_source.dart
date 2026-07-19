@@ -15,11 +15,12 @@ class AuthRemoteDataSource implements AuthDataSource {
     required String identifier,
     required String password,
   }) async {
+    final normalizedIdentifier = _normalizeIdentifier(identifier);
     final response = await _apiServices.post(
       AppUrl.login,
       body: {
-        'identifier': identifier,
-        'email': identifier,
+        'identifier': normalizedIdentifier,
+        'email': normalizedIdentifier,
         'password': password,
       },
       hasToken: false,
@@ -61,12 +62,13 @@ class AuthRemoteDataSource implements AuthDataSource {
   Future<BaseModel<UserRegisterResponse>> register(
     UserRegisterRequest request,
   ) async {
+    final email = _normalizeEmail(request.email);
     final response = await _apiServices.post(
       AppUrl.signup,
       body: {
         'full_name': request.fullName,
         'username': request.username,
-        'email': request.email,
+        'email': email,
         'phone': request.phone,
         'password': request.password,
         'password_confirmation': request.passwordConfirmation,
@@ -86,11 +88,12 @@ class AuthRemoteDataSource implements AuthDataSource {
     required String otp,
     required String purpose,
   }) async {
+    final normalizedIdentifier = _normalizeIdentifier(identifier);
     final response = await _apiServices.post(
       AppUrl.verifyOtp,
       body: {
-        'identifier': identifier,
-        'email': identifier,
+        'identifier': normalizedIdentifier,
+        'email': normalizedIdentifier,
         'otp': otp,
         'purpose': purpose,
       },
@@ -111,9 +114,14 @@ class AuthRemoteDataSource implements AuthDataSource {
     required String identifier,
     required String purpose,
   }) async {
+    final normalizedIdentifier = _normalizeIdentifier(identifier);
     final response = await _apiServices.post(
       AppUrl.resendOtp,
-      body: {'identifier': identifier, 'email': identifier, 'purpose': purpose},
+      body: {
+        'identifier': normalizedIdentifier,
+        'email': normalizedIdentifier,
+        'purpose': purpose,
+      },
       hasToken: false,
     );
     return _mapResponse(response, fallbackMessage: 'otp_resent_successfully');
@@ -123,9 +131,10 @@ class AuthRemoteDataSource implements AuthDataSource {
   Future<BaseModel<PasswordResetRequestModel>> requestPasswordReset(
     String identifier,
   ) async {
+    final normalizedIdentifier = _normalizeIdentifier(identifier);
     final response = await _apiServices.post(
       AppUrl.forgotPassword,
-      body: {'identifier': identifier, 'email': identifier},
+      body: {'identifier': normalizedIdentifier, 'email': normalizedIdentifier},
       hasToken: false,
     );
     return BaseModel.fromJson(
@@ -133,7 +142,7 @@ class AuthRemoteDataSource implements AuthDataSource {
         response,
         fallbackMessage: 'password_reset_code_sent',
         fallbackData: {
-          'identifier': identifier,
+          'identifier': normalizedIdentifier,
           'delivery_method': 'email',
           'expires_in': 300,
         },
@@ -189,7 +198,7 @@ class AuthRemoteDataSource implements AuthDataSource {
   Future<BaseModel<UserModel>> getProfile() async {
     final response = await _apiServices.get(AppUrl.userProfile, hasToken: true);
     return BaseModel.fromJson(
-      _normalizedEnvelope(response, fallbackMessage: 'profile_successful'),
+      _normalizedUserEnvelope(response, fallbackMessage: 'profile_successful'),
       (json) => UserModel.fromJson(Map<String, dynamic>.from(json as Map)),
     );
   }
@@ -262,9 +271,50 @@ class AuthRemoteDataSource implements AuthDataSource {
       'email': user['email'] ?? '',
       'phone': user['phone'] ?? user['phone_number'] ?? '',
       'avatar': user['avatar'] ?? user['profile_image'],
-      'email_verified':
-          user['email_verified'] == true || user['email_verified_at'] != null,
+      'email_verified': user['email_verified'] == true,
+      'email_verified_at': user['email_verified_at'],
       'is_guest': user['is_guest'] == true,
     };
+  }
+
+  Map<String, dynamic> _normalizedUserEnvelope(
+    dynamic response, {
+    required String fallbackMessage,
+  }) {
+    final map = _normalizedEnvelope(response, fallbackMessage: fallbackMessage);
+    final data = map['data'];
+    final userJson = data is Map
+        ? data['user'] ?? data['profile'] ?? data
+        : data;
+    map['data'] = _normalizedAppUserJson(userJson);
+    return map;
+  }
+
+  Map<String, dynamic> _normalizedAppUserJson(dynamic json) {
+    final user = Map<String, dynamic>.from(json as Map);
+    final fullName =
+        user['full_name'] ??
+        user['name'] ??
+        '${user['first_name'] ?? ''} ${user['last_name'] ?? ''}'.trim();
+    final parts = fullName.toString().trim().split(RegExp(r'\s+'));
+    return {
+      ...user,
+      'first_name': user['first_name'] ?? (parts.isEmpty ? '' : parts.first),
+      'last_name':
+          user['last_name'] ??
+          (parts.length > 1 ? parts.sublist(1).join(' ') : ''),
+      'email': user['email'] ?? '',
+      'phone': user['phone'] ?? user['phone_number'] ?? '',
+      'profile_image': user['profile_image'] ?? user['avatar'],
+      'is_verified': user['email_verified'] == true,
+      'email_verified_at': user['email_verified_at'],
+    };
+  }
+
+  String _normalizeEmail(String email) => email.trim().toLowerCase();
+
+  String _normalizeIdentifier(String identifier) {
+    final trimmed = identifier.trim();
+    return trimmed.contains('@') ? trimmed.toLowerCase() : trimmed;
   }
 }

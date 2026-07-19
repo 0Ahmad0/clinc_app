@@ -9,6 +9,7 @@ class AuthUserModel {
     required this.phone,
     this.avatar,
     this.emailVerified = false,
+    this.emailVerifiedAt,
     this.isGuest = false,
   });
 
@@ -19,7 +20,10 @@ class AuthUserModel {
   final String phone;
   final String? avatar;
   final bool emailVerified;
+  final DateTime? emailVerifiedAt;
   final bool isGuest;
+
+  bool get hasVerifiedEmail => emailVerified && emailVerifiedAt != null;
 
   factory AuthUserModel.fromJson(Map<String, dynamic> json) => AuthUserModel(
     id: json['id']?.toString() ?? '',
@@ -29,6 +33,7 @@ class AuthUserModel {
     phone: json['phone']?.toString() ?? '',
     avatar: json['avatar']?.toString(),
     emailVerified: json['email_verified'] == true,
+    emailVerifiedAt: _parseDateTime(json['email_verified_at']),
     isGuest: json['is_guest'] == true,
   );
 
@@ -40,6 +45,7 @@ class AuthUserModel {
     'phone': phone,
     'avatar': avatar,
     'email_verified': emailVerified,
+    'email_verified_at': emailVerifiedAt?.toIso8601String(),
     'is_guest': isGuest,
   };
 
@@ -53,6 +59,7 @@ class AuthUserModel {
       phone: phone,
       profileImage: avatar,
       isVerified: emailVerified,
+      emailVerifiedAt: emailVerifiedAt,
       accountStatus: isGuest ? 'guest' : 'active',
     );
   }
@@ -70,6 +77,11 @@ class AuthSessionModel {
   final String token;
   final String? refreshToken;
   final bool needsEmailVerification;
+
+  bool get canEnterApp =>
+      token.trim().isNotEmpty &&
+      user.hasVerifiedEmail &&
+      !needsEmailVerification;
 
   factory AuthSessionModel.fromJson(Map<String, dynamic> json) {
     return AuthSessionModel(
@@ -133,24 +145,50 @@ class UserRegisterResponse {
 class OtpVerificationModel {
   const OtpVerificationModel({
     required this.verified,
+    required this.emailVerified,
+    this.user,
     this.resetToken,
     this.session,
   });
 
   final bool verified;
+  final bool emailVerified;
+  final AuthUserModel? user;
   final String? resetToken;
   final AuthSessionModel? session;
 
   factory OtpVerificationModel.fromJson(Map<String, dynamic> json) {
     final sessionJson = json['session'];
+    final userJson = json['user'];
+    final inferredSessionJson =
+        sessionJson ??
+        (json['token'] != null || json['access_token'] != null
+            ? {
+                'user': userJson ?? <String, dynamic>{},
+                'token': json['token'] ?? json['access_token'],
+                'refresh_token': json['refresh_token'],
+              }
+            : null);
     return OtpVerificationModel(
       verified: json['verified'] == true,
+      emailVerified: json['email_verified'] == true,
+      user: userJson is Map
+          ? AuthUserModel.fromJson(Map<String, dynamic>.from(userJson))
+          : null,
       resetToken: json['reset_token']?.toString(),
-      session: sessionJson is Map
-          ? AuthSessionModel.fromJson(Map<String, dynamic>.from(sessionJson))
+      session: inferredSessionJson is Map
+          ? AuthSessionModel.fromJson(
+              Map<String, dynamic>.from(inferredSessionJson),
+            )
           : null,
     );
   }
+}
+
+DateTime? _parseDateTime(dynamic value) {
+  final text = value?.toString().trim();
+  if (text == null || text.isEmpty || text == 'null') return null;
+  return DateTime.tryParse(text);
 }
 
 class PasswordResetRequestModel {

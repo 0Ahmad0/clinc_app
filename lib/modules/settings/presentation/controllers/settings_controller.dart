@@ -2,9 +2,11 @@ import 'package:get/get.dart';
 
 import '../../../../app/core/configuration/locator.dart';
 import '../../../../app/core/helper/auth_required_helper.dart';
+import '../../../../app/core/helper/email_verification_navigation_helper.dart';
 import '../../../../app/core/helper/response_helper.dart';
 import '../../../../app/data/base_model.dart';
 import '../../../../app/data/user.dart';
+import '../../../../app/domain/error_handler/email_verification_challenge.dart';
 import '../../../../app/domain/error_handler/network_exceptions.dart';
 import '../../../../app/routes/app_routes.dart';
 import '../../../../app/services/storage_service.dart';
@@ -62,6 +64,10 @@ class SettingsController extends GetxController {
           if (isSplash) Get.offAllNamed(AppRoutes.login);
           return;
         }
+        if (!response.result!.hasVerifiedEmail) {
+          await _openEmailVerification(response.result!, clearStack: isSplash);
+          return;
+        }
         profile.value = response.result;
         await StorageService.instance.cacheUserModel(
           response.result!.toUserModel().toJson(),
@@ -71,6 +77,16 @@ class SettingsController extends GetxController {
         if (isSplash) Get.offNamed(AppRoutes.navbar);
       },
       failure: (exception) async {
+        final challenge = NetworkExceptions.takeEmailVerificationChallenge(
+          exception,
+        );
+        if (challenge != null) {
+          await EmailVerificationNavigationHelper.clearSessionAndOpen(
+            challenge,
+            clearStack: isSplash,
+          );
+          return;
+        }
         if (AuthRequiredHelper.handleFailure(exception)) return;
         if (isSplash) Get.offAllNamed(AppRoutes.login);
       },
@@ -207,6 +223,23 @@ class SettingsController extends GetxController {
     StorageService.instance.saveBool(
       StorageService.SMS_NOTIFICATIONS,
       settings.smsNotifications,
+    );
+  }
+
+  Future<void> _openEmailVerification(
+    UserSettingsProfileModel user, {
+    required bool clearStack,
+  }) async {
+    profile.value = null;
+    await EmailVerificationNavigationHelper.clearSessionAndOpen(
+      EmailVerificationChallenge(
+        identifier: user.email,
+        email: user.email,
+        purpose: 'email_verification',
+        expiresIn: 300,
+        user: user.toJson(),
+      ),
+      clearStack: clearStack,
     );
   }
 }

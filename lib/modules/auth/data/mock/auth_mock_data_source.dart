@@ -11,7 +11,7 @@ class AuthMockDataSource implements AuthDataSource {
   String _currentPassword = _defaultPassword;
 
   final Map<String, AuthUserModel> _usersByEmail = {
-    'ahmad@example.com': const AuthUserModel(
+    'ahmad@example.com': AuthUserModel(
       id: '1',
       fullName: 'Ahmad Saleh Omar',
       username: 'ahmad',
@@ -19,6 +19,7 @@ class AuthMockDataSource implements AuthDataSource {
       phone: '0501234567',
       avatar: null,
       emailVerified: true,
+      emailVerifiedAt: DateTime(2026),
     ),
   };
 
@@ -58,6 +59,7 @@ class AuthMockDataSource implements AuthDataSource {
       email: '$provider@example.com',
       phone: '0500000000',
       emailVerified: true,
+      emailVerifiedAt: DateTime(2026),
     );
     return _sessionResponse(
       message: 'User logged in successfully',
@@ -68,13 +70,14 @@ class AuthMockDataSource implements AuthDataSource {
   @override
   Future<BaseModel<AuthSessionModel>> guestLogin() async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
-    const user = AuthUserModel(
+    final user = AuthUserModel(
       id: '0',
       fullName: 'Guest User',
       username: 'guest',
       email: 'guest@local.app',
       phone: '',
       emailVerified: true,
+      emailVerifiedAt: DateTime(2026),
       isGuest: true,
     );
     return _sessionResponse(
@@ -171,12 +174,18 @@ class AuthMockDataSource implements AuthDataSource {
       phone: user.phone,
       avatar: user.avatar,
       emailVerified: true,
+      emailVerifiedAt: DateTime.now(),
       isGuest: user.isGuest,
     );
     _usersByEmail[verifiedUser.email] = verifiedUser;
     return _otpResponse(
       message: 'Email verified successfully',
-      data: {'verified': true, 'session': _sessionFor(verifiedUser).toJson()},
+      data: {
+        'verified': true,
+        'email_verified': true,
+        'user': verifiedUser.toJson(),
+        'session': _sessionFor(verifiedUser).toJson(),
+      },
     );
   }
 
