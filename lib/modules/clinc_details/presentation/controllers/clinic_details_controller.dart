@@ -20,6 +20,7 @@ import '../../data/models/clinic_details_model.dart';
 import '../../data/models/clinic_review_model.dart';
 import '../../../../app/services/snackbar_service.dart';
 import '../../../doctors/data/models/doctor_model.dart';
+import '../../../../app/extension/number_format_extension.dart';
 
 class ClinicDetailsController extends GetxController {
   late final ClinicDetailsRepository _repository;
@@ -88,7 +89,7 @@ class ClinicDetailsController extends GetxController {
               ),
               const Spacer(),
               const Icon(Icons.star, color: Colors.amber, size: 14),
-              Text(" ${review.rating}"),
+              Text(" ${review.rating.toTrimmedFixed(maxDecimals: 2)}"),
             ],
           ),
           8.verticalSpace,

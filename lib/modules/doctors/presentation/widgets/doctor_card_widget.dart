@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
+import 'package:clinc_app_t1/app/extension/number_format_extension.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
@@ -73,7 +74,7 @@ class DoctorCard extends StatelessWidget {
                             Icon(Icons.star, size: 12.sp, color: Colors.amber),
                             2.horizontalSpace,
                             Text(
-                              doctor.rating.toString(),
+                              doctor.rating.toTrimmedFixed(maxDecimals: 2),
                               style: TextStyle(
                                 fontSize: 10.sp,
                                 fontWeight: FontWeight.bold,

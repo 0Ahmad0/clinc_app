@@ -9,6 +9,7 @@ import '../../../../app/core/utils/app_validator.dart';
 import '../../../../app/domain/error_handler/email_verification_challenge.dart';
 import '../../../../app/domain/error_handler/network_exceptions.dart';
 import '../../../../app/routes/app_routes.dart';
+import '../../../../app/services/notification_service.dart';
 import '../../../../app/services/storage_service.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../data/models/user_auth_model.dart';
@@ -156,6 +157,7 @@ class LoginController extends GetxController {
     }
     await StorageService.instance.setGuestMode(false);
     await _saveLoginSession(session);
+    await NotificationService.instance.onLoginSuccess();
     ResponseHelper.onSuccess(message: message);
     await FocusHelper.clearPrimaryFocusBeforeNavigation();
     Get.offAllNamed(AppRoutes.navbar);

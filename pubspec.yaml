@@ -29,7 +29,7 @@ dependencies:
   animated_bottom_navigation_bar:
   skeletonizer:
   vector_graphics:
-  share_plus:
+  share_plus: 13.2.0
   path_provider:
   easy_date_timeline:
   image_picker:
@@ -50,6 +50,8 @@ dependencies:
   flutter_local_notifications: ^22.0.1
   google_sign_in: ^6.2.1
   build_runner: ^2.15.1
+  package_info_plus: ^10.2.1
+  device_info_plus: ^13.2.0
 
 dev_dependencies:
   flutter_test:

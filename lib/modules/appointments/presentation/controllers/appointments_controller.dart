@@ -53,7 +53,11 @@ class AppointmentsController extends GetxController {
     switch (currentFilterIndex.value) {
       case 1:
         return allOrders
-            .where((e) => e.status == AppointmentStatus.accepted)
+            .where(
+              (e) =>
+                  e.status == AppointmentStatus.accepted ||
+                  e.status == AppointmentStatus.completed,
+            )
             .toList();
       case 2:
         return allOrders
@@ -72,7 +76,11 @@ class AppointmentsController extends GetxController {
     switch (index) {
       case 1:
         return allOrders
-            .where((e) => e.status == AppointmentStatus.accepted)
+            .where(
+              (e) =>
+                  e.status == AppointmentStatus.accepted ||
+                  e.status == AppointmentStatus.completed,
+            )
             .length;
       case 2:
         return allOrders

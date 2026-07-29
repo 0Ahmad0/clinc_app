@@ -1,9 +1,9 @@
 // const baseServ = "http://192.168.1.114/";
 
-const baseServ = "https://clinic.hivetech.space/";
-const baseServSlashLess = "https://clinic.hivetech.space/";
-// const baseServ = "http://192.168.1.101:8000/";
-// const baseServSlashLess = "http://192.168.1.101:8000/";
+// const baseServ = "https://clinic.hivetech.space/";
+// const baseServSlashLess = "https://clinic.hivetech.space/";
+const baseServ = "http://192.168.1.103:8000/";
+const baseServSlashLess = "http://192.168.1.103:8000/";
 
 const baseUrl = "${baseServSlashLess}api/";
 const storageUrl = "${baseServSlashLess}storage/";
@@ -70,6 +70,7 @@ class AppUrl {
   static const userResetPassword = '${baseUrl}user/reset-password';
   static const userNotificationSettings =
       '${baseUrl}user/notification-settings';
+  static const userDeviceToken = '${baseUrl}user/device-token';
   static const userAccount = '${baseUrl}user/account';
   static const forgotPassword = '${baseUrl}forgot-password';
   static const restoreAccount = '${baseUrl}restore-account';

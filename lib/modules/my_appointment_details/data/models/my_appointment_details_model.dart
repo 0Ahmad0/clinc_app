@@ -34,6 +34,9 @@ class MyAppointmentDetailsModel {
     this.canCancel,
     this.canCancelUntil = '',
     this.cancelledAt = '',
+    this.resultFileUrl = '',
+    this.resultFileName = '',
+    this.resultNotes = '',
   });
 
   final String id;
@@ -70,6 +73,9 @@ class MyAppointmentDetailsModel {
   final bool? canCancel;
   final String canCancelUntil;
   final String cancelledAt;
+  final String resultFileUrl;
+  final String resultFileName;
+  final String resultNotes;
 
   factory MyAppointmentDetailsModel.fromJson(Map<String, dynamic> json) {
     final doctor = _mapValue(json['doctor']);
@@ -85,6 +91,15 @@ class MyAppointmentDetailsModel {
     );
     final paymentInfo = AppointmentPaymentInfoModel.fromJson(
       _mapValue(json['payment_info'] ?? json['paymentInfo']),
+    );
+    final resultData = _mapValue(
+      json['result'] ?? json['appointment_result'] ?? json['lab_result'],
+    );
+    final resultFileData = _mapValue(
+      json['result_file'] ??
+          resultData['file'] ??
+          resultData['result_file'] ??
+          resultData['attachment'],
     );
 
     return MyAppointmentDetailsModel(
@@ -218,6 +233,39 @@ class MyAppointmentDetailsModel {
           '',
       cancelledAt:
           (json['cancelled_at'] ?? json['cancelledAt'])?.toString() ?? '',
+      resultFileUrl: _firstString([
+        json['result_file_url'],
+        json['result_url'],
+        json['analysis_result_url'],
+        json['report_url'],
+        resultData['result_file_url'],
+        resultData['result_url'],
+        resultData['file_url'],
+        resultData['url'],
+        resultFileData['url'],
+        resultFileData['file_url'],
+        resultFileData['download_url'],
+      ]),
+      resultFileName: _firstString([
+        json['result_file_name'],
+        json['report_name'],
+        resultData['result_file_name'],
+        resultData['file_name'],
+        resultData['name'],
+        resultFileData['name'],
+        resultFileData['file_name'],
+      ]),
+      resultNotes: _firstString([
+        json['result_notes'],
+        json['result_description'],
+        json['notes'],
+        json['description'],
+        resultData['result_notes'],
+        resultData['result_description'],
+        resultData['notes'],
+        resultData['description'],
+        resultData['comment'],
+      ]),
     );
   }
 
@@ -256,6 +304,9 @@ class MyAppointmentDetailsModel {
     'can_cancel': canCancel,
     'can_cancel_until': canCancelUntil,
     'cancelled_at': cancelledAt,
+    'result_file_url': resultFileUrl,
+    'result_file_name': resultFileName,
+    'result_notes': resultNotes,
   };
 
   static Map<String, dynamic> _mapValue(dynamic value) {

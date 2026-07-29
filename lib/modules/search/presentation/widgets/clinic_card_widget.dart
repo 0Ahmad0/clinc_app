@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
+import 'package:clinc_app_t1/app/extension/number_format_extension.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -61,7 +62,7 @@ class ClinicCardWidget extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4.r),
                         ),
                         child: Text(
-                          "${hospital.rating} ★",
+                          "${hospital.rating.toTrimmedFixed(maxDecimals: 2)} ★",
                           style: TextStyle(
                             fontSize: 10.sp,
                             fontWeight: FontWeight.bold,

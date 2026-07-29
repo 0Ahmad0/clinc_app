@@ -12,6 +12,8 @@ abstract class AppAssets {
   static const String signupLogo = '$_imagesPath/signup_logo.png';
   static const String forgetPasswordLogo =
       '$_imagesPath/forget_password_logo.png';
+  static const String defaultOfferBackground =
+      '$_imagesPath/default_offer_background.png';
 
   // --- الأيقونات (SVG) ---
   static const String appLogoIcon = '$_iconsPath/app_logo.svg';
@@ -62,9 +64,7 @@ abstract class AppAssets {
   // --- ملفات Lottie (JSON) ---
   static const String onboarding_1 = '$_lottiePath/best_doctor.json';
   static const String onboarding_2 = '$_lottiePath/calendar_booking.json';
-  static const String onboarding_3 =
-      '$_lottiePath/support.json';
-
+  static const String onboarding_3 = '$_lottiePath/support.json';
 
   /// information
   static const String snackbarSuccess = '$_iconsPath/ep-success.svg';
@@ -79,5 +79,4 @@ abstract class AppAssets {
   static const String notFoundIcon = '$_iconsPath/not_found.svg';
   static const String imageDefaultIcon = '$_iconsPath/image_default.svg';
   static const String profileInfo = '$_iconsPath/profile_info.png';
-
 }

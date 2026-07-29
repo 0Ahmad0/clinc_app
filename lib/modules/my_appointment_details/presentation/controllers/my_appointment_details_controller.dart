@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:iconsax/iconsax.dart';
 
 import '../../../../app/core/configuration/locator.dart';
 import '../../../../app/core/helper/auth_required_helper.dart';
@@ -13,6 +14,9 @@ import '../../../appointments/data/enum/appointment_status.dart';
 import '../../../appointments/data/models/order_model.dart';
 import '../../data/models/my_appointment_details_model.dart';
 import '../../domain/my_appointment_details_repository.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+enum ResultFileKind { image, pdf, text, document, spreadsheet, archive, other }
 
 class MyAppointmentDetailsController extends GetxController {
   late final MyAppointmentDetailsRepository _repository;
@@ -97,6 +101,81 @@ class MyAppointmentDetailsController extends GetxController {
   double get remainingAmount => details.value?.remainingAmount != 0
       ? details.value?.remainingAmount ?? appointment.remainingAmount
       : appointment.remainingAmount;
+  String get resultNotes =>
+      _firstNotEmpty([details.value?.resultNotes, tr(LocaleKeys.my_appointment_details_not_available)]);
+  String get resultFileUrl => _firstNotEmpty([details.value?.resultFileUrl]);
+  String get resultFileName => _firstNotEmpty([
+    details.value?.resultFileName,
+    details.value?.resultFileUrl.split('/').last,
+  ]);
+  String get resultFileExtension {
+    final source = resultFileName.isNotEmpty ? resultFileName : resultFileUrl;
+    if (source.trim().isEmpty) return '';
+    final noQuery = source.split('?').first.split('#').first.trim();
+    final dotIndex = noQuery.lastIndexOf('.');
+    if (dotIndex == -1 || dotIndex == noQuery.length - 1) return '';
+    return noQuery.substring(dotIndex + 1).toLowerCase();
+  }
+  ResultFileKind get resultFileKind {
+    const imageExt = {'jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'};
+    const pdfExt = {'pdf'};
+    const textExt = {'txt', 'md', 'json', 'csv', 'xml'};
+    const documentExt = {'doc', 'docx', 'rtf', 'odt'};
+    const spreadsheetExt = {'xls', 'xlsx', 'ods'};
+    const archiveExt = {'zip', 'rar', '7z'};
+
+    final ext = resultFileExtension;
+    if (imageExt.contains(ext)) return ResultFileKind.image;
+    if (pdfExt.contains(ext)) return ResultFileKind.pdf;
+    if (textExt.contains(ext)) return ResultFileKind.text;
+    if (documentExt.contains(ext)) return ResultFileKind.document;
+    if (spreadsheetExt.contains(ext)) return ResultFileKind.spreadsheet;
+    if (archiveExt.contains(ext)) return ResultFileKind.archive;
+    return ResultFileKind.other;
+  }
+  bool get canPreviewInApp => resultFileKind == ResultFileKind.image;
+  String get resultFileKindLabel {
+    switch (resultFileKind) {
+      case ResultFileKind.image:
+        return tr(LocaleKeys.my_appointment_details_file_type_image);
+      case ResultFileKind.pdf:
+        return tr(LocaleKeys.my_appointment_details_file_type_pdf);
+      case ResultFileKind.text:
+        return tr(LocaleKeys.my_appointment_details_file_type_text);
+      case ResultFileKind.document:
+        return tr(LocaleKeys.my_appointment_details_file_type_document);
+      case ResultFileKind.spreadsheet:
+        return tr(LocaleKeys.my_appointment_details_file_type_spreadsheet);
+      case ResultFileKind.archive:
+        return tr(LocaleKeys.my_appointment_details_file_type_archive);
+      case ResultFileKind.other:
+        return tr(LocaleKeys.my_appointment_details_file_type_other);
+    }
+  }
+  String get resultFileActionLabel => canPreviewInApp
+      ? tr(LocaleKeys.my_appointment_details_result_action_preview)
+      : tr(LocaleKeys.my_appointment_details_result_action_open);
+  IconData get resultFileIcon {
+    switch (resultFileKind) {
+      case ResultFileKind.image:
+        return Iconsax.gallery;
+      case ResultFileKind.pdf:
+        return Iconsax.document_download;
+      case ResultFileKind.text:
+        return Iconsax.document_text_1;
+      case ResultFileKind.document:
+        return Iconsax.document;
+      case ResultFileKind.spreadsheet:
+        return Iconsax.chart_2;
+      case ResultFileKind.archive:
+        return Iconsax.folder_open;
+      case ResultFileKind.other:
+        return Iconsax.document_cloud;
+    }
+  }
+  bool get hasResult =>
+      resultFileUrl.trim().isNotEmpty ||
+      (details.value?.resultNotes.trim().isNotEmpty ?? false);
   AppointmentStatus get status {
     final value = details.value?.status.trim();
     if (value == null || value.isEmpty) return appointment.status;
@@ -217,6 +296,89 @@ class MyAppointmentDetailsController extends GetxController {
       return;
     }
     Get.toNamed(AppRoutes.bookAppointments, arguments: args);
+  }
+
+  Future<void> openResultFile() async {
+    final link = resultFileUrl.trim();
+    if (link.isEmpty) {
+      ResponseHelper.onFailure(
+        message: tr(LocaleKeys.my_appointment_details_result_file_unavailable),
+      );
+      return;
+    }
+    final uri = Uri.tryParse(link);
+    if (uri == null) {
+      ResponseHelper.onFailure(
+        message: tr(LocaleKeys.my_appointment_details_result_file_open_failed),
+      );
+      return;
+    }
+    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!opened) {
+      ResponseHelper.onFailure(
+        message: tr(LocaleKeys.my_appointment_details_result_file_open_failed),
+      );
+    }
+  }
+
+  Future<void> handleResultFileTap() async {
+    if (resultFileUrl.trim().isEmpty) {
+      await openResultFile();
+      return;
+    }
+    if (canPreviewInApp) {
+      _showImagePreviewDialog();
+      return;
+    }
+    await openResultFile();
+  }
+
+  void _showImagePreviewDialog() {
+    Get.dialog(
+      Dialog(
+        insetPadding: const EdgeInsets.all(16),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Stack(
+            children: [
+              Container(
+                color: Colors.black,
+                width: double.infinity,
+                constraints: const BoxConstraints(maxHeight: 500),
+                child: InteractiveViewer(
+                  minScale: 0.8,
+                  maxScale: 4,
+                  child: Center(
+                    child: Image.network(
+                      resultFileUrl,
+                      fit: BoxFit.contain,
+                      errorBuilder: (_, _, _) => Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Text(
+                          tr(
+                            LocaleKeys
+                                .my_appointment_details_result_file_open_failed,
+                          ),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              PositionedDirectional(
+                top: 8,
+                end: 8,
+                child: IconButton(
+                  icon: const Icon(Icons.close, color: Colors.white),
+                  onPressed: Get.back,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   AppointmentModel get _cancellationAppointment => appointment.copyWith(

@@ -3,6 +3,7 @@ import 'package:clinc_app_t1/app/core/helper/auth_required_helper.dart';
 import 'package:clinc_app_t1/app/core/helper/response_helper.dart';
 import 'package:clinc_app_t1/app/core/utils/share_helper.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_rating_widget.dart';
+import 'package:clinc_app_t1/app/extension/number_format_extension.dart';
 import 'package:clinc_app_t1/app/data/base_model.dart';
 import 'package:clinc_app_t1/app/data/pagination/pagination_params.dart';
 import 'package:clinc_app_t1/app/data/pagination/pagination_state.dart';
@@ -82,7 +83,10 @@ class LabProfileController extends GetxController {
       if (lab.address.trim().isNotEmpty)
         tr(LocaleKeys.labs_profile_share_address, args: [lab.address.trim()]),
       if (lab.rating > 0)
-        tr(LocaleKeys.labs_profile_share_rating, args: [lab.rating.toString()]),
+        tr(
+          LocaleKeys.labs_profile_share_rating,
+          args: [lab.rating.toTrimmedFixed(maxDecimals: 2)],
+        ),
       if (lab.phoneNumber.trim().isNotEmpty)
         tr(LocaleKeys.labs_profile_share_phone, args: [lab.phoneNumber.trim()]),
       tr(LocaleKeys.share_app_link, args: [ShareHelper.appLink]),

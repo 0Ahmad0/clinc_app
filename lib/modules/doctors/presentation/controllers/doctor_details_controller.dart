@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../../../app/core/widgets/app_rating_widget.dart';
+import '../../../../app/extension/number_format_extension.dart';
 import '../../../../app/services/bottom_sheet_service.dart';
 import '../../../../app/services/snackbar_service.dart';
 import '../../../../generated/locale_keys.g.dart';
@@ -196,7 +197,7 @@ class DoctorDetailsController extends GetxController {
               ),
               const Spacer(),
               const Icon(Icons.star, color: Colors.amber, size: 14),
-              Text(" ${review.rating}"),
+              Text(" ${review.rating.toTrimmedFixed(maxDecimals: 2)}"),
             ],
           ),
           8.verticalSpace,

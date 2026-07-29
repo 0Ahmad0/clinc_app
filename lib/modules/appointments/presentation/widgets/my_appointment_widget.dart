@@ -30,6 +30,8 @@ class MyAppointmentWidget extends GetView<AppointmentsController> {
         return tr(LocaleKeys.appointments_status_accepted);
       case AppointmentStatus.pending:
         return tr(LocaleKeys.appointments_status_pending);
+      case AppointmentStatus.completed:
+        return tr(LocaleKeys.appointments_status_completed);
       case AppointmentStatus.rejected:
         return tr(LocaleKeys.appointments_status_rejected);
     }
@@ -41,6 +43,8 @@ class MyAppointmentWidget extends GetView<AppointmentsController> {
         return AppColors.success;
       case AppointmentStatus.pending:
         return AppColors.warning;
+      case AppointmentStatus.completed:
+        return AppColors.success;
       case AppointmentStatus.rejected:
         return AppColors.error;
     }
@@ -52,6 +56,8 @@ class MyAppointmentWidget extends GetView<AppointmentsController> {
         return AppAssets.checkCircleIcon;
       case AppointmentStatus.pending:
         return AppAssets.waitingIcon;
+      case AppointmentStatus.completed:
+        return AppAssets.checkCircleIcon;
       case AppointmentStatus.rejected:
         return AppAssets.rejectedCircleIcon;
     }

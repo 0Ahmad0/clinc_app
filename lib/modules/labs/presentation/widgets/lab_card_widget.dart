@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
+import 'package:clinc_app_t1/app/extension/number_format_extension.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
@@ -97,7 +98,7 @@ class LabCardWidget extends StatelessWidget {
                       Icon(Icons.star, color: Colors.amber, size: 18.sp),
                       4.horizontalSpace,
                       Text(
-                        lab.rating.toString(),
+                        lab.rating.toTrimmedFixed(maxDecimals: 2),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 12.sp,

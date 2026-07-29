@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
+import 'package:clinc_app_t1/app/extension/number_format_extension.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -39,7 +40,7 @@ class HospitalInfoSection extends StatelessWidget {
                   Icon(Icons.star, color: Colors.amber, size: 16.sp),
                   4.horizontalSpace,
                   Text(
-                    "${hospital.rating} (${tr(LocaleKeys.clinic_app_details_rating_count)})",
+                    "${hospital.rating.toTrimmedFixed(maxDecimals: 2)} (${tr(LocaleKeys.clinic_app_details_rating_count)})",
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Colors.amber[800],

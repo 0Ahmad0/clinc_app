@@ -79,6 +79,93 @@ class MyAppointmentDetailsScreen
                         ),
                       ]),
 
+                      if (controller.hasResult) ...[
+                        20.verticalSpace,
+                        _buildSectionTitle(
+                          tr(LocaleKeys.my_appointment_details_result_section),
+                        ),
+                        _buildInfoCard([
+                          _buildInfoRow(
+                            Iconsax.document_text_1,
+                            tr(LocaleKeys.my_appointment_details_result_notes),
+                            controller.resultNotes,
+                          ),
+                          if (controller.resultFileUrl.trim().isNotEmpty)
+                            Padding(
+                              padding: EdgeInsets.only(top: 10.h),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(12.r),
+                                onTap: controller.handleResultFileTap,
+                                child: Container(
+                                  padding: EdgeInsets.all(12.r),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12.r),
+                                    border: Border.all(
+                                      color: AppColors.primary.myOpacity(0.25),
+                                    ),
+                                    color: AppColors.primary.myOpacity(0.06),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(8.r),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.primary.myOpacity(0.12),
+                                          borderRadius: BorderRadius.circular(8.r),
+                                        ),
+                                        child: Icon(
+                                          controller.resultFileIcon,
+                                          color: AppColors.primary,
+                                          size: 18.sp,
+                                        ),
+                                      ),
+                                      10.horizontalSpace,
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              controller.resultFileName
+                                                      .trim()
+                                                      .isNotEmpty
+                                                  ? controller.resultFileName
+                                                  : tr(
+                                                      LocaleKeys
+                                                          .my_appointment_details_result_file,
+                                                    ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 12.sp,
+                                              ),
+                                            ),
+                                            4.verticalSpace,
+                                            Text(
+                                              '${controller.resultFileKindLabel} • ${controller.resultFileActionLabel}',
+                                              style: TextStyle(
+                                                fontSize: 11.sp,
+                                                color: Colors.grey[700],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      8.horizontalSpace,
+                                      Icon(
+                                        Iconsax.arrow_right_3,
+                                        color: AppColors.primary,
+                                        size: 16.sp,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ]),
+                      ],
+
                       20.verticalSpace,
                       _buildSectionTitle(
                         tr(LocaleKeys.my_appointment_details_clinic_details),
@@ -348,6 +435,8 @@ class MyAppointmentDetailsScreen
         return tr(LocaleKeys.appointments_status_accepted);
       case AppointmentStatus.pending:
         return tr(LocaleKeys.appointments_status_pending);
+      case AppointmentStatus.completed:
+        return tr(LocaleKeys.appointments_status_completed);
       case AppointmentStatus.rejected:
         return tr(LocaleKeys.appointments_status_rejected);
     }

@@ -1,5 +1,4 @@
 import 'package:clinc_app_t1/app/core/constants/app_assets.dart';
-import 'package:clinc_app_t1/app/core/utils/app_url.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,6 +15,8 @@ class OfferItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final offerImage = offer.image?.trim();
+
     return Skeletonizer(
       enabled: false,
       child: Stack(
@@ -27,13 +28,7 @@ class OfferItemWidget extends StatelessWidget {
                 AppColors.black.myOpacity(.5),
                 BlendMode.darken,
               ),
-              child: Image.network(
-                offer.image??"${baseServ}images/logo.png",
-                fit: BoxFit.contain,
-
-                width: double.maxFinite,
-                height: 120.h,
-              ),
+              child: _OfferBackgroundImage(imageUrl: offerImage),
             ),
           ),
           AppPaddingWidget(
@@ -70,6 +65,36 @@ class OfferItemWidget extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _OfferBackgroundImage extends StatelessWidget {
+  const _OfferBackgroundImage({required this.imageUrl});
+
+  final String? imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    if (imageUrl == null || imageUrl!.isEmpty) {
+      return _assetImage();
+    }
+
+    return Image.network(
+      imageUrl!,
+      fit: BoxFit.cover,
+      width: double.maxFinite,
+      height: 120.h,
+      errorBuilder: (_, __, ___) => _assetImage(),
+    );
+  }
+
+  Widget _assetImage() {
+    return Image.asset(
+      AppAssets.defaultOfferBackground,
+      fit: BoxFit.cover,
+      width: double.maxFinite,
+      height: 120.h,
     );
   }
 }

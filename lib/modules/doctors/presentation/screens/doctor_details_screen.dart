@@ -3,6 +3,7 @@ import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/extension/localization_extension.dart';
+import 'package:clinc_app_t1/app/extension/number_format_extension.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
@@ -223,7 +224,9 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
                       const Icon(Icons.star, color: Colors.amber, size: 20),
                       SizedBox(width: 4.w),
                       Text(
-                        "${doc.rating}".trNumbers(),
+                        doc.rating
+                            .toTrimmedFixed(maxDecimals: 2)
+                            .trNumbers(),
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       SizedBox(width: 4.w),

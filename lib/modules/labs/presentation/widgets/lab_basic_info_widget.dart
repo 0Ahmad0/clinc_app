@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
+import 'package:clinc_app_t1/app/extension/number_format_extension.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/labs/presentation/controllers/lab_profile_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -69,7 +70,7 @@ class LabBasicInfoWidget extends GetView<LabProfileController> {
               const Icon(Icons.star, color: Colors.amber),
               4.horizontalSpace,
               Text(
-                "${controller.lab.rating} (120+ مراجعة)", // يمكن جعل العدد ديناميكي
+                "${controller.lab.rating.toTrimmedFixed(maxDecimals: 2)} (120+ مراجعة)", // يمكن جعل العدد ديناميكي
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp),
               ),
             ],
