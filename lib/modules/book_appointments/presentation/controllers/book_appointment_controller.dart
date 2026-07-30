@@ -23,6 +23,9 @@ class BookAppointmentController extends GetxController {
   String? labId;
   String? specialtyId;
   String? originalAppointmentId;
+  String doctorName = '';
+  String doctorLogo = '';
+  String specialty = '';
   Map<String, dynamic>? latestAppointmentResponse;
 
   // 1. التاريخ والوقت
@@ -190,9 +193,12 @@ class BookAppointmentController extends GetxController {
     return {
       'flow_type': 'doctor',
       'doctor_id': doctorId,
+      'doctor_name': doctorName,
+      'doctor_logo': doctorLogo,
       'clinic_id': clinicId,
       'lab_id': labId,
       'specialty_id': specialtyId,
+      'specialty': specialty,
       'date': _dateOnly(selectedDate.value),
       'time': selectedTime.value,
       'full_name': fullNameController.text.trim(),
@@ -209,6 +215,9 @@ class BookAppointmentController extends GetxController {
     final args = Get.arguments;
     if (args is DoctorModel) {
       doctorId = args.id;
+      doctorName = args.name;
+      doctorLogo = args.imageUrl;
+      specialty = args.specialty;
       return;
     }
     if (args is Map) {
@@ -217,6 +226,21 @@ class BookAppointmentController extends GetxController {
       labId = _argString(args, 'lab_id') ?? _argString(args, 'labId');
       specialtyId =
           _argString(args, 'specialty_id') ?? _argString(args, 'specialtyId');
+      doctorName =
+          _argString(args, 'doctor_name') ??
+          _argString(args, 'doctorName') ??
+          doctorName;
+      doctorLogo =
+          _argString(args, 'doctor_logo') ??
+          _argString(args, 'doctorLogo') ??
+          _argString(args, 'doctor_image') ??
+          _argString(args, 'doctorImage') ??
+          doctorLogo;
+      specialty =
+          _argString(args, 'specialty') ??
+          _argString(args, 'specialty_name') ??
+          _argString(args, 'specialtyName') ??
+          specialty;
       originalAppointmentId =
           _argString(args, 'appointment_id') ??
           _argString(args, 'appointmentId');

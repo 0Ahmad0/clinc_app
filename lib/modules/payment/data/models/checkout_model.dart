@@ -18,6 +18,7 @@ class CheckoutModel {
     this.labLogo = '',
     this.testCount = 0,
     this.items = const <LabTest>[],
+    this.bookingDate = '',
     this.bookingTime = '',
     this.summary = const CheckoutSummaryModel(),
     this.paymentId = '',
@@ -38,6 +39,7 @@ class CheckoutModel {
   final String labLogo;
   final int testCount;
   final List<LabTest> items;
+  final String bookingDate;
   final String bookingTime;
   final CheckoutSummaryModel summary;
   final String paymentId;
@@ -134,6 +136,13 @@ class CheckoutModel {
           _intValue(source['test_count'] ?? source['testCount']) ??
           (items.isNotEmpty ? items.length : 0),
       items: items,
+      bookingDate: _firstString([
+        source['booking_date'],
+        source['bookingDate'],
+        source['appointment_date'],
+        source['appointmentDate'],
+        source['date'],
+      ]),
       bookingTime: _firstString([
         source['booking_time'],
         source['bookingTime'],
@@ -189,6 +198,7 @@ class CheckoutModel {
       labLogo: labLogo,
       testCount: testCount,
       items: items,
+      bookingDate: bookingDate,
       bookingTime: bookingTime,
       summary: summary ?? this.summary,
       paymentId: paymentId ?? this.paymentId,
@@ -211,6 +221,7 @@ class CheckoutModel {
     'lab_logo': labLogo,
     'test_count': testCount,
     'items': items.map((item) => item.toJson()).toList(),
+    'booking_date': bookingDate,
     'booking_time': bookingTime,
     'summary': summary.toJson(),
     'payment_id': paymentId,

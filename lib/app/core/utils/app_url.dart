@@ -1,9 +1,9 @@
 // const baseServ = "http://192.168.1.114/";
 
-// const baseServ = "https://clinic.hivetech.space/";
-// const baseServSlashLess = "https://clinic.hivetech.space/";
-const baseServ = "http://192.168.1.103:8000/";
-const baseServSlashLess = "http://192.168.1.103:8000/";
+const baseServ = "https://clinic.hivetech.space/";
+const baseServSlashLess = "https://clinic.hivetech.space/";
+// const baseServ = "http://192.168.1.103:8000/";
+// const baseServSlashLess = "http://192.168.1.103:8000/";
 
 const baseUrl = "${baseServSlashLess}api/";
 const storageUrl = "${baseServSlashLess}storage/";
@@ -15,6 +15,9 @@ const guardian = "guardian/";
 const sheikh = "sheikh/";
 const psychologist = "psychologist/";
 const app = "app/";
+
+
+
 
 class AppUrl {
   static const appSettings = "${baseUrl}app/settings";

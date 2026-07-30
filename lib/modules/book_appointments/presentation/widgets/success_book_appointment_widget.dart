@@ -1,12 +1,17 @@
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
+import 'package:clinc_app_t1/modules/payment/data/models/checkout_model.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class SuccessBookAppointmentWidget extends StatelessWidget {
-  const SuccessBookAppointmentWidget({super.key});
+  const SuccessBookAppointmentWidget({super.key, required this.appointment});
+
+  final CheckoutModel appointment;
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +19,9 @@ class SuccessBookAppointmentWidget extends StatelessWidget {
     final Color primaryBlue = Theme.of(context).primaryColor;
     final Color textDark = const Color(0xFF1A1A1A);
     final Color textGrey = const Color(0xFF808080);
+    final doctorName = _fallback(appointment.doctorName, 'الطبيب');
+    final specialty = _fallback(appointment.specialty, appointment.clinicName);
+    final appointmentText = _appointmentText(context);
 
     return Material(
       color: AppColors.transparent,
@@ -66,33 +74,32 @@ class SuccessBookAppointmentWidget extends StatelessWidget {
                   // صورة الطبيب واسمه
                   Column(
                     children: [
-                      Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: const DecorationImage(
-                            image: NetworkImage(
-                              "https://img.freepik.com/free-photo/woman-doctor-wearing-lab-coat-with-stethoscope-isolated_1303-29791.jpg",
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                      AppCachedImageWidget(
+                        imageUrl: appointment.doctorLogo,
+                        width: 80.w,
+                        height: 80.w,
+                        fit: BoxFit.cover,
+                        clipRadius: 40.r,
+                        placeholderType: AppImagePlaceholderType.doctor,
                       ),
                       const SizedBox(height: 15),
                       Text(
-                        "د. سارة العلي",
+                        doctorName,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: textDark,
                         ),
                       ),
-                      const SizedBox(height: 5),
-                      Text(
-                        "أخصائية أنف وأذن وحنجرة",
-                        style: TextStyle(fontSize: 14, color: textGrey),
-                      ),
+                      if (specialty.isNotEmpty) ...[
+                        const SizedBox(height: 5),
+                        Text(
+                          specialty,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 14, color: textGrey),
+                        ),
+                      ],
                     ],
                   ),
 
@@ -124,23 +131,27 @@ class SuccessBookAppointmentWidget extends StatelessWidget {
                         const SizedBox(width: 15),
 
                         // النصوص
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "الموعد",
-                              style: TextStyle(color: textGrey, fontSize: 12),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              "الأربعاء، 10 يناير 2024، 11:00",
-                              style: TextStyle(
-                                color: textDark,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "الموعد",
+                                style: TextStyle(color: textGrey, fontSize: 12),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 4),
+                              Text(
+                                appointmentText,
+                                style: TextStyle(
+                                  color: textDark,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -189,5 +200,27 @@ class SuccessBookAppointmentWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _appointmentText(BuildContext context) {
+    final parts = <String>[];
+    final parsedDate = DateTime.tryParse(appointment.bookingDate);
+    if (parsedDate != null) {
+      parts.add(
+        DateFormat.yMMMMEEEEd(context.locale.toString()).format(parsedDate),
+      );
+    } else if (appointment.bookingDate.trim().isNotEmpty) {
+      parts.add(appointment.bookingDate.trim());
+    }
+    if (appointment.bookingTime.trim().isNotEmpty) {
+      parts.add(appointment.bookingTime.trim());
+    }
+    return parts.isEmpty ? 'سيتم تأكيد تفاصيل الموعد قريباً' : parts.join('، ');
+  }
+
+  String _fallback(String primary, String fallback) {
+    final value = primary.trim();
+    if (value.isNotEmpty) return value;
+    return fallback.trim();
   }
 }

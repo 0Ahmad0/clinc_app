@@ -229,6 +229,7 @@ class CheckoutController extends GetxController {
       },
     );
   }
+
   Future<void> processPayment(BuildContext context) async {
     if (!AuthRequiredHelper.ensureAuthenticated()) return;
     if (isProcessingPayment.value) return;
@@ -333,7 +334,9 @@ class CheckoutController extends GetxController {
   void _showDoctorBookingSuccess(BuildContext context) {
     AppDialog.showAppDialog(
       context,
-      widget: const SuccessBookAppointmentWidget().bounceIn(),
+      widget: SuccessBookAppointmentWidget(
+        appointment: checkout.value,
+      ).bounceIn(),
       barrierColor: Theme.of(context).primaryColor.withValues(alpha: 0.2),
     );
     ResponseHelper.onSuccess(
