@@ -1,18 +1,18 @@
 import 'main_home_item_model.dart';
-import 'offer_model.dart';
+import 'ad_model.dart';
 
 class HomeModel {
   const HomeModel({
     required this.user,
     required this.mainServices,
-    required this.offers,
+    required this.ads,
     required this.unreadNotificationsCount,
     this.activeAppointment,
   });
 
   final HomeUserModel user;
   final List<MainHomeItemModel> mainServices;
-  final List<OfferModel> offers;
+  final List<AdModel> ads;
   final HomeAppointmentModel? activeAppointment;
   final int unreadNotificationsCount;
 
@@ -25,10 +25,7 @@ class HomeModel {
         json['main_services'],
         (item) => MainHomeItemModel.fromJson(item),
       ),
-      offers: _listFromJson(
-        json['offers'],
-        (item) => OfferModel.fromJson(item),
-      ),
+      ads: _listFromJson(json['ads'], (item) => AdModel.fromJson(item)),
       activeAppointment: json['active_appointment'] is Map
           ? HomeAppointmentModel.fromJson(
               Map<String, dynamic>.from(json['active_appointment'] as Map),
@@ -43,7 +40,7 @@ class HomeModel {
   Map<String, dynamic> toJson() => {
     'user': user.toJson(),
     'main_services': mainServices.map((item) => item.toJson()).toList(),
-    'offers': offers.map((item) => item.toJson()).toList(),
+    'ads': ads.map((item) => item.toJson()).toList(),
     'active_appointment': activeAppointment?.toJson(),
     'unread_notifications_count': unreadNotificationsCount,
   };

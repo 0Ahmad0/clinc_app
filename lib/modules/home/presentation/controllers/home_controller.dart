@@ -4,9 +4,9 @@ import 'package:clinc_app_t1/app/core/configuration/locator.dart';
 import 'package:clinc_app_t1/app/core/helper/response_helper.dart';
 import 'package:clinc_app_t1/app/data/base_model.dart';
 import 'package:clinc_app_t1/app/domain/error_handler/network_exceptions.dart';
+import 'package:clinc_app_t1/modules/home/data/models/ad_model.dart';
 import 'package:clinc_app_t1/modules/home/data/models/home_model.dart';
 import 'package:clinc_app_t1/modules/home/data/models/main_home_item_model.dart';
-import 'package:clinc_app_t1/modules/home/data/models/offer_model.dart';
 import 'package:clinc_app_t1/modules/home/domain/home_repository.dart';
 import 'package:clinc_app_t1/modules/settings/data/models/user_settings_model.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/controllers/settings_controller.dart';
@@ -22,7 +22,7 @@ class HomeController extends GetxController {
   final RxBool isLoading = false.obs;
   final Rxn<HomeModel> home = Rxn<HomeModel>();
   final RxList<MainHomeItemModel> mainSectionList = <MainHomeItemModel>[].obs;
-  final RxList<OfferModel> offersList = <OfferModel>[].obs;
+  final RxList<AdModel> adsList = <AdModel>[].obs;
   final RxString displayUserName = tr(LocaleKeys.core_guest).obs;
   final RxString displayUserAvatar = ''.obs;
   Worker? _profileWorker;
@@ -73,7 +73,7 @@ class HomeController extends GetxController {
     home.value = response.result;
     mainSectionList.assignAll(response.result!.mainServices);
 
-    offersList.assignAll(response.result!.offers);
+    adsList.assignAll(response.result!.ads);
   }
 
   SettingsController? get _settingsController {

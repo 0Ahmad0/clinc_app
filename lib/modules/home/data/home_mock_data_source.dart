@@ -3,9 +3,9 @@ import '../../../app/data/base_model.dart';
 import '../../../app/routes/app_routes.dart';
 import '../../../generated/locale_keys.g.dart';
 import 'home_data_source.dart';
+import 'models/ad_model.dart';
 import 'models/home_model.dart';
 import 'models/main_home_item_model.dart';
-import 'models/offer_model.dart';
 
 class HomeMockDataSource implements HomeDataSource {
   static const HomeModel _home = HomeModel(
@@ -37,23 +37,51 @@ class HomeMockDataSource implements HomeDataSource {
         route: AppRoutes.chatbot,
       ),
     ],
-    offers: [
-      OfferModel(
-        image:
-            'https://tse3.mm.bing.net/th/id/OIP.L4RloIj6B9smazJN3cKxSwHaE-?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3',
+    ads: [
+      AdModel(
+        id: '1',
         title: 'خصم الأطباء في مشفى المملكة',
+        titleAr: 'خصم الأطباء في مشفى المملكة',
+        titleEn: 'Doctors discount at Kingdom Hospital',
+        description: '',
+        descriptionAr: '',
+        descriptionEn: '',
+        cover:
+            'https://tse3.mm.bing.net/th/id/OIP.L4RloIj6B9smazJN3cKxSwHaE-?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3',
+        linkUrl: '',
+        startsAt: '',
+        endsAt: '',
+        publishedAt: '',
       ),
-      OfferModel(
-        image:
-            'https://tse2.mm.bing.net/th/id/OIP.G0Eqr0TT1PO5OvKZ60_OUAHaEK?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3',
+      AdModel(
+        id: '2',
         title: 'عيادة العيون في مشفى الملك فيصل',
-        subTitle: 'خصم 50%',
+        titleAr: 'عيادة العيون في مشفى الملك فيصل',
+        titleEn: 'Eye clinic at King Faisal Hospital',
+        description: 'خصم 50%',
+        descriptionAr: 'خصم 50%',
+        descriptionEn: '50% discount',
+        cover:
+            'https://tse2.mm.bing.net/th/id/OIP.G0Eqr0TT1PO5OvKZ60_OUAHaEK?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3',
+        linkUrl: '',
+        startsAt: '',
+        endsAt: '',
+        publishedAt: '',
       ),
-      OfferModel(
-        image:
-            'https://tse1.mm.bing.net/th/id/OIP.t81S5sabzIEU7hDvOZ1M4gHaEo?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3',
+      AdModel(
+        id: '3',
         title: 'مشفى الحبيب سلمان - جدة',
-        subTitle: 'خصم 10% عمليات جلدية',
+        titleAr: 'مشفى الحبيب سلمان - جدة',
+        titleEn: 'Al Habib Salman Hospital - Jeddah',
+        description: 'خصم 10% عمليات جلدية',
+        descriptionAr: 'خصم 10% عمليات جلدية',
+        descriptionEn: '10% discount on dermatology procedures',
+        cover:
+            'https://tse1.mm.bing.net/th/id/OIP.t81S5sabzIEU7hDvOZ1M4gHaEo?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3',
+        linkUrl: '',
+        startsAt: '',
+        endsAt: '',
+        publishedAt: '',
       ),
     ],
     activeAppointment: HomeAppointmentModel(

@@ -28,8 +28,8 @@ class CarouselSliderWidget extends StatelessWidget {
         ),
         12.verticalSpace,
         CarouselSlider(
-          items: controller.offersList
-              .map((offer) => OfferItemWidget(offer: offer))
+          items: controller.adsList
+              .map((ad) => OfferItemWidget(ad: ad))
               .toList(),
           options: CarouselOptions(
             height: 140.h,

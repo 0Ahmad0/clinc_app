@@ -46,7 +46,7 @@ class HomeScreen extends GetView<HomeController> {
                   notificationCount: controller.unreadNotificationsCount,
                 ),
               ),
-              if (controller.offersList.isNotEmpty)
+              if (controller.adsList.isNotEmpty)
                 SliverToBoxAdapter(
                   child: CarouselSliderWidget(controller: controller),
                 ),
@@ -63,7 +63,7 @@ class HomeScreen extends GetView<HomeController> {
                 ),
               if (controller.mainSectionList.isNotEmpty)
                 const SliverToBoxAdapter(child: MainSectionWidget()),
-              if (controller.offersList.isEmpty &&
+              if (controller.adsList.isEmpty &&
                   appointment == null &&
                   controller.mainSectionList.isEmpty)
                 SliverFillRemaining(
