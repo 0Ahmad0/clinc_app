@@ -18,7 +18,6 @@ import '../../data/models/doctor_model.dart';
 import '../../data/models/doctor_review_model.dart';
 import '../../domain/doctors_repository.dart';
 
-
 class DoctorDetailsController extends GetxController {
   late final DoctorsRepository _repository;
   DoctorModel doctor = DoctorModel.mockDoctors.first;
@@ -37,6 +36,7 @@ class DoctorDetailsController extends GetxController {
   int get patientCount => details.value?.patientCount ?? 7500;
   int get yearsExperience => details.value?.yearsExperience ?? 10;
   String get aboutText => details.value?.about ?? '';
+  bool get isFavoriteLoading => favoriteLoadingIds.contains(currentDoctor.id);
 
   @override
   void onInit() {
@@ -121,12 +121,16 @@ class DoctorDetailsController extends GetxController {
 
   // فتح كل التقييمات في Bottom Sheet
   void showAllReviews() {
+    final context = Get.context;
+    final theme = context != null ? Theme.of(context) : Get.theme;
+    final isDark = theme.brightness == Brightness.dark;
+
     Get.bottomSheet(
       Container(
         padding: EdgeInsets.all(20.w),
         height: Get.height * 0.75,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.cardColor,
           borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
         ),
         child: Column(
@@ -135,7 +139,9 @@ class DoctorDetailsController extends GetxController {
               width: 40.w,
               height: 4.h,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: isDark
+                    ? theme.dividerColor.withValues(alpha: 0.55)
+                    : Colors.grey[300],
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -145,14 +151,17 @@ class DoctorDetailsController extends GetxController {
                 LocaleKeys.doctor_details_all_reviews_title,
                 args: [allReviews.length.toString()],
               ),
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 18.sp,
+              ),
             ),
             20.verticalSpace,
             Expanded(
               child: ListView.builder(
                 itemCount: allReviews.length,
                 itemBuilder: (context, index) =>
-                    Obx(() => reviewCard(allReviews[index])),
+                    Obx(() => reviewCard(context, allReviews[index])),
               ),
             ),
           ],
@@ -163,14 +172,23 @@ class DoctorDetailsController extends GetxController {
   }
 
   // ويدجت كرت المراجعة الصغير
-  Widget reviewCard(DoctorReviewModel review) {
+  Widget reviewCard(BuildContext context, DoctorReviewModel review) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       margin: EdgeInsets.only(bottom: 15.h),
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
-        color: Colors.grey[50],
+        color: isDark
+            ? theme.colorScheme.surface.withValues(alpha: 0.48)
+            : Colors.grey[50],
         borderRadius: BorderRadius.circular(15.r),
-        border: Border.all(color: Colors.grey[100]!),
+        border: Border.all(
+          color: isDark
+              ? theme.dividerColor.withValues(alpha: 0.28)
+              : Colors.grey[100]!,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,23 +205,36 @@ class DoctorDetailsController extends GetxController {
                 children: [
                   Text(
                     review.userName,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Text(
                     review.date,
-                    style: TextStyle(fontSize: 10.sp, color: Colors.grey),
+                    style: TextStyle(
+                      fontSize: 10.sp,
+                      color: theme.textTheme.bodySmall?.color?.withValues(
+                        alpha: 0.64,
+                      ),
+                    ),
                   ),
                 ],
               ),
               const Spacer(),
               const Icon(Icons.star, color: Colors.amber, size: 14),
-              Text(" ${review.rating.toTrimmedFixed(maxDecimals: 2)}"),
+              Text(
+                " ${review.rating.toTrimmedFixed(maxDecimals: 2)}",
+                style: theme.textTheme.bodySmall,
+              ),
             ],
           ),
           8.verticalSpace,
           Text(
             review.comment,
-            style: TextStyle(fontSize: 12.sp, color: Colors.black87),
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.82),
+            ),
           ),
         ],
       ),

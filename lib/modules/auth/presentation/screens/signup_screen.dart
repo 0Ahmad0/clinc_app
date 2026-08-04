@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -120,6 +121,10 @@ class SignupScreen extends GetView<SignupController> {
                         controller: controller.phoneController,
                         hintText: tr(LocaleKeys.signup_phone_number),
                         keyboardType: TextInputType.phone,
+                        maxLength: 10,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                         validator: AppValidator.validateSaudiPhone,
                       ).fadeIn(),
                       10.verticalSpace,

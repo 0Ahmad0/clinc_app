@@ -13,6 +13,9 @@ class HospitalSpecialtiesList extends GetView<ClinicDetailsController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -59,19 +62,23 @@ class HospitalSpecialtiesList extends GetView<ClinicDetailsController> {
                     ),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? Theme.of(
-                              context,
-                            ).primaryColor.withValues(alpha: 0.08)
-                          : Colors.white,
+                          ? theme.primaryColor.withValues(
+                              alpha: isDark ? 0.16 : 0.08,
+                            )
+                          : theme.cardColor,
                       borderRadius: BorderRadius.circular(20.r),
                       border: Border.all(
                         color: isSelected
-                            ? Theme.of(context).primaryColor
-                            : Colors.grey[100]!,
+                            ? theme.primaryColor
+                            : theme.dividerColor.withValues(
+                                alpha: isDark ? 0.28 : 0.45,
+                              ),
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.03),
+                          color: Colors.black.withValues(
+                            alpha: isDark ? 0.18 : 0.03,
+                          ),
                           blurRadius: 10,
                           offset: const Offset(0, 5),
                         ),
@@ -83,13 +90,11 @@ class HospitalSpecialtiesList extends GetView<ClinicDetailsController> {
                         padding: EdgeInsets.all(6.w),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8.r),
-                          color: Theme.of(
-                            context,
-                          ).primaryColor.withValues(alpha: 0.1),
+                          color: theme.primaryColor.withValues(alpha: 0.1),
                         ),
                         child: Icon(
                           Icons.medical_services_outlined,
-                          color: Theme.of(context).primaryColor,
+                          color: theme.primaryColor,
                           size: 20.sp,
                         ),
                       ),
@@ -98,9 +103,7 @@ class HospitalSpecialtiesList extends GetView<ClinicDetailsController> {
                         isSelected
                             ? Iconsax.tick_circle
                             : Iconsax.arrow_circle_left,
-                        color: isSelected
-                            ? Theme.of(context).primaryColor
-                            : null,
+                        color: isSelected ? theme.primaryColor : null,
                       ),
 
                       subtitle: Text(

@@ -8,6 +8,29 @@ import 'models/home_model.dart';
 import 'models/main_home_item_model.dart';
 
 class HomeMockDataSource implements HomeDataSource {
+  static const List<MainHomeItemModel> defaultMainServices = [
+    MainHomeItemModel(
+      name: LocaleKeys.home_services_clinics,
+      icon: AppAssets.clinicMedicalIcon,
+      route: AppRoutes.search,
+    ),
+    MainHomeItemModel(
+      name: LocaleKeys.home_services_labs,
+      icon: AppAssets.labsIcon,
+      route: AppRoutes.labs,
+    ),
+    MainHomeItemModel(
+      name: LocaleKeys.home_services_insurance,
+      icon: AppAssets.insuranceCardIcon,
+      route: AppRoutes.insurance,
+    ),
+    MainHomeItemModel(
+      name: LocaleKeys.home_services_chatbot,
+      icon: AppAssets.chatBotIcon,
+      route: AppRoutes.chatbot,
+    ),
+  ];
+
   static const HomeModel _home = HomeModel(
     user: HomeUserModel(
       fullName: 'أحلام الحرير',
@@ -15,28 +38,7 @@ class HomeMockDataSource implements HomeDataSource {
           'https://tse1.mm.bing.net/th/id/OIP.lj2NFJ7HSEsDqn7er7BuDAHaHa?cb=ucfimg2&ucfimg=1&w=626&h=626&rs=1&pid=ImgDetMain&o=7&rm=3',
     ),
     unreadNotificationsCount: 3,
-    mainServices: [
-      MainHomeItemModel(
-        name: LocaleKeys.home_services_clinics,
-        icon: AppAssets.clinicMedicalIcon,
-        route: AppRoutes.search,
-      ),
-      MainHomeItemModel(
-        name: LocaleKeys.home_services_labs,
-        icon: AppAssets.labsIcon,
-        route: AppRoutes.labs,
-      ),
-      MainHomeItemModel(
-        name: LocaleKeys.home_services_insurance,
-        icon: AppAssets.insuranceCardIcon,
-        route: AppRoutes.insurance,
-      ),
-      MainHomeItemModel(
-        name: LocaleKeys.home_services_chatbot,
-        icon: AppAssets.chatBotIcon,
-        route: AppRoutes.chatbot,
-      ),
-    ],
+    mainServices: defaultMainServices,
     ads: [
       AdModel(
         id: '1',

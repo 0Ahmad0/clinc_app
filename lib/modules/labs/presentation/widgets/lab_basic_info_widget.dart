@@ -13,6 +13,11 @@ class LabBasicInfoWidget extends GetView<LabProfileController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final mutedColor = theme.colorScheme.onSurface.withValues(
+      alpha: theme.brightness == Brightness.dark ? 0.68 : 0.60,
+    );
+
     return AppPaddingWidget(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,12 +59,15 @@ class LabBasicInfoWidget extends GetView<LabProfileController> {
           8.verticalSpace,
           Row(
             children: [
-              Icon(Iconsax.location, color: Colors.grey, size: 18.sp),
+              Icon(Iconsax.location, color: mutedColor, size: 18.sp),
               4.horizontalSpace,
               Expanded(
                 child: Text(
                   controller.lab.address,
-                  style: TextStyle(color: Colors.grey[600], fontSize: 14.sp),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: mutedColor,
+                    fontSize: 14.sp,
+                  ),
                 ),
               ),
             ],
@@ -71,7 +79,11 @@ class LabBasicInfoWidget extends GetView<LabProfileController> {
               4.horizontalSpace,
               Text(
                 "${controller.lab.rating.toTrimmedFixed(maxDecimals: 2)} (120+ مراجعة)", // يمكن جعل العدد ديناميكي
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14.sp,
+                ),
               ),
             ],
           ),

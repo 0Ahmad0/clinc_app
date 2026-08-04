@@ -13,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:readmore/readmore.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 import '../../../../app/core/widgets/action_rating_card_widget.dart';
 import '../controllers/doctor_details_controller.dart';
 
@@ -25,17 +26,22 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
       appBar: AppAppBarWidget(
         title: tr(LocaleKeys.doctor_details_details_title),
         actions: [
-          Obx(
-            () => IconButton(
-              icon: Icon(
-                controller.isFavorite.value
-                    ? Icons.favorite
-                    : Icons.favorite_border,
-                color: controller.isFavorite.value ? Colors.red : Colors.black,
-              ),
-              onPressed: () => controller.toggleFavorite(),
-            ),
-          ),
+          Obx(() {
+            final isLoading = controller.isFavoriteLoading;
+            return IconButton(
+              icon: isLoading
+                  ? const _FavoriteShimmerIcon()
+                  : Icon(
+                      controller.isFavorite.value
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      color: controller.isFavorite.value
+                          ? Colors.red
+                          : Theme.of(context).iconTheme.color,
+                    ),
+              onPressed: isLoading ? null : () => controller.toggleFavorite(),
+            );
+          }),
         ],
       ),
       body: Obx(() {
@@ -45,7 +51,7 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildDoctorCard(),
+              _buildDoctorCard(context),
 
               25.verticalSpace,
 
@@ -126,7 +132,7 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
               // عرض أول 3 تقييمات فقط كمعاينة
               ...controller.allReviews
                   .take(3)
-                  .map((review) => controller.reviewCard(review)),
+                  .map((review) => controller.reviewCard(context, review)),
             ],
           ),
         );
@@ -135,10 +141,12 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
         child: Container(
           padding: EdgeInsets.all(20.w),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).scaffoldBackgroundColor,
             boxShadow: [
               BoxShadow(
-                color: Colors.black12,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.black.withValues(alpha: 0.28)
+                    : Colors.black12,
                 blurRadius: 10.r,
                 offset: const Offset(0, -4),
               ),
@@ -156,18 +164,22 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
     );
   }
 
-  Widget _buildDoctorCard() {
+  Widget _buildDoctorCard(BuildContext context) {
     final doc = controller.currentDoctor;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.myOpacity(0.1),
-            blurRadius: 10,
-            spreadRadius: 5,
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.24)
+                : Colors.grey.myOpacity(0.1),
+            blurRadius: isDark ? 18 : 10,
+            spreadRadius: isDark ? 0 : 5,
             offset: const Offset(0, 5),
           ),
         ],
@@ -180,7 +192,9 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
             child: Container(
               height: 200.h,
               width: double.infinity,
-              color: Colors.grey.myOpacity(0.12),
+              color: isDark
+                  ? theme.colorScheme.surface.withValues(alpha: 0.46)
+                  : Colors.grey.myOpacity(0.12),
               child: AppCachedImageWidget(
                 imageUrl: doc.imageUrl,
                 height: 200.h,
@@ -206,14 +220,16 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
                         style: TextStyle(
                           fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                          color: theme.textTheme.titleMedium?.color,
                         ),
                       ),
                       subtitle: Text(
                         doc.specialty,
                         style: TextStyle(
                           fontSize: 14.sp,
-                          color: Colors.grey[500],
+                          color: theme.textTheme.bodySmall?.color?.withValues(
+                            alpha: 0.72,
+                          ),
                         ),
                       ),
                     ),
@@ -224,10 +240,11 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
                       const Icon(Icons.star, color: Colors.amber, size: 20),
                       SizedBox(width: 4.w),
                       Text(
-                        doc.rating
-                            .toTrimmedFixed(maxDecimals: 2)
-                            .trNumbers(),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        doc.rating.toTrimmedFixed(maxDecimals: 2).trNumbers(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: theme.textTheme.bodyMedium?.color,
+                        ),
                       ),
                       SizedBox(width: 4.w),
                       Text(
@@ -235,7 +252,9 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
                             .trNumbers(),
                         style: TextStyle(
                           fontSize: 12.sp,
-                          color: Colors.grey[500],
+                          color: theme.textTheme.bodySmall?.color?.withValues(
+                            alpha: 0.72,
+                          ),
                         ),
                       ),
                     ],
@@ -277,6 +296,30 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
             style: TextStyle(fontSize: 11.sp, color: Colors.grey),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _FavoriteShimmerIcon extends StatelessWidget {
+  const _FavoriteShimmerIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Shimmer(
+      duration: const Duration(milliseconds: 1100),
+      interval: const Duration(milliseconds: 180),
+      color: Colors.white,
+      colorOpacity: isDark ? .18 : .55,
+      enabled: true,
+      direction: const ShimmerDirection.fromLTRB(),
+      child: Icon(
+        Icons.favorite,
+        color: isDark
+            ? Colors.white.withValues(alpha: .34)
+            : Colors.red.withValues(alpha: .28),
       ),
     );
   }

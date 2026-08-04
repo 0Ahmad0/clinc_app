@@ -34,6 +34,7 @@ class MyAppointmentDetailsModel {
     this.canCancel,
     this.canCancelUntil = '',
     this.cancelledAt = '',
+    this.createdAt = '',
     this.resultFileUrl = '',
     this.resultFileName = '',
     this.resultNotes = '',
@@ -73,6 +74,7 @@ class MyAppointmentDetailsModel {
   final bool? canCancel;
   final String canCancelUntil;
   final String cancelledAt;
+  final String createdAt;
   final String resultFileUrl;
   final String resultFileName;
   final String resultNotes;
@@ -233,6 +235,15 @@ class MyAppointmentDetailsModel {
           '',
       cancelledAt:
           (json['cancelled_at'] ?? json['cancelledAt'])?.toString() ?? '',
+      createdAt:
+          (json['created_at'] ??
+                  json['createdAt'] ??
+                  json['requested_at'] ??
+                  json['requestedAt'] ??
+                  json['booked_at'] ??
+                  json['bookedAt'])
+              ?.toString() ??
+          '',
       resultFileUrl: _firstString([
         json['result_file_url'],
         json['result_url'],
@@ -304,6 +315,7 @@ class MyAppointmentDetailsModel {
     'can_cancel': canCancel,
     'can_cancel_until': canCancelUntil,
     'cancelled_at': cancelledAt,
+    'created_at': createdAt,
     'result_file_url': resultFileUrl,
     'result_file_name': resultFileName,
     'result_notes': resultNotes,

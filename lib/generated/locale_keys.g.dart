@@ -41,6 +41,7 @@ abstract class  LocaleKeys {
   static const password_validation_req_digit = 'password_validation.req_digit';
   static const password_validation_req_special = 'password_validation.req_special';
   static const password_validation_req_no_spaces = 'password_validation.req_no_spaces';
+  static const password_validation_password_matches = 'password_validation.password_matches';
   static const password_validation = 'password_validation';
   static const toast_success = 'toast.success';
   static const toast_error = 'toast.error';
@@ -111,6 +112,7 @@ abstract class  LocaleKeys {
   static const signup_visitor_register = 'signup.visitor_register';
   static const signup_terms_prefix = 'signup.terms_prefix';
   static const signup_terms_link = 'signup.terms_link';
+  static const signup_terms_required = 'signup.terms_required';
   static const signup = 'signup';
   static const forgetPassword_email = 'forgetPassword.email';
   static const forgetPassword_welcome = 'forgetPassword.welcome';
@@ -568,6 +570,8 @@ abstract class  LocaleKeys {
   static const booking_problem_label = 'booking.problem_label';
   static const booking_problem_hint = 'booking.problem_hint';
   static const booking_btn_book_now = 'booking.btn_book_now';
+  static const booking_no_times_title = 'booking.no_times_title';
+  static const booking_no_times_subtitle = 'booking.no_times_subtitle';
   static const booking_validation_error = 'booking.validation_error';
   static const booking = 'booking';
   static const appointments_screen_title = 'appointments.screen_title';
@@ -576,6 +580,8 @@ abstract class  LocaleKeys {
   static const appointments_filter_pending = 'appointments.filter_pending';
   static const appointments_filter_rejected = 'appointments.filter_rejected';
   static const appointments_order_id = 'appointments.order_id';
+  static const appointments_order_type_appointment = 'appointments.order_type_appointment';
+  static const appointments_order_type_lab = 'appointments.order_type_lab';
   static const appointments_price_label = 'appointments.price_label';
   static const appointments_status_accepted = 'appointments.status_accepted';
   static const appointments_status_pending = 'appointments.status_pending';

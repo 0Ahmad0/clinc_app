@@ -1,3 +1,4 @@
+import 'package:clinc_app_t1/app/core/widgets/section_shimmer_widgets.dart';
 import 'package:clinc_app_t1/app/enums/loading.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/labs/data/models/lab_test_model.dart';
@@ -18,33 +19,34 @@ class LabsTestsList extends GetView<LabsTestController> {
 
       if (controller.loadingState.value == GeneralLoading.loading ||
           controller.loadingState.value == GeneralLoading.initial) {
-        return SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.all(32.w),
-            child: const Center(child: CircularProgressIndicator()),
-          ),
-        );
+        return const LabTestsShimmer();
       }
 
       if (tests.isEmpty && controller.searchQuery.isNotEmpty) {
+        final theme = Theme.of(context);
+        final mutedColor = theme.colorScheme.onSurface.withValues(
+          alpha: theme.brightness == Brightness.dark ? 0.62 : 0.54,
+        );
         return SliverToBoxAdapter(
           child: Padding(
             padding: EdgeInsets.all(32.w),
             child: Column(
               children: [
-                Icon(
-                  Iconsax.search_status,
-                  size: 60.sp,
-                  color: Colors.grey[400],
-                ),
+                Icon(Iconsax.search_status, size: 60.sp, color: mutedColor),
                 SizedBox(height: 16.h),
                 Text(
                   "لا توجد نتائج",
-                  style: TextStyle(fontSize: 16.sp, color: Colors.grey[600]),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontSize: 16.sp,
+                    color: mutedColor,
+                  ),
                 ),
                 Text(
                   "جرب كلمات بحث أخرى",
-                  style: TextStyle(fontSize: 14.sp, color: Colors.grey[500]),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontSize: 14.sp,
+                    color: mutedColor,
+                  ),
                 ),
               ],
             ),
@@ -62,16 +64,26 @@ class LabsTestsList extends GetView<LabsTestController> {
   }
 
   Widget _buildTestItem(LabTest test, BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final titleColor = theme.colorScheme.onSurface;
+    final subtitleColor = theme.colorScheme.onSurface.withValues(
+      alpha: isDark ? 0.66 : 0.58,
+    );
+
     return Container(
       margin: EdgeInsets.fromLTRB(16.w, 0, 16.w, 12.h),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: theme.dividerColor.withValues(alpha: isDark ? 0.24 : 0.10),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: isDark ? 0.18 : 0.05),
             blurRadius: 10,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -83,7 +95,7 @@ class LabsTestsList extends GetView<LabsTestController> {
             // تفاصيل الفحص
             Get.bottomSheet(
               _buildTestDetailsSheet(test, context),
-              backgroundColor: Colors.white,
+              backgroundColor: theme.cardColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(25.r)),
               ),
@@ -99,7 +111,9 @@ class LabsTestsList extends GetView<LabsTestController> {
                 Container(
                   padding: EdgeInsets.all(12.w),
                   decoration: BoxDecoration(
-                    color: _getCategoryColor(test.category).withOpacity(0.1),
+                    color: _getCategoryColor(
+                      test.category,
+                    ).withValues(alpha: isDark ? 0.16 : 0.1),
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Icon(
@@ -126,7 +140,7 @@ class LabsTestsList extends GetView<LabsTestController> {
                               style: TextStyle(
                                 fontSize: 15.sp,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                                color: titleColor,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -140,7 +154,7 @@ class LabsTestsList extends GetView<LabsTestController> {
                             decoration: BoxDecoration(
                               color: _getCategoryColor(
                                 test.category,
-                              ).withOpacity(0.1),
+                              ).withValues(alpha: isDark ? 0.16 : 0.1),
                               borderRadius: BorderRadius.circular(8.r),
                             ),
                             child: Text(
@@ -162,7 +176,7 @@ class LabsTestsList extends GetView<LabsTestController> {
                         test.description,
                         style: TextStyle(
                           fontSize: 12.sp,
-                          color: Colors.grey[600],
+                          color: subtitleColor,
                           height: 1.4,
                         ),
                         maxLines: 2,
@@ -247,7 +261,18 @@ class LabsTestsList extends GetView<LabsTestController> {
   }
 
   Widget _buildTestDetailsSheet(LabTest test, BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final titleColor = theme.colorScheme.onSurface;
+    final subtitleColor = theme.colorScheme.onSurface.withValues(
+      alpha: isDark ? 0.68 : 0.60,
+    );
+
     return Container(
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.r)),
+      ),
       padding: EdgeInsets.all(20.w),
       child: SingleChildScrollView(
         child: Column(
@@ -260,7 +285,9 @@ class LabsTestsList extends GetView<LabsTestController> {
                 width: 40.w,
                 height: 4.h,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: theme.dividerColor.withValues(
+                    alpha: isDark ? 0.36 : 0.65,
+                  ),
                   borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
@@ -274,7 +301,7 @@ class LabsTestsList extends GetView<LabsTestController> {
               style: TextStyle(
                 fontSize: 22.sp,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: titleColor,
               ),
             ),
 
@@ -289,7 +316,9 @@ class LabsTestsList extends GetView<LabsTestController> {
                     vertical: 6.h,
                   ),
                   decoration: BoxDecoration(
-                    color: _getCategoryColor(test.category).withOpacity(0.1),
+                    color: _getCategoryColor(
+                      test.category,
+                    ).withValues(alpha: isDark ? 0.16 : 0.1),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Text(
@@ -309,7 +338,9 @@ class LabsTestsList extends GetView<LabsTestController> {
                       vertical: 6.h,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.orange.withOpacity(0.1),
+                      color: Colors.orange.withValues(
+                        alpha: isDark ? 0.16 : 0.1,
+                      ),
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Row(
@@ -337,7 +368,7 @@ class LabsTestsList extends GetView<LabsTestController> {
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: titleColor,
               ),
             ),
             SizedBox(height: 8.h),
@@ -345,7 +376,7 @@ class LabsTestsList extends GetView<LabsTestController> {
               test.description,
               style: TextStyle(
                 fontSize: 14.sp,
-                color: Colors.grey[700],
+                color: subtitleColor,
                 height: 1.6,
               ),
             ),
@@ -362,7 +393,7 @@ class LabsTestsList extends GetView<LabsTestController> {
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: titleColor,
                     ),
                   ),
                   SizedBox(height: 8.h),
@@ -372,7 +403,9 @@ class LabsTestsList extends GetView<LabsTestController> {
                     children: test.includedTests!.map((item) {
                       return Chip(
                         label: Text(item),
-                        backgroundColor: Colors.blue.withOpacity(0.1),
+                        backgroundColor: Colors.blue.withValues(
+                          alpha: isDark ? 0.16 : 0.1,
+                        ),
                         labelStyle: TextStyle(
                           fontSize: 12.sp,
                           color: Colors.blue,
@@ -390,7 +423,7 @@ class LabsTestsList extends GetView<LabsTestController> {
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: titleColor,
               ),
             ),
             SizedBox(height: 8.h),
@@ -402,7 +435,7 @@ class LabsTestsList extends GetView<LabsTestController> {
               ),
               title: Text(
                 "يرجى إحضار الهوية الوطنية",
-                style: TextStyle(fontSize: 14.sp),
+                style: TextStyle(fontSize: 14.sp, color: titleColor),
               ),
               dense: true,
               visualDensity: VisualDensity.compact,
@@ -413,7 +446,7 @@ class LabsTestsList extends GetView<LabsTestController> {
                 test.isFastingRequired
                     ? "الصيام لمدة 8 ساعات قبل الفحص"
                     : "لا يتطلب صيام",
-                style: TextStyle(fontSize: 14.sp),
+                style: TextStyle(fontSize: 14.sp, color: titleColor),
               ),
               dense: true,
               visualDensity: VisualDensity.compact,
@@ -429,10 +462,12 @@ class LabsTestsList extends GetView<LabsTestController> {
                 IconButton(
                   onPressed: () => controller.shareTest(test),
                   style: IconButton.styleFrom(
-                    backgroundColor: Colors.grey[100],
+                    backgroundColor: theme.colorScheme.onSurface.withValues(
+                      alpha: isDark ? 0.10 : 0.06,
+                    ),
                     padding: EdgeInsets.all(12.w),
                   ),
-                  icon: Icon(Iconsax.share, color: Colors.grey[600]),
+                  icon: Icon(Iconsax.share, color: subtitleColor),
                 ),
               ],
             ),

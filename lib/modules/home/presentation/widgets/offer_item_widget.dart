@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/constants/app_assets.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -97,12 +98,14 @@ class _OfferBackgroundImage extends StatelessWidget {
       return _assetImage();
     }
 
-    return Image.network(
-      imageUrl!,
+    return AppCachedImageWidget(
+      imageUrl: imageUrl,
       fit: BoxFit.cover,
       width: double.maxFinite,
       height: 120.h,
-      errorBuilder: (_, __, ___) => _assetImage(),
+      clipRadius: 0,
+      useShimmerPlaceholder: true,
+      fallback: _assetImage(),
     );
   }
 

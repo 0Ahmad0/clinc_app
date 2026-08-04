@@ -349,7 +349,7 @@ class LabsTestController extends GetxController {
   void _readRouteArgs() {
     final args = Get.arguments;
     if (args is! Map) return;
-    _labId = args['id']?.toString() ?? args['lab_id']?.toString();
+    _labId = args['lab_id']?.toString() ?? args['id']?.toString();
     if (args['category'] is String) {
       _initialCategory = args['category'] as String;
     }

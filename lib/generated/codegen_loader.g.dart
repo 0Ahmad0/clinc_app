@@ -25,7 +25,7 @@ class CodegenLoader extends AssetLoader{
     "email_empty": "Please enter email",
     "email_invalid": "Invalid email format",
     "phone_empty": "Please enter phone number",
-    "phone_invalid": "Invalid phone number format (example: 0512345678)",
+    "phone_invalid": "Phone number must be exactly 10 digits",
     "password_empty": "Please enter password",
     "password_short": "Password must be at least 8 characters",
     "password_uppercase": "Password must contain at least one uppercase letter",
@@ -54,7 +54,8 @@ class CodegenLoader extends AssetLoader{
     "req_lower": "Lowercase (a-z)",
     "req_digit": "One digit (0-9)",
     "req_special": "Special character (!@#\\u0024%)",
-    "req_no_spaces": "No spaces"
+    "req_no_spaces": "No spaces",
+    "password_matches": "Password meets the requirements"
   },
   "toast": {
     "success": "Success",
@@ -131,7 +132,8 @@ class CodegenLoader extends AssetLoader{
     "login": "Login",
     "visitor_register": "Register as Visitor",
     "terms_prefix": "I agree to ",
-    "terms_link": "Privacy Policy and Terms of Use"
+    "terms_link": "Privacy Policy and Terms of Use",
+    "terms_required": "Please agree to the Privacy Policy and Terms of Use"
   },
   "forgetPassword": {
     "email": "Email",
@@ -614,24 +616,28 @@ class CodegenLoader extends AssetLoader{
     "problem_label": "Patient's Complaint",
     "problem_hint": "Describe the issue clearly and concisely...",
     "btn_book_now": "Book Appointment Now",
+    "no_times_title": "No times available",
+    "no_times_subtitle": "Try choosing another day, and we will show available times as soon as they open.",
     "validation_error": "Please fill all required fields"
   },
   "appointments": {
-    "screen_title": "My Bookings",
+    "screen_title": "Orders",
     "filter_all": "All",
     "filter_accepted": "Accepted",
     "filter_pending": "In Progress",
     "filter_rejected": "Rejected",
     "order_id": "Order #",
+    "order_type_appointment": "Appointment",
+    "order_type_lab": "Lab order",
     "price_label": "Price: ",
     "status_accepted": "Accepted",
     "status_pending": "Pending",
     "status_completed": "Completed",
     "status_rejected": "Rejected",
     "currency": "SAR",
-    "empty_title": "No appointments",
-    "empty_subtitle_all": "Your appointments will appear here after your first booking.",
-    "empty_subtitle_filtered": "No appointments in this category right now.",
+    "empty_title": "No orders",
+    "empty_subtitle_all": "Your orders will appear here after your first appointment or lab order.",
+    "empty_subtitle_filtered": "No orders in this category right now.",
     "rebook": "Rebook",
     "cancel_booking": "Cancel booking",
     "cancel_unavailable": "Cannot cancel (allowed time has passed)",
@@ -716,7 +722,7 @@ static const Map<String,dynamic> _ar = {
     "email_empty": "الرجاء إدخال البريد الإلكتروني",
     "email_invalid": "صيغة البريد الإلكتروني غير صحيحة",
     "phone_empty": "الرجاء إدخال رقم الهاتف",
-    "phone_invalid": "صيغة الرقم غير صحيحة (مثال: 0512345678)",
+    "phone_invalid": "رقم الهاتف يجب أن يتكون من 10 أرقام فقط",
     "password_empty": "الرجاء إدخال كلمة المرور",
     "password_short": "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
     "password_uppercase": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل",
@@ -745,7 +751,8 @@ static const Map<String,dynamic> _ar = {
     "req_lower": "حرف صغير (a-z)",
     "req_digit": "رقم واحد (0-9)",
     "req_special": "رمز خاص (!@#\\u0024%)",
-    "req_no_spaces": "بدون مسافات"
+    "req_no_spaces": "بدون مسافات",
+    "password_matches": "كلمة المرور مطابقة للمواصفات"
   },
   "toast": {
     "success": "نجاح",
@@ -822,7 +829,8 @@ static const Map<String,dynamic> _ar = {
     "login": "تسجيل الدخول",
     "visitor_register": "التسجيل كزائر",
     "terms_prefix": "أوافق على ",
-    "terms_link": "سياسة الخصوصية و شروط الاستخدام"
+    "terms_link": "سياسة الخصوصية و شروط الاستخدام",
+    "terms_required": "يجب الموافقة على سياسة الخصوصية والشروط والأحكام"
   },
   "forgetPassword": {
     "email": "البريد الالكتروني",
@@ -1305,24 +1313,28 @@ static const Map<String,dynamic> _ar = {
     "problem_label": "ما يشكو منه المراجع",
     "problem_hint": "اكتب بوضوح واختصار المشكلة التي تواجهها...",
     "btn_book_now": "احجز موعد الآن",
+    "no_times_title": "لا توجد أوقات متاحة",
+    "no_times_subtitle": "جرّب اختيار يوم آخر، وسنعرض لك الأوقات المتاحة فور توفرها.",
     "validation_error": "الرجاء ملء جميع الحقول المطلوبة"
   },
   "appointments": {
-    "screen_title": "حجوزاتي",
+    "screen_title": "الطلبات",
     "filter_all": "الكل",
     "filter_accepted": "المقبولة",
     "filter_pending": "الجارية",
     "filter_rejected": "المرفوضة",
     "order_id": "الطلب رقم",
+    "order_type_appointment": "حجز موعد",
+    "order_type_lab": "طلب تحاليل",
     "price_label": "السعر :",
     "status_accepted": "تم قبول الطلب",
     "status_pending": "قيد الانتظار",
     "status_completed": "مكتملة",
     "status_rejected": "تم رفض الطلب",
     "currency": "ريال",
-    "empty_title": "لا توجد مواعيد",
-    "empty_subtitle_all": "ستظهر مواعيدك هنا بعد إتمام أول حجز.",
-    "empty_subtitle_filtered": "لا توجد مواعيد ضمن هذا التصنيف حالياً.",
+    "empty_title": "لا توجد طلبات",
+    "empty_subtitle_all": "ستظهر طلباتك هنا بعد إتمام أول حجز أو طلب تحاليل.",
+    "empty_subtitle_filtered": "لا توجد طلبات ضمن هذا التصنيف حالياً.",
     "rebook": "إعادة حجز",
     "cancel_booking": "إلغاء الحجز",
     "cancel_unavailable": "غير قابل للإلغاء (تجاوز الوقت المسموح)",

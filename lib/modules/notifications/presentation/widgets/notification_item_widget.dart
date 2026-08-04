@@ -13,109 +13,122 @@ class NotificationItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final isUnread = !notification.isRead;
+    final accentColor = notification.type.iconColor;
+    final cardColor = isUnread
+        ? theme.cardColor
+        : theme.cardColor.withValues(alpha: isDark ? 0.42 : 0.58);
+    final borderColor = isUnread
+        ? accentColor.withValues(alpha: isDark ? 0.28 : 0.18)
+        : theme.dividerColor.withValues(alpha: isDark ? 0.18 : 0.08);
+    final bodyColor = theme.colorScheme.onSurface.withValues(
+      alpha: isDark ? 0.66 : 0.58,
+    );
+    final timeColor = theme.colorScheme.onSurface.withValues(
+      alpha: isDark ? 0.48 : 0.42,
+    );
 
-    return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.all(16.sp),
-      decoration: BoxDecoration(
-        // color: isUnread ? Colors.white : const Color(0xFFFAFAFA),
-        color: isUnread
-            ? Theme.of(context).cardColor
-            : Theme.of(context).cardColor.myOpacity(.3),
+    return Directionality(
+      textDirection: Directionality.of(context),
+      child: Container(
+        margin: EdgeInsets.only(bottom: 12.h),
+        padding: EdgeInsets.all(14.sp),
+        decoration: BoxDecoration(
+          color: cardColor,
 
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.myOpacity(isUnread ? 0.05 : 0.01),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-        border: isUnread
-            ? Border.all(
-                color: Theme.of(context).primaryColor.myOpacity(0.1),
-                width: 1,
-              )
-            : null,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 1. الأيقونة (تأخذ لونها وشكلها من الـ Enum Extension مباشرة)
-          Container(
-            height: 48.sp,
-            width: 48.sp,
-            decoration: BoxDecoration(
-              color: notification.type.backgroundColor, // <--- هنا النظافة
-              borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(14.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.myOpacity(
+                isDark ? (isUnread ? 0.22 : 0.10) : (isUnread ? 0.06 : 0.02),
+              ),
+              blurRadius: 16,
+              offset: const Offset(0, 8),
             ),
-            child: Icon(
-              notification.type.icon, // <--- وهنا
-              color: notification.type.iconColor, // <--- وهنا
-              size: 24.sp,
+          ],
+          border: Border.all(color: borderColor, width: 1),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 46.sp,
+              width: 46.sp,
+              decoration: BoxDecoration(
+                color: accentColor.withValues(alpha: isDark ? 0.18 : 0.12),
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+              child: Icon(
+                notification.type.icon,
+                color: accentColor,
+                size: 23.sp,
+              ),
             ),
-          ),
-          16.horizontalSpace,
-
-          // 2. المحتوى
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        notification.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(
-                              fontWeight: isUnread
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                              fontSize: 15.sp,
-                            ),
-                      ),
-                    ),
-                    if (isUnread)
-                      Container(
-                        width: 8.sp,
-                        height: 8.sp,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          shape: BoxShape.circle,
+            14.horizontalSpace,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          notification.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurface,
+                            fontWeight: isUnread
+                                ? FontWeight.w800
+                                : FontWeight.w600,
+                            fontSize: 15.sp,
+                            height: 1.25,
+                          ),
                         ),
                       ),
-                  ],
-                ),
-                6.verticalSpace,
-                Text(
-                  notification.body,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.grey.shade600,
-                    height: 1.5,
+                      if (isUnread) ...[
+                        10.horizontalSpace,
+                        Container(
+                          width: 8.sp,
+                          height: 8.sp,
+                          decoration: BoxDecoration(
+                            color: theme.primaryColor,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
-                ),
-                8.verticalSpace,
-                Text(
-                  DateFormat(
-                    'hh:mm a',
-                    Get.locale?.languageCode,
-                  ).format(notification.time),
-                  style: TextStyle(
-                    fontSize: 11.sp,
-                    color: Colors.grey.shade400,
+                  6.verticalSpace,
+                  Text(
+                    notification.body,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: bodyColor,
+                      height: 1.45,
+                      fontSize: 12.5.sp,
+                    ),
                   ),
-                ),
-              ],
+                  10.verticalSpace,
+                  Text(
+                    DateFormat(
+                      'hh:mm a',
+                      Get.locale?.languageCode,
+                    ).format(notification.time),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontSize: 11.sp,
+                      color: timeColor,
+                      height: 1,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

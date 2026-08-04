@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 import 'circle_action_button.dart';
 
@@ -12,17 +13,16 @@ class LabProfileAppBar extends GetView<LabProfileController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return SliverAppBar(
       expandedHeight: 280.h,
       pinned: true,
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: theme.primaryColor,
       title: Text(controller.lab.name),
       leading: Padding(
         padding: EdgeInsets.all(8.sp),
-        child: CircleAvatar(
-          backgroundColor: Colors.white.withValues(alpha: 0.9),
-          child: const BackButton(color: Colors.black),
-        ),
+        child: CircleActionButton(icon: Iconsax.arrow_left_2, onTap: Get.back),
       ),
       actions: [
         // زر المشاركة
@@ -32,8 +32,13 @@ class LabProfileAppBar extends GetView<LabProfileController> {
         Obx(
           () => CircleActionButton(
             icon: controller.isFavorite.value ? Iconsax.heart5 : Iconsax.heart,
-            color: controller.isFavorite.value ? Colors.red : Colors.black,
-            onTap: controller.toggleFavorite,
+            color: controller.isFavorite.value ? Colors.red : null,
+            onTap: controller.isFavoriteLoading.value
+                ? () {}
+                : controller.toggleFavorite,
+            child: controller.isFavoriteLoading.value
+                ? const _FavoriteShimmerIcon()
+                : null,
           ),
         ),
         16.horizontalSpace,
@@ -63,6 +68,31 @@ class LabProfileAppBar extends GetView<LabProfileController> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _FavoriteShimmerIcon extends StatelessWidget {
+  const _FavoriteShimmerIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Shimmer(
+      duration: const Duration(milliseconds: 1100),
+      interval: const Duration(milliseconds: 180),
+      color: Colors.white,
+      colorOpacity: isDark ? .18 : .55,
+      enabled: true,
+      direction: const ShimmerDirection.fromLTRB(),
+      child: Icon(
+        Iconsax.heart5,
+        color: isDark
+            ? Colors.white.withValues(alpha: .34)
+            : Colors.red.withValues(alpha: .28),
+        size: 20.sp,
       ),
     );
   }

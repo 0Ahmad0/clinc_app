@@ -4,23 +4,36 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CircleActionButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
-  final Color color;
+  final Color? color;
+  final Widget? child;
 
   const CircleActionButton({
     super.key,
     required this.icon,
     required this.onTap,
-    this.color = Colors.black,
+    this.color,
+    this.child,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: onTap,
       child: CircleAvatar(
-        backgroundColor: Colors.white.withValues(alpha: 0.9),
+        backgroundColor: theme.cardColor.withValues(
+          alpha: isDark ? 0.86 : 0.90,
+        ),
         radius: 20.r,
-        child: Icon(icon, color: color, size: 20.sp),
+        child:
+            child ??
+            Icon(
+              icon,
+              color: color ?? theme.colorScheme.onSurface,
+              size: 20.sp,
+            ),
       ),
     );
   }

@@ -32,6 +32,7 @@ class AppointmentModel {
   final bool isBreastfeeding;
   final bool? canCancel;
   final String canCancelUntil;
+  final String createdAt;
 
   AppointmentModel({
     required this.id,
@@ -65,6 +66,7 @@ class AppointmentModel {
     this.isBreastfeeding = false,
     this.canCancel,
     this.canCancelUntil = '',
+    this.createdAt = '',
   });
 
   factory AppointmentModel.fromJson(Map<String, dynamic> json) {
@@ -152,7 +154,10 @@ class AppointmentModel {
                   doctor['logo'] ??
                   doctor['image'] ??
                   doctor['image_url'] ??
-                  doctor['avatar'])
+                  doctor['avatar'] ??
+                  lab['logo'] ??
+                  lab['image'] ??
+                  lab['image_url'])
               ?.toString() ??
           '',
       price:
@@ -194,6 +199,15 @@ class AppointmentModel {
       canCancelUntil:
           (json['can_cancel_until'] ?? json['canCancelUntil'])?.toString() ??
           '',
+      createdAt:
+          (json['created_at'] ??
+                  json['createdAt'] ??
+                  json['requested_at'] ??
+                  json['requestedAt'] ??
+                  json['booked_at'] ??
+                  json['bookedAt'])
+              ?.toString() ??
+          '',
     );
   }
 
@@ -229,6 +243,7 @@ class AppointmentModel {
     'is_breastfeeding': isBreastfeeding,
     'can_cancel': canCancel,
     'can_cancel_until': canCancelUntil,
+    'created_at': createdAt,
   };
 
   // دالة copyWith لتحديث الحقول بسهولة
@@ -264,6 +279,7 @@ class AppointmentModel {
     bool? isBreastfeeding,
     bool? canCancel,
     String? canCancelUntil,
+    String? createdAt,
   }) {
     return AppointmentModel(
       id: id ?? this.id,
@@ -297,7 +313,14 @@ class AppointmentModel {
       isBreastfeeding: isBreastfeeding ?? this.isBreastfeeding,
       canCancel: canCancel ?? this.canCancel,
       canCancelUntil: canCancelUntil ?? this.canCancelUntil,
+      createdAt: createdAt ?? this.createdAt,
     );
+  }
+
+  DateTime? get createdDateTime {
+    final text = createdAt.trim();
+    if (text.isEmpty) return null;
+    return DateTime.tryParse(text);
   }
 
   DateTime? get scheduledAt {
@@ -316,6 +339,26 @@ class AppointmentModel {
     final scheduled = scheduledAt;
     if (scheduled == null) return false;
     return scheduled.difference(DateTime.now()).inHours >= 24;
+  }
+
+  bool get isWithinPendingCancellationWindow {
+    if (status != AppointmentStatus.pending) return false;
+    if (canCancel != null) return canCancel!;
+    final cancelUntil = DateTime.tryParse(canCancelUntil);
+    if (cancelUntil != null) return DateTime.now().isBefore(cancelUntil);
+    final created = createdDateTime;
+    if (created == null) return false;
+    return DateTime.now().difference(created) < const Duration(hours: 24);
+  }
+
+  bool get canCancelByPolicy {
+    if (status == AppointmentStatus.accepted) {
+      return isBeforeCancellationDeadline;
+    }
+    if (status == AppointmentStatus.pending) {
+      return isWithinPendingCancellationWindow;
+    }
+    return false;
   }
 
   static double _doubleValue(dynamic value) {

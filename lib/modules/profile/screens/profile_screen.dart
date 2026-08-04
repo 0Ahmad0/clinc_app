@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clinc_app_t1/app/core/constants/app_assets.dart';
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/core/utils/dialogs/app_bottom_sheet.dart';
@@ -75,7 +76,7 @@ class ProfileScreen extends GetView<ProfileController> {
                               backgroundColor: AppColors.success.myOpacity(.25),
                               radius: 60.r,
                               backgroundImage: avatar.startsWith('http')
-                                  ? NetworkImage(avatar)
+                                  ? CachedNetworkImageProvider(avatar)
                                   : FileImage(File(avatar)) as ImageProvider,
                             );
                           }

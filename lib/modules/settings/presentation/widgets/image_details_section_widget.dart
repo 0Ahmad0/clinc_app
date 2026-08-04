@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
@@ -65,7 +66,7 @@ class ImageDetailsSectionWidget extends GetView<SettingsController> {
                       backgroundImage: image == null || image.isEmpty
                           ? null
                           : image.startsWith('http')
-                          ? NetworkImage(image)
+                          ? CachedNetworkImageProvider(image)
                           : FileImage(File(image)) as ImageProvider,
                       child: image == null || image.isEmpty
                           ? const Icon(Iconsax.user)

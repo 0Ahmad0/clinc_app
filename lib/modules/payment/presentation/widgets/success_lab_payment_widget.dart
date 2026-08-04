@@ -12,10 +12,18 @@ class SuccessLabPaymentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).primaryColor;
-    final textTheme = Theme.of(context).textTheme;
-    final textDark = const Color(0xFF1A1A1A);
-    final textGrey = const Color(0xFF808080);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final primaryColor = theme.primaryColor;
+    final textTheme = theme.textTheme;
+    final panelColor = theme.cardColor;
+    final detailsColor = isDark
+        ? theme.scaffoldBackgroundColor.withValues(alpha: 0.46)
+        : const Color(0xFFF5F7FA);
+    final titleColor = theme.colorScheme.onSurface;
+    final subtitleColor = theme.colorScheme.onSurface.withValues(
+      alpha: isDark ? 0.68 : 0.58,
+    );
 
     return Material(
       color: AppColors.transparent,
@@ -29,7 +37,7 @@ class SuccessLabPaymentWidget extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: panelColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30.r),
                   topRight: Radius.circular(30.r),
@@ -44,7 +52,7 @@ class SuccessLabPaymentWidget extends StatelessWidget {
                     style: textTheme.titleLarge?.copyWith(
                       fontSize: 22.sp,
                       fontWeight: FontWeight.bold,
-                      color: textDark,
+                      color: titleColor,
                     ),
                   ),
                   12.verticalSpace,
@@ -55,7 +63,7 @@ class SuccessLabPaymentWidget extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: textTheme.bodyMedium?.copyWith(
                         fontSize: 14.sp,
-                        color: textGrey,
+                        color: subtitleColor,
                         height: 1.5,
                       ),
                     ),
@@ -65,8 +73,13 @@ class SuccessLabPaymentWidget extends StatelessWidget {
                     width: double.infinity,
                     padding: EdgeInsets.all(16.w),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF5F7FA),
+                      color: detailsColor,
                       borderRadius: BorderRadius.circular(16.r),
+                      border: Border.all(
+                        color: theme.dividerColor.withValues(
+                          alpha: isDark ? 0.26 : 0.12,
+                        ),
+                      ),
                     ),
                     child: Row(
                       children: [
@@ -90,7 +103,7 @@ class SuccessLabPaymentWidget extends StatelessWidget {
                               Text(
                                 tr(LocaleKeys.checkout_lab_title),
                                 style: textTheme.bodySmall?.copyWith(
-                                  color: textGrey,
+                                  color: subtitleColor,
                                   fontSize: 12.sp,
                                 ),
                               ),
@@ -98,7 +111,7 @@ class SuccessLabPaymentWidget extends StatelessWidget {
                               Text(
                                 tr(LocaleKeys.checkout_lab_success_msg),
                                 style: textTheme.bodyMedium?.copyWith(
-                                  color: textDark,
+                                  color: titleColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 13.sp,
                                 ),
@@ -125,7 +138,7 @@ class SuccessLabPaymentWidget extends StatelessWidget {
               width: 90.sp,
               height: 90.sp,
               decoration: ShapeDecoration(
-                color: Colors.white,
+                color: panelColor,
                 shape: StarBorder.polygon(
                   pointRounding: .75,
                   side: BorderSide(color: primaryColor, width: 8.sp),

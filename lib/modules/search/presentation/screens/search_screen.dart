@@ -25,20 +25,17 @@ class SearchScreen extends GetView<SearchAndFilterController> {
       ),
       body: Column(
         children: <Widget>[
-          Visibility(
-            visible: !isShow,
-            child: AppSearchBarWidget(
-              hintText: tr(LocaleKeys.search_search_hint),
-              showFilterButton: true,
-              onChanged: controller.updateSearchQuery,
-              onFilterTap: controller.toggleFilterBar,
-            ),
+          AppSearchBarWidget(
+            hintText: tr(LocaleKeys.search_search_hint),
+            showFilterButton: !isShow,
+            onChanged: controller.updateSearchQuery,
+            onFilterTap: isShow ? null : controller.toggleFilterBar,
           ),
           Visibility(
             visible: !isShow,
             child: Obx(
               () => controller.isFiltersLoading.value
-                  ? const FiltersShimmer(itemCount: 5)
+                  ? const SearchFiltersShimmer()
                   : SearchFilterList(controller: controller),
             ),
           ),

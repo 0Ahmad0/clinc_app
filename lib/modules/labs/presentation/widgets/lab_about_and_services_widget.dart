@@ -11,6 +11,11 @@ class LabAboutAndServicesWidget extends GetView<LabProfileController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final mutedColor = theme.colorScheme.onSurface.withValues(
+      alpha: theme.brightness == Brightness.dark ? 0.68 : 0.60,
+    );
+
     return AppPaddingWidget(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,8 +29,8 @@ class LabAboutAndServicesWidget extends GetView<LabProfileController> {
           8.verticalSpace,
           Text(
             controller.lab.description,
-            style: TextStyle(
-              color: Colors.grey[600],
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: mutedColor,
               height: 1.5,
               fontSize: 14.sp,
             ),

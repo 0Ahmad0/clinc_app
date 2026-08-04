@@ -4,6 +4,7 @@ import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../controllers/payment_controller.dart';
@@ -74,6 +75,10 @@ class AddCardBottomSheet extends GetView<PaymentController> {
                           hintText: "MM/YY",
                           labelText: tr(LocaleKeys.payment_settings_expiry),
                           keyboardType: TextInputType.datetime,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            _ExpiryDateInputFormatter(),
+                          ],
                           validator: controller.validateDate,
                           maxLength: 5,
                         ),
@@ -111,6 +116,32 @@ class AddCardBottomSheet extends GetView<PaymentController> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ExpiryDateInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final oldDigits = oldValue.text.replaceAll(RegExp(r'\D'), '');
+    final digits = newValue.text.replaceAll(RegExp(r'\D'), '');
+    final limitedDigits = digits.length > 4 ? digits.substring(0, 4) : digits;
+
+    var formatted = limitedDigits;
+    if (limitedDigits.length > 2) {
+      formatted =
+          '${limitedDigits.substring(0, 2)}/${limitedDigits.substring(2)}';
+    } else if (limitedDigits.length == 2 &&
+        oldDigits.length < limitedDigits.length) {
+      formatted = '$limitedDigits/';
+    }
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
     );
   }
 }

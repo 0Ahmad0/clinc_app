@@ -72,12 +72,17 @@ class SignupController extends GetxController {
 
   Future<void> processSignup() async {
     if (isLoading.value) return;
-    final isValid = formKey.currentState!.validate() && isAgreed.value;
+    final isFormValid = formKey.currentState!.validate();
 
-    if (!isValid) {
-      ResponseHelper.onFailure(message: tr(LocaleKeys.core_form_invalid));
+    if (!isFormValid) {
       return;
     }
+
+    if (!isAgreed.value) {
+      ResponseHelper.onFailure(message: tr(LocaleKeys.signup_terms_required));
+      return;
+    }
+
     isLoading.value = true;
     final email = emailController.text.trim().toLowerCase();
     final result = await _repository.register(

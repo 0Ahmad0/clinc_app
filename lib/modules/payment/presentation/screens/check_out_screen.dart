@@ -16,7 +16,7 @@ class CheckoutScreen extends GetView<CheckoutController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FD),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppAppBarWidget(
         title: tr(LocaleKeys.checkout_booking_payment_title),
       ),
@@ -26,11 +26,11 @@ class CheckoutScreen extends GetView<CheckoutController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildCheckoutInfoCard(),
+            _buildCheckoutInfoCard(context),
             24.verticalSpace,
 
             _buildSectionTitle(tr(LocaleKeys.checkout_payment_method_title)),
-            _buildMainPaymentOptions(),
+            _buildMainPaymentOptions(context),
 
             // ظهور خيارات الأونلاين التفاعلية
             Obx(
@@ -42,7 +42,7 @@ class CheckoutScreen extends GetView<CheckoutController> {
                         _buildSectionTitle(
                           tr(LocaleKeys.checkout_online_payment_method_title),
                         ),
-                        _buildOnlinePaymentGrid(),
+                        _buildOnlinePaymentGrid(context),
                       ],
                     )
                   : const SizedBox.shrink(),
@@ -50,18 +50,21 @@ class CheckoutScreen extends GetView<CheckoutController> {
 
             24.verticalSpace,
             _buildSectionTitle(tr(LocaleKeys.checkout_coupon_code_title)),
-            _buildCouponInputSection(),
+            _buildCouponInputSection(context),
 
             24.verticalSpace,
             _buildSectionTitle(tr(LocaleKeys.checkout_invoice_summary_title)),
-            _buildPriceSummary(),
+            _buildPriceSummary(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCheckoutInfoCard() {
+  Widget _buildCheckoutInfoCard(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Obx(() {
       final model = controller.checkout.value;
       final isLab = model.isLab;
@@ -78,10 +81,13 @@ class CheckoutScreen extends GetView<CheckoutController> {
       return Container(
         padding: EdgeInsets.all(12.w),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.cardColor,
           borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10),
+            BoxShadow(
+              color: Colors.black.withValues(alpha: isDark ? 0.18 : 0.02),
+              blurRadius: 10,
+            ),
           ],
         ),
         child: Row(
@@ -110,7 +116,12 @@ class CheckoutScreen extends GetView<CheckoutController> {
                   ),
                   Text(
                     subtitle,
-                    style: TextStyle(color: Colors.grey, fontSize: 12.sp),
+                    style: TextStyle(
+                      color: theme.textTheme.bodySmall?.color?.withValues(
+                        alpha: 0.68,
+                      ),
+                      fontSize: 12.sp,
+                    ),
                   ),
                   5.verticalSpace,
                   Text(
@@ -133,11 +144,12 @@ class CheckoutScreen extends GetView<CheckoutController> {
   }
 
   // --- 2. خيارات الدفع الرئيسية (تفاعلية) ---
-  Widget _buildMainPaymentOptions() {
+  Widget _buildMainPaymentOptions(BuildContext context) {
     return Obx(
       () => Row(
         children: [
           _buildPaymentCard(
+            context: context,
             label: tr(LocaleKeys.checkout_cash_at_clinic),
             icon: Iconsax.wallet_money,
             isSelected: controller.selectedPayment.value == 'cash',
@@ -145,6 +157,7 @@ class CheckoutScreen extends GetView<CheckoutController> {
           ),
           12.horizontalSpace,
           _buildPaymentCard(
+            context: context,
             label: tr(LocaleKeys.checkout_online_payment),
             icon: Iconsax.card_pos,
             isSelected: controller.selectedPayment.value == 'online',
@@ -156,7 +169,7 @@ class CheckoutScreen extends GetView<CheckoutController> {
   }
 
   // --- 3. شبكة الدفع الإلكتروني (فيزا، أبل باي، تقسيط، تأمين) ---
-  Widget _buildOnlinePaymentGrid() {
+  Widget _buildOnlinePaymentGrid(BuildContext context) {
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -166,17 +179,20 @@ class CheckoutScreen extends GetView<CheckoutController> {
       crossAxisSpacing: 10,
       children: [
         _buildSubMethodCard(
+          context,
           tr(LocaleKeys.checkout_bank_card),
           Iconsax.card,
           'visa',
         ),
-        _buildSubMethodCard("Apple Pay", Icons.apple, 'apple_pay'),
+        _buildSubMethodCard(context, "Apple Pay", Icons.apple, 'apple_pay'),
         _buildSubMethodCard(
+          context,
           tr(LocaleKeys.checkout_installments),
           Iconsax.timer_1,
           'tabby',
         ),
         _buildSubMethodCard(
+          context,
           tr(LocaleKeys.checkout_medical_insurance),
           Iconsax.shield_tick,
           'insurance',
@@ -186,15 +202,20 @@ class CheckoutScreen extends GetView<CheckoutController> {
   }
 
   // --- 4. قسم الكوبون المطور ---
-  Widget _buildCouponInputSection() {
+  Widget _buildCouponInputSection(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Column(
       children: [
         Container(
           padding: EdgeInsets.symmetric(horizontal: 12.w),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: theme.cardColor,
             borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: Colors.grey.shade200),
+            border: Border.all(
+              color: theme.dividerColor.withValues(alpha: isDark ? 0.28 : 0.45),
+            ),
           ),
           child: Row(
             children: [
@@ -204,7 +225,10 @@ class CheckoutScreen extends GetView<CheckoutController> {
                   decoration: InputDecoration(
                     hintText: tr(LocaleKeys.checkout_coupon_hint),
                     border: InputBorder.none,
-                    hintStyle: TextStyle(fontSize: 13.sp),
+                    hintStyle: TextStyle(
+                      fontSize: 13.sp,
+                      color: theme.hintColor,
+                    ),
                   ),
                 ),
               ),
@@ -286,11 +310,13 @@ class CheckoutScreen extends GetView<CheckoutController> {
   }
 
   // --- 5. ملخص الفاتورة التفاعلي ---
-  Widget _buildPriceSummary() {
+  Widget _buildPriceSummary(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Obx(
@@ -310,7 +336,7 @@ class CheckoutScreen extends GetView<CheckoutController> {
                 "-${controller.discountAmount} ${tr(LocaleKeys.checkout_currency)}",
                 isDiscount: true,
               ),
-            const Divider(thickness: 0.1),
+            Divider(color: theme.dividerColor, thickness: 0.1),
             _rowSummary(
               tr(LocaleKeys.checkout_total_due),
               "${controller.totalAmount} ${tr(LocaleKeys.checkout_currency)}",
@@ -327,10 +353,12 @@ class CheckoutScreen extends GetView<CheckoutController> {
     return Container(
       padding: EdgeInsets.all(12.sp),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.black.withValues(alpha: 0.28)
+                : Colors.black12,
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -341,7 +369,6 @@ class CheckoutScreen extends GetView<CheckoutController> {
           isLoading: controller.isProcessingPayment.value,
           onPressed: () => controller.processPayment(context),
           text: controller.selectedPayment.value == 'cash'
-
               ? tr(LocaleKeys.checkout_confirm_booking)
               : tr(
                   LocaleKeys.checkout_confirm_and_pay,
@@ -354,11 +381,15 @@ class CheckoutScreen extends GetView<CheckoutController> {
 
   // Helper Widgets
   Widget _buildPaymentCard({
+    required BuildContext context,
     required String label,
     required IconData icon,
     required bool isSelected,
     required VoidCallback onTap,
   }) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
@@ -366,10 +397,12 @@ class CheckoutScreen extends GetView<CheckoutController> {
           duration: const Duration(milliseconds: 250),
           padding: EdgeInsets.symmetric(vertical: 18.h),
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.primary : Colors.white,
+            color: isSelected ? AppColors.primary : theme.cardColor,
             borderRadius: BorderRadius.circular(16.r),
             border: Border.all(
-              color: isSelected ? AppColors.primary : Colors.grey.shade200,
+              color: isSelected
+                  ? AppColors.primary
+                  : theme.dividerColor.withValues(alpha: isDark ? 0.28 : 0.45),
             ),
           ),
           child: Column(
@@ -384,7 +417,9 @@ class CheckoutScreen extends GetView<CheckoutController> {
                 label,
                 style: TextStyle(
                   fontSize: 13.sp,
-                  color: isSelected ? Colors.white : Colors.black87,
+                  color: isSelected
+                      ? Colors.white
+                      : theme.textTheme.bodyMedium?.color,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 ),
               ),
@@ -395,7 +430,15 @@ class CheckoutScreen extends GetView<CheckoutController> {
     );
   }
 
-  Widget _buildSubMethodCard(String label, IconData icon, String methodId) {
+  Widget _buildSubMethodCard(
+    BuildContext context,
+    String label,
+    IconData icon,
+    String methodId,
+  ) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Obx(() {
       bool isSelected = controller.selectedSubMethod.value == methodId;
       return GestureDetector(
@@ -403,11 +446,13 @@ class CheckoutScreen extends GetView<CheckoutController> {
         child: Container(
           decoration: BoxDecoration(
             color: isSelected
-                ? AppColors.primary.withOpacity(0.08)
-                : Colors.white,
+                ? AppColors.primary.withValues(alpha: isDark ? 0.16 : 0.08)
+                : theme.cardColor,
             borderRadius: BorderRadius.circular(12.r),
             border: Border.all(
-              color: isSelected ? AppColors.primary : Colors.grey.shade200,
+              color: isSelected
+                  ? AppColors.primary
+                  : theme.dividerColor.withValues(alpha: isDark ? 0.28 : 0.45),
             ),
           ),
           child: Row(
@@ -424,7 +469,9 @@ class CheckoutScreen extends GetView<CheckoutController> {
                 style: TextStyle(
                   fontSize: 11.sp,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  color: isSelected ? AppColors.primary : Colors.black87,
+                  color: isSelected
+                      ? AppColors.primary
+                      : theme.textTheme.bodyMedium?.color,
                 ),
               ),
             ],
@@ -440,6 +487,8 @@ class CheckoutScreen extends GetView<CheckoutController> {
     bool isDiscount = false,
     bool isTotal = false,
   }) {
+    final theme = Get.theme;
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 4.h),
       child: Row(
@@ -449,7 +498,9 @@ class CheckoutScreen extends GetView<CheckoutController> {
             label,
             style: TextStyle(
               fontSize: isTotal ? 14.sp : 13.sp,
-              color: isDiscount ? Colors.red : Colors.black54,
+              color: isDiscount
+                  ? Colors.red
+                  : theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
             ),
           ),
@@ -458,7 +509,9 @@ class CheckoutScreen extends GetView<CheckoutController> {
             style: TextStyle(
               fontSize: isTotal ? 16.sp : 13.sp,
               fontWeight: FontWeight.bold,
-              color: isDiscount ? Colors.red : Colors.black,
+              color: isDiscount
+                  ? Colors.red
+                  : theme.textTheme.bodyMedium?.color,
             ),
           ),
         ],

@@ -40,15 +40,8 @@ class BookAppointmentScreen extends GetView<BookAppointmentController> {
                   selectedTime: controller.selectedTime.value,
                   availableTimes: controller.availableTimes,
                   onTap: controller.selectTime,
+                  isLoading: controller.isLoadingTimes.value,
                 ),
-              ),
-              Obx(
-                () => controller.isLoadingTimes.value
-                    ? Padding(
-                        padding: EdgeInsets.only(top: 10.h),
-                        child: const Center(child: CircularProgressIndicator()),
-                      )
-                    : const SizedBox.shrink(),
               ),
               24.verticalSpace,
 

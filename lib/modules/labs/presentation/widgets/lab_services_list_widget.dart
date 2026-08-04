@@ -48,14 +48,20 @@ class _ServiceTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       margin: EdgeInsets.only(bottom: 10.h),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(14.r),
+        border: Border.all(
+          color: theme.dividerColor.withValues(alpha: isDark ? 0.24 : 0.10),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: Colors.black.withValues(alpha: isDark ? 0.18 : 0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -71,7 +77,6 @@ class _ServiceTile extends StatelessWidget {
             Get.toNamed(
               AppRoutes.labsTest,
               arguments: {
-                'id': lab.id,
                 'lab_id': lab.id,
                 'name': lab.name,
                 'category': serviceName,
@@ -110,7 +115,9 @@ class _ServiceTile extends StatelessWidget {
                 Icon(
                   Iconsax.arrow_left_2,
                   size: 18.sp,
-                  color: Colors.grey[500],
+                  color: theme.colorScheme.onSurface.withValues(
+                    alpha: isDark ? 0.54 : 0.45,
+                  ),
                 ),
               ],
             ),

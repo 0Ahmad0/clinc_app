@@ -1,5 +1,7 @@
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/auth/presentation/controllers/signup_controller.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -26,7 +28,7 @@ class PasswordFieldWithStrengthWidget extends StatelessWidget {
               Icon(Icons.verified, color: Colors.green, size: 14.sp),
               8.horizontalSpace,
               Text(
-                "كلمة المرور مطابقة للمواصفات",
+                tr(LocaleKeys.password_validation_password_matches),
                 style: TextStyle(
                   color: Colors.green,
                   fontWeight: FontWeight.bold,
@@ -38,7 +40,6 @@ class PasswordFieldWithStrengthWidget extends StatelessWidget {
         );
       }
 
-      // 3. حالة عدم الاكتمال: اظهر شريط القوة وقائمة المتطلبات
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -56,12 +57,30 @@ class PasswordFieldWithStrengthWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildItem("8 أحرف على الأقل", reqs['length']!),
-        _buildItem("حرف كبير (A-Z)", reqs['uppercase']!),
-        _buildItem("حرف صغير (a-z)", reqs['lowercase']!),
-        _buildItem("رقم واحد على الأقل", reqs['digit']!),
-        _buildItem("رمز خاص (@، #، %، &)", reqs['special']!),
-        _buildItem("بدون مسافات", reqs['noSpaces']!),
+        _buildItem(
+          tr(LocaleKeys.password_validation_req_length),
+          reqs['length']!,
+        ),
+        _buildItem(
+          tr(LocaleKeys.password_validation_req_upper),
+          reqs['uppercase']!,
+        ),
+        _buildItem(
+          tr(LocaleKeys.password_validation_req_lower),
+          reqs['lowercase']!,
+        ),
+        _buildItem(
+          tr(LocaleKeys.password_validation_req_digit),
+          reqs['digit']!,
+        ),
+        _buildItem(
+          tr(LocaleKeys.password_validation_req_special),
+          reqs['special']!,
+        ),
+        _buildItem(
+          tr(LocaleKeys.password_validation_req_no_spaces),
+          reqs['noSpaces']!,
+        ),
       ],
     );
   }

@@ -1,4 +1,4 @@
-package com.clinic.app;
+package com.clinic.user;
 
 import io.flutter.embedding.android.FlutterActivity;
 

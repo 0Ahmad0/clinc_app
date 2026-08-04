@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'app_shimmer_placeholder.dart';
+
 enum AppImagePlaceholderType { doctor, clinic, lab }
 
 class AppCachedImageWidget extends StatelessWidget {
@@ -14,6 +16,8 @@ class AppCachedImageWidget extends StatelessWidget {
     this.clipRadius = 0.0,
     this.placeholderType = AppImagePlaceholderType.clinic,
     this.alignment = Alignment.center,
+    this.useShimmerPlaceholder = false,
+    this.fallback,
   });
 
   final String? imageUrl;
@@ -23,6 +27,8 @@ class AppCachedImageWidget extends StatelessWidget {
   final double clipRadius;
   final AppImagePlaceholderType placeholderType;
   final Alignment alignment;
+  final bool useShimmerPlaceholder;
+  final Widget? fallback;
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +41,9 @@ class AppCachedImageWidget extends StatelessWidget {
             fit: fit,
             alignment: alignment,
             placeholder: (context, _) => _placeholder(context),
-            errorWidget: (context, _, _) => _placeholder(context),
+            errorWidget: (context, _, _) => fallback ?? _placeholder(context),
           )
-        : _placeholder(context);
+        : fallback ?? _placeholder(context);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(clipRadius),
@@ -54,6 +60,14 @@ class AppCachedImageWidget extends StatelessWidget {
   }
 
   Widget _placeholder(BuildContext context) {
+    if (useShimmerPlaceholder) {
+      return AppShimmerPlaceholder(
+        width: width,
+        height: height,
+        borderRadius: clipRadius,
+      );
+    }
+
     final spec = _placeholderSpec(context);
     return Container(
       width: width,

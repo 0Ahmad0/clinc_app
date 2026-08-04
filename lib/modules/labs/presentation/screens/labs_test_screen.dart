@@ -11,13 +11,14 @@ import '../widgets/labs_tests_list_widget.dart';
 
 class LabsTestScreen extends GetView<LabsTestController> {
   const LabsTestScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     final args = Get.arguments as Map?;
     final labName = args != null ? args['name'] : null;
+    final theme = Theme.of(context);
 
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppAppBarWidget(title: labName ?? tr(LocaleKeys.labs_title)),
       body: LayoutBuilder(
         builder: (context, constraints) {

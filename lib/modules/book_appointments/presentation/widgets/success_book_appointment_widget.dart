@@ -15,10 +15,20 @@ class SuccessBookAppointmentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // الألوان
-    final Color primaryBlue = Theme.of(context).primaryColor;
-    final Color textDark = const Color(0xFF1A1A1A);
-    final Color textGrey = const Color(0xFF808080);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final Color primaryBlue = theme.primaryColor;
+    final Color panelColor = theme.cardColor;
+    final Color detailsColor = isDark
+        ? theme.scaffoldBackgroundColor.withValues(alpha: 0.46)
+        : const Color(0xFFF5F7FA);
+    final Color iconBackgroundColor = primaryBlue.withValues(
+      alpha: isDark ? 0.18 : 0.12,
+    );
+    final Color titleColor = theme.colorScheme.onSurface;
+    final Color subtitleColor = theme.colorScheme.onSurface.withValues(
+      alpha: isDark ? 0.68 : 0.58,
+    );
     final doctorName = _fallback(appointment.doctorName, 'الطبيب');
     final specialty = _fallback(appointment.specialty, appointment.clinicName);
     final appointmentText = _appointmentText(context);
@@ -34,8 +44,8 @@ class SuccessBookAppointmentWidget extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.8,
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-              decoration: const BoxDecoration(
-                color: Colors.white,
+              decoration: BoxDecoration(
+                color: panelColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30),
                   topRight: Radius.circular(30),
@@ -50,12 +60,11 @@ class SuccessBookAppointmentWidget extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: textDark,
+                      color: titleColor,
                     ),
                   ),
                   const SizedBox(height: 10),
 
-                  // النص الفرعي
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
@@ -63,7 +72,7 @@ class SuccessBookAppointmentWidget extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
-                        color: textGrey,
+                        color: subtitleColor,
                         height: 1.5,
                       ),
                     ),
@@ -89,7 +98,7 @@ class SuccessBookAppointmentWidget extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: textDark,
+                          color: titleColor,
                         ),
                       ),
                       if (specialty.isNotEmpty) ...[
@@ -97,7 +106,7 @@ class SuccessBookAppointmentWidget extends StatelessWidget {
                         Text(
                           specialty,
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 14, color: textGrey),
+                          style: TextStyle(fontSize: 14, color: subtitleColor),
                         ),
                       ],
                     ],
@@ -105,21 +114,23 @@ class SuccessBookAppointmentWidget extends StatelessWidget {
 
                   const SizedBox(height: 30),
 
-                  // كارت تفاصيل الموعد الصغير
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF5F7FA),
-                      // لون رمادي فاتح جداً للخلفية
+                      color: detailsColor,
                       borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: theme.dividerColor.withValues(
+                          alpha: isDark ? 0.26 : 0.12,
+                        ),
+                      ),
                     ),
                     child: Row(
                       children: [
-                        // أيقونة التقويم
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFE0E7FF), // أزرق فاتح جداً
+                            color: iconBackgroundColor,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Icon(
@@ -130,20 +141,22 @@ class SuccessBookAppointmentWidget extends StatelessWidget {
                         ),
                         const SizedBox(width: 15),
 
-                        // النصوص
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 "الموعد",
-                                style: TextStyle(color: textGrey, fontSize: 12),
+                                style: TextStyle(
+                                  color: subtitleColor,
+                                  fontSize: 12,
+                                ),
                               ),
                               const SizedBox(height: 4),
                               Text(
                                 appointmentText,
                                 style: TextStyle(
-                                  color: textDark,
+                                  color: titleColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 13,
                                 ),
@@ -158,9 +171,7 @@ class SuccessBookAppointmentWidget extends StatelessWidget {
                   ),
 
                   const Spacer(),
-                  // يدفع الزر للأسفل
 
-                  // زر العودة للرئيسية
                   AppButtonWidget(
                     text: 'العودة للرئيسية',
                     onPressed: () {
@@ -181,7 +192,7 @@ class SuccessBookAppointmentWidget extends StatelessWidget {
               width: 90.sp,
               height: 90.sp,
               decoration: ShapeDecoration(
-                color: Colors.white,
+                color: panelColor,
 
                 shape: StarBorder.polygon(
                   pointRounding: .75,

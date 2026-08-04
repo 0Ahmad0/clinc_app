@@ -18,6 +18,7 @@ class BookAppointmentController extends GetxController {
 
   final RxBool isLoadingTimes = false.obs;
   final RxBool isSubmitting = false.obs;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String? doctorId;
   String? clinicId;
   String? labId;
@@ -89,15 +90,10 @@ class BookAppointmentController extends GetxController {
   void toggleBreastfeeding(bool? val) => isBreastfeeding.value = val ?? false;
 
   bool validateBooking() {
-    if (fullNameController.text.isEmpty ||
-        problemController.text.isEmpty ||
-        phoneController.text.isEmpty ||
-        selectedTime.value.isEmpty) {
-      Get.snackbar(
-        "تنبيه",
-        tr(LocaleKeys.booking_validation_error),
-        backgroundColor: Colors.red.withValues(alpha: 0.1),
-        colorText: Colors.red,
+    final isFormValid = formKey.currentState?.validate() ?? false;
+    if (!isFormValid || selectedTime.value.isEmpty) {
+      ResponseHelper.onWarning(
+        message: tr(LocaleKeys.booking_validation_error),
       );
       return false;
     }

@@ -14,20 +14,28 @@ class NotificationsScreen extends GetView<NotificationsController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final groupTitleColor = theme.colorScheme.onSurface.withValues(
+      alpha: theme.brightness == Brightness.dark ? 0.68 : 0.58,
+    );
+
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppAppBarWidget(
         title: tr(LocaleKeys.notifications_screen_title),
         actions: [
           IconButton(
             onPressed: controller.markAllAsRead,
             tooltip: tr(LocaleKeys.notifications_mark_all_read),
-            icon: Icon(Icons.done_all, color: Theme.of(context).cardColor),
+            icon: Icon(Icons.done_all, color: theme.colorScheme.onPrimary),
           ),
         ],
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: CircularProgressIndicator(color: theme.primaryColor),
+          );
         }
 
         final groupedData = controller.groupedNotifications;
@@ -36,35 +44,37 @@ class NotificationsScreen extends GetView<NotificationsController> {
           return const EmptyNotificationWidget();
         }
 
-        return ListView.builder(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-          itemCount: groupedData.length,
-          itemBuilder: (context, index) {
-            String key = groupedData.keys.elementAt(index);
-            final notifications = groupedData[key]!;
+        return Directionality(
+          textDirection: Directionality.of(context),
+          child: ListView.builder(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+            itemCount: groupedData.length,
+            itemBuilder: (context, index) {
+              String key = groupedData.keys.elementAt(index);
+              final notifications = groupedData[key]!;
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // عنوان المجموعة (اليوم، البارحة...)
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 15.h),
-                  child: Text(
-                    key,
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey.shade600,
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 15.h),
+                    child: Text(
+                      key,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w800,
+                        color: groupTitleColor,
+                      ),
                     ),
                   ),
-                ),
 
-                ...notifications.map((notification) {
-                  return NotificationItemWidget(notification: notification);
-                }),
-              ],
-            );
-          },
+                  ...notifications.map((notification) {
+                    return NotificationItemWidget(notification: notification);
+                  }),
+                ],
+              );
+            },
+          ),
         );
       }),
     );

@@ -21,6 +21,7 @@ class MyAppointmentDetailsScreen
   const MyAppointmentDetailsScreen({super.key});
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Obx(
       () => AppScaffoldWidget(
         applyBodyPadding: false,
@@ -28,51 +29,61 @@ class MyAppointmentDetailsScreen
           title: tr(LocaleKeys.my_appointment_details_title),
         ),
         body: controller.isLoading.value
-            ? const Center(child: CircularProgressIndicator())
+            ? Center(
+                child: CircularProgressIndicator(color: theme.primaryColor),
+              )
             : SingleChildScrollView(
                 child: AppPaddingWidget(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildDoctorCard(), // كرت الدكتور (الموجود عندك أصلاً)
+                      _buildDoctorCard(context),
                       20.verticalSpace,
 
                       _buildSectionTitle(
+                        context,
                         tr(LocaleKeys.my_appointment_details_appointment_info),
                       ),
-                      _buildInfoCard([
+                      _buildInfoCard(context, [
                         _buildInfoRow(
+                          context,
                           Iconsax.user,
                           tr(LocaleKeys.my_appointment_details_patient),
                           controller.patientName,
                         ),
                         if (controller.phone.isNotEmpty)
                           _buildInfoRow(
+                            context,
                             Iconsax.call,
                             tr(LocaleKeys.my_appointment_details_phone),
                             controller.phone,
                           ),
                         _buildInfoRow(
+                          context,
                           Iconsax.calendar_1,
                           tr(LocaleKeys.my_appointment_details_date),
                           controller.appointmentDate,
                         ),
                         _buildInfoRow(
+                          context,
                           Iconsax.clock,
                           tr(LocaleKeys.my_appointment_details_time),
                           controller.appointmentTime,
                         ),
                         _buildInfoRow(
+                          context,
                           Iconsax.info_circle,
                           tr(LocaleKeys.my_appointment_details_visit_type),
                           controller.appointmentType,
                         ),
                         _buildInfoRow(
+                          context,
                           Iconsax.tick_circle,
                           tr(LocaleKeys.my_appointment_details_status),
                           _statusText(controller.status),
                         ),
                         _buildInfoRow(
+                          context,
                           Iconsax.document_text,
                           tr(LocaleKeys.my_appointment_details_problem),
                           controller.problem,
@@ -82,101 +93,35 @@ class MyAppointmentDetailsScreen
                       if (controller.hasResult) ...[
                         20.verticalSpace,
                         _buildSectionTitle(
+                          context,
                           tr(LocaleKeys.my_appointment_details_result_section),
                         ),
-                        _buildInfoCard([
+                        _buildInfoCard(context, [
                           _buildInfoRow(
+                            context,
                             Iconsax.document_text_1,
                             tr(LocaleKeys.my_appointment_details_result_notes),
                             controller.resultNotes,
                           ),
                           if (controller.resultFileUrl.trim().isNotEmpty)
-                            Padding(
-                              padding: EdgeInsets.only(top: 10.h),
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(12.r),
-                                onTap: controller.handleResultFileTap,
-                                child: Container(
-                                  padding: EdgeInsets.all(12.r),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12.r),
-                                    border: Border.all(
-                                      color: AppColors.primary.myOpacity(0.25),
-                                    ),
-                                    color: AppColors.primary.myOpacity(0.06),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(8.r),
-                                        decoration: BoxDecoration(
-                                          color: AppColors.primary.myOpacity(0.12),
-                                          borderRadius: BorderRadius.circular(8.r),
-                                        ),
-                                        child: Icon(
-                                          controller.resultFileIcon,
-                                          color: AppColors.primary,
-                                          size: 18.sp,
-                                        ),
-                                      ),
-                                      10.horizontalSpace,
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              controller.resultFileName
-                                                      .trim()
-                                                      .isNotEmpty
-                                                  ? controller.resultFileName
-                                                  : tr(
-                                                      LocaleKeys
-                                                          .my_appointment_details_result_file,
-                                                    ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 12.sp,
-                                              ),
-                                            ),
-                                            4.verticalSpace,
-                                            Text(
-                                              '${controller.resultFileKindLabel} • ${controller.resultFileActionLabel}',
-                                              style: TextStyle(
-                                                fontSize: 11.sp,
-                                                color: Colors.grey[700],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      8.horizontalSpace,
-                                      Icon(
-                                        Iconsax.arrow_right_3,
-                                        color: AppColors.primary,
-                                        size: 16.sp,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
+                            _buildResultFileCard(context),
                         ]),
                       ],
 
                       20.verticalSpace,
                       _buildSectionTitle(
+                        context,
                         tr(LocaleKeys.my_appointment_details_clinic_details),
                       ),
-                      _buildInfoCard([
+                      _buildInfoCard(context, [
                         _buildInfoRow(
+                          context,
                           Iconsax.hospital,
                           tr(LocaleKeys.my_appointment_details_facility),
                           controller.clinicName,
                         ),
                         _buildInfoRow(
+                          context,
                           Iconsax.location,
                           tr(LocaleKeys.my_appointment_details_address),
                           controller.clinicAddress,
@@ -185,10 +130,12 @@ class MyAppointmentDetailsScreen
 
                       20.verticalSpace,
                       _buildSectionTitle(
+                        context,
                         tr(LocaleKeys.my_appointment_details_financial_summary),
                       ),
-                      _buildInfoCard([
+                      _buildInfoCard(context, [
                         _buildInfoRow(
+                          context,
                           Iconsax.money_send,
                           tr(
                             LocaleKeys.my_appointment_details_consultation_fee,
@@ -196,16 +143,19 @@ class MyAppointmentDetailsScreen
                           _money(controller.consultationFee),
                         ),
                         _buildInfoRow(
+                          context,
                           Iconsax.card_pos,
                           tr(LocaleKeys.my_appointment_details_payment_method),
                           controller.paymentMethod,
                         ),
                         _buildInfoRow(
+                          context,
                           Iconsax.receipt_1,
                           tr(LocaleKeys.my_appointment_details_payment_status),
                           controller.paymentStatus,
                         ),
                         _buildInfoRow(
+                          context,
                           Iconsax.receipt_text,
                           tr(
                             LocaleKeys.my_appointment_details_payment_reference,
@@ -213,11 +163,13 @@ class MyAppointmentDetailsScreen
                           controller.paymentReference,
                         ),
                         _buildInfoRow(
+                          context,
                           Iconsax.money_recive,
                           tr(LocaleKeys.my_appointment_details_paid_amount),
                           _money(controller.paidAmount),
                         ),
                         _buildInfoRow(
+                          context,
                           Iconsax.money_time,
                           tr(
                             LocaleKeys.my_appointment_details_remaining_amount,
@@ -229,13 +181,24 @@ class MyAppointmentDetailsScreen
                   ),
                 ),
               ),
-        bottomNavigationBar: _buildBottomAction(),
+        bottomNavigationBar: _buildBottomAction(context),
       ),
     );
   }
 
-  // ودجيت بناء الأسطر داخل البطاقة
-  Widget _buildInfoRow(IconData icon, String label, String value) {
+  Widget _buildInfoRow(
+    BuildContext context,
+    IconData icon,
+    String label,
+    String value,
+  ) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final labelColor = theme.colorScheme.onSurface.withValues(
+      alpha: isDark ? 0.62 : 0.54,
+    );
+    final valueColor = theme.colorScheme.onSurface;
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: Row(
@@ -253,7 +216,10 @@ class MyAppointmentDetailsScreen
             flex: 2,
             child: Text(
               label,
-              style: TextStyle(color: Colors.grey, fontSize: 13.sp),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: labelColor,
+                fontSize: 13.sp,
+              ),
             ),
           ),
           8.horizontalSpace,
@@ -262,7 +228,11 @@ class MyAppointmentDetailsScreen
             child: Text(
               value,
               textAlign: TextAlign.end,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.sp),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: valueColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 13.sp,
+              ),
             ),
           ),
         ],
@@ -270,16 +240,21 @@ class MyAppointmentDetailsScreen
     );
   }
 
-  // بطاقة المعلومات المغلفة
-  Widget _buildInfoCard(List<Widget> children) {
+  Widget _buildInfoCard(BuildContext context, List<Widget> children) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(15.r),
+        border: Border.all(
+          color: theme.dividerColor.withValues(alpha: isDark ? 0.24 : 0.10),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black.withValues(alpha: isDark ? 0.20 : 0.05),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -289,16 +264,24 @@ class MyAppointmentDetailsScreen
     );
   }
 
-  // --- Widget: كارت الطبيب ---
-  Widget _buildDoctorCard() {
+  Widget _buildDoctorCard(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final subtitleColor = theme.colorScheme.onSurface.withValues(
+      alpha: isDark ? 0.62 : 0.54,
+    );
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: theme.dividerColor.withValues(alpha: isDark ? 0.24 : 0.10),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.myOpacity(0.1),
+            color: Colors.black.withValues(alpha: isDark ? 0.20 : 0.06),
             blurRadius: 10,
             spreadRadius: 5,
             offset: const Offset(0, 5),
@@ -331,16 +314,19 @@ class MyAppointmentDetailsScreen
                     children: [
                       Text(
                         controller.doctorName,
-                        style: const TextStyle(
+                        style: theme.textTheme.bodyMedium?.copyWith(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                          color: theme.colorScheme.onSurface,
                         ),
                       ),
                       const SizedBox(height: 5),
                       Text(
                         controller.specialty,
-                        style: TextStyle(fontSize: 14, color: Colors.grey[500]),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontSize: 14,
+                          color: subtitleColor,
+                        ),
                       ),
                     ],
                   ),
@@ -354,7 +340,10 @@ class MyAppointmentDetailsScreen
                     const SizedBox(width: 4),
                     Text(
                       "50".trNumbers(),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onSurface,
+                      ),
                     ),
                     const SizedBox(width: 4),
                     Text(
@@ -362,7 +351,10 @@ class MyAppointmentDetailsScreen
                         LocaleKeys.my_appointment_details_rating_count,
                         args: ['50'],
                       ).trNumbers(),
-                      style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontSize: 12,
+                        color: subtitleColor,
+                      ),
                     ),
                   ],
                 ),
@@ -374,31 +366,114 @@ class MyAppointmentDetailsScreen
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildResultFileCard(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final subtitleColor = theme.colorScheme.onSurface.withValues(
+      alpha: isDark ? 0.62 : 0.54,
+    );
+
     return Padding(
-      padding: EdgeInsets.only(bottom: 10.h, right: 5.w),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 15.sp,
-          fontWeight: FontWeight.bold,
-          color: Colors.black87,
+      padding: EdgeInsets.only(top: 10.h),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12.r),
+        onTap: controller.handleResultFileTap,
+        child: Container(
+          padding: EdgeInsets.all(12.r),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12.r),
+            border: Border.all(color: AppColors.primary.myOpacity(0.25)),
+            color: AppColors.primary.myOpacity(isDark ? 0.12 : 0.06),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(8.r),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.myOpacity(isDark ? 0.20 : 0.12),
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: Icon(
+                  controller.resultFileIcon,
+                  color: AppColors.primary,
+                  size: 18.sp,
+                ),
+              ),
+              10.horizontalSpace,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      controller.resultFileName.trim().isNotEmpty
+                          ? controller.resultFileName
+                          : tr(LocaleKeys.my_appointment_details_result_file),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurface,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                    4.verticalSpace,
+                    Text(
+                      '${controller.resultFileKindLabel} • ${controller.resultFileActionLabel}',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontSize: 11.sp,
+                        color: subtitleColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              8.horizontalSpace,
+              Icon(
+                Iconsax.arrow_right_3,
+                color: AppColors.primary,
+                size: 16.sp,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  // الزر السفلي الذكي
-  Widget _buildBottomAction() {
+  Widget _buildSectionTitle(BuildContext context, String title) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: 10.h, right: 5.w),
+      child: Text(
+        title,
+        style: theme.textTheme.bodyMedium?.copyWith(
+          fontSize: 15.sp,
+          fontWeight: FontWeight.bold,
+          color: theme.colorScheme.onSurface,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBottomAction(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
+        border: Border(
+          top: BorderSide(
+            color: theme.dividerColor.withValues(alpha: isDark ? 0.24 : 0.10),
+          ),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black12,
+            color: Colors.black.withValues(alpha: isDark ? 0.28 : 0.12),
             blurRadius: 10,
-            offset: Offset(0, -2),
+            offset: const Offset(0, -2),
           ),
         ],
       ),
@@ -418,7 +493,7 @@ class MyAppointmentDetailsScreen
             ? tr(LocaleKeys.my_appointment_details_cancel_booking)
             : controller.showRebookAction
             ? tr(LocaleKeys.my_appointment_details_rebook_appointment)
-            : controller.isAccepted
+            : controller.isAccepted || controller.isPending
             ? tr(LocaleKeys.my_appointment_details_cancel_unavailable_24h)
             : tr(LocaleKeys.my_appointment_details_no_action_available),
       ),

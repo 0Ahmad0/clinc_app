@@ -1,7 +1,5 @@
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
-import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
-import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/labs/presentation/controllers/lab_profile_controller.dart';
 import 'package:clinc_app_t1/modules/labs/presentation/widgets/LabsSpecialOffers.dart';
@@ -24,8 +22,10 @@ class LabProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileController = Get.put(LabProfileController());
+    final theme = Theme.of(context);
 
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: CustomScrollView(
         slivers: [
           const LabProfileAppBar(),
@@ -50,32 +50,7 @@ class LabProfileScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar:
-      true?SizedBox.shrink():
-      Container(
-        padding: EdgeInsets.all(20.w),
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.myOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, -4),
-            ),
-          ],
-        ),
-        child: AppButtonWidget(
-          onPressed: () => Get.toNamed(
-            AppRoutes.bookAppointments,
-            arguments: {
-              'lab_id': profileController.lab.id,
-              'name': profileController.lab.name,
-            },
-          ),
-          icon: const Icon(Iconsax.calendar_add, color: Colors.white),
-          text: tr(LocaleKeys.labs_page_book_btn),
-        ),
-      ),
+      bottomNavigationBar: const SizedBox.shrink(),
     );
   }
 

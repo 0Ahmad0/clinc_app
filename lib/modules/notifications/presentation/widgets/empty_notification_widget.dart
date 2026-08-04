@@ -12,33 +12,44 @@ class EmptyNotificationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Icon(
-          Iconsax.notification,
-          size: Get.width / 2,
-          color: AppColors.primary.myOpacity(.1),
-        ),
-        10.verticalSpace,
-        Text(
-          tr(LocaleKeys.notifications_empty_title),
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.bold,
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final mutedTextColor = theme.colorScheme.onSurface.withValues(
+      alpha: isDark ? 0.62 : 0.54,
+    );
+
+    return Directionality(
+      textDirection: Directionality.of(context),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Icon(
+            Iconsax.notification,
+            size: Get.width / 2,
+            color: AppColors.primary.myOpacity(isDark ? .18 : .1),
           ),
-        ),
-        6.verticalSpace,
-        Text(
-          tr(LocaleKeys.notifications_empty_desc),
-          textAlign: TextAlign.center,
-          style: Theme.of(
-            context,
-          ).textTheme.bodySmall?.copyWith(color: Colors.grey),
-        ),
-      ],
+          10.verticalSpace,
+          Text(
+            tr(LocaleKeys.notifications_empty_title),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.onSurface,
+            ),
+          ),
+          6.verticalSpace,
+          Text(
+            tr(LocaleKeys.notifications_empty_desc),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: mutedTextColor,
+              fontSize: 13.sp,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

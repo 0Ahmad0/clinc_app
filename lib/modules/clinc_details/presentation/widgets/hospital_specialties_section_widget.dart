@@ -10,6 +10,9 @@ class HospitalSpecialtiesSection extends GetView<ClinicDetailsController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -36,15 +39,22 @@ class HospitalSpecialtiesSection extends GetView<ClinicDetailsController> {
                       ),
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? Theme.of(context).primaryColor
-                            : Colors.grey[100],
+                            ? theme.primaryColor
+                            : theme.cardColor,
                         borderRadius: BorderRadius.circular(20.r),
+                        border: Border.all(
+                          color: isSelected
+                              ? theme.primaryColor
+                              : theme.dividerColor.withValues(
+                                  alpha: isDark ? 0.28 : 0.45,
+                                ),
+                        ),
                         boxShadow: isSelected
                             ? [
                                 BoxShadow(
-                                  color: Theme.of(
-                                    context,
-                                  ).primaryColor.withValues(alpha: 0.3),
+                                  color: theme.primaryColor.withValues(
+                                    alpha: 0.3,
+                                  ),
                                   blurRadius: 8,
                                   offset: const Offset(0, 4),
                                 ),
@@ -54,7 +64,9 @@ class HospitalSpecialtiesSection extends GetView<ClinicDetailsController> {
                       child: Text(
                         spec,
                         style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.black87,
+                          color: isSelected
+                              ? Colors.white
+                              : theme.textTheme.bodyMedium?.color,
                           fontWeight: isSelected
                               ? FontWeight.bold
                               : FontWeight.normal,

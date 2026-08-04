@@ -66,8 +66,7 @@ class AppValidator {
     if (value == null || value.trim().isEmpty) {
       return tr(LocaleKeys.validation_phone_empty);
     }
-    // Regex للتحقق من أرقام الجوال السعودية (05xxxxxxxx أو 5xxxxxxxx)
-    final regex = RegExp(r'^(05|5)\d{8}$');
+    final regex = RegExp(r'^\d{10}$');
     if (!regex.hasMatch(value.trim())) {
       return tr(LocaleKeys.validation_phone_invalid);
     }

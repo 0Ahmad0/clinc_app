@@ -14,6 +14,9 @@ class HospitalDoctorsListSection extends GetView<ClinicDetailsController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Obx(() {
       final doctors = controller.filteredDoctors;
 
@@ -60,14 +63,18 @@ class HospitalDoctorsListSection extends GetView<ClinicDetailsController> {
                           margin: EdgeInsets.only(bottom: 12.h),
                           padding: EdgeInsets.all(12.w),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: theme.cardColor,
                             borderRadius: BorderRadius.circular(15.r),
                             border: Border.all(
-                              color: Colors.grey.withValues(alpha: 0.1),
+                              color: theme.dividerColor.withValues(
+                                alpha: isDark ? 0.28 : 0.45,
+                              ),
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.02),
+                                color: Colors.black.withValues(
+                                  alpha: isDark ? 0.18 : 0.02,
+                                ),
                                 blurRadius: 10,
                                 offset: const Offset(0, 5),
                               ),

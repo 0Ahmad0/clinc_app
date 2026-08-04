@@ -14,6 +14,9 @@ class LabLocationWidget extends GetView<LabProfileController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return AppPaddingWidget(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,10 +54,17 @@ class LabLocationWidget extends GetView<LabProfileController> {
                         vertical: 8.h,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: theme.cardColor.withValues(
+                          alpha: isDark ? 0.92 : 0.96,
+                        ),
                         borderRadius: BorderRadius.circular(20.r),
                         boxShadow: [
-                          BoxShadow(color: Colors.black26, blurRadius: 10),
+                          BoxShadow(
+                            color: Colors.black.withValues(
+                              alpha: isDark ? 0.28 : 0.16,
+                            ),
+                            blurRadius: 10,
+                          ),
                         ],
                       ),
                       child: Row(
@@ -64,7 +74,8 @@ class LabLocationWidget extends GetView<LabProfileController> {
                           8.horizontalSpace,
                           Text(
                             tr(LocaleKeys.labs_profile_view_map),
-                            style: TextStyle(
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurface,
                               fontWeight: FontWeight.bold,
                               fontSize: 12.sp,
                             ),

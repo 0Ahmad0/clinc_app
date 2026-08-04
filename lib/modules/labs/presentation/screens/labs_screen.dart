@@ -30,7 +30,7 @@ class LabsScreen extends GetView<LabsController> {
           // 2. الفلتر
           Obx(
             () => controller.isFiltersLoading.value
-                ? const FiltersShimmer(itemCount: 3)
+                ? const SearchFiltersShimmer(itemCount: 3)
                 : const LabsFilterListWidget(),
           ),
           10.verticalSpace,

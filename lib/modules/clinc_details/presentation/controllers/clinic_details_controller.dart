@@ -55,14 +55,23 @@ class ClinicDetailsController extends GetxController {
     loadClinicDetails();
   }
 
-  Widget reviewCard(ClinicReviewModel review) {
+  Widget reviewCard(BuildContext context, ClinicReviewModel review) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       margin: EdgeInsets.only(bottom: 15.h),
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
-        color: Colors.grey[50],
+        color: isDark
+            ? theme.colorScheme.surface.withValues(alpha: 0.48)
+            : Colors.grey[50],
         borderRadius: BorderRadius.circular(15.r),
-        border: Border.all(color: Colors.grey[100]!),
+        border: Border.all(
+          color: isDark
+              ? theme.dividerColor.withValues(alpha: 0.28)
+              : Colors.grey[100]!,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,23 +88,36 @@ class ClinicDetailsController extends GetxController {
                 children: [
                   Text(
                     review.name,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Text(
                     review.dateLabel,
-                    style: TextStyle(fontSize: 10.sp, color: Colors.grey),
+                    style: TextStyle(
+                      fontSize: 10.sp,
+                      color: theme.textTheme.bodySmall?.color?.withValues(
+                        alpha: 0.64,
+                      ),
+                    ),
                   ),
                 ],
               ),
               const Spacer(),
               const Icon(Icons.star, color: Colors.amber, size: 14),
-              Text(" ${review.rating.toTrimmedFixed(maxDecimals: 2)}"),
+              Text(
+                " ${review.rating.toTrimmedFixed(maxDecimals: 2)}",
+                style: theme.textTheme.bodySmall,
+              ),
             ],
           ),
           8.verticalSpace,
           Text(
             review.comment,
-            style: TextStyle(fontSize: 12.sp, color: Colors.black87),
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.82),
+            ),
           ),
         ],
       ),
@@ -106,12 +128,16 @@ class ClinicDetailsController extends GetxController {
     if (allReviews.isEmpty && !reviewsPagination.isBusy) {
       loadClinicReviews(refresh: true);
     }
+    final context = Get.context;
+    final theme = context != null ? Theme.of(context) : Get.theme;
+    final isDark = theme.brightness == Brightness.dark;
+
     Get.bottomSheet(
       Container(
         padding: EdgeInsets.all(20.w),
         height: Get.height * 0.75,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.cardColor,
           borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
         ),
         child: Column(
@@ -120,7 +146,9 @@ class ClinicDetailsController extends GetxController {
               width: 40.w,
               height: 4.h,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: isDark
+                    ? theme.dividerColor.withValues(alpha: 0.55)
+                    : Colors.grey[300],
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -130,7 +158,10 @@ class ClinicDetailsController extends GetxController {
                 LocaleKeys.clinic_app_details_all_reviews_title,
                 args: [allReviews.length.toString()],
               ),
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 18.sp,
+              ),
             ),
             20.verticalSpace,
             Expanded(
@@ -151,7 +182,7 @@ class ClinicDetailsController extends GetxController {
                       if (index >= allReviews.length) {
                         return const Center(child: CircularProgressIndicator());
                       }
-                      return reviewCard(allReviews[index]);
+                      return reviewCard(context, allReviews[index]);
                     },
                   ),
                 ),

@@ -5,7 +5,6 @@ import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/section_shimmer_widgets.dart';
 import 'package:clinc_app_t1/app/core/widgets/shared_empty_widget.dart';
-import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -28,8 +27,11 @@ class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
     final Hospital hospital =
         controller.clinic.value ?? Hospital.mockHospitals[0];
 
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Obx(
         () => controller.isLoading.value
             ? const ClinicDetailsShimmer()
@@ -71,7 +73,7 @@ class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
                             child: Container(
                               height: 30.h,
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: theme.scaffoldBackgroundColor,
                                 borderRadius: BorderRadius.vertical(
                                   top: Radius.circular(30.r),
                                 ),
@@ -85,8 +87,8 @@ class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
                             child: ZoomIn(
                               child: Container(
                                 padding: EdgeInsets.all(3.w),
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
+                                decoration: BoxDecoration(
+                                  color: theme.cardColor,
                                   shape: BoxShape.circle,
                                 ),
                                 child: AppCachedImageWidget(
@@ -155,7 +157,7 @@ class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
                                 ),
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                                  fontSize: 18.sp,
                                 ),
                               ),
                               TextButton(
@@ -182,7 +184,10 @@ class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
                           else
                             ...controller.allReviews
                                 .take(3)
-                                .map((review) => controller.reviewCard(review)),
+                                .map(
+                                  (review) =>
+                                      controller.reviewCard(context, review),
+                                ),
                           150.verticalSpace,
                         ],
                       ),
@@ -198,10 +203,12 @@ class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
         child: Container(
           padding: EdgeInsets.all(20.w),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: theme.scaffoldBackgroundColor,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
+                color: isDark
+                    ? Colors.black.withValues(alpha: 0.28)
+                    : Colors.black.withValues(alpha: 0.05),
                 blurRadius: 20,
                 offset: const Offset(0, -5),
               ),
@@ -221,20 +228,6 @@ class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
                 ),
                 12.horizontalSpace,
               ],
-              if(false)
-              Expanded(
-                child: AppButtonWidget(
-                  onPressed: () => Get.toNamed(
-                    AppRoutes.bookAppointments,
-                    arguments: {
-                      'clinic_id': hospital.id,
-                      'name': hospital.name,
-                    },
-                  ),
-                  icon: const Icon(Iconsax.calendar_add, color: Colors.white),
-                  text: tr(LocaleKeys.clinic_app_details_book_btn),
-                ),
-              ),
             ],
           ),
         ),

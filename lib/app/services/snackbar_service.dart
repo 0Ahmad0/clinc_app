@@ -116,77 +116,133 @@ class SnackBarService {
     required IconData icon,
     required Duration duration,
   }) {
-    // إخفاء أي SnackBar معروض مسبقاً
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final textDirection = Directionality.of(context);
+    final foregroundColor = theme.colorScheme.onSurface;
+    final mutedForegroundColor = foregroundColor.withValues(
+      alpha: isDark ? 0.72 : 0.62,
+    );
+    final surfaceColor = isDark
+        ? theme.cardColor
+        : Color.alphaBlend(
+            backgroundColor.withValues(alpha: 0.04),
+            theme.cardColor,
+          );
+
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
-    // عرض SnackBar الجديد
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         duration: duration,
-        content: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 10,
-                spreadRadius: 1,
+        content: Directionality(
+          textDirection: textDirection,
+          child: Container(
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              color: surfaceColor,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: backgroundColor.withValues(alpha: isDark ? 0.32 : 0.18),
               ),
-            ],
-          ),
-          child: Row(
-            children: [
-              // الأيقونة مع Animation
-              AnimatedSwitcher(
-                duration: Duration(milliseconds: 300),
-                child: Icon(
-                  icon,
-                  key: ValueKey(icon),
-                  color: Colors.white,
-                  size: 28,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: isDark ? 0.28 : 0.10),
+                  blurRadius: 18,
+                  offset: const Offset(0, 8),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // العنوان
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 5,
+                  constraints: const BoxConstraints(minHeight: 74),
+                  color: backgroundColor,
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(
+                      14,
+                      14,
+                      8,
+                      14,
                     ),
-                    // الوصف (إذا موجود)
-                    if (description != null && description.isNotEmpty) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        description,
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.9),
-                          fontSize: 14,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 250),
+                          child: Container(
+                            key: ValueKey(icon),
+                            width: 38,
+                            height: 38,
+                            decoration: BoxDecoration(
+                              color: backgroundColor.withValues(
+                                alpha: isDark ? 0.18 : 0.12,
+                              ),
+                              borderRadius: BorderRadius.circular(11),
+                            ),
+                            child: Icon(icon, color: backgroundColor, size: 22),
+                          ),
                         ),
-                      ),
-                    ],
-                  ],
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                title,
+                                textAlign: TextAlign.start,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: foregroundColor,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w800,
+                                  height: 1.25,
+                                ),
+                              ),
+                              if (description != null &&
+                                  description.isNotEmpty) ...[
+                                const SizedBox(height: 4),
+                                Text(
+                                  description,
+                                  textAlign: TextAlign.start,
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: mutedForegroundColor,
+                                    fontSize: 13,
+                                    height: 1.35,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        IconButton(
+                          visualDensity: VisualDensity.compact,
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(
+                            minWidth: 32,
+                            minHeight: 32,
+                          ),
+                          icon: Icon(
+                            Icons.close_rounded,
+                            color: mutedForegroundColor,
+                            size: 20,
+                          ),
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              // زر الإغلاق
-              IconButton(
-                icon: const Icon(Icons.close, color: Colors.white, size: 20),
-                onPressed: () {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                },
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         behavior: SnackBarBehavior.floating,

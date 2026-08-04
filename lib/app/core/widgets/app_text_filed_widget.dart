@@ -1,6 +1,7 @@
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -20,6 +21,7 @@ class AppTextFormFieldWidget extends StatefulWidget {
   final int maxLines;
   final int? errorMaxLines;
   final int? maxLength;
+  final List<TextInputFormatter>? inputFormatters;
   final bool enabled;
   final bool autofocus;
 
@@ -41,6 +43,7 @@ class AppTextFormFieldWidget extends StatefulWidget {
     this.enabled = true,
     this.autofocus = false,
     this.maxLength,
+    this.inputFormatters,
     this.onChanged,
   });
 
@@ -71,6 +74,7 @@ class _AppTextFormFieldWidgetState extends State<AppTextFormFieldWidget> {
     return TextFormField(
       onChanged: widget.onChanged,
       maxLength: widget.maxLength,
+      inputFormatters: widget.inputFormatters,
       autofocus: widget.autofocus,
       controller: widget.controller,
       focusNode: widget.currentFocusNode,

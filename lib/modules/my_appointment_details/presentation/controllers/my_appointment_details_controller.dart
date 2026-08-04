@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -101,8 +102,10 @@ class MyAppointmentDetailsController extends GetxController {
   double get remainingAmount => details.value?.remainingAmount != 0
       ? details.value?.remainingAmount ?? appointment.remainingAmount
       : appointment.remainingAmount;
-  String get resultNotes =>
-      _firstNotEmpty([details.value?.resultNotes, tr(LocaleKeys.my_appointment_details_not_available)]);
+  String get resultNotes => _firstNotEmpty([
+    details.value?.resultNotes,
+    tr(LocaleKeys.my_appointment_details_not_available),
+  ]);
   String get resultFileUrl => _firstNotEmpty([details.value?.resultFileUrl]);
   String get resultFileName => _firstNotEmpty([
     details.value?.resultFileName,
@@ -116,6 +119,7 @@ class MyAppointmentDetailsController extends GetxController {
     if (dotIndex == -1 || dotIndex == noQuery.length - 1) return '';
     return noQuery.substring(dotIndex + 1).toLowerCase();
   }
+
   ResultFileKind get resultFileKind {
     const imageExt = {'jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'};
     const pdfExt = {'pdf'};
@@ -133,6 +137,7 @@ class MyAppointmentDetailsController extends GetxController {
     if (archiveExt.contains(ext)) return ResultFileKind.archive;
     return ResultFileKind.other;
   }
+
   bool get canPreviewInApp => resultFileKind == ResultFileKind.image;
   String get resultFileKindLabel {
     switch (resultFileKind) {
@@ -152,6 +157,7 @@ class MyAppointmentDetailsController extends GetxController {
         return tr(LocaleKeys.my_appointment_details_file_type_other);
     }
   }
+
   String get resultFileActionLabel => canPreviewInApp
       ? tr(LocaleKeys.my_appointment_details_result_action_preview)
       : tr(LocaleKeys.my_appointment_details_result_action_open);
@@ -173,6 +179,7 @@ class MyAppointmentDetailsController extends GetxController {
         return Iconsax.document_cloud;
     }
   }
+
   bool get hasResult =>
       resultFileUrl.trim().isNotEmpty ||
       (details.value?.resultNotes.trim().isNotEmpty ?? false);
@@ -183,9 +190,10 @@ class MyAppointmentDetailsController extends GetxController {
   }
 
   bool get isAccepted => status == AppointmentStatus.accepted;
-  bool get canCancelAppointment =>
-      _cancellationAppointment.isBeforeCancellationDeadline;
-  bool get showCancelAction => isAccepted && canCancelAppointment;
+  bool get isPending => status == AppointmentStatus.pending;
+  bool get canCancelAppointment => _cancellationAppointment.canCancelByPolicy;
+  bool get showCancelAction =>
+      (isAccepted || isPending) && canCancelAppointment;
   bool get showRebookAction => status == AppointmentStatus.rejected;
 
   @override
@@ -241,12 +249,25 @@ class MyAppointmentDetailsController extends GetxController {
     if (!AuthRequiredHelper.ensureAuthenticated(onAuthenticated: loadDetails)) {
       return;
     }
+    final context = Get.context;
+    final theme = context == null ? Get.theme : Theme.of(context);
     Get.defaultDialog(
       title: tr(LocaleKeys.my_appointment_details_cancel_dialog_title),
       middleText: tr(LocaleKeys.my_appointment_details_cancel_dialog_message),
+      backgroundColor: theme.cardColor,
+      titleStyle: theme.textTheme.bodyMedium?.copyWith(
+        color: theme.colorScheme.onSurface,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+      middleTextStyle: theme.textTheme.bodyMedium?.copyWith(
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.72),
+        fontSize: 14,
+      ),
       textConfirm: tr(LocaleKeys.my_appointment_details_cancel_dialog_confirm),
       textCancel: tr(LocaleKeys.my_appointment_details_cancel_dialog_back),
       confirmTextColor: Colors.white,
+      cancelTextColor: theme.colorScheme.onSurface,
       onConfirm: () async {
         Get.back();
         await cancelAppointment();
@@ -258,7 +279,7 @@ class MyAppointmentDetailsController extends GetxController {
     if (!AuthRequiredHelper.ensureAuthenticated(onAuthenticated: loadDetails)) {
       return;
     }
-    if (isCancelling.value || !isAccepted) return;
+    if (isCancelling.value || !showCancelAction) return;
     isCancelling(true);
     final result = await _repository.cancelAppointment(appointment.id);
     isCancelling(false);
@@ -349,10 +370,18 @@ class MyAppointmentDetailsController extends GetxController {
                   minScale: 0.8,
                   maxScale: 4,
                   child: Center(
-                    child: Image.network(
-                      resultFileUrl,
+                    child: CachedNetworkImage(
+                      imageUrl: resultFileUrl,
                       fit: BoxFit.contain,
-                      errorBuilder: (_, _, _) => Padding(
+                      placeholder: (_, __) => const SizedBox(
+                        width: 48,
+                        height: 48,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      ),
+                      errorWidget: (_, _, _) => Padding(
                         padding: const EdgeInsets.all(20),
                         child: Text(
                           tr(
@@ -389,6 +418,10 @@ class MyAppointmentDetailsController extends GetxController {
     canCancelUntil: _firstNotEmpty([
       details.value?.canCancelUntil,
       appointment.canCancelUntil,
+    ]),
+    createdAt: _firstNotEmpty([
+      details.value?.createdAt,
+      appointment.createdAt,
     ]),
   );
 

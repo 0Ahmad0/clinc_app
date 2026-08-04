@@ -12,11 +12,21 @@ class PackageCard extends GetView<LabsTestController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final titleColor = theme.colorScheme.onSurface;
+    final subtitleColor = theme.colorScheme.onSurface.withValues(
+      alpha: isDark ? 0.68 : 0.60,
+    );
+    final cardColor = isDark
+        ? theme.cardColor
+        : test.cardColor ?? const Color(0xFFF8FAFD);
+
     return GestureDetector(
       onTap: () {
         Get.bottomSheet(
           _buildPackageDetails(test, context),
-          backgroundColor: Colors.white,
+          backgroundColor: theme.cardColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25.r)),
           ),
@@ -26,14 +36,16 @@ class PackageCard extends GetView<LabsTestController> {
       child: Container(
         width: 280.w,
         decoration: BoxDecoration(
-          color: test.cardColor ?? Color(0xFFF8FAFD),
+          color: cardColor,
           borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(color: Colors.grey.withOpacity(0.1)),
+          border: Border.all(
+            color: theme.dividerColor.withValues(alpha: isDark ? 0.24 : 0.10),
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: isDark ? 0.18 : 0.05),
               blurRadius: 10,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -46,7 +58,7 @@ class PackageCard extends GetView<LabsTestController> {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                 decoration: BoxDecoration(
-                  color: Colors.orange.withOpacity(0.1),
+                  color: Colors.orange.withValues(alpha: isDark ? 0.16 : 0.1),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Row(
@@ -78,7 +90,7 @@ class PackageCard extends GetView<LabsTestController> {
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: titleColor,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -92,7 +104,7 @@ class PackageCard extends GetView<LabsTestController> {
                       test.description,
                       style: TextStyle(
                         fontSize: 12.sp,
-                        color: Colors.grey[600],
+                        color: subtitleColor,
                         height: 1.4,
                       ),
                       maxLines: 2,
@@ -121,7 +133,9 @@ class PackageCard extends GetView<LabsTestController> {
                             vertical: 4.h,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.green.withOpacity(0.1),
+                            color: Colors.green.withValues(
+                              alpha: isDark ? 0.16 : 0.1,
+                            ),
                             borderRadius: BorderRadius.circular(8.r),
                           ),
                           child: Text(
@@ -197,7 +211,18 @@ class PackageCard extends GetView<LabsTestController> {
   }
 
   Widget _buildPackageDetails(LabTest test, BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final titleColor = theme.colorScheme.onSurface;
+    final subtitleColor = theme.colorScheme.onSurface.withValues(
+      alpha: isDark ? 0.68 : 0.60,
+    );
+
     return Container(
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.r)),
+      ),
       padding: EdgeInsets.all(20.w),
       child: SingleChildScrollView(
         child: Column(
@@ -210,7 +235,9 @@ class PackageCard extends GetView<LabsTestController> {
                 width: 40.w,
                 height: 4.h,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: theme.dividerColor.withValues(
+                    alpha: isDark ? 0.36 : 0.65,
+                  ),
                   borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
@@ -224,7 +251,7 @@ class PackageCard extends GetView<LabsTestController> {
               style: TextStyle(
                 fontSize: 22.sp,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: titleColor,
               ),
             ),
 
@@ -239,7 +266,7 @@ class PackageCard extends GetView<LabsTestController> {
                     vertical: 6.h,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.orange.withOpacity(0.1),
+                    color: Colors.orange.withValues(alpha: isDark ? 0.16 : 0.1),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Row(
@@ -264,7 +291,7 @@ class PackageCard extends GetView<LabsTestController> {
                     vertical: 6.h,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.1),
+                    color: Colors.blue.withValues(alpha: isDark ? 0.16 : 0.1),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Row(
@@ -288,7 +315,7 @@ class PackageCard extends GetView<LabsTestController> {
               test.description,
               style: TextStyle(
                 fontSize: 15.sp,
-                color: Colors.grey[700],
+                color: subtitleColor,
                 height: 1.6,
               ),
             ),
@@ -305,7 +332,7 @@ class PackageCard extends GetView<LabsTestController> {
                     style: TextStyle(
                       fontSize: 17.sp,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: titleColor,
                     ),
                   ),
                   SizedBox(height: 12.h),
@@ -325,7 +352,7 @@ class PackageCard extends GetView<LabsTestController> {
                               item,
                               style: TextStyle(
                                 fontSize: 14.sp,
-                                color: Colors.grey[700],
+                                color: subtitleColor,
                               ),
                             ),
                           ),
@@ -346,16 +373,17 @@ class PackageCard extends GetView<LabsTestController> {
                   style: TextStyle(
                     fontSize: 17.sp,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: titleColor,
                   ),
                 ),
                 SizedBox(height: 12.h),
                 _buildBenefitItem(
+                  context,
                   "توفير يصل إلى ${test.discountPercentage ?? 20}%",
                 ),
-                _buildBenefitItem("نتائج دقيقة خلال 24 ساعة"),
-                _buildBenefitItem("تقرير طبي مفصل"),
-                _buildBenefitItem("استشارة طبية مجانية"),
+                _buildBenefitItem(context, "نتائج دقيقة خلال 24 ساعة"),
+                _buildBenefitItem(context, "تقرير طبي مفصل"),
+                _buildBenefitItem(context, "استشارة طبية مجانية"),
               ],
             ),
 
@@ -389,7 +417,7 @@ class PackageCard extends GetView<LabsTestController> {
                           "${test.price.toInt()} ريال",
                           style: TextStyle(
                             fontSize: 14.sp,
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withValues(alpha: 0.9),
                           ),
                         ),
                       ],
@@ -400,10 +428,12 @@ class PackageCard extends GetView<LabsTestController> {
                 IconButton(
                   onPressed: () => controller.shareTest(test),
                   style: IconButton.styleFrom(
-                    backgroundColor: Colors.grey[100],
+                    backgroundColor: theme.colorScheme.onSurface.withValues(
+                      alpha: isDark ? 0.10 : 0.06,
+                    ),
                     padding: EdgeInsets.all(12.w),
                   ),
-                  icon: Icon(Iconsax.share, color: Colors.grey[600]),
+                  icon: Icon(Iconsax.share, color: subtitleColor),
                 ),
               ],
             ),
@@ -413,7 +443,12 @@ class PackageCard extends GetView<LabsTestController> {
     );
   }
 
-  Widget _buildBenefitItem(String text) {
+  Widget _buildBenefitItem(BuildContext context, String text) {
+    final theme = Theme.of(context);
+    final subtitleColor = theme.colorScheme.onSurface.withValues(
+      alpha: theme.brightness == Brightness.dark ? 0.68 : 0.60,
+    );
+
     return Padding(
       padding: EdgeInsets.only(bottom: 8.h),
       child: Row(
@@ -422,7 +457,7 @@ class PackageCard extends GetView<LabsTestController> {
           SizedBox(width: 8.w),
           Text(
             text,
-            style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
+            style: TextStyle(fontSize: 14.sp, color: subtitleColor),
           ),
         ],
       ),

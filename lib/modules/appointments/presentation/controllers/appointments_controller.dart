@@ -217,7 +217,7 @@ class AppointmentsController extends GetxController {
   }
 
   bool canCancel(AppointmentModel appointment) {
-    return appointment.isBeforeCancellationDeadline;
+    return appointment.canCancelByPolicy;
   }
 
   bool _hasAppointmentTarget(Map<String, dynamic> args) {

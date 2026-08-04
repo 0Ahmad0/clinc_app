@@ -7,6 +7,7 @@ import 'package:clinc_app_t1/app/domain/error_handler/network_exceptions.dart';
 import 'package:clinc_app_t1/modules/home/data/models/ad_model.dart';
 import 'package:clinc_app_t1/modules/home/data/models/home_model.dart';
 import 'package:clinc_app_t1/modules/home/data/models/main_home_item_model.dart';
+import 'package:clinc_app_t1/modules/home/data/home_mock_data_source.dart';
 import 'package:clinc_app_t1/modules/home/domain/home_repository.dart';
 import 'package:clinc_app_t1/modules/settings/data/models/user_settings_model.dart';
 import 'package:clinc_app_t1/modules/settings/presentation/controllers/settings_controller.dart';
@@ -41,6 +42,7 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     _repository = locator<HomeRepository>();
+    mainSectionList.assignAll(HomeMockDataSource.defaultMainServices);
     _bindCurrentUserProfile();
     _loadCurrentUserProfile();
     loadHome();
@@ -71,7 +73,9 @@ class HomeController extends GetxController {
       return;
     }
     home.value = response.result;
-    mainSectionList.assignAll(response.result!.mainServices);
+    if (response.result!.mainServices.isNotEmpty) {
+      mainSectionList.assignAll(response.result!.mainServices);
+    }
 
     adsList.assignAll(response.result!.ads);
   }

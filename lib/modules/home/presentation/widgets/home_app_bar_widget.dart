@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clinc_app_t1/app/routes/app_routes.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -114,12 +115,16 @@ class HomeAppBarWidget extends StatelessWidget {
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(50.r),
-      child: Image.network(
-        image,
+      child: CachedNetworkImage(
+        imageUrl: image,
         width: 50.sp,
         height: 50.sp,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => CircleAvatar(
+        placeholder: (_, __) => CircleAvatar(
+          radius: 25.sp,
+          backgroundColor: Colors.white.withValues(alpha: 0.2),
+        ),
+        errorWidget: (_, __, ___) => CircleAvatar(
           radius: 25.sp,
           backgroundColor: Colors.white.withValues(alpha: 0.2),
           child: Icon(Iconsax.user, color: Colors.white, size: 26.sp),

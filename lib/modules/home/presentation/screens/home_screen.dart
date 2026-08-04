@@ -11,25 +11,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-import '../../data/home_mock_data_source.dart';
-
 class HomeScreen extends GetView<HomeController> {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.useFullPageShimmer = false});
+
+  final bool useFullPageShimmer;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(() {
-        if (controller.isLoading.value && !controller.hasHomeData) {
-          return const HomeShimmer();
-        }
+        final isInitialLoading =
+            controller.isLoading.value && !controller.hasHomeData;
 
-        if (controller.mainSectionList.isEmpty) {
-          HomeMockDataSource().getHome().then((value) {
-            controller.mainSectionList.assignAll(
-              value.result?.mainServices ?? [],
-            );
-          });
+        if (useFullPageShimmer && isInitialLoading) {
+          return const HomeShimmer();
         }
 
         final appointment = controller.activeAppointment;
@@ -46,11 +41,13 @@ class HomeScreen extends GetView<HomeController> {
                   notificationCount: controller.unreadNotificationsCount,
                 ),
               ),
-              if (controller.adsList.isNotEmpty)
+              if (isInitialLoading)
+                const SliverToBoxAdapter(child: HomeApiDataShimmer())
+              else if (controller.adsList.isNotEmpty)
                 SliverToBoxAdapter(
                   child: CarouselSliderWidget(controller: controller),
                 ),
-              if (appointment != null)
+              if (!isInitialLoading && appointment != null)
                 SliverToBoxAdapter(
                   child: AppointmentCardWidget(
                     doctorName: appointment.doctorName,
@@ -63,7 +60,8 @@ class HomeScreen extends GetView<HomeController> {
                 ),
               if (controller.mainSectionList.isNotEmpty)
                 const SliverToBoxAdapter(child: MainSectionWidget()),
-              if (controller.adsList.isEmpty &&
+              if (!isInitialLoading &&
+                  controller.adsList.isEmpty &&
                   appointment == null &&
                   controller.mainSectionList.isEmpty)
                 SliverFillRemaining(

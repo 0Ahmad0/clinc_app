@@ -11,12 +11,24 @@ class ReviewItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final mutedColor = theme.colorScheme.onSurface.withValues(
+      alpha: isDark ? 0.68 : 0.60,
+    );
+    final subtleColor = theme.colorScheme.onSurface.withValues(
+      alpha: isDark ? 0.48 : 0.42,
+    );
+
     return Container(
       margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(
+          color: theme.dividerColor.withValues(alpha: isDark ? 0.24 : 0.10),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,26 +45,40 @@ class ReviewItem extends StatelessWidget {
               8.horizontalSpace,
               Text(
                 review.userName,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14.sp,
+                ),
               ),
               const Spacer(),
               Icon(Icons.star, color: Colors.amber, size: 14.sp),
               4.horizontalSpace,
               Text(
                 review.rating.toTrimmedFixed(maxDecimals: 2),
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12.sp,
+                ),
               ),
             ],
           ),
           8.verticalSpace,
           Text(
             review.comment,
-            style: TextStyle(color: Colors.grey[700], fontSize: 12.sp),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: mutedColor,
+              fontSize: 12.sp,
+            ),
           ),
           4.verticalSpace,
           Text(
             review.date,
-            style: TextStyle(color: Colors.grey[400], fontSize: 10.sp),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: subtleColor,
+              fontSize: 10.sp,
+            ),
           ),
         ],
       ),
