@@ -28,6 +28,7 @@ class ClinicDetailsController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxBool isSubmittingReview = false.obs;
   final Rxn<Hospital> clinic = Rxn<Hospital>();
+  final Rxn<ClinicDetailsModel> clinicDetails = Rxn<ClinicDetailsModel>();
   var selectedRating = 0.0.obs;
   var commentController = TextEditingController();
 
@@ -216,6 +217,33 @@ class ClinicDetailsController extends GetxController {
     }
   }
 
+  Future<void> openClinicMap() async {
+    final details = clinicDetails.value;
+    final query = _clinicLocationQuery(details);
+    final directUrl = _directMapUrl(details?.location);
+
+    if (query.isEmpty && directUrl == null) {
+      ResponseHelper.onWarning(
+        message: tr(LocaleKeys.labs_profile_location_unavailable),
+      );
+      return;
+    }
+
+    final url =
+        directUrl ??
+        Uri.parse(
+          'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(query)}',
+        );
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      ResponseHelper.onWarning(
+        message: tr(LocaleKeys.labs_profile_map_open_failed),
+      );
+    }
+  }
+
   Future<void> loadClinicDetails() async {
     final clinicId = clinic.value?.id ?? '';
     if (isLoading.value || clinicId.isEmpty) return;
@@ -236,6 +264,7 @@ class ClinicDetailsController extends GetxController {
       return;
     }
     selectedSpecialty.value = '';
+    clinicDetails.value = response.result;
     doctorsPagination.setPage(
       data: response.result!.doctors.result?.list ?? <DoctorModel>[],
       page: response.result!.doctors.meta?.currentPage ?? 1,
@@ -400,5 +429,52 @@ class ClinicDetailsController extends GetxController {
         );
       },
     );
+  }
+
+  String _clinicLocationQuery(ClinicDetailsModel? details) {
+    if (details != null && _hasValidCoordinates(details)) {
+      return '${details.latitude},${details.longitude}';
+    }
+
+    final fallbackClinic = clinic.value;
+    if (fallbackClinic != null &&
+        _hasValidHospitalCoordinates(fallbackClinic)) {
+      return '${fallbackClinic.latitude},${fallbackClinic.longitude}';
+    }
+
+    return [
+      details?.location,
+      details?.address,
+      details?.name,
+      fallbackClinic?.name,
+      fallbackClinic?.region,
+    ].where((item) => item?.trim().isNotEmpty == true).join(' ');
+  }
+
+  bool _hasValidCoordinates(ClinicDetailsModel details) {
+    return details.latitude >= -90 &&
+        details.latitude <= 90 &&
+        details.longitude >= -180 &&
+        details.longitude <= 180 &&
+        details.latitude != 0 &&
+        details.longitude != 0;
+  }
+
+  bool _hasValidHospitalCoordinates(Hospital hospital) {
+    return hospital.latitude >= -90 &&
+        hospital.latitude <= 90 &&
+        hospital.longitude >= -180 &&
+        hospital.longitude <= 180 &&
+        hospital.latitude != 0 &&
+        hospital.longitude != 0;
+  }
+
+  Uri? _directMapUrl(String? value) {
+    final text = value?.trim() ?? '';
+    if (text.isEmpty) return null;
+    final uri = Uri.tryParse(text);
+    if (uri == null || !uri.hasScheme) return null;
+    if (uri.scheme != 'http' && uri.scheme != 'https') return null;
+    return uri;
   }
 }

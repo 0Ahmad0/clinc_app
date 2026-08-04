@@ -19,8 +19,6 @@ class NotificationService {
   NotificationService._internal();
   static final NotificationService instance = NotificationService._internal();
 
-
-
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _localNotifications =
       FlutterLocalNotificationsPlugin();
@@ -33,6 +31,9 @@ class NotificationService {
   static const _channelId = 'vaccination_requests';
   static const _channelName = 'requests';
   static const _channelDesc = 'new notification';
+  static final RegExp _rtlTextRegex = RegExp(
+    r'[\u0590-\u05FF\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]',
+  );
 
   final AndroidNotificationChannel _androidChannel =
       const AndroidNotificationChannel(
@@ -170,7 +171,9 @@ class NotificationService {
   }
 
   void _bindTokenRefreshListener() {
-    _tokenRefreshSubscription ??= _messaging.onTokenRefresh.listen((token) async {
+    _tokenRefreshSubscription ??= _messaging.onTokenRefresh.listen((
+      token,
+    ) async {
       log('🔄 [FCM] onTokenRefresh token: ${_maskToken(token)}');
       if (token.isEmpty) {
         log(
@@ -179,7 +182,10 @@ class NotificationService {
         );
         return;
       }
-      await syncDeviceTokenWithBackend(reason: 'token_refresh', overrideToken: token);
+      await syncDeviceTokenWithBackend(
+        reason: 'token_refresh',
+        overrideToken: token,
+      );
     });
   }
 
@@ -349,15 +355,17 @@ class NotificationService {
     final maskedHeaders = Map<String, String>.from(headers);
     final authHeader = maskedHeaders['Authorization'];
     if (authHeader != null) {
-      maskedHeaders['Authorization'] = 'Bearer ${_maskToken(authHeader.replaceFirst('Bearer ', ''))}';
+      maskedHeaders['Authorization'] =
+          'Bearer ${_maskToken(authHeader.replaceFirst('Bearer ', ''))}';
     }
     final maskedPayload = Map<String, dynamic>.from(payload);
     if (maskedPayload['token'] is String) {
       maskedPayload['token'] = _maskToken(maskedPayload['token'] as String?);
     }
     if (maskedPayload['fcm_token'] is String) {
-      maskedPayload['fcm_token'] =
-          _maskToken(maskedPayload['fcm_token'] as String?);
+      maskedPayload['fcm_token'] = _maskToken(
+        maskedPayload['fcm_token'] as String?,
+      );
     }
 
     log('➡️ [FCM][$reason] /api/user/device-token request (attempt $attempt)');
@@ -429,6 +437,14 @@ class NotificationService {
   static Future<void> _handleBackgroundMessage(RemoteMessage msg) async {
     if (msg.notification == null) return;
     final plugin = FlutterLocalNotificationsPlugin();
+    final isRtl = _isRtlNotification(
+      msg.notification!.title,
+      msg.notification!.body,
+      msg.data,
+    );
+    final title = _withNotificationDirection(msg.notification!.title, isRtl);
+    final body = _withNotificationDirection(msg.notification!.body, isRtl);
+
     await plugin
         .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin
@@ -439,26 +455,9 @@ class NotificationService {
 
     await plugin.show(
       id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      title: msg.notification!.title,
-      body: msg.notification!.body,
-      notificationDetails: const NotificationDetails(
-        android: AndroidNotificationDetails(
-          _channelId,
-          _channelName,
-          channelDescription: _channelDesc,
-          icon: '@mipmap/ic_launcher',
-          importance: Importance.max,
-          priority: Priority.high,
-          playSound: true,
-          // sound: RawResourceAndroidNotificationSound('notification'),
-        ),
-        iOS: DarwinNotificationDetails(
-          presentSound: true,
-          presentAlert: true,
-          presentBadge: true,
-          sound: "default",
-        ),
-      ),
+      title: title,
+      body: body,
+      notificationDetails: _systemNotificationDetails(title: title, body: body),
       payload: jsonEncode(msg.data),
     );
   }
@@ -501,30 +500,17 @@ class NotificationService {
     String? body,
     Map<String, dynamic> data,
   ) {
+    final isRtl = _isRtlNotification(title, body, data);
+    final directedTitle = _withNotificationDirection(title, isRtl);
+    final directedBody = _withNotificationDirection(body, isRtl);
+
     return _localNotifications.show(
       id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      title: title,
-      body: body,
-      notificationDetails: const NotificationDetails(
-        android: AndroidNotificationDetails(
-          _channelId,
-          _channelName,
-          channelDescription: _channelDesc,
-          icon: '@mipmap/ic_launcher',
-          importance: Importance.max,
-          priority: Priority.high,
-          playSound: true,
-          showWhen: true,
-
-          // sound: RawResourceAndroidNotificationSound('notification'),
-        ),
-        iOS: DarwinNotificationDetails(
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
-          // sound: "notification.wav"
-          sound: "default",
-        ),
+      title: directedTitle,
+      body: directedBody,
+      notificationDetails: _systemNotificationDetails(
+        title: directedTitle,
+        body: directedBody,
       ),
       payload: jsonEncode(data),
     );
@@ -535,37 +521,85 @@ class NotificationService {
     String? body,
     Map<String, dynamic> data,
   ) {
+    final isRtl = _isRtlNotification(title, body, data);
+    final directedTitle = _withNotificationDirection(title, isRtl);
+    final directedBody = _withNotificationDirection(body, isRtl);
+
     return _localNotifications.show(
       id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
-      title: title,
+      title: directedTitle,
       body:
-      // MessagePreviewHelper.isMedia(body ?? '')
-      //     ? MessagePreviewHelper.buildPreview(body ?? '')
-      //     :
-      body,
-      notificationDetails: const NotificationDetails(
-        android: AndroidNotificationDetails(
-          _channelId,
-          _channelName,
-          channelDescription: _channelDesc,
-          icon: '@mipmap/ic_launcher',
-          importance: Importance.max,
-          priority: Priority.high,
-          playSound: true,
-          showWhen: true,
-
-          // sound: RawResourceAndroidNotificationSound('notification'),
-        ),
-        iOS: DarwinNotificationDetails(
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
-          // sound: "notification.wav"
-          sound: "default",
-        ),
+          // MessagePreviewHelper.isMedia(body ?? '')
+          //     ? MessagePreviewHelper.buildPreview(body ?? '')
+          //     :
+          directedBody,
+      notificationDetails: _systemNotificationDetails(
+        title: directedTitle,
+        body: directedBody,
       ),
       payload: jsonEncode(data),
     );
+  }
+
+  static NotificationDetails _systemNotificationDetails({
+    String? title,
+    String? body,
+  }) {
+    // System notifications are rendered by Android/iOS, so Flutter fontFamily
+    // cannot be forced here. Direction is handled by wrapping the text itself.
+    return NotificationDetails(
+      android: AndroidNotificationDetails(
+        _channelId,
+        _channelName,
+        channelDescription: _channelDesc,
+        icon: '@mipmap/ic_launcher',
+        importance: Importance.max,
+        priority: Priority.high,
+        playSound: true,
+        showWhen: true,
+        styleInformation: BigTextStyleInformation(
+          body ?? '',
+          contentTitle: title,
+        ),
+        // sound: RawResourceAndroidNotificationSound('notification'),
+      ),
+      iOS: const DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+        // sound: "notification.wav"
+        sound: "default",
+      ),
+    );
+  }
+
+  static bool _isRtlNotification(
+    String? title,
+    String? body,
+    Map<String, dynamic> data,
+  ) {
+    final locale = (data['locale'] ?? data['lang'] ?? data['language'])
+        ?.toString()
+        .toLowerCase();
+    if (locale != null && locale.isNotEmpty) {
+      if (locale.startsWith('ar') ||
+          locale.startsWith('fa') ||
+          locale.startsWith('ur') ||
+          locale.startsWith('he')) {
+        return true;
+      }
+      if (locale.startsWith('en')) return false;
+    }
+
+    return _rtlTextRegex.hasMatch('${title ?? ''} ${body ?? ''}');
+  }
+
+  static String? _withNotificationDirection(String? value, bool isRtl) {
+    final text = value?.trim();
+    if (text == null || text.isEmpty) return value;
+    final embedding = isRtl ? '\u202B' : '\u202A';
+    const popDirectionalFormatting = '\u202C';
+    return '$embedding$text$popDirectionalFormatting';
   }
 
   String buildMessagePreview(String message) {

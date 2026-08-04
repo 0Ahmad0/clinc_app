@@ -505,7 +505,172 @@ class LabsListShimmer extends StatelessWidget {
   const LabsListShimmer({super.key});
 
   @override
-  Widget build(BuildContext context) => const ListShimmer(itemCount: 5);
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+      itemCount: 5,
+      separatorBuilder: (_, __) => 16.verticalSpace,
+      itemBuilder: (_, index) => _LabCardListShimmer(index: index),
+    );
+  }
+}
+
+class _LabCardListShimmer extends StatelessWidget {
+  const _LabCardListShimmer({required this.index});
+
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final primary = theme.primaryColor;
+    final mutedColor = theme.dividerColor.withValues(
+      alpha: isDark ? 0.28 : 0.48,
+    );
+    final accentColor = primary.withValues(alpha: isDark ? 0.24 : 0.11);
+    final imageColor = primary.withValues(alpha: isDark ? 0.18 : 0.08);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: theme.dividerColor.withValues(alpha: isDark ? 0.24 : 0.10),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: isDark ? 0.16 : 0.05),
+            blurRadius: 14,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              width: 112.w,
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: _FilterShimmerBlock(
+                      width: 112.w,
+                      height: 142.h,
+                      color: imageColor,
+                      borderRadius: 0,
+                    ),
+                  ),
+                  PositionedDirectional(
+                    top: 10.h,
+                    start: 10.w,
+                    child: _FilterShimmerBlock(
+                      width: index.isEven ? 48.w : 58.w,
+                      height: 24.h,
+                      color: Colors.amber.withValues(
+                        alpha: isDark ? 0.26 : 0.18,
+                      ),
+                      borderRadius: 6.r,
+                    ),
+                  ),
+                  Center(
+                    child: _FilterShimmerBlock(
+                      width: 38.w,
+                      height: 38.w,
+                      color: primary.withValues(alpha: isDark ? 0.22 : 0.14),
+                      borderRadius: 10.r,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(12.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AppShimmerPlaceholder(
+                            height: 16.h,
+                            borderRadius: 5.r,
+                          ),
+                        ),
+                        10.horizontalSpace,
+                        _FilterShimmerBlock(
+                          width: 20.w,
+                          height: 20.w,
+                          color: mutedColor,
+                          borderRadius: 5.r,
+                        ),
+                      ],
+                    ),
+                    8.verticalSpace,
+                    AppShimmerPlaceholder(
+                      width: index.isEven ? 166.w : 132.w,
+                      height: 12.h,
+                      borderRadius: 4.r,
+                    ),
+                    10.verticalSpace,
+                    Row(
+                      children: [
+                        _FilterShimmerBlock(
+                          width: 14.w,
+                          height: 14.w,
+                          color: mutedColor,
+                          shape: BoxShape.circle,
+                        ),
+                        6.horizontalSpace,
+                        Expanded(
+                          child: AppShimmerPlaceholder(
+                            height: 11.h,
+                            borderRadius: 4.r,
+                          ),
+                        ),
+                      ],
+                    ),
+                    14.verticalSpace,
+                    Wrap(
+                      spacing: 7.w,
+                      runSpacing: 7.h,
+                      children: [
+                        _FilterShimmerBlock(
+                          width: 62.w,
+                          height: 24.h,
+                          color: accentColor,
+                          borderRadius: 7.r,
+                        ),
+                        _FilterShimmerBlock(
+                          width: 78.w,
+                          height: 24.h,
+                          color: accentColor,
+                          borderRadius: 7.r,
+                        ),
+                        _FilterShimmerBlock(
+                          width: index.isEven ? 52.w : 66.w,
+                          height: 24.h,
+                          color: mutedColor.withValues(
+                            alpha: isDark ? 0.5 : 0.7,
+                          ),
+                          borderRadius: 7.r,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class LabTestsShimmer extends StatelessWidget {

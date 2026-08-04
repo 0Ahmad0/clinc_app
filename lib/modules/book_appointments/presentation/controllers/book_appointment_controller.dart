@@ -186,14 +186,15 @@ class BookAppointmentController extends GetxController {
   }
 
   Map<String, dynamic> checkoutArguments() {
+    final isLabBooking = labId?.trim().isNotEmpty == true;
     return {
-      'flow_type': 'doctor',
-      'doctor_id': doctorId,
+      'flow_type': isLabBooking ? 'lab' : 'doctor',
+      'doctor_id': isLabBooking ? null : doctorId,
       'doctor_name': doctorName,
       'doctor_logo': doctorLogo,
-      'clinic_id': clinicId,
+      'clinic_id': isLabBooking ? null : clinicId,
       'lab_id': labId,
-      'specialty_id': specialtyId,
+      'specialty_id': isLabBooking ? null : specialtyId,
       'specialty': specialty,
       'date': _dateOnly(selectedDate.value),
       'time': selectedTime.value,
@@ -240,8 +241,19 @@ class BookAppointmentController extends GetxController {
       originalAppointmentId =
           _argString(args, 'appointment_id') ??
           _argString(args, 'appointmentId');
+      _normalizeAppointmentTarget();
       _applyPrefillArguments(args);
     }
+  }
+
+  void _normalizeAppointmentTarget() {
+    if (labId?.trim().isNotEmpty == true) {
+      doctorId = null;
+      clinicId = null;
+      specialtyId = null;
+      return;
+    }
+    labId = null;
   }
 
   void _applyPrefillArguments(Map args) {

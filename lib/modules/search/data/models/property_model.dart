@@ -5,12 +5,14 @@ class Hospital {
   final double consultationFee;
   final double distanceKm;
   final String imageUrl;
-  final String?    phone ;
+  final String? phone;
   final double rating;
   final List<String> specialties; // قائمة التخصصات للفلترة
   final List<String> supportedInsurances; // قائمة شركات التأمين
   final String workTime; // صباحي، مسائي، أو كلاهما
   final bool isOpen; // هل العيادة مفتوحة الآن؟
+  final double latitude;
+  final double longitude;
 
   const Hospital({
     required this.id,
@@ -24,15 +26,15 @@ class Hospital {
     required this.supportedInsurances,
     required this.workTime,
     required this.isOpen,
-  this.phone ,
+    this.phone,
+    this.latitude = 0,
+    this.longitude = 0,
   });
 
   // خاصية مساعدة للـ UI: هل يقبل أي تأمين؟
   bool get isInsuranceAccepted => supportedInsurances.isNotEmpty;
 
   factory Hospital.fromJson(Map<String, dynamic> json) {
-
-
     return Hospital(
       id: json['id']?.toString() ?? '',
       name: json['name']?.toString() ?? '',
@@ -46,6 +48,15 @@ class Hospital {
       supportedInsurances: _stringList(json['supported_insurances']),
       workTime: json['work_time']?.toString() ?? '',
       phone: json['phone'],
+      latitude: _double(
+        json['latitude'] ?? json['lat'] ?? json['clinic_latitude'],
+      ),
+      longitude: _double(
+        json['longitude'] ??
+            json['lng'] ??
+            json['long'] ??
+            json['clinic_longitude'],
+      ),
       isOpen: json['is_open'] == true,
     );
   }
@@ -63,11 +74,19 @@ class Hospital {
     'work_time': workTime,
     'is_open': isOpen,
     'phone': phone,
+    'latitude': latitude,
+    'longitude': longitude,
   };
 
   static List<String> _stringList(dynamic value) {
     if (value is! List) return <String>[];
     return value.map((item) => item.toString()).toList();
+  }
+
+  static double _double(dynamic value) {
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    return double.tryParse(value?.toString() ?? '') ?? 0;
   }
 
   // --- بيانات وهمية للتجربة (Mock Data) ---

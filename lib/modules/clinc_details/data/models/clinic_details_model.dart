@@ -10,7 +10,7 @@ class ClinicDetailsModel {
     this.name = '',
     this.coverImage = '',
     this.logo = '',
-    this.phone ,
+    this.phone,
     this.rating = 0,
     this.about = '',
     this.location = '',
@@ -34,6 +34,13 @@ class ClinicDetailsModel {
   final BaseModel<BaseModels<ClinicReviewModel>> reviews;
 
   factory ClinicDetailsModel.fromJson(Map<String, dynamic> json) {
+    final locationData = _mapValue(
+      json['location'] ??
+          json['map_location'] ??
+          json['mapLocation'] ??
+          json['map'],
+    );
+
     return ClinicDetailsModel(
       id: json['id']?.toString() ?? '',
       name: json['name']?.toString() ?? '',
@@ -49,13 +56,40 @@ class ClinicDetailsModel {
           (json['about'] ?? json['description'] ?? json['bio'])?.toString() ??
           '',
       location:
-          (json['location'] ?? json['map_location'] ?? json['mapLocation'])
+          (locationData['url'] ??
+                  locationData['link'] ??
+                  locationData['map_url'] ??
+                  locationData['mapUrl'] ??
+                  locationData['address'] ??
+                  json['location'] ??
+                  json['map_location'] ??
+                  json['mapLocation'])
               ?.toString() ??
           '',
-      address: json['address']?.toString() ?? '',
+      address:
+          (json['address'] ??
+                  locationData['address'] ??
+                  locationData['formatted_address'] ??
+                  locationData['formattedAddress'])
+              ?.toString() ??
+          '',
       phone: json['phone']?.toString() ?? '',
-      latitude: _double(json['latitude'] ?? json['lat']),
-      longitude: _double(json['longitude'] ?? json['lng']),
+      latitude: _double(
+        json['latitude'] ??
+            json['lat'] ??
+            json['clinic_latitude'] ??
+            locationData['latitude'] ??
+            locationData['lat'],
+      ),
+      longitude: _double(
+        json['longitude'] ??
+            json['lng'] ??
+            json['long'] ??
+            json['clinic_longitude'] ??
+            locationData['longitude'] ??
+            locationData['lng'] ??
+            locationData['long'],
+      ),
       doctors: _paginatedList<DoctorModel>(
         json['doctors'],
         (item) => DoctorModel.fromJson(Map<String, dynamic>.from(item as Map)),
@@ -140,6 +174,11 @@ class ClinicDetailsModel {
     if (value is double) return value;
     if (value is int) return value.toDouble();
     return double.tryParse(value?.toString() ?? '') ?? 0;
+  }
+
+  static Map<String, dynamic> _mapValue(dynamic value) {
+    if (value is Map) return Map<String, dynamic>.from(value);
+    return const <String, dynamic>{};
   }
 
   static int? _int(dynamic value) {

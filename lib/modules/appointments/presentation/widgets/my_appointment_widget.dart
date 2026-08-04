@@ -70,7 +70,7 @@ class MyAppointmentWidget extends GetView<AppointmentsController> {
     final orderTypeColor = _orderTypeColor(context);
 
     return ZoomIn(
-      key: ValueKey(appointment.id), // مفتاح فريد للأنيميشن
+      key: ValueKey('${appointment.id}-${appointment.status.name}'),
       child: InkWell(
         borderRadius: BorderRadius.circular(14.r),
         onTap: () =>

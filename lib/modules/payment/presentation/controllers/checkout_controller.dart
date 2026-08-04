@@ -13,9 +13,12 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../app/core/utils/dialogs/app_dialog.dart';
+import '../../../appointments/presentation/controllers/appointments_controller.dart';
 import '../../../book_appointments/data/models/book_appointment_request.dart';
 import '../../../book_appointments/domain/book_appointment_repository.dart';
 import '../../../book_appointments/presentation/widgets/success_book_appointment_widget.dart';
+import '../../../home/presentation/controllers/home_controller.dart';
+import '../../../labs/presentation/controllers/labs_test_controller.dart';
 import '../../data/models/checkout_model.dart';
 import '../../data/models/checkout_payment_request_model.dart';
 import '../../data/models/payment_coupon_model.dart';
@@ -264,6 +267,8 @@ class CheckoutController extends GetxController {
         if (response.result != null) {
           checkout.value = _mergeCheckoutResponse(response.result!);
         }
+        _clearLocalLabCart();
+        _refreshOrdersData();
         _showLabPaymentSuccess(context);
       },
       failure: (exception) {
@@ -291,9 +296,10 @@ class CheckoutController extends GetxController {
         checkout.value = CheckoutModel.fromRouteArguments({
           ..._checkoutArguments,
           ...appointment,
-          'flow_type': 'doctor',
+          'flow_type': _argString('flow_type') ?? 'doctor',
           'appointment': appointment,
         }).copyWith(message: response.message);
+        _refreshOrdersData();
         _showDoctorBookingSuccess(context);
       },
       failure: (exception) {
@@ -306,11 +312,17 @@ class CheckoutController extends GetxController {
   }
 
   BookAppointmentRequest _doctorBookingRequest() {
+    final labId = _argString('lab_id') ?? checkout.value.labId;
+    final isLabBooking = labId.trim().isNotEmpty;
     return BookAppointmentRequest(
-      doctorId: _argString('doctor_id') ?? checkout.value.doctorId,
-      clinicId: _argString('clinic_id') ?? checkout.value.clinicId,
-      labId: _argString('lab_id') ?? checkout.value.labId,
-      specialtyId: _argString('specialty_id'),
+      doctorId: isLabBooking
+          ? null
+          : _argString('doctor_id') ?? checkout.value.doctorId,
+      clinicId: isLabBooking
+          ? null
+          : _argString('clinic_id') ?? checkout.value.clinicId,
+      labId: isLabBooking ? labId : null,
+      specialtyId: isLabBooking ? null : _argString('specialty_id'),
       date:
           DateTime.tryParse(
             _argString('date') ?? _argString('appointment_date') ?? '',
@@ -353,6 +365,21 @@ class CheckoutController extends GetxController {
       barrierColor: Theme.of(context).primaryColor.withValues(alpha: 0.2),
     );
     ResponseHelper.onSuccess(message: tr(LocaleKeys.checkout_lab_success_msg));
+  }
+
+  void _refreshOrdersData() {
+    if (Get.isRegistered<HomeController>()) {
+      Get.find<HomeController>().loadHome();
+    }
+    if (Get.isRegistered<AppointmentsController>()) {
+      Get.find<AppointmentsController>().loadAppointments(refresh: true);
+    }
+  }
+
+  void _clearLocalLabCart() {
+    if (Get.isRegistered<LabsTestController>()) {
+      Get.find<LabsTestController>().cartItems.clear();
+    }
   }
 
   CheckoutModel _mergeCheckoutResponse(CheckoutModel response) {

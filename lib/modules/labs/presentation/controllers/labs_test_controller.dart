@@ -48,7 +48,6 @@ class LabsTestController extends GetxController {
     _repository = locator<LabsRepository>();
     _readRouteArgs();
     loadData();
-    if (!AuthRequiredHelper.isGuest) loadCart();
   }
 
   Future<void> loadData() async {
@@ -166,9 +165,7 @@ class LabsTestController extends GetxController {
   bool isCartItemLoading(String testId) => cartItemLoadingIds.contains(testId);
 
   Future<void> addToCart(LabTest test) async {
-    if (!AuthRequiredHelper.ensureAuthenticated(onAuthenticated: loadCart)) {
-      return;
-    }
+    if (!AuthRequiredHelper.ensureAuthenticated()) return;
     if (isInCart(test.id)) {
       ResponseHelper.onWarning(
         message: tr(LocaleKeys.labs_test_already_in_cart),
@@ -179,69 +176,20 @@ class LabsTestController extends GetxController {
 
     cartItemLoadingIds.add(test.id);
     cartItemLoadingIds.refresh();
-    final result = await _repository.addLabTestToCart(test.id);
+    cartItems.add(test);
     cartItemLoadingIds.remove(test.id);
     cartItemLoadingIds.refresh();
-    result.when(
-      success: (response) {
-        if (!response.isSuccess) {
-          ResponseHelper.onFailure(message: response.message);
-          return;
-        }
-        if (response.result != null) {
-          _handleCartResponse(response);
-        }
-        if (!isInCart(test.id)) {
-          cartItems.add(test);
-        }
-        if (response.isSuccess) {
-          ResponseHelper.onSuccess(message: response.message);
-        }
-      },
-      failure: (exception) {
-        if (AuthRequiredHelper.handleFailure(
-          exception,
-          onAuthenticated: loadCart,
-        )) {
-          return;
-        }
-        ResponseHelper.onFailure(
-          message: NetworkExceptions.getErrorMessage(exception),
-        );
-      },
-    );
   }
 
   Future<void> removeFromCart(String testId) async {
-    if (!AuthRequiredHelper.ensureAuthenticated(onAuthenticated: loadCart)) {
-      return;
-    }
+    if (!AuthRequiredHelper.ensureAuthenticated()) return;
     if (cartItemLoadingIds.contains(testId)) return;
 
     cartItemLoadingIds.add(testId);
     cartItemLoadingIds.refresh();
-    final result = await _repository.removeLabTestFromCart(testId);
+    cartItems.removeWhere((item) => item.id == testId);
     cartItemLoadingIds.remove(testId);
     cartItemLoadingIds.refresh();
-    result.when(
-      success: (response) {
-        _handleCartResponse(response);
-        if (response.isSuccess) {
-          ResponseHelper.onSuccess(message: response.message);
-        }
-      },
-      failure: (exception) {
-        if (AuthRequiredHelper.handleFailure(
-          exception,
-          onAuthenticated: loadCart,
-        )) {
-          return;
-        }
-        ResponseHelper.onFailure(
-          message: NetworkExceptions.getErrorMessage(exception),
-        );
-      },
-    );
   }
 
   void updateQuantity(String testId, int quantity) {
@@ -249,24 +197,8 @@ class LabsTestController extends GetxController {
   }
 
   Future<void> clearCart() async {
-    if (!AuthRequiredHelper.ensureAuthenticated(onAuthenticated: loadCart)) {
-      return;
-    }
-    final result = await _repository.clearLabCart();
-    result.when(
-      success: _handleCartResponse,
-      failure: (exception) {
-        if (AuthRequiredHelper.handleFailure(
-          exception,
-          onAuthenticated: loadCart,
-        )) {
-          return;
-        }
-        ResponseHelper.onFailure(
-          message: NetworkExceptions.getErrorMessage(exception),
-        );
-      },
-    );
+    if (!AuthRequiredHelper.ensureAuthenticated()) return;
+    cartItems.clear();
   }
 
   void changeCategory(String category) {

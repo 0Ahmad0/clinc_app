@@ -184,18 +184,16 @@ class AppointmentsController extends GetxController {
     if (index != -1) {
       allOrders[index] = allOrders[index].copyWith(
         status: AppointmentStatus.rejected,
+        canCancel: false,
       );
+      allOrders.refresh();
     }
   }
 
   void reBookAppointment(AppointmentModel appointment) {
-    final args = {
+    final args = <String, dynamic>{
       'rebook': true,
       'appointment_id': appointment.id,
-      'doctor_id': appointment.doctorId,
-      'clinic_id': appointment.clinicId,
-      'lab_id': appointment.labId,
-      'specialty_id': appointment.specialtyId,
       'patient_name': appointment.patientName,
       'phone': appointment.phone,
       'problem': appointment.problem,
@@ -206,6 +204,28 @@ class AppointmentsController extends GetxController {
       'is_pregnant': appointment.isPregnant,
       'is_breastfeeding': appointment.isBreastfeeding,
     };
+
+    final labId = appointment.labId.trim();
+    final doctorId = appointment.doctorId.trim();
+    final clinicId = appointment.clinicId.trim();
+    final specialtyId = appointment.specialtyId.trim();
+
+    if (labId.isNotEmpty) {
+      Get.toNamed(
+        AppRoutes.labsTest,
+        arguments: {
+          'rebook': true,
+          'appointment_id': appointment.id,
+          'lab_id': labId,
+          'name': appointment.clinicName,
+        },
+      );
+      return;
+    } else {
+      if (doctorId.isNotEmpty) args['doctor_id'] = doctorId;
+      if (clinicId.isNotEmpty) args['clinic_id'] = clinicId;
+      if (specialtyId.isNotEmpty) args['specialty_id'] = specialtyId;
+    }
 
     if (!_hasAppointmentTarget(args)) {
       ResponseHelper.onFailure(
