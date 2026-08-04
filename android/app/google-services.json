@@ -7,12 +7,131 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:815847296623:android:83cdf19864d8d400fa879a",
+        "android_client_info": {
+          "package_name": "com.clinic.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "815847296623-lt1j9ds0hd9ln495b0f8i6gcu4309ce8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.clinic.app",
+            "certificate_hash": "804dbc17c19ffd556d1d975242ce7caaf34c5a39"
+          }
+        },
+        {
+          "client_id": "815847296623-4va1cdfoomgb5i89n6fjf1fugjd2o1vm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxg_UIVphrL_BjkfxGHYMA2TqrFBrtORc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "815847296623-4va1cdfoomgb5i89n6fjf1fugjd2o1vm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815847296623:android:994c64fbb12a416efa879a",
+        "android_client_info": {
+          "package_name": "com.clinic.clinic_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "815847296623-4va1cdfoomgb5i89n6fjf1fugjd2o1vm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxg_UIVphrL_BjkfxGHYMA2TqrFBrtORc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "815847296623-4va1cdfoomgb5i89n6fjf1fugjd2o1vm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815847296623:android:8f17a730a5975233fa879a",
+        "android_client_info": {
+          "package_name": "com.clinic.provider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "815847296623-4va1cdfoomgb5i89n6fjf1fugjd2o1vm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxg_UIVphrL_BjkfxGHYMA2TqrFBrtORc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "815847296623-4va1cdfoomgb5i89n6fjf1fugjd2o1vm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:815847296623:android:e32a098b29d7c8dbfa879a",
         "android_client_info": {
           "package_name": "com.clinic.user"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "815847296623-8u14jauio212ao6ii991pa1bihh9qdre.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.clinic.user",
+            "certificate_hash": "42fd0b5943e976f2181e0be5a4587b7f0f1cb113"
+          }
+        },
+        {
+          "client_id": "815847296623-bhv6bhq4a85t2691frdcug30kkj6c01e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.clinic.user",
+            "certificate_hash": "825c51d4005824d06bbc2c7845d5e98d45e0040e"
+          }
+        },
+        {
+          "client_id": "815847296623-hair5grg2stt0d98a9a6eamb254djbuv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.clinic.user",
+            "certificate_hash": "804dbc17c19ffd556d1d975242ce7caaf34c5a39"
+          }
+        },
         {
           "client_id": "815847296623-4va1cdfoomgb5i89n6fjf1fugjd2o1vm.apps.googleusercontent.com",
           "client_type": 3
