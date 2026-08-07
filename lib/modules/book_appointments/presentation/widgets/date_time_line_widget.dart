@@ -8,11 +8,13 @@ class DateTimeLineWidget extends StatelessWidget {
     super.key,
     required this.controller,
     required this.selectedDate,
+    this.availableWeekdays = const <int>{},
     this.onDateChange,
   });
 
   final EasyDatePickerController controller;
   final DateTime selectedDate;
+  final Set<int> availableWeekdays;
   final Function(DateTime)? onDateChange;
 
   @override
@@ -29,8 +31,21 @@ class DateTimeLineWidget extends StatelessWidget {
       firstDate: DateTime.now(),
       focusedDate: selectedDate,
       lastDate: DateTime(2030),
+      disableStrategy: _UnavailableWeekdaysStrategy(availableWeekdays),
       locale: Locale(context.locale.languageCode),
       onDateChange: onDateChange,
     );
+  }
+}
+
+class _UnavailableWeekdaysStrategy extends DisableStrategy {
+  const _UnavailableWeekdaysStrategy(this.availableWeekdays);
+
+  final Set<int> availableWeekdays;
+
+  @override
+  bool isDisabled(DateTime date) {
+    return availableWeekdays.isNotEmpty &&
+        !availableWeekdays.contains(date.weekday);
   }
 }

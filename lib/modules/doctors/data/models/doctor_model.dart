@@ -7,6 +7,7 @@ class DoctorModel {
   final double rating; // التقييم
   final double price; // سعر الكشفية
   final String imageUrl;
+  final Set<int> availableWeekdays;
 
   const DoctorModel({
     required this.id,
@@ -17,6 +18,7 @@ class DoctorModel {
     required this.rating,
     required this.price,
     required this.imageUrl,
+    this.availableWeekdays = const <int>{},
   });
 
   factory DoctorModel.fromJson(Map<String, dynamic> json) {
@@ -46,6 +48,7 @@ class DoctorModel {
           (json['image_url'] ?? json['imageUrl'] ?? json['avatar'])
               ?.toString() ??
           '',
+      availableWeekdays: parseAvailableWeekdays(json),
     );
   }
 
@@ -58,7 +61,114 @@ class DoctorModel {
     'rating': rating,
     'price': price,
     'image_url': imageUrl,
+    'available_weekdays': availableWeekdays.toList(),
   };
+
+  static Set<int> parseAvailableWeekdays(dynamic value) {
+    final weekdays = <int>{};
+    _collectWeekdays(value, weekdays);
+    return weekdays;
+  }
+
+  static void _collectWeekdays(dynamic value, Set<int> output) {
+    if (value == null) return;
+    if (value is List) {
+      for (final item in value) {
+        _collectWeekdays(item, output);
+      }
+      return;
+    }
+    if (value is Map) {
+      final isEnabled =
+          _boolValue(
+            value['is_active'] ??
+                value['is_available'] ??
+                value['enabled'] ??
+                value['active'],
+          ) ??
+          true;
+      if (!isEnabled) return;
+
+      final day = _weekdayValue(
+        value['day'] ??
+            value['weekday'] ??
+            value['day_of_week'] ??
+            value['dayOfWeek'] ??
+            value['day_number'] ??
+            value['dayNumber'] ??
+            value['name'],
+      );
+      if (day != null) output.add(day);
+
+      for (final key in const [
+        'available_weekdays',
+        'available_days',
+        'working_days',
+        'work_days',
+        'days',
+        'schedule',
+        'schedules',
+        'availability',
+        'doctor_availability',
+        'working_hours',
+      ]) {
+        _collectWeekdays(value[key], output);
+      }
+      return;
+    }
+
+    final day = _weekdayValue(value);
+    if (day != null) output.add(day);
+  }
+
+  static bool? _boolValue(dynamic value) {
+    if (value == null) return null;
+    if (value is bool) return value;
+    final text = value.toString().trim().toLowerCase();
+    if (text == 'true' || text == '1' || text == 'yes') return true;
+    if (text == 'false' || text == '0' || text == 'no') return false;
+    return null;
+  }
+
+  static int? _weekdayValue(dynamic value) {
+    if (value == null) return null;
+    final number = int.tryParse(value.toString());
+    if (number != null) {
+      if (number >= DateTime.monday && number <= DateTime.sunday) {
+        return number;
+      }
+      if (number == 0) return DateTime.sunday;
+    }
+
+    final text = value.toString().trim().toLowerCase();
+    const weekdays = {
+      'monday': DateTime.monday,
+      'mon': DateTime.monday,
+      'الاثنين': DateTime.monday,
+      'الإثنين': DateTime.monday,
+      'tuesday': DateTime.tuesday,
+      'tue': DateTime.tuesday,
+      'الثلاثاء': DateTime.tuesday,
+      'wednesday': DateTime.wednesday,
+      'wed': DateTime.wednesday,
+      'الاربعاء': DateTime.wednesday,
+      'الأربعاء': DateTime.wednesday,
+      'thursday': DateTime.thursday,
+      'thu': DateTime.thursday,
+      'الخميس': DateTime.thursday,
+      'friday': DateTime.friday,
+      'fri': DateTime.friday,
+      'الجمعة': DateTime.friday,
+      'saturday': DateTime.saturday,
+      'sat': DateTime.saturday,
+      'السبت': DateTime.saturday,
+      'sunday': DateTime.sunday,
+      'sun': DateTime.sunday,
+      'الاحد': DateTime.sunday,
+      'الأحد': DateTime.sunday,
+    };
+    return weekdays[text];
+  }
 
   // بيانات وهمية للتجربة
   static List<DoctorModel> get mockDoctors => [

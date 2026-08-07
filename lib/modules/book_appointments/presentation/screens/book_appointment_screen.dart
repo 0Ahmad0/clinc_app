@@ -29,6 +29,7 @@ class BookAppointmentScreen extends GetView<BookAppointmentController> {
                 () => DateTimeLineWidget(
                   controller: controller.dateLineController,
                   selectedDate: controller.selectedDate.value,
+                  availableWeekdays: controller.availableWeekdays,
                   onDateChange: controller.updateDate,
                 ),
               ),

@@ -27,6 +27,7 @@ class BookAppointmentController extends GetxController {
   String doctorName = '';
   String doctorLogo = '';
   String specialty = '';
+  final RxSet<int> availableWeekdays = <int>{}.obs;
   Map<String, dynamic>? latestAppointmentResponse;
 
   // 1. التاريخ والوقت
@@ -70,6 +71,15 @@ class BookAppointmentController extends GetxController {
   // --- Logic Methods ---
 
   void updateDate(DateTime date) {
+    if (!isDateBookable(date)) {
+      final nextDate = firstBookableDate(from: date);
+      if (nextDate != null) {
+        selectedDate.value = nextDate;
+        dateLineController.animateToDate(nextDate);
+        loadAvailableTimes();
+      }
+      return;
+    }
     selectedDate.value = date;
     dateLineController.animateToDate(date);
     loadAvailableTimes();
@@ -215,6 +225,8 @@ class BookAppointmentController extends GetxController {
       doctorName = args.name;
       doctorLogo = args.imageUrl;
       specialty = args.specialty;
+      availableWeekdays.assignAll(args.availableWeekdays);
+      _alignSelectedDateWithAvailability();
       return;
     }
     if (args is Map) {
@@ -238,11 +250,13 @@ class BookAppointmentController extends GetxController {
           _argString(args, 'specialty_name') ??
           _argString(args, 'specialtyName') ??
           specialty;
+      availableWeekdays.assignAll(DoctorModel.parseAvailableWeekdays(args));
       originalAppointmentId =
           _argString(args, 'appointment_id') ??
           _argString(args, 'appointmentId');
       _normalizeAppointmentTarget();
       _applyPrefillArguments(args);
+      _alignSelectedDateWithAvailability();
     }
   }
 
@@ -324,10 +338,36 @@ class BookAppointmentController extends GetxController {
       (clinicId?.isNotEmpty == true) ||
       (labId?.isNotEmpty == true);
 
+  bool isDateBookable(DateTime date) {
+    return availableWeekdays.isEmpty ||
+        availableWeekdays.contains(date.weekday);
+  }
+
+  DateTime? firstBookableDate({DateTime? from}) {
+    final start = _dateOnlyValue(from ?? DateTime.now());
+    for (var index = 0; index < 370; index++) {
+      final date = start.add(Duration(days: index));
+      if (isDateBookable(date)) return date;
+    }
+    return null;
+  }
+
+  void _alignSelectedDateWithAvailability() {
+    if (isDateBookable(selectedDate.value)) return;
+    final nextDate = firstBookableDate(from: selectedDate.value);
+    if (nextDate == null) return;
+    selectedDate.value = nextDate;
+    dateLineController.animateToDate(nextDate);
+  }
+
   String _dateOnly(DateTime value) {
     final month = value.month.toString().padLeft(2, '0');
     final day = value.day.toString().padLeft(2, '0');
     return '${value.year}-$month-$day';
+  }
+
+  DateTime _dateOnlyValue(DateTime value) {
+    return DateTime(value.year, value.month, value.day);
   }
 
   void _handleTimesResponse(BaseModel<List<String>> response) {
