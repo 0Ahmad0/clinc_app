@@ -25,7 +25,7 @@ class SplashController extends GetxController {
     await Get.context?.setLocale(newLocale);
     Get.updateLocale(newLocale);
 
-    await NotificationService.instance.init();
+     NotificationService.instance.init();
     if (StorageService.instance.isGuest) {
       Get.offNamed(AppRoutes.navbar);
       return;
@@ -54,7 +54,7 @@ class SplashController extends GetxController {
 
   Future<void> initSplash() async {
     await _initSplash();
-    await Get.find<AppSettingsController>().loadSettings();
+     Get.find<AppSettingsController>().loadSettings();
     await _loadSplash();
   }
 }
