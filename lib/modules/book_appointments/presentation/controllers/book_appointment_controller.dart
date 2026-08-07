@@ -357,7 +357,6 @@ class BookAppointmentController extends GetxController {
     final nextDate = firstBookableDate(from: selectedDate.value);
     if (nextDate == null) return;
     selectedDate.value = nextDate;
-    dateLineController.animateToDate(nextDate);
   }
 
   String _dateOnly(DateTime value) {
