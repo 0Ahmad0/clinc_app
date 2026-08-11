@@ -183,8 +183,34 @@ class SearchAndFilterController extends GetxController {
   }
 
   Future<void> loadFiltersAndClinics() async {
-    await loadFilters();
-    await loadClinics(refresh: true);
+    if (isFiltersLoading.value || clinicsPagination.isBusy) return;
+
+    isFiltersLoading(true);
+    clinicsPagination.reset();
+    clinicsPagination.isInitialLoading(true);
+
+    final filtersFuture = _repository.getFilters();
+    final clinicsFuture = _repository.searchClinics(
+      PaginationParams(
+        page: 1,
+        perPage: clinicsPagination.perPage,
+        filters: _activeFilters,
+      ),
+    );
+
+    final filtersResult = await filtersFuture;
+    final clinicsResult = await clinicsFuture;
+
+    isFiltersLoading(false);
+    clinicsPagination.isInitialLoading(false);
+
+    filtersResult.when(success: _handleFiltersResponse, failure: (_) {});
+    clinicsResult.when(
+      success: (response) => _handleClinicsResponse(response, 1),
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
   }
 
   Future<void> loadFilters() async {

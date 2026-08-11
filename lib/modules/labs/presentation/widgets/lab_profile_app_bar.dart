@@ -78,10 +78,6 @@ class _FavoriteShimmerIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppShimmerPlaceholder(
-      width: 20.sp,
-      height: 20.sp,
-      shape: BoxShape.circle,
-    );
+    return AppShimmerIcon(icon: Iconsax.heart5, size: 20.sp);
   }
 }

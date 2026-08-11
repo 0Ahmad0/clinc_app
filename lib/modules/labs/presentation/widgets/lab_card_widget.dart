@@ -61,7 +61,6 @@ class LabCardWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Text(
-
                       tr(
                         lab.isOpen
                             ? LocaleKeys.labs_page_status_open
@@ -127,6 +126,7 @@ class LabCardWidget extends StatelessWidget {
                   // الخدمات (Tags)
                   Wrap(
                     spacing: 6.w,
+                    runSpacing: 8.h,
                     children: lab.services
                         .take(3)
                         .map(

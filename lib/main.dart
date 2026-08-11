@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:clinc_app_t1/app/controllers/settings_app_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'app/core/configuration/locator.dart';
 import 'app/core/constants/app_constants.dart';
+import 'app/services/navigation_mode_service.dart';
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
 import 'app/bindings/initial_binding.dart';
@@ -15,11 +18,16 @@ import 'app/core/theme/app_theme.dart';
 import 'firebase_options.dart';
 import 'generated/codegen_loader.g.dart';
 
+Future<void> configureEdgeToEdgeUI() async {
+  await SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.edgeToEdge,
+    overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
+  );
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await Future.wait([
     EasyLocalization.ensureInitialized(),
     ScreenUtil.ensureScreenSize(),
@@ -31,6 +39,13 @@ Future<void> main() async {
   ]);
   setupLocator();
   Get.put(SettingsAppController(), permanent: true);
+
+  if (Platform.isAndroid) {
+    await Future.wait([
+      // configureEdgeToEdgeUI(),
+      NavigationModeService.check3ButtonNavigation(),
+    ]);
+  }
   runApp(
     EasyLocalization(
       supportedLocales: const [
@@ -79,11 +94,21 @@ class PillWiseApp extends StatelessWidget {
               getPages: AppPages.routes,
               initialRoute: AppRoutes.initial,
               builder: (context, child) {
-                return MediaQuery(
-                  data: MediaQuery.of(
-                    context,
-                  ).copyWith(textScaler: TextScaler.linear(1.0)),
-                  child: child!,
+                final extraBottomInset =
+                    NavigationModeService.android3ButtonBottomInset;
+
+                return SafeArea(
+                  left: false,
+                  top: false,
+                  right: false,
+                  bottom: NavigationModeService.is3ButtonNavigation,
+                  minimum: EdgeInsets.only(bottom: extraBottomInset),
+                  child: MediaQuery(
+                    data: MediaQuery.of(
+                      context,
+                    ).copyWith(textScaler: TextScaler.linear(1.0)),
+                    child: child!,
+                  ),
                 );
               },
             );

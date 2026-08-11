@@ -54,7 +54,8 @@ class LabReviewsWidget extends GetView<LabProfileController> {
                 ),
                 if (controller.reviewsPagination.isLoadingMore.value)
                   const Center(child: CircularProgressIndicator()),
-                if (controller.reviewsPagination.hasMore &&
+                if (controller.reviews.isNotEmpty &&
+                    controller.reviewsPagination.hasMore &&
                     !controller.reviewsPagination.isLoadingMore.value)
                   TextButton(
                     onPressed: controller.loadMoreLabReviews,

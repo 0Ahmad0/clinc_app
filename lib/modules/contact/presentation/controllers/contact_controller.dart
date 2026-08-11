@@ -52,7 +52,7 @@ class ContactController extends GetxController {
         }
         contactInfo.value = response.result;
       },
-      failure: (exception) => ResponseHelper.onFailure(
+      failure: (exception) =>{}?? ResponseHelper.onFailure(
         message: NetworkExceptions.getErrorMessage(exception),
       ),
     );

@@ -47,6 +47,21 @@
     "failure": "فشل",
     "otp_sent_success": "تم إرسال رمز التحقق بنجاح"
   },
+  "network": {
+    "not_implemented": "هذه الميزة غير متاحة حالياً",
+    "request_cancelled": "تم إلغاء الطلب",
+    "unauthorized_request": "يرجى تسجيل الدخول للمتابعة",
+    "service_unavailable": "الخدمة غير متاحة حالياً",
+    "method_not_allowed": "هذا الإجراء غير مسموح",
+    "bad_request": "الطلب غير صحيح",
+    "unexpected_error": "حدث خطأ غير متوقع",
+    "request_timeout": "انتهت مهلة الطلب، حاول مرة أخرى",
+    "no_internet_connection": "لا يوجد اتصال بالإنترنت",
+    "conflict": "حدث تعارض أثناء تنفيذ الطلب",
+    "send_timeout": "انتهت مهلة إرسال الطلب",
+    "unable_to_process": "تعذر معالجة البيانات",
+    "not_acceptable": "الطلب غير مقبول"
+  },
   "core": {
     "yes": "نعم",
     "no": "لا",
@@ -557,7 +572,12 @@
     "empty_subtitle": "عدّل الفلاتر أو جرّب البحث باسم مختبر آخر.",
     "chat": "دردشة",
     "no_services_title": "لا توجد خدمات متاحة",
-    "no_services_subtitle": "لم يضف المختبر خدماته بعد."
+    "no_services_subtitle": "لم يضف المختبر خدماته بعد.",
+    "included_tests": "الفحوصات المضمنة:",
+    "instructions": "التعليمات:",
+    "bring_national_id": "يرجى إحضار الهوية الوطنية",
+    "fasting_8_hours": "الصيام لمدة 8 ساعات قبل الفحص",
+    "no_fasting_required": "لا يتطلب صيام"
   },
   "labs_profile": {
     "location_title": "موقع المختبر",

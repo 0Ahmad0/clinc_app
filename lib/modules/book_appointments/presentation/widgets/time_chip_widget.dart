@@ -20,6 +20,8 @@ class TimeChipWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final displayTime = _formatWithAmPm(time);
+
     return GestureDetector(
       onTap: () => onTap(time),
       child: AnimatedContainer(
@@ -34,7 +36,7 @@ class TimeChipWidget extends StatelessWidget {
           ),
         ),
         child: Text(
-          time.trNumbers(),
+          displayTime.trNumbers(),
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: isSelected ? AppColors.white : null,
             fontWeight: isSelected ? FontWeight.bold : null,
@@ -42,5 +44,26 @@ class TimeChipWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _formatWithAmPm(String value) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty) return trimmed;
+
+    final existingPeriod = RegExp(r'\b(AM|PM)\b', caseSensitive: false);
+    if (existingPeriod.hasMatch(trimmed)) {
+      return trimmed.toUpperCase();
+    }
+
+    final match = RegExp(r'^(\d{1,2}):(\d{2})(?::\d{2})?$').firstMatch(trimmed);
+    if (match == null) return trimmed;
+
+    final hour = int.tryParse(match.group(1) ?? '');
+    final minute = match.group(2);
+    if (hour == null || minute == null || hour > 23) return trimmed;
+
+    final period = hour >= 12 ? 'PM' : 'AM';
+    final displayHour = hour % 12 == 0 ? 12 : hour % 12;
+    return '${displayHour.toString().padLeft(2, '0')}:$minute $period';
   }
 }

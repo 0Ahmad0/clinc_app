@@ -74,7 +74,7 @@ class SettingsScreen extends GetView<SettingsController> {
                       icon: Iconsax.notification,
                       onTap: () {
                         if (AuthRequiredHelper.ensureAuthenticated()) {
-                          Get.toNamed(AppRoutes.notificationSettings);
+                          Get.toNamed(AppRoutes.notifications);
                         }
                       },
                     ),

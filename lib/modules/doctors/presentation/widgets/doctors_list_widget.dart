@@ -26,12 +26,23 @@ class DoctorsList extends StatelessWidget {
       }
 
       if (controller.filteredDoctors.isEmpty) {
-        return SharedEmptyWidget(
-          icon: Icons.person_search_outlined,
-          title: tr(LocaleKeys.doctors_no_results),
-          subtitle: tr(LocaleKeys.doctors_empty_subtitle),
+        return RefreshIndicator(
+          onRefresh: controller.reloadDoctors,
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+            children: [
+              SizedBox(height: 80.h),
+              SharedEmptyWidget(
+                icon: Icons.person_search_outlined,
+                title: tr(LocaleKeys.doctors_no_results),
+                subtitle: tr(LocaleKeys.doctors_empty_subtitle),
+              ),
+            ],
+          ),
         );
       }
+
       return RefreshIndicator(
         onRefresh: controller.reloadDoctors,
         child: ListView.builder(

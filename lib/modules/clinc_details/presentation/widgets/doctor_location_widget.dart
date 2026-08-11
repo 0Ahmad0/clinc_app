@@ -113,14 +113,6 @@ class DoctorLocation extends GetView<ClinicDetailsController> {
                           ),
                         ),
                       ),
-                      PositionedDirectional(
-                        end: 14.w,
-                        bottom: 14.h,
-                        child: _MapBadge(
-                          icon: Iconsax.map,
-                          text: tr(LocaleKeys.labs_profile_view_map),
-                        ),
-                      ),
                     ],
                   ),
                 ),

@@ -47,6 +47,21 @@
     "failure": "Failure",
     "otp_sent_success": "OTP sent successfully"
   },
+  "network": {
+    "not_implemented": "This feature is not available right now",
+    "request_cancelled": "The request was cancelled",
+    "unauthorized_request": "Please log in to continue",
+    "service_unavailable": "Service is currently unavailable",
+    "method_not_allowed": "This action is not allowed",
+    "bad_request": "Invalid request",
+    "unexpected_error": "An unexpected error occurred",
+    "request_timeout": "The request timed out. Please try again",
+    "no_internet_connection": "No internet connection",
+    "conflict": "A conflict occurred while processing the request",
+    "send_timeout": "The request took too long to send",
+    "unable_to_process": "Unable to process the data",
+    "not_acceptable": "The request is not acceptable"
+  },
   "core": {
     "yes": "Yes",
     "no": "No",
@@ -557,7 +572,12 @@
     "empty_subtitle": "Adjust filters or try searching for another lab name.",
     "chat": "Chat",
     "no_services_title": "No services available",
-    "no_services_subtitle": "This lab has not added services yet."
+    "no_services_subtitle": "This lab has not added services yet.",
+    "included_tests": "Included tests:",
+    "instructions": "Instructions:",
+    "bring_national_id": "Please bring your national ID",
+    "fasting_8_hours": "Fast for 8 hours before the test",
+    "no_fasting_required": "No fasting required"
   },
   "labs_profile": {
     "location_title": "Laboratory Location",

@@ -51,6 +51,10 @@ class GeneralAppDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final dialogColor = theme.dialogTheme.backgroundColor ?? theme.cardColor;
+    final isDark = theme.brightness == Brightness.dark;
+
     return Material(
       color: AppColors.transparent,
       child: Column(
@@ -61,8 +65,12 @@ class GeneralAppDialog extends StatelessWidget {
             width: double.maxFinite,
             margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: dialogColor,
               borderRadius: BorderRadius.circular(6.r),
+              border: Border.all(
+                color: theme.dividerColor.withValues(alpha: isDark ? 0.22 : 0),
+                width: isDark ? 0.7 : 0,
+              ),
             ),
             child: Column(
               children: [
@@ -96,7 +104,7 @@ class GeneralAppDialog extends StatelessWidget {
                 Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  style: theme.textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -107,7 +115,7 @@ class GeneralAppDialog extends StatelessWidget {
                       onPressed: okOnTap ?? () => Get.back(),
                       child: Text(
                         okText ?? '',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        style: theme.textTheme.bodyMedium?.copyWith(
                           color: generalColor ?? okColor!,
                           fontSize: 12.sp,
                         ),
@@ -117,8 +125,12 @@ class GeneralAppDialog extends StatelessWidget {
                       onPressed: cancelOnTap ?? () => Get.back(),
                       child: Text(
                         cancelText ?? '',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: cancelColor,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color:
+                              cancelColor ??
+                              theme.textTheme.bodySmall?.color?.withValues(
+                                alpha: 0.72,
+                              ),
                           fontSize: 12.sp,
                         ),
                       ),

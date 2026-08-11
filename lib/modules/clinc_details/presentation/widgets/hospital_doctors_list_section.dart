@@ -21,6 +21,7 @@ class HospitalDoctorsListSection extends GetView<ClinicDetailsController> {
       final doctors = controller.filteredDoctors;
 
       return Column(
+        key: controller.doctorsSectionKey,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -32,7 +33,7 @@ class HospitalDoctorsListSection extends GetView<ClinicDetailsController> {
               ),
               if (controller.selectedSpecialty.value.isNotEmpty)
                 TextButton(
-                  onPressed: () => controller.selectedSpecialty.value = '',
+                  onPressed: controller.showAllDoctors,
                   child: Text(tr(LocaleKeys.clinic_app_details_view_all)),
                 ),
             ],

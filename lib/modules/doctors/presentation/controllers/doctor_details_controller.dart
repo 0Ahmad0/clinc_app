@@ -33,8 +33,10 @@ class DoctorDetailsController extends GetxController {
   final RxList<DoctorReviewModel> allReviews = <DoctorReviewModel>[].obs;
 
   DoctorModel get currentDoctor => details.value?.doctor ?? doctor;
-  int get patientCount => details.value?.patientCount ?? 7500;
-  int get yearsExperience => details.value?.yearsExperience ?? 10;
+  bool get isDetailsLoading =>
+      loadingState.value == GeneralLoading.loading && details.value == null;
+  int? get patientCount => details.value?.patientCount;
+  int? get yearsExperience => details.value?.yearsExperience;
   String get aboutText => details.value?.about ?? '';
   bool get isFavoriteLoading => favoriteLoadingIds.contains(currentDoctor.id);
 

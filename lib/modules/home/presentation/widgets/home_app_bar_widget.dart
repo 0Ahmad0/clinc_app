@@ -14,11 +14,13 @@ class HomeAppBarWidget extends StatelessWidget {
     super.key,
     required this.userName,
     required this.userImage,
+    required this.userImageVersion,
     required this.notificationCount,
   });
 
   final String userName;
   final String userImage;
+  final int userImageVersion;
   final int notificationCount;
 
   @override
@@ -117,6 +119,7 @@ class HomeAppBarWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(50.r),
       child: CachedNetworkImage(
         imageUrl: image,
+        cacheKey: '$image:$userImageVersion',
         width: 50.sp,
         height: 50.sp,
         fit: BoxFit.cover,

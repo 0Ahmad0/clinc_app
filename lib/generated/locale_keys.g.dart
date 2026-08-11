@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const validation_emptyField = 'validation.emptyField';
   static const validation_name_empty = 'validation.name_empty';
   static const validation_name_short = 'validation.name_short';
@@ -20,10 +20,14 @@ abstract class  LocaleKeys {
   static const validation_password_digit = 'validation.password_digit';
   static const validation_password_special = 'validation.password_special';
   static const validation_password_strong = 'validation.password_strong';
-  static const validation_confirmPassword_empty = 'validation.confirmPassword_empty';
-  static const validation_confirmPassword_noMatch = 'validation.confirmPassword_noMatch';
-  static const validation_emailOrUsername_empty = 'validation.emailOrUsername_empty';
-  static const validation_emailOrUsername_invalid = 'validation.emailOrUsername_invalid';
+  static const validation_confirmPassword_empty =
+      'validation.confirmPassword_empty';
+  static const validation_confirmPassword_noMatch =
+      'validation.confirmPassword_noMatch';
+  static const validation_emailOrUsername_empty =
+      'validation.emailOrUsername_empty';
+  static const validation_emailOrUsername_invalid =
+      'validation.emailOrUsername_invalid';
   static const validation_password_no_spaces = 'validation.password_no_spaces';
   static const validation_saudi_id_length = 'validation.saudi_id_length';
   static const validation_saudi_id_invalid = 'validation.saudi_id_invalid';
@@ -32,22 +36,43 @@ abstract class  LocaleKeys {
   static const validation_birth_date_check = 'validation.birth_date_check';
   static const validation_birth_date_invalid = 'validation.birth_date_invalid';
   static const validation = 'validation';
-  static const password_validation_requirements_title = 'password_validation.requirements_title';
-  static const password_validation_met_status = 'password_validation.met_status';
+  static const password_validation_requirements_title =
+      'password_validation.requirements_title';
+  static const password_validation_met_status =
+      'password_validation.met_status';
   static const password_validation_of = 'password_validation.of';
-  static const password_validation_req_length = 'password_validation.req_length';
+  static const password_validation_req_length =
+      'password_validation.req_length';
   static const password_validation_req_upper = 'password_validation.req_upper';
   static const password_validation_req_lower = 'password_validation.req_lower';
   static const password_validation_req_digit = 'password_validation.req_digit';
-  static const password_validation_req_special = 'password_validation.req_special';
-  static const password_validation_req_no_spaces = 'password_validation.req_no_spaces';
-  static const password_validation_password_matches = 'password_validation.password_matches';
+  static const password_validation_req_special =
+      'password_validation.req_special';
+  static const password_validation_req_no_spaces =
+      'password_validation.req_no_spaces';
+  static const password_validation_password_matches =
+      'password_validation.password_matches';
   static const password_validation = 'password_validation';
   static const toast_success = 'toast.success';
   static const toast_error = 'toast.error';
   static const toast_failure = 'toast.failure';
   static const toast_otp_sent_success = 'toast.otp_sent_success';
   static const toast = 'toast';
+  static const network_not_implemented = 'network.not_implemented';
+  static const network_request_cancelled = 'network.request_cancelled';
+  static const network_unauthorized_request = 'network.unauthorized_request';
+  static const network_service_unavailable = 'network.service_unavailable';
+  static const network_method_not_allowed = 'network.method_not_allowed';
+  static const network_bad_request = 'network.bad_request';
+  static const network_unexpected_error = 'network.unexpected_error';
+  static const network_request_timeout = 'network.request_timeout';
+  static const network_no_internet_connection =
+      'network.no_internet_connection';
+  static const network_conflict = 'network.conflict';
+  static const network_send_timeout = 'network.send_timeout';
+  static const network_unable_to_process = 'network.unable_to_process';
+  static const network_not_acceptable = 'network.not_acceptable';
+  static const network = 'network';
   static const core_yes = 'core.yes';
   static const core_no = 'core.no';
   static const core_get_started = 'core.get_started';
@@ -133,10 +158,12 @@ abstract class  LocaleKeys {
   static const auth_save_password = 'auth.save_password';
   static const auth_change_password_title = 'auth.change_password_title';
   static const auth_change_password_new_desc = 'auth.change_password_new_desc';
-  static const auth_change_password_current_desc = 'auth.change_password_current_desc';
+  static const auth_change_password_current_desc =
+      'auth.change_password_current_desc';
   static const auth_current_password_hint = 'auth.current_password_hint';
   static const auth_verify = 'auth.verify';
-  static const auth_confirm_new_password_hint = 'auth.confirm_new_password_hint';
+  static const auth_confirm_new_password_hint =
+      'auth.confirm_new_password_hint';
   static const auth_password_no_match = 'auth.password_no_match';
   static const auth_google_login_failed = 'auth.google_login_failed';
   static const auth = 'auth';
@@ -144,7 +171,8 @@ abstract class  LocaleKeys {
   static const home_app_bar_search_hint = 'home.app_bar.search_hint';
   static const home_app_bar = 'home.app_bar';
   static const home_sections_offers = 'home.sections.offers';
-  static const home_sections_active_appointments = 'home.sections.active_appointments';
+  static const home_sections_active_appointments =
+      'home.sections.active_appointments';
   static const home_sections_main_services = 'home.sections.main_services';
   static const home_sections = 'home.sections';
   static const home_services_clinics = 'home.services.clinics';
@@ -188,15 +216,23 @@ abstract class  LocaleKeys {
   static const about_app_hero_subtitle = 'about_app.hero_subtitle';
   static const about_app_intro_title = 'about_app.intro_title';
   static const about_app_intro_desc = 'about_app.intro_desc';
-  static const about_app_features_section_title = 'about_app.features_section_title';
-  static const about_app_feature_smart_booking = 'about_app.feature_smart_booking';
-  static const about_app_feature_smart_booking_desc = 'about_app.feature_smart_booking_desc';
-  static const about_app_feature_precise_search = 'about_app.feature_precise_search';
-  static const about_app_feature_precise_search_desc = 'about_app.feature_precise_search_desc';
-  static const about_app_feature_auto_reminder = 'about_app.feature_auto_reminder';
-  static const about_app_feature_auto_reminder_desc = 'about_app.feature_auto_reminder_desc';
+  static const about_app_features_section_title =
+      'about_app.features_section_title';
+  static const about_app_feature_smart_booking =
+      'about_app.feature_smart_booking';
+  static const about_app_feature_smart_booking_desc =
+      'about_app.feature_smart_booking_desc';
+  static const about_app_feature_precise_search =
+      'about_app.feature_precise_search';
+  static const about_app_feature_precise_search_desc =
+      'about_app.feature_precise_search_desc';
+  static const about_app_feature_auto_reminder =
+      'about_app.feature_auto_reminder';
+  static const about_app_feature_auto_reminder_desc =
+      'about_app.feature_auto_reminder_desc';
   static const about_app_feature_simplicity = 'about_app.feature_simplicity';
-  static const about_app_feature_simplicity_desc = 'about_app.feature_simplicity_desc';
+  static const about_app_feature_simplicity_desc =
+      'about_app.feature_simplicity_desc';
   static const about_app_slogan = 'about_app.slogan';
   static const about_app_version = 'about_app.version';
   static const about_app = 'about_app';
@@ -208,7 +244,8 @@ abstract class  LocaleKeys {
   static const contact_us_instant_chat = 'contact_us.instant_chat';
   static const contact_us_email = 'contact_us.email';
   static const contact_us_working_hours = 'contact_us.working_hours';
-  static const contact_us_working_hours_details = 'contact_us.working_hours_details';
+  static const contact_us_working_hours_details =
+      'contact_us.working_hours_details';
   static const contact_us_form_title = 'contact_us.form_title';
   static const contact_us_form_desc = 'contact_us.form_desc';
   static const contact_us_label_full_name = 'contact_us.label_full_name';
@@ -222,7 +259,8 @@ abstract class  LocaleKeys {
   static const contact_us_intro_title = 'contact_us.intro_title';
   static const contact_us_intro_desc = 'contact_us.intro_desc';
   static const contact_us_label_email = 'contact_us.label_email';
-  static const contact_us_default_working_hours = 'contact_us.default_working_hours';
+  static const contact_us_default_working_hours =
+      'contact_us.default_working_hours';
   static const contact_us_email_subject = 'contact_us.email_subject';
   static const contact_us_email_body = 'contact_us.email_body';
   static const contact_us = 'contact_us';
@@ -231,26 +269,43 @@ abstract class  LocaleKeys {
   static const privacy_policy_hero_subtitle = 'privacy_policy.hero_subtitle';
   static const privacy_policy_intro_title = 'privacy_policy.intro_title';
   static const privacy_policy_intro_desc = 'privacy_policy.intro_desc';
-  static const privacy_policy_section_1_title = 'privacy_policy.section_1_title';
-  static const privacy_policy_section_2_title = 'privacy_policy.section_2_title';
-  static const privacy_policy_section_3_title = 'privacy_policy.section_3_title';
+  static const privacy_policy_section_1_title =
+      'privacy_policy.section_1_title';
+  static const privacy_policy_section_2_title =
+      'privacy_policy.section_2_title';
+  static const privacy_policy_section_3_title =
+      'privacy_policy.section_3_title';
   static const privacy_policy_warning_title = 'privacy_policy.warning_title';
-  static const privacy_policy_disclaimer_purpose = 'privacy_policy.disclaimer_purpose';
-  static const privacy_policy_disclaimer_advice = 'privacy_policy.disclaimer_advice';
-  static const privacy_policy_disclaimer_emergency = 'privacy_policy.disclaimer_emergency';
-  static const privacy_policy_disclaimer_liability = 'privacy_policy.disclaimer_liability';
+  static const privacy_policy_disclaimer_purpose =
+      'privacy_policy.disclaimer_purpose';
+  static const privacy_policy_disclaimer_advice =
+      'privacy_policy.disclaimer_advice';
+  static const privacy_policy_disclaimer_emergency =
+      'privacy_policy.disclaimer_emergency';
+  static const privacy_policy_disclaimer_liability =
+      'privacy_policy.disclaimer_liability';
   static const privacy_policy_website = 'privacy_policy.website';
   static const privacy_policy_last_update = 'privacy_policy.last_update';
-  static const privacy_policy_privacy_item_1_title = 'privacy_policy.privacy_item_1_title';
-  static const privacy_policy_privacy_item_1_content = 'privacy_policy.privacy_item_1_content';
-  static const privacy_policy_privacy_item_2_title = 'privacy_policy.privacy_item_2_title';
-  static const privacy_policy_privacy_item_2_content = 'privacy_policy.privacy_item_2_content';
-  static const privacy_policy_privacy_item_3_title = 'privacy_policy.privacy_item_3_title';
-  static const privacy_policy_privacy_item_3_content = 'privacy_policy.privacy_item_3_content';
-  static const privacy_policy_privacy_item_4_title = 'privacy_policy.privacy_item_4_title';
-  static const privacy_policy_privacy_item_4_content = 'privacy_policy.privacy_item_4_content';
-  static const privacy_policy_privacy_item_5_title = 'privacy_policy.privacy_item_5_title';
-  static const privacy_policy_privacy_item_5_content = 'privacy_policy.privacy_item_5_content';
+  static const privacy_policy_privacy_item_1_title =
+      'privacy_policy.privacy_item_1_title';
+  static const privacy_policy_privacy_item_1_content =
+      'privacy_policy.privacy_item_1_content';
+  static const privacy_policy_privacy_item_2_title =
+      'privacy_policy.privacy_item_2_title';
+  static const privacy_policy_privacy_item_2_content =
+      'privacy_policy.privacy_item_2_content';
+  static const privacy_policy_privacy_item_3_title =
+      'privacy_policy.privacy_item_3_title';
+  static const privacy_policy_privacy_item_3_content =
+      'privacy_policy.privacy_item_3_content';
+  static const privacy_policy_privacy_item_4_title =
+      'privacy_policy.privacy_item_4_title';
+  static const privacy_policy_privacy_item_4_content =
+      'privacy_policy.privacy_item_4_content';
+  static const privacy_policy_privacy_item_5_title =
+      'privacy_policy.privacy_item_5_title';
+  static const privacy_policy_privacy_item_5_content =
+      'privacy_policy.privacy_item_5_content';
   static const privacy_policy = 'privacy_policy';
   static const doctors_title = 'doctors.title';
   static const doctors_search_hint = 'doctors.search_hint';
@@ -260,7 +315,8 @@ abstract class  LocaleKeys {
   static const doctors_filter_rating = 'doctors.filter_rating';
   static const doctors_filter_gender = 'doctors.filter_gender';
   static const doctors_filter_all = 'doctors.filter_all';
-  static const doctors_filter_city_search_hint = 'doctors.filter_city_search_hint';
+  static const doctors_filter_city_search_hint =
+      'doctors.filter_city_search_hint';
   static const doctors_rating_45_plus = 'doctors.rating_45_plus';
   static const doctors_rating_40_plus = 'doctors.rating_40_plus';
   static const doctors_rating_35_plus = 'doctors.rating_35_plus';
@@ -298,43 +354,64 @@ abstract class  LocaleKeys {
   static const chatbot_headache_response = 'chatbot.headache_response';
   static const chatbot_default_response = 'chatbot.default_response';
   static const chatbot = 'chatbot';
-  static const clinic_app_details_rating_count = 'clinic_app_details.rating_count';
-  static const clinic_app_details_distance_away = 'clinic_app_details.distance_away';
+  static const clinic_app_details_rating_count =
+      'clinic_app_details.rating_count';
+  static const clinic_app_details_distance_away =
+      'clinic_app_details.distance_away';
   static const clinic_app_details_km = 'clinic_app_details.km';
-  static const clinic_app_details_about_clinic = 'clinic_app_details.about_clinic';
-  static const clinic_app_details_about_description = 'clinic_app_details.about_description';
-  static const clinic_app_details_available_specialties = 'clinic_app_details.available_specialties';
-  static const clinic_app_details_elite_doctors = 'clinic_app_details.elite_doctors';
+  static const clinic_app_details_about_clinic =
+      'clinic_app_details.about_clinic';
+  static const clinic_app_details_about_description =
+      'clinic_app_details.about_description';
+  static const clinic_app_details_available_specialties =
+      'clinic_app_details.available_specialties';
+  static const clinic_app_details_elite_doctors =
+      'clinic_app_details.elite_doctors';
   static const clinic_app_details_view_all = 'clinic_app_details.view_all';
-  static const clinic_app_details_call_clinic = 'clinic_app_details.call_clinic';
+  static const clinic_app_details_call_clinic =
+      'clinic_app_details.call_clinic';
   static const clinic_app_details_book_btn = 'clinic_app_details.book_btn';
-  static const clinic_app_details_rate_clinic = 'clinic_app_details.rate_clinic';
-  static const clinic_app_details_rate_clinic_subtitle = 'clinic_app_details.rate_clinic_subtitle';
-  static const clinic_app_details_patient_reviews = 'clinic_app_details.patient_reviews';
-  static const clinic_app_details_no_reviews_title = 'clinic_app_details.no_reviews_title';
-  static const clinic_app_details_no_reviews_subtitle = 'clinic_app_details.no_reviews_subtitle';
-  static const clinic_app_details_no_doctors_title = 'clinic_app_details.no_doctors_title';
-  static const clinic_app_details_no_doctors_subtitle = 'clinic_app_details.no_doctors_subtitle';
-  static const clinic_app_details_all_reviews_title = 'clinic_app_details.all_reviews_title';
+  static const clinic_app_details_rate_clinic =
+      'clinic_app_details.rate_clinic';
+  static const clinic_app_details_rate_clinic_subtitle =
+      'clinic_app_details.rate_clinic_subtitle';
+  static const clinic_app_details_patient_reviews =
+      'clinic_app_details.patient_reviews';
+  static const clinic_app_details_no_reviews_title =
+      'clinic_app_details.no_reviews_title';
+  static const clinic_app_details_no_reviews_subtitle =
+      'clinic_app_details.no_reviews_subtitle';
+  static const clinic_app_details_no_doctors_title =
+      'clinic_app_details.no_doctors_title';
+  static const clinic_app_details_no_doctors_subtitle =
+      'clinic_app_details.no_doctors_subtitle';
+  static const clinic_app_details_all_reviews_title =
+      'clinic_app_details.all_reviews_title';
   static const clinic_app_details = 'clinic_app_details';
   static const doctor_details_app_bar_title = 'doctor_details.app_bar_title';
   static const doctor_details_about_doctor = 'doctor_details.about_doctor';
   static const doctor_details_about_bio = 'doctor_details.about_bio';
-  static const doctor_details_clinic_location = 'doctor_details.clinic_location';
+  static const doctor_details_clinic_location =
+      'doctor_details.clinic_location';
   static const doctor_details_address = 'doctor_details.address';
   static const doctor_details_reviews_title = 'doctor_details.reviews_title';
   static const doctor_details_details_title = 'doctor_details.details_title';
   static const doctor_details_patients_label = 'doctor_details.patients_label';
-  static const doctor_details_years_experience = 'doctor_details.years_experience';
-  static const doctor_details_experience_label = 'doctor_details.experience_label';
+  static const doctor_details_years_experience =
+      'doctor_details.years_experience';
+  static const doctor_details_experience_label =
+      'doctor_details.experience_label';
   static const doctor_details_price_value = 'doctor_details.price_value';
   static const doctor_details_currency_label = 'doctor_details.currency_label';
   static const doctor_details_rate_doctor = 'doctor_details.rate_doctor';
-  static const doctor_details_rate_doctor_subtitle = 'doctor_details.rate_doctor_subtitle';
+  static const doctor_details_rate_doctor_subtitle =
+      'doctor_details.rate_doctor_subtitle';
   static const doctor_details_about_dynamic = 'doctor_details.about_dynamic';
-  static const doctor_details_patient_reviews = 'doctor_details.patient_reviews';
+  static const doctor_details_patient_reviews =
+      'doctor_details.patient_reviews';
   static const doctor_details_view_all = 'doctor_details.view_all';
-  static const doctor_details_all_reviews_title = 'doctor_details.all_reviews_title';
+  static const doctor_details_all_reviews_title =
+      'doctor_details.all_reviews_title';
   static const doctor_details_rating_success = 'doctor_details.rating_success';
   static const doctor_details_hospital_label = 'doctor_details.hospital_label';
   static const doctor_details_hospital_name = 'doctor_details.hospital_name';
@@ -363,7 +440,8 @@ abstract class  LocaleKeys {
   static const setting_mode_dark = 'setting.mode_dark';
   static const setting_lang_ar = 'setting.lang_ar';
   static const setting_lang_en = 'setting.lang_en';
-  static const setting_notification_settings_title = 'setting.notification_settings_title';
+  static const setting_notification_settings_title =
+      'setting.notification_settings_title';
   static const setting_notification_app = 'setting.notification_app';
   static const setting_notification_email = 'setting.notification_email';
   static const setting_notification_sms = 'setting.notification_sms';
@@ -378,7 +456,8 @@ abstract class  LocaleKeys {
   static const search_filter_rating = 'search.filter_rating';
   static const search_filter_sort = 'search.filter_sort';
   static const search_filter_all = 'search.filter_all';
-  static const search_filter_city_search_hint = 'search.filter_city_search_hint';
+  static const search_filter_city_search_hint =
+      'search.filter_city_search_hint';
   static const search_sort_price_asc = 'search.sort_price_asc';
   static const search_sort_price_desc = 'search.sort_price_desc';
   static const search_sort_distance = 'search.sort_distance';
@@ -391,7 +470,8 @@ abstract class  LocaleKeys {
   static const search_filter_price = 'search.filter_price';
   static const search_filter_open_now = 'search.filter_open_now';
   static const search_filter_location = 'search.filter_location';
-  static const search_filter_location_selected = 'search.filter_location_selected';
+  static const search_filter_location_selected =
+      'search.filter_location_selected';
   static const search_filter_latitude = 'search.filter_latitude';
   static const search_filter_longitude = 'search.filter_longitude';
   static const search_empty_subtitle = 'search.empty_subtitle';
@@ -410,26 +490,36 @@ abstract class  LocaleKeys {
   static const payment_settings_cvv = 'payment.settings_cvv';
   static const payment_settings_save_btn = 'payment.settings_save_btn';
   static const payment_settings_no_cards = 'payment.settings_no_cards';
-  static const payment_pay_method_online_title = 'payment.pay_method_online_title';
+  static const payment_pay_method_online_title =
+      'payment.pay_method_online_title';
   static const payment_pay_method_mada = 'payment.pay_method_mada';
   static const payment_pay_method_visa = 'payment.pay_method_visa';
   static const payment_pay_method_mastercard = 'payment.pay_method_mastercard';
-  static const payment_pay_method_wallets_title = 'payment.pay_method_wallets_title';
+  static const payment_pay_method_wallets_title =
+      'payment.pay_method_wallets_title';
   static const payment_pay_method_apple_pay = 'payment.pay_method_apple_pay';
   static const payment_pay_method_stc_pay = 'payment.pay_method_stc_pay';
-  static const payment_pay_method_installments_title = 'payment.pay_method_installments_title';
+  static const payment_pay_method_installments_title =
+      'payment.pay_method_installments_title';
   static const payment_pay_method_tabby = 'payment.pay_method_tabby';
   static const payment_pay_method_tamara = 'payment.pay_method_tamara';
   static const payment_pay_installment_desc = 'payment.pay_installment_desc';
-  static const payment_pay_method_clinic_title = 'payment.pay_method_clinic_title';
+  static const payment_pay_method_clinic_title =
+      'payment.pay_method_clinic_title';
   static const payment_pay_method_cash = 'payment.pay_method_cash';
   static const payment_pay_method_pos = 'payment.pay_method_pos';
-  static const payment_pay_method_insurance_title = 'payment.pay_method_insurance_title';
-  static const payment_pay_method_insurance_desc = 'payment.pay_method_insurance_desc';
-  static const payment_pay_validation_required = 'payment.pay_validation_required';
-  static const payment_pay_validation_number_invalid = 'payment.pay_validation_number_invalid';
-  static const payment_pay_validation_date_invalid = 'payment.pay_validation_date_invalid';
-  static const payment_pay_validation_cvv_invalid = 'payment.pay_validation_cvv_invalid';
+  static const payment_pay_method_insurance_title =
+      'payment.pay_method_insurance_title';
+  static const payment_pay_method_insurance_desc =
+      'payment.pay_method_insurance_desc';
+  static const payment_pay_validation_required =
+      'payment.pay_validation_required';
+  static const payment_pay_validation_number_invalid =
+      'payment.pay_validation_number_invalid';
+  static const payment_pay_validation_date_invalid =
+      'payment.pay_validation_date_invalid';
+  static const payment_pay_validation_cvv_invalid =
+      'payment.pay_validation_cvv_invalid';
   static const payment = 'payment';
   static const notifications_screen_title = 'notifications.screen_title';
   static const notifications_mark_all_read = 'notifications.mark_all_read';
@@ -437,7 +527,8 @@ abstract class  LocaleKeys {
   static const notifications_empty_desc = 'notifications.empty_desc';
   static const notifications_label_today = 'notifications.label_today';
   static const notifications_label_yesterday = 'notifications.label_yesterday';
-  static const notifications_type_appointment = 'notifications.type_appointment';
+  static const notifications_type_appointment =
+      'notifications.type_appointment';
   static const notifications_type_offer = 'notifications.type_offer';
   static const notifications_type_system = 'notifications.type_system';
   static const notifications = 'notifications';
@@ -447,12 +538,16 @@ abstract class  LocaleKeys {
   static const checkout_summary_vat = 'checkout.summary_vat';
   static const checkout_summary_total = 'checkout.summary_total';
   static const checkout_payment_method_title = 'checkout.payment_method_title';
-  static const checkout_booking_payment_title = 'checkout.booking_payment_title';
-  static const checkout_online_payment_method_title = 'checkout.online_payment_method_title';
+  static const checkout_booking_payment_title =
+      'checkout.booking_payment_title';
+  static const checkout_online_payment_method_title =
+      'checkout.online_payment_method_title';
   static const checkout_coupon_code_title = 'checkout.coupon_code_title';
-  static const checkout_invoice_summary_title = 'checkout.invoice_summary_title';
+  static const checkout_invoice_summary_title =
+      'checkout.invoice_summary_title';
   static const checkout_mock_doctor_name = 'checkout.mock_doctor_name';
-  static const checkout_mock_doctor_specialty = 'checkout.mock_doctor_specialty';
+  static const checkout_mock_doctor_specialty =
+      'checkout.mock_doctor_specialty';
   static const checkout_mock_booking_time = 'checkout.mock_booking_time';
   static const checkout_doctor_title = 'checkout.doctor_title';
   static const checkout_lab_title = 'checkout.lab_title';
@@ -466,12 +561,14 @@ abstract class  LocaleKeys {
   static const checkout_apply_coupon = 'checkout.apply_coupon';
   static const checkout_my_coupons = 'checkout.my_coupons';
   static const checkout_coupon_discount = 'checkout.coupon_discount';
-  static const checkout_coupon_applied_success = 'checkout.coupon_applied_success';
+  static const checkout_coupon_applied_success =
+      'checkout.coupon_applied_success';
   static const checkout_total_due = 'checkout.total_due';
   static const checkout_currency = 'checkout.currency';
   static const checkout_confirm_booking = 'checkout.confirm_booking';
   static const checkout_confirm_and_pay = 'checkout.confirm_and_pay';
-  static const checkout_available_coupons_title = 'checkout.available_coupons_title';
+  static const checkout_available_coupons_title =
+      'checkout.available_coupons_title';
   static const checkout_coupon_code_label = 'checkout.coupon_code_label';
   static const checkout_no_coupons_available = 'checkout.no_coupons_available';
   static const checkout_pay_btn = 'checkout.pay_btn';
@@ -529,7 +626,13 @@ abstract class  LocaleKeys {
   static const labs_page_empty_subtitle = 'labs_page.empty_subtitle';
   static const labs_page_chat = 'labs_page.chat';
   static const labs_page_no_services_title = 'labs_page.no_services_title';
-  static const labs_page_no_services_subtitle = 'labs_page.no_services_subtitle';
+  static const labs_page_no_services_subtitle =
+      'labs_page.no_services_subtitle';
+  static const labs_page_included_tests = 'labs_page.included_tests';
+  static const labs_page_instructions = 'labs_page.instructions';
+  static const labs_page_bring_national_id = 'labs_page.bring_national_id';
+  static const labs_page_fasting_8_hours = 'labs_page.fasting_8_hours';
+  static const labs_page_no_fasting_required = 'labs_page.no_fasting_required';
   static const labs_page = 'labs_page';
   static const labs_profile_location_title = 'labs_profile.location_title';
   static const labs_profile_view_map = 'labs_profile.view_map';
@@ -539,17 +642,21 @@ abstract class  LocaleKeys {
   static const labs_profile_offers_title = 'labs_profile.offers_title';
   static const labs_profile_copy_coupon = 'labs_profile.copy_coupon';
   static const labs_profile_coupon_copied = 'labs_profile.coupon_copied';
-  static const labs_profile_write_review_hint = 'labs_profile.write_review_hint';
+  static const labs_profile_write_review_hint =
+      'labs_profile.write_review_hint';
   static const labs_profile_submit_review = 'labs_profile.submit_review';
   static const labs_profile_share_msg = 'labs_profile.share_msg';
   static const labs_profile_share_title = 'labs_profile.share_title';
   static const labs_profile_share_opened = 'labs_profile.share_opened';
   static const labs_profile_copied_title = 'labs_profile.copied_title';
-  static const labs_profile_phone_unavailable = 'labs_profile.phone_unavailable';
+  static const labs_profile_phone_unavailable =
+      'labs_profile.phone_unavailable';
   static const labs_profile_call_open_failed = 'labs_profile.call_open_failed';
-  static const labs_profile_location_unavailable = 'labs_profile.location_unavailable';
+  static const labs_profile_location_unavailable =
+      'labs_profile.location_unavailable';
   static const labs_profile_map_open_failed = 'labs_profile.map_open_failed';
-  static const labs_profile_no_reviews_subtitle = 'labs_profile.no_reviews_subtitle';
+  static const labs_profile_no_reviews_subtitle =
+      'labs_profile.no_reviews_subtitle';
   static const labs_profile_show_more = 'labs_profile.show_more';
   static const labs_profile_share_address = 'labs_profile.share_address';
   static const labs_profile_share_phone = 'labs_profile.share_phone';
@@ -580,7 +687,8 @@ abstract class  LocaleKeys {
   static const appointments_filter_pending = 'appointments.filter_pending';
   static const appointments_filter_rejected = 'appointments.filter_rejected';
   static const appointments_order_id = 'appointments.order_id';
-  static const appointments_order_type_appointment = 'appointments.order_type_appointment';
+  static const appointments_order_type_appointment =
+      'appointments.order_type_appointment';
   static const appointments_order_type_lab = 'appointments.order_type_lab';
   static const appointments_price_label = 'appointments.price_label';
   static const appointments_status_accepted = 'appointments.status_accepted';
@@ -589,76 +697,132 @@ abstract class  LocaleKeys {
   static const appointments_status_rejected = 'appointments.status_rejected';
   static const appointments_currency = 'appointments.currency';
   static const appointments_empty_title = 'appointments.empty_title';
-  static const appointments_empty_subtitle_all = 'appointments.empty_subtitle_all';
-  static const appointments_empty_subtitle_filtered = 'appointments.empty_subtitle_filtered';
+  static const appointments_empty_subtitle_all =
+      'appointments.empty_subtitle_all';
+  static const appointments_empty_subtitle_filtered =
+      'appointments.empty_subtitle_filtered';
   static const appointments_rebook = 'appointments.rebook';
   static const appointments_cancel_booking = 'appointments.cancel_booking';
-  static const appointments_cancel_unavailable = 'appointments.cancel_unavailable';
-  static const appointments_cancel_dialog_title = 'appointments.cancel_dialog_title';
-  static const appointments_cancel_dialog_message = 'appointments.cancel_dialog_message';
-  static const appointments_cancel_dialog_confirm = 'appointments.cancel_dialog_confirm';
-  static const appointments_cancel_dialog_back = 'appointments.cancel_dialog_back';
-  static const appointments_rebook_snackbar_message = 'appointments.rebook_snackbar_message';
-  static const appointments_rebook_missing_target = 'appointments.rebook_missing_target';
+  static const appointments_cancel_unavailable =
+      'appointments.cancel_unavailable';
+  static const appointments_cancel_dialog_title =
+      'appointments.cancel_dialog_title';
+  static const appointments_cancel_dialog_message =
+      'appointments.cancel_dialog_message';
+  static const appointments_cancel_dialog_confirm =
+      'appointments.cancel_dialog_confirm';
+  static const appointments_cancel_dialog_back =
+      'appointments.cancel_dialog_back';
+  static const appointments_rebook_snackbar_message =
+      'appointments.rebook_snackbar_message';
+  static const appointments_rebook_missing_target =
+      'appointments.rebook_missing_target';
   static const appointments = 'appointments';
   static const my_appointment_details_title = 'my_appointment_details.title';
-  static const my_appointment_details_appointment_info = 'my_appointment_details.appointment_info';
-  static const my_appointment_details_patient = 'my_appointment_details.patient';
+  static const my_appointment_details_appointment_info =
+      'my_appointment_details.appointment_info';
+  static const my_appointment_details_patient =
+      'my_appointment_details.patient';
   static const my_appointment_details_date = 'my_appointment_details.date';
   static const my_appointment_details_time = 'my_appointment_details.time';
   static const my_appointment_details_phone = 'my_appointment_details.phone';
-  static const my_appointment_details_visit_type = 'my_appointment_details.visit_type';
+  static const my_appointment_details_visit_type =
+      'my_appointment_details.visit_type';
   static const my_appointment_details_status = 'my_appointment_details.status';
-  static const my_appointment_details_problem = 'my_appointment_details.problem';
-  static const my_appointment_details_result_section = 'my_appointment_details.result_section';
-  static const my_appointment_details_result_notes = 'my_appointment_details.result_notes';
-  static const my_appointment_details_result_file = 'my_appointment_details.result_file';
-  static const my_appointment_details_result_file_open = 'my_appointment_details.result_file_open';
-  static const my_appointment_details_result_action_preview = 'my_appointment_details.result_action_preview';
-  static const my_appointment_details_result_action_open = 'my_appointment_details.result_action_open';
-  static const my_appointment_details_file_type_image = 'my_appointment_details.file_type_image';
-  static const my_appointment_details_file_type_pdf = 'my_appointment_details.file_type_pdf';
-  static const my_appointment_details_file_type_text = 'my_appointment_details.file_type_text';
-  static const my_appointment_details_file_type_document = 'my_appointment_details.file_type_document';
-  static const my_appointment_details_file_type_spreadsheet = 'my_appointment_details.file_type_spreadsheet';
-  static const my_appointment_details_file_type_archive = 'my_appointment_details.file_type_archive';
-  static const my_appointment_details_file_type_other = 'my_appointment_details.file_type_other';
-  static const my_appointment_details_result_file_unavailable = 'my_appointment_details.result_file_unavailable';
-  static const my_appointment_details_result_file_open_failed = 'my_appointment_details.result_file_open_failed';
-  static const my_appointment_details_clinic_details = 'my_appointment_details.clinic_details';
-  static const my_appointment_details_facility = 'my_appointment_details.facility';
-  static const my_appointment_details_address = 'my_appointment_details.address';
-  static const my_appointment_details_financial_summary = 'my_appointment_details.financial_summary';
-  static const my_appointment_details_consultation_fee = 'my_appointment_details.consultation_fee';
-  static const my_appointment_details_payment_method = 'my_appointment_details.payment_method';
-  static const my_appointment_details_payment_status = 'my_appointment_details.payment_status';
-  static const my_appointment_details_payment_reference = 'my_appointment_details.payment_reference';
-  static const my_appointment_details_paid_amount = 'my_appointment_details.paid_amount';
-  static const my_appointment_details_remaining_amount = 'my_appointment_details.remaining_amount';
-  static const my_appointment_details_rating_count = 'my_appointment_details.rating_count';
-  static const my_appointment_details_cancel_booking = 'my_appointment_details.cancel_booking';
-  static const my_appointment_details_rebook_appointment = 'my_appointment_details.rebook_appointment';
-  static const my_appointment_details_cancel_unavailable_24h = 'my_appointment_details.cancel_unavailable_24h';
-  static const my_appointment_details_no_action_available = 'my_appointment_details.no_action_available';
-  static const my_appointment_details_not_available = 'my_appointment_details.not_available';
-  static const my_appointment_details_cancel_dialog_title = 'my_appointment_details.cancel_dialog_title';
-  static const my_appointment_details_cancel_dialog_message = 'my_appointment_details.cancel_dialog_message';
-  static const my_appointment_details_cancel_dialog_confirm = 'my_appointment_details.cancel_dialog_confirm';
-  static const my_appointment_details_cancel_dialog_back = 'my_appointment_details.cancel_dialog_back';
-  static const my_appointment_details_mock_doctor_name = 'my_appointment_details.mock_doctor_name';
-  static const my_appointment_details_mock_specialty = 'my_appointment_details.mock_specialty';
-  static const my_appointment_details_mock_clinic_name = 'my_appointment_details.mock_clinic_name';
-  static const my_appointment_details_mock_clinic_address = 'my_appointment_details.mock_clinic_address';
-  static const my_appointment_details_mock_patient_name = 'my_appointment_details.mock_patient_name';
-  static const my_appointment_details_mock_date = 'my_appointment_details.mock_date';
-  static const my_appointment_details_mock_time = 'my_appointment_details.mock_time';
-  static const my_appointment_details_mock_visit_type = 'my_appointment_details.mock_visit_type';
-  static const my_appointment_details_mock_payment_method = 'my_appointment_details.mock_payment_method';
+  static const my_appointment_details_problem =
+      'my_appointment_details.problem';
+  static const my_appointment_details_result_section =
+      'my_appointment_details.result_section';
+  static const my_appointment_details_result_notes =
+      'my_appointment_details.result_notes';
+  static const my_appointment_details_result_file =
+      'my_appointment_details.result_file';
+  static const my_appointment_details_result_file_open =
+      'my_appointment_details.result_file_open';
+  static const my_appointment_details_result_action_preview =
+      'my_appointment_details.result_action_preview';
+  static const my_appointment_details_result_action_open =
+      'my_appointment_details.result_action_open';
+  static const my_appointment_details_file_type_image =
+      'my_appointment_details.file_type_image';
+  static const my_appointment_details_file_type_pdf =
+      'my_appointment_details.file_type_pdf';
+  static const my_appointment_details_file_type_text =
+      'my_appointment_details.file_type_text';
+  static const my_appointment_details_file_type_document =
+      'my_appointment_details.file_type_document';
+  static const my_appointment_details_file_type_spreadsheet =
+      'my_appointment_details.file_type_spreadsheet';
+  static const my_appointment_details_file_type_archive =
+      'my_appointment_details.file_type_archive';
+  static const my_appointment_details_file_type_other =
+      'my_appointment_details.file_type_other';
+  static const my_appointment_details_result_file_unavailable =
+      'my_appointment_details.result_file_unavailable';
+  static const my_appointment_details_result_file_open_failed =
+      'my_appointment_details.result_file_open_failed';
+  static const my_appointment_details_clinic_details =
+      'my_appointment_details.clinic_details';
+  static const my_appointment_details_facility =
+      'my_appointment_details.facility';
+  static const my_appointment_details_address =
+      'my_appointment_details.address';
+  static const my_appointment_details_financial_summary =
+      'my_appointment_details.financial_summary';
+  static const my_appointment_details_consultation_fee =
+      'my_appointment_details.consultation_fee';
+  static const my_appointment_details_payment_method =
+      'my_appointment_details.payment_method';
+  static const my_appointment_details_payment_status =
+      'my_appointment_details.payment_status';
+  static const my_appointment_details_payment_reference =
+      'my_appointment_details.payment_reference';
+  static const my_appointment_details_paid_amount =
+      'my_appointment_details.paid_amount';
+  static const my_appointment_details_remaining_amount =
+      'my_appointment_details.remaining_amount';
+  static const my_appointment_details_rating_count =
+      'my_appointment_details.rating_count';
+  static const my_appointment_details_cancel_booking =
+      'my_appointment_details.cancel_booking';
+  static const my_appointment_details_rebook_appointment =
+      'my_appointment_details.rebook_appointment';
+  static const my_appointment_details_cancel_unavailable_24h =
+      'my_appointment_details.cancel_unavailable_24h';
+  static const my_appointment_details_no_action_available =
+      'my_appointment_details.no_action_available';
+  static const my_appointment_details_not_available =
+      'my_appointment_details.not_available';
+  static const my_appointment_details_cancel_dialog_title =
+      'my_appointment_details.cancel_dialog_title';
+  static const my_appointment_details_cancel_dialog_message =
+      'my_appointment_details.cancel_dialog_message';
+  static const my_appointment_details_cancel_dialog_confirm =
+      'my_appointment_details.cancel_dialog_confirm';
+  static const my_appointment_details_cancel_dialog_back =
+      'my_appointment_details.cancel_dialog_back';
+  static const my_appointment_details_mock_doctor_name =
+      'my_appointment_details.mock_doctor_name';
+  static const my_appointment_details_mock_specialty =
+      'my_appointment_details.mock_specialty';
+  static const my_appointment_details_mock_clinic_name =
+      'my_appointment_details.mock_clinic_name';
+  static const my_appointment_details_mock_clinic_address =
+      'my_appointment_details.mock_clinic_address';
+  static const my_appointment_details_mock_patient_name =
+      'my_appointment_details.mock_patient_name';
+  static const my_appointment_details_mock_date =
+      'my_appointment_details.mock_date';
+  static const my_appointment_details_mock_time =
+      'my_appointment_details.mock_time';
+  static const my_appointment_details_mock_visit_type =
+      'my_appointment_details.mock_visit_type';
+  static const my_appointment_details_mock_payment_method =
+      'my_appointment_details.mock_payment_method';
   static const my_appointment_details = 'my_appointment_details';
   static const logout_title = 'logout.title';
   static const logout = 'logout';
   static const share_app_text = 'share.app_text';
   static const share_app_link = 'share.app_link';
   static const share = 'share';
-
 }

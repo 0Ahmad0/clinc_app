@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 
 import '../../../../app/core/configuration/locator.dart';
@@ -14,11 +16,14 @@ import '../../data/models/user_settings_model.dart';
 import '../../domain/settings_repository.dart';
 
 class SettingsController extends GetxController {
+  static const bool loadProfileFromApi = false;
+
   late final SettingsRepository _repository;
 
   final RxBool isLoading = false.obs;
   final RxBool isSavingNotifications = false.obs;
   final Rxn<UserSettingsProfileModel> profile = Rxn<UserSettingsProfileModel>();
+  final RxInt avatarCacheVersion = 0.obs;
   final Rx<NotificationSettingsModel> notificationSettings =
       const NotificationSettingsModel(
         appNotifications: true,
@@ -29,6 +34,7 @@ class SettingsController extends GetxController {
   bool get isGuest => StorageService.instance.isGuest;
 
   String? get userImage => profile.value?.avatar;
+  String avatarCacheKey(String image) => '$image:${avatarCacheVersion.value}';
 
   @override
   void onInit() {
@@ -56,6 +62,11 @@ class SettingsController extends GetxController {
       if (isSplash) Get.offNamed(AppRoutes.navbar);
       return false;
     }
+    if (!loadProfileFromApi && _applyCachedProfile()) {
+      if (isSplash) Get.offNamed(AppRoutes.navbar);
+      return true;
+    }
+
     final result = await _repository.getProfile();
     bool loaded = false;
     await result.when(
@@ -68,9 +79,9 @@ class SettingsController extends GetxController {
           await _openEmailVerification(response.result!, clearStack: isSplash);
           return;
         }
-        profile.value = response.result;
+        applyProfile(response.result!);
         await StorageService.instance.cacheUserModel(
-          response.result!.toUserModel().toJson(),
+          response.result!.toCachedUserJson(),
         );
         updateUser(response.result!.toUserModel());
         loaded = true;
@@ -209,6 +220,39 @@ class SettingsController extends GetxController {
 
   void updateUser(UserModel userModel) {
     update();
+  }
+
+  void applyProfile(
+    UserSettingsProfileModel nextProfile, {
+    bool refreshAvatar = false,
+  }) {
+    final previousAvatar = profile.value?.avatar?.trim();
+    final nextAvatar = nextProfile.avatar?.trim();
+    profile.value = nextProfile;
+    if (refreshAvatar || previousAvatar != nextAvatar) {
+      avatarCacheVersion.value++;
+    }
+  }
+
+  bool _applyCachedProfile() {
+    try {
+      final data = StorageService.instance.readData(StorageService.USER);
+      if (data == null || data.isEmpty || data == 'null') return false;
+
+      final decoded = jsonDecode(data);
+      if (decoded is! Map) return false;
+
+      final cachedProfile = UserSettingsProfileModel.fromJson(
+        Map<String, dynamic>.from(decoded),
+      );
+      if (cachedProfile.email.trim().isEmpty) return false;
+
+      applyProfile(cachedProfile);
+      updateUser(cachedProfile.toUserModel());
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   void _persistNotificationSettings(NotificationSettingsModel settings) {

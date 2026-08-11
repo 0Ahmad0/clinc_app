@@ -26,13 +26,16 @@ class HomeController extends GetxController {
   final RxList<AdModel> adsList = <AdModel>[].obs;
   final RxString displayUserName = tr(LocaleKeys.core_guest).obs;
   final RxString displayUserAvatar = ''.obs;
+  final RxInt displayUserAvatarVersion = 0.obs;
   Worker? _profileWorker;
+  Worker? _avatarWorker;
 
   bool get hasHomeData => home.value != null;
 
   String get userName => displayUserName.value;
 
   String get userAvatar => displayUserAvatar.value;
+  int get userAvatarVersion => displayUserAvatarVersion.value;
 
   int get unreadNotificationsCount => home.value?.unreadNotificationsCount ?? 0;
 
@@ -51,6 +54,7 @@ class HomeController extends GetxController {
   @override
   void onClose() {
     _profileWorker?.dispose();
+    _avatarWorker?.dispose();
     super.onClose();
   }
 
@@ -101,9 +105,14 @@ class HomeController extends GetxController {
     _applyCachedUser();
     _applyProfile(settingsController.profile.value);
     _profileWorker?.dispose();
+    _avatarWorker?.dispose();
     _profileWorker = ever<UserSettingsProfileModel?>(
       settingsController.profile,
       _applyProfile,
+    );
+    _avatarWorker = ever<int>(
+      settingsController.avatarCacheVersion,
+      (_) => displayUserAvatarVersion.value++,
     );
   }
 
@@ -135,7 +144,9 @@ class HomeController extends GetxController {
         : username.isNotEmpty
         ? username
         : tr(LocaleKeys.core_guest);
-    displayUserAvatar.value = profile.avatar?.trim() ?? '';
+    final avatar = profile.avatar?.trim() ?? '';
+    displayUserAvatar.value = avatar;
+    displayUserAvatarVersion.value++;
   }
 
   void _applyCachedUser() {
@@ -166,7 +177,10 @@ class HomeController extends GetxController {
           ? username!
           : '';
       if (name.isNotEmpty) displayUserName.value = name;
-      if (avatar?.isNotEmpty == true) displayUserAvatar.value = avatar!;
+      if (avatar?.isNotEmpty == true) {
+        displayUserAvatar.value = avatar!;
+        displayUserAvatarVersion.value++;
+      }
     } catch (_) {
       return;
     }

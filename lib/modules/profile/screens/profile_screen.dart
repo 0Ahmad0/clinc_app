@@ -76,7 +76,12 @@ class ProfileScreen extends GetView<ProfileController> {
                               backgroundColor: AppColors.success.myOpacity(.25),
                               radius: 60.r,
                               backgroundImage: avatar.startsWith('http')
-                                  ? CachedNetworkImageProvider(avatar)
+                                  ? CachedNetworkImageProvider(
+                                      avatar,
+                                      cacheKey: controller.avatarCacheKey(
+                                        avatar,
+                                      ),
+                                    )
                                   : FileImage(File(avatar)) as ImageProvider,
                             );
                           }

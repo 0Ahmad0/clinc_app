@@ -46,6 +46,7 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
       ),
       body: Obx(() {
         final doc = controller.currentDoctor;
+        final isDetailsLoading = controller.isDetailsLoading;
         return SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
           child: Column(
@@ -61,13 +62,15 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
                 children: [
                   _buildStatItem(
                     Iconsax.people,
-                    "${controller.patientCount}+",
+                    controller.patientCount == null
+                        ? null
+                        : "${controller.patientCount}+",
                     tr(LocaleKeys.doctor_details_patients_label),
                     Colors.blue,
                   ),
                   _buildStatItem(
                     Iconsax.award,
-                    controller.yearsExperience.toString(),
+                    controller.yearsExperience?.toString(),
                     tr(LocaleKeys.doctor_details_experience_label),
                     Colors.orange,
                   ),
@@ -97,17 +100,19 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
                 ),
               ),
               10.verticalSpace,
-              ReadMoreText(
-                controller.aboutText.isEmpty
-                    ? tr(
-                        LocaleKeys.doctor_details_about_dynamic,
-                        args: [doc.name, doc.specialty],
-                      )
-                    : controller.aboutText,
-                trimLines: 3,
-                colorClickableText: Theme.of(context).primaryColor,
-                style: TextStyle(color: Colors.grey[600], height: 1.5),
-              ),
+              isDetailsLoading && controller.aboutText.isEmpty
+                  ? const _DoctorAboutShimmer()
+                  : ReadMoreText(
+                      controller.aboutText.isEmpty
+                          ? tr(
+                              LocaleKeys.doctor_details_about_dynamic,
+                              args: [doc.name, doc.specialty],
+                            )
+                          : controller.aboutText,
+                      trimLines: 3,
+                      colorClickableText: Theme.of(context).primaryColor,
+                      style: TextStyle(color: Colors.grey[600], height: 1.5),
+                    ),
 
               25.verticalSpace,
 
@@ -122,17 +127,21 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
                       fontSize: 18,
                     ),
                   ),
-                  TextButton(
-                    onPressed: () => controller.showAllReviews(),
-                    child: Text(tr(LocaleKeys.doctor_details_view_all)),
-                  ),
+                  if (controller.allReviews.isNotEmpty)
+                    TextButton(
+                      onPressed: () => controller.showAllReviews(),
+                      child: Text(tr(LocaleKeys.doctor_details_view_all)),
+                    ),
                 ],
               ),
               10.verticalSpace,
               // عرض أول 3 تقييمات فقط كمعاينة
-              ...controller.allReviews
-                  .take(3)
-                  .map((review) => controller.reviewCard(context, review)),
+              if (isDetailsLoading && controller.allReviews.isEmpty)
+                const _DoctorReviewsShimmer()
+              else
+                ...controller.allReviews
+                    .take(3)
+                    .map((review) => controller.reviewCard(context, review)),
             ],
           ),
         );
@@ -168,6 +177,8 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
     final doc = controller.currentDoctor;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final isLoadingReviews =
+        controller.isDetailsLoading && controller.allReviews.isEmpty;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -247,16 +258,21 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
                         ),
                       ),
                       SizedBox(width: 4.w),
-                      Text(
-                        "(${controller.allReviews.length} ${tr(LocaleKeys.clinic_app_details_rating_count)})"
-                            .trNumbers(),
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: theme.textTheme.bodySmall?.color?.withValues(
-                            alpha: 0.72,
-                          ),
-                        ),
-                      ),
+                      isLoadingReviews
+                          ? AppShimmerPlaceholder(
+                              width: 58.w,
+                              height: 12.h,
+                              borderRadius: 4.r,
+                            )
+                          : Text(
+                              "(${controller.allReviews.length} ${tr(LocaleKeys.clinic_app_details_rating_count)})"
+                                  .trNumbers(),
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                color: theme.textTheme.bodySmall?.color
+                                    ?.withValues(alpha: 0.72),
+                              ),
+                            ),
                     ],
                   ),
                 ],
@@ -271,7 +287,7 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
   // ويدجت الإحصائيات (نفس التصميم المطلوب)
   Widget _buildStatItem(
     IconData icon,
-    String value,
+    String? value,
     String label,
     Color color,
   ) {
@@ -287,10 +303,19 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
             child: Icon(icon, color: color),
           ),
           10.verticalSpace,
-          Text(
-            value.trNumbers(),
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
-          ),
+          value == null
+              ? AppShimmerPlaceholder(
+                  width: 44.w,
+                  height: 18.h,
+                  borderRadius: 5.r,
+                )
+              : Text(
+                  value.trNumbers(),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
+                  ),
+                ),
           Text(
             label,
             style: TextStyle(fontSize: 11.sp, color: Colors.grey),
@@ -301,15 +326,46 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
   }
 }
 
+class _DoctorAboutShimmer extends StatelessWidget {
+  const _DoctorAboutShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppShimmerPlaceholder(height: 14.h, borderRadius: 5.r),
+        8.verticalSpace,
+        AppShimmerPlaceholder(height: 14.h, borderRadius: 5.r),
+        8.verticalSpace,
+        AppShimmerPlaceholder(width: 210.w, height: 14.h, borderRadius: 5.r),
+      ],
+    );
+  }
+}
+
+class _DoctorReviewsShimmer extends StatelessWidget {
+  const _DoctorReviewsShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: List.generate(
+        3,
+        (index) => Padding(
+          padding: EdgeInsets.only(bottom: 15.h),
+          child: AppShimmerPlaceholder(height: 88.h, borderRadius: 15.r),
+        ),
+      ),
+    );
+  }
+}
+
 class _FavoriteShimmerIcon extends StatelessWidget {
   const _FavoriteShimmerIcon();
 
   @override
   Widget build(BuildContext context) {
-    return AppShimmerPlaceholder(
-      width: 24.sp,
-      height: 24.sp,
-      shape: BoxShape.circle,
-    );
+    return AppShimmerIcon(icon: Icons.favorite, size: 24.sp);
   }
 }

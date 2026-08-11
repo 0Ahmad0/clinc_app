@@ -1,5 +1,7 @@
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/labs/data/models/lab_test_model.dart';
 import 'package:clinc_app_t1/modules/labs/presentation/controllers/labs_test_controller.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -328,7 +330,7 @@ class PackageCard extends GetView<LabsTestController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "الفحوصات المضمنة:",
+                    tr(LocaleKeys.labs_page_included_tests),
                     style: TextStyle(
                       fontSize: 17.sp,
                       fontWeight: FontWeight.bold,

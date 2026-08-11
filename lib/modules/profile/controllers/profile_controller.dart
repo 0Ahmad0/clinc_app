@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,6 +21,8 @@ import '../../settings/domain/settings_repository.dart';
 import '../../settings/presentation/controllers/settings_controller.dart';
 
 class ProfileController extends GetxController {
+  static const bool loadProfileFromApi = false;
+
   final profileFormKey = GlobalKey<FormState>();
   final usernameController = TextEditingController();
   final fullNameController = TextEditingController();
@@ -29,10 +33,12 @@ class ProfileController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxBool isSaving = false.obs;
   final Rxn<UserSettingsProfileModel> profile = Rxn<UserSettingsProfileModel>();
+  final RxInt avatarCacheVersion = 0.obs;
 
   late final SettingsRepository _repository;
   final ImagePicker _picker = ImagePicker();
   String? get avatar => profile.value?.avatar;
+  String avatarCacheKey(String image) => '$image:${avatarCacheVersion.value}';
 
   @override
   void onInit() {
@@ -45,6 +51,8 @@ class ProfileController extends GetxController {
     if (!AuthRequiredHelper.ensureAuthenticated(onAuthenticated: loadProfile)) {
       return;
     }
+    if (!loadProfileFromApi && _applyCachedProfile()) return;
+
     isLoading(true);
     final result = await _repository.getProfile();
     isLoading(false);
@@ -119,6 +127,8 @@ class ProfileController extends GetxController {
     }
     final current = profile.value;
     if (current == null) return;
+    final previousAvatar = current.avatar?.trim();
+    final shouldRefreshAvatar = selectedImage.value != null;
     final updated = current.copyWith(
       fullName: fullNameController.text.trim(),
       username: usernameController.text.trim(),
@@ -139,12 +149,17 @@ class ProfileController extends GetxController {
           await _openEmailVerification(response.result!);
           return;
         }
+        await _evictAvatarCache(previousAvatar, response.result!.avatar);
         _applyProfile(response.result!);
+        selectedImage.value = null;
         await StorageService.instance.cacheUserModel(
-          response.result!.toUserModel().toJson(),
+          response.result!.toCachedUserJson(),
         );
         if (Get.isRegistered<SettingsController>()) {
-          Get.find<SettingsController>().profile.value = response.result!;
+          Get.find<SettingsController>().applyProfile(
+            response.result!,
+            refreshAvatar: shouldRefreshAvatar,
+          );
         }
         ResponseHelper.onSuccess(message: response.message);
       },
@@ -202,10 +217,47 @@ class ProfileController extends GetxController {
 
   void _applyProfile(UserSettingsProfileModel profile) {
     this.profile.value = profile;
+    avatarCacheVersion.value++;
     fullNameController.text = profile.fullName;
     usernameController.text = profile.username;
     emailController.text = profile.email;
     phoneController.text = profile.phone;
+  }
+
+  bool _applyCachedProfile() {
+    try {
+      final data = StorageService.instance.readData(StorageService.USER);
+      if (data == null || data.isEmpty || data == 'null') return false;
+
+      final decoded = jsonDecode(data);
+      if (decoded is! Map) return false;
+
+      final cachedProfile = UserSettingsProfileModel.fromJson(
+        Map<String, dynamic>.from(decoded),
+      );
+      if (cachedProfile.email.trim().isEmpty) return false;
+
+      _applyProfile(cachedProfile);
+      if (Get.isRegistered<SettingsController>()) {
+        Get.find<SettingsController>().applyProfile(cachedProfile);
+      }
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<void> _evictAvatarCache(
+    String? previousAvatar,
+    String? nextAvatar,
+  ) async {
+    final urls = {
+      previousAvatar?.trim(),
+      nextAvatar?.trim(),
+    }.whereType<String>().where((url) => url.startsWith('http'));
+    for (final url in urls) {
+      await CachedNetworkImage.evictFromCache(url);
+    }
   }
 
   Future<void> _openEmailVerification(UserSettingsProfileModel user) async {

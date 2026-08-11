@@ -34,6 +34,7 @@ class ClinicDetailsController extends GetxController {
 
   // التخصص المختار (فارغ يعني عرض الكل)
   var selectedSpecialty = ''.obs;
+  final doctorsSectionKey = GlobalKey();
 
   final PaginationState<DoctorModel> doctorsPagination = PaginationState(
     perPage: 10,
@@ -285,6 +286,25 @@ class ClinicDetailsController extends GetxController {
     } else {
       selectedSpecialty.value = specialty;
     }
+    _scrollToDoctorsSection();
+  }
+
+  void showAllDoctors() {
+    selectedSpecialty.value = '';
+    _scrollToDoctorsSection();
+  }
+
+  void _scrollToDoctorsSection() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final context = doctorsSectionKey.currentContext;
+      if (context == null) return;
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 450),
+        curve: Curves.easeOutCubic,
+        alignment: 0.08,
+      );
+    });
   }
 
   // الحصول على الأطباء المفلترين بناءً على التخصص

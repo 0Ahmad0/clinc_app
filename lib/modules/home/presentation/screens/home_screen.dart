@@ -38,6 +38,7 @@ class HomeScreen extends GetView<HomeController> {
                 child: HomeAppBarWidget(
                   userName: controller.userName,
                   userImage: controller.userAvatar,
+                  userImageVersion: controller.userAvatarVersion,
                   notificationCount: controller.unreadNotificationsCount,
                 ),
               ),

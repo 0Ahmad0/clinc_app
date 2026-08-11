@@ -8,6 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -18,6 +19,9 @@ import 'storage_service.dart';
 class NotificationService {
   NotificationService._internal();
   static final NotificationService instance = NotificationService._internal();
+  static const MethodChannel _firebaseInstallationsChannel = MethodChannel(
+    'com.clinic.user/firebase_installations',
+  );
 
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _localNotifications =
@@ -191,7 +195,7 @@ class NotificationService {
 
   Future<String?> _logFcmToken({required String trigger}) async {
     try {
-      final token = await _messaging.getToken();
+      final token = await _getMessagingTokenWithFisRecovery(trigger: trigger);
       log('📲 [FCM][$trigger] token: ${_maskToken(token)}');
       if (token == null || token.isEmpty) {
         final settings = await _messaging.getNotificationSettings();
@@ -214,6 +218,48 @@ class NotificationService {
     }
   }
 
+  Future<String?> _getMessagingTokenWithFisRecovery({
+    required String trigger,
+  }) async {
+    try {
+      return await _messaging.getToken();
+    } on PlatformException catch (e, s) {
+      if (!_isFisAuthError(e) || kIsWeb || !Platform.isAndroid) {
+        Error.throwWithStackTrace(e, s);
+      }
+
+      log(
+        '⚠️ [FCM][$trigger] FIS_AUTH_ERROR detected. '
+        'Deleting cached Firebase Installation and retrying once.',
+        stackTrace: s,
+      );
+
+      await _deleteFirebaseInstallation();
+      await Future<void>.delayed(const Duration(seconds: 2));
+      return _messaging.getToken();
+    }
+  }
+
+  bool _isFisAuthError(PlatformException error) {
+    final message = '${error.code} ${error.message} ${error.details}';
+    return message.contains('FIS_AUTH_ERROR') ||
+        message.contains('Firebase Installations Service');
+  }
+
+  Future<void> _deleteFirebaseInstallation() async {
+    try {
+      await _firebaseInstallationsChannel.invokeMethod<void>(
+        'deleteFirebaseInstallation',
+      );
+      log('🧹 [FCM] Cached Firebase Installation deleted.');
+    } catch (e, s) {
+      log(
+        '⚠️ [FCM] Failed to delete cached Firebase Installation: $e',
+        stackTrace: s,
+      );
+    }
+  }
+
   Future<void> syncDeviceTokenWithBackend({
     required String reason,
     String? overrideToken,
@@ -227,7 +273,9 @@ class NotificationService {
       return;
     }
 
-    final token = overrideToken ?? await _messaging.getToken();
+    final token =
+        overrideToken ??
+        await _getMessagingTokenWithFisRecovery(trigger: reason);
     if (token == null || token.isEmpty) {
       log(
         '⚠️ [FCM][$reason] skip backend sync. '

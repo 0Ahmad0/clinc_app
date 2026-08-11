@@ -160,12 +160,13 @@ class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
                                   fontSize: 18.sp,
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () => controller.showAllReviews(),
-                                child: Text(
-                                  tr(LocaleKeys.clinic_app_details_view_all),
+                              if (controller.allReviews.isNotEmpty)
+                                TextButton(
+                                  onPressed: () => controller.showAllReviews(),
+                                  child: Text(
+                                    tr(LocaleKeys.clinic_app_details_view_all),
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                           10.verticalSpace,

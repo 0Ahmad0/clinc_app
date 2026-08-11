@@ -77,3 +77,34 @@ class AppShimmerLoading extends StatelessWidget {
     );
   }
 }
+
+class AppShimmerIcon extends StatelessWidget {
+  const AppShimmerIcon({
+    super.key,
+    required this.icon,
+    this.size = 24,
+    this.color,
+  });
+
+  final IconData icon;
+  final double size;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final baseColor =
+        color ?? (isDark ? AppColors.darkBorder : AppColors.dividerLight);
+    final highlightColor = isDark ? AppColors.darkCard : AppColors.surfaceLight;
+
+    return Shimmer(
+      duration: const Duration(milliseconds: 1600),
+      interval: const Duration(milliseconds: 450),
+      color: highlightColor,
+      colorOpacity: isDark ? .24 : .62,
+      enabled: true,
+      direction: const ShimmerDirection.fromLTRB(),
+      child: Icon(icon, size: size, color: baseColor),
+    );
+  }
+}

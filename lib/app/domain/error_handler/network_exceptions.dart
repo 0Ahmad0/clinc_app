@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
 
 import 'email_verification_challenge.dart';
 
@@ -350,13 +350,14 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
     var errorMessage = "";
     networkExceptions?.whenOrNull(
           notImplemented: () {
-            errorMessage = "Not Implemented";
+            errorMessage = tr('network.not_implemented');
           },
           requestCancelled: () {
-            errorMessage = "Request Cancelled";
+            errorMessage = tr('network.request_cancelled');
           },
           loggingInRequired: () {
-            errorMessage = _loggingInRequiredMessage ?? "Un Authorized Request";
+            errorMessage =
+                _loggingInRequiredMessage ?? tr('network.unauthorized_request');
             _loggingInRequiredMessage = null;
             // errorMessage = "Log in First";
           },
@@ -368,13 +369,13 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
             errorMessage = reason;
           },
           serviceUnavailable: () {
-            errorMessage = "Service unavailable";
+            errorMessage = tr('network.service_unavailable');
           },
           methodNotAllowed: () {
-            errorMessage = "Method Not Allowed";
+            errorMessage = tr('network.method_not_allowed');
           },
           badRequest: () {
-            errorMessage = "Bad request";
+            errorMessage = tr('network.bad_request');
           },
           unauthorizedRequest: (String error) {
             errorMessage = error;
@@ -383,31 +384,31 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
             errorMessage = error;
           },
           unexpectedError: (String? error) {
-            errorMessage = error ?? "Unexpected error occurred";
+            errorMessage = error ?? tr('network.unexpected_error');
           },
           requestTimeout: () {
-            errorMessage = 'request_timeout'.tr;
+            errorMessage = tr('network.request_timeout');
           },
           noInternetConnection: () {
-            errorMessage = 'no_internet_connection'.tr;
+            errorMessage = tr('network.no_internet_connection');
           },
           conflict: () {
-            errorMessage = "Error due to a conflict";
+            errorMessage = tr('network.conflict');
           },
           sendTimeout: () {
-            errorMessage = 'send_timeout'.tr;
+            errorMessage = tr('network.send_timeout');
           },
           unableToProcess: () {
-            errorMessage = "Unable to process the data";
+            errorMessage = tr('network.unable_to_process');
           },
           defaultError: (String error) {
             errorMessage = error;
           },
           formatException: () {
-            errorMessage = "Unexpected error occurred";
+            errorMessage = tr('network.unexpected_error');
           },
           notAcceptable: () {
-            errorMessage = "Not acceptable";
+            errorMessage = tr('network.not_acceptable');
           },
           // firebaseAuthException: (String message) {
           //   errorMessage = message;

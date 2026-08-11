@@ -18,7 +18,7 @@ class SearchResultsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       if (controller.isFiltersLoading.value) {
-        return const SizedBox.shrink();
+        return const ClinicsListShimmer();
       }
 
       if (controller.isInitialLoading) {

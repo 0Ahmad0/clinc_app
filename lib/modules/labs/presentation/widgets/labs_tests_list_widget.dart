@@ -389,7 +389,7 @@ class LabsTestsList extends GetView<LabsTestController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "الفحوصات المضمنة:",
+                    tr(LocaleKeys.labs_page_included_tests),
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
@@ -419,7 +419,7 @@ class LabsTestsList extends GetView<LabsTestController> {
 
             // التعليمات
             Text(
-              "التعليمات:",
+              tr(LocaleKeys.labs_page_instructions),
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
@@ -434,7 +434,7 @@ class LabsTestsList extends GetView<LabsTestController> {
                 size: 20.sp,
               ),
               title: Text(
-                "يرجى إحضار الهوية الوطنية",
+                tr(LocaleKeys.labs_page_bring_national_id),
                 style: TextStyle(fontSize: 14.sp, color: titleColor),
               ),
               dense: true,
@@ -444,8 +444,8 @@ class LabsTestsList extends GetView<LabsTestController> {
               leading: Icon(Iconsax.clock, color: Colors.orange, size: 20.sp),
               title: Text(
                 test.isFastingRequired
-                    ? "الصيام لمدة 8 ساعات قبل الفحص"
-                    : "لا يتطلب صيام",
+                    ? tr(LocaleKeys.labs_page_fasting_8_hours)
+                    : tr(LocaleKeys.labs_page_no_fasting_required),
                 style: TextStyle(fontSize: 14.sp, color: titleColor),
               ),
               dense: true,

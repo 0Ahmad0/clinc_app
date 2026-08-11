@@ -28,63 +28,72 @@ class LabLocationWidget extends GetView<LabProfileController> {
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           12.verticalSpace,
-          GestureDetector(
+          InkWell(
             onTap: controller.openMap,
-            child: Container(
-              height: 150.h,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                border: Border.all(color: AppColors.success),
-                borderRadius: BorderRadius.circular(16.r),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  const AppCachedImageWidget(
-                    imageUrl:
-                        "https://media.wired.com/photos/59269cd37034dc5f91becd80/master/pass/GoogleMapTA.jpg",
-                    fit: BoxFit.cover,
-                    placeholderType: AppImagePlaceholderType.clinic,
-                  ),
-                  Center(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16.w,
-                        vertical: 8.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: theme.cardColor.withValues(
-                          alpha: isDark ? 0.92 : 0.96,
+            borderRadius: BorderRadius.circular(16.r),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16.r),
+              child: Ink(
+                height: 150.h,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.success),
+                  borderRadius: BorderRadius.circular(16.r),
+                ),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    const AppCachedImageWidget(
+                      imageUrl:
+                          "https://media.wired.com/photos/59269cd37034dc5f91becd80/master/pass/GoogleMapTA.jpg",
+                      fit: BoxFit.cover,
+                      placeholderType: AppImagePlaceholderType.clinic,
+                    ),
+                    PositionedDirectional(
+                      end: 12.w,
+                      bottom: 12.h,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.w,
+                          vertical: 7.h,
                         ),
-                        borderRadius: BorderRadius.circular(20.r),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(
-                              alpha: isDark ? 0.28 : 0.16,
-                            ),
-                            blurRadius: 10,
+                        decoration: BoxDecoration(
+                          color: theme.cardColor.withValues(
+                            alpha: isDark ? 0.92 : 0.96,
                           ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Iconsax.map, color: Colors.blue),
-                          8.horizontalSpace,
-                          Text(
-                            tr(LocaleKeys.labs_profile_view_map),
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.onSurface,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12.sp,
+                          borderRadius: BorderRadius.circular(12.r),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(
+                                alpha: isDark ? 0.28 : 0.16,
+                              ),
+                              blurRadius: 10,
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Iconsax.map,
+                              color: AppColors.success,
+                              size: 18.sp,
+                            ),
+                            8.horizontalSpace,
+                            Text(
+                              tr(LocaleKeys.labs_profile_view_map),
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: theme.colorScheme.onSurface,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12.sp,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

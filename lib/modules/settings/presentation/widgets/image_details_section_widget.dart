@@ -66,7 +66,12 @@ class ImageDetailsSectionWidget extends GetView<SettingsController> {
                       backgroundImage: image == null || image.isEmpty
                           ? null
                           : image.startsWith('http')
-                          ? CachedNetworkImageProvider(image)
+                          ? CachedNetworkImageProvider(
+                              image,
+                              cacheKey: settingsController.avatarCacheKey(
+                                image,
+                              ),
+                            )
                           : FileImage(File(image)) as ImageProvider,
                       child: image == null || image.isEmpty
                           ? const Icon(Iconsax.user)

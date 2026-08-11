@@ -1,4 +1,7 @@
+import 'dart:ui' as ui;
+
 import 'package:clinc_app_t1/app/core/widgets/app_shimmer_placeholder.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -680,7 +683,15 @@ class ClinicsListShimmer extends StatelessWidget {
   const ClinicsListShimmer({super.key});
 
   @override
-  Widget build(BuildContext context) => const ListShimmer(itemCount: 5);
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+      itemCount: 5,
+      separatorBuilder: (_, __) => 12.verticalSpace,
+      itemBuilder: (_, index) => _ClinicCardListShimmer(index: index),
+    );
+  }
 }
 
 class LabsListShimmer extends StatelessWidget {
@@ -698,6 +709,112 @@ class LabsListShimmer extends StatelessWidget {
   }
 }
 
+class _ClinicCardListShimmer extends StatelessWidget {
+  const _ClinicCardListShimmer({required this.index});
+
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final rowTextDirection = context.locale.languageCode.startsWith('en')
+        ? ui.TextDirection.ltr
+        : ui.TextDirection.rtl;
+
+    return Container(
+      margin: EdgeInsets.only(bottom: 12.h),
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: IntrinsicHeight(
+        child: Directionality(
+          textDirection: rowTextDirection,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                width: 110.w,
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: AppShimmerPlaceholder(borderRadius: 0),
+                    ),
+                    PositionedDirectional(
+                      top: 8.h,
+                      start: 8.w,
+                      child: AppShimmerPlaceholder(
+                        width: 42.w,
+                        height: 22.h,
+                        borderRadius: 4.r,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Directionality(
+                  textDirection: Directionality.of(context),
+                  child: Padding(
+                    padding: EdgeInsets.all(12.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AppShimmerPlaceholder(height: 16.h, borderRadius: 5.r),
+                        8.verticalSpace,
+                        AppShimmerPlaceholder(
+                          width: index.isEven ? 160.w : 128.w,
+                          height: 12.h,
+                          borderRadius: 4.r,
+                        ),
+                        10.verticalSpace,
+                        Row(
+                          children: [
+                            AppShimmerPlaceholder(
+                              width: 14.w,
+                              height: 14.w,
+                              shape: BoxShape.circle,
+                            ),
+                            6.horizontalSpace,
+                            Expanded(
+                              child: AppShimmerPlaceholder(
+                                height: 11.h,
+                                borderRadius: 4.r,
+                              ),
+                            ),
+                          ],
+                        ),
+                        14.verticalSpace,
+                        Row(
+                          children: [
+                            AppShimmerPlaceholder(
+                              width: 76.w,
+                              height: 24.h,
+                              borderRadius: 6.r,
+                            ),
+                            8.horizontalSpace,
+                            AppShimmerPlaceholder(
+                              width: 102.w,
+                              height: 24.h,
+                              borderRadius: 6.r,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _LabCardListShimmer extends StatelessWidget {
   const _LabCardListShimmer({required this.index});
 
@@ -706,150 +823,95 @@ class _LabCardListShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final primary = theme.primaryColor;
-    final mutedColor = theme.dividerColor.withValues(
-      alpha: isDark ? 0.28 : 0.48,
-    );
-    final accentColor = primary.withValues(alpha: isDark ? 0.24 : 0.11);
-    final imageColor = primary.withValues(alpha: isDark ? 0.18 : 0.08);
 
     return Container(
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(
-          color: theme.dividerColor.withValues(alpha: isDark ? 0.24 : 0.10),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.16 : 0.05),
-            blurRadius: 14,
-            offset: const Offset(0, 6),
-          ),
-        ],
       ),
       clipBehavior: Clip.antiAlias,
-      child: IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(
-              width: 112.w,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: _FilterShimmerBlock(
-                      width: 112.w,
-                      height: 142.h,
-                      color: imageColor,
-                      borderRadius: 0,
-                    ),
-                  ),
-                  PositionedDirectional(
-                    top: 10.h,
-                    start: 10.w,
-                    child: _FilterShimmerBlock(
-                      width: index.isEven ? 48.w : 58.w,
-                      height: 24.h,
-                      color: Colors.amber.withValues(
-                        alpha: isDark ? 0.26 : 0.18,
-                      ),
-                      borderRadius: 6.r,
-                    ),
-                  ),
-                  Center(
-                    child: _FilterShimmerBlock(
-                      width: 38.w,
-                      height: 38.w,
-                      color: primary.withValues(alpha: isDark ? 0.22 : 0.14),
-                      borderRadius: 10.r,
-                    ),
-                  ),
-                ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              AppShimmerPlaceholder(height: 140.h, borderRadius: 0),
+              PositionedDirectional(
+                top: 10.h,
+                end: 10.w,
+                child: AppShimmerPlaceholder(
+                  width: index.isEven ? 62.w : 74.w,
+                  height: 24.h,
+                  borderRadius: 8.r,
+                ),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.all(12.w),
-                child: Column(
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.all(12.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: AppShimmerPlaceholder(
-                            height: 16.h,
-                            borderRadius: 5.r,
-                          ),
-                        ),
-                        10.horizontalSpace,
-                        _FilterShimmerBlock(
-                          width: 20.w,
-                          height: 20.w,
-                          color: mutedColor,
-                          borderRadius: 5.r,
-                        ),
-                      ],
+                    Expanded(
+                      child: AppShimmerPlaceholder(
+                        height: 18.h,
+                        borderRadius: 5.r,
+                      ),
                     ),
-                    8.verticalSpace,
+                    10.horizontalSpace,
                     AppShimmerPlaceholder(
-                      width: index.isEven ? 166.w : 132.w,
-                      height: 12.h,
-                      borderRadius: 4.r,
-                    ),
-                    10.verticalSpace,
-                    Row(
-                      children: [
-                        _FilterShimmerBlock(
-                          width: 14.w,
-                          height: 14.w,
-                          color: mutedColor,
-                          shape: BoxShape.circle,
-                        ),
-                        6.horizontalSpace,
-                        Expanded(
-                          child: AppShimmerPlaceholder(
-                            height: 11.h,
-                            borderRadius: 4.r,
-                          ),
-                        ),
-                      ],
-                    ),
-                    14.verticalSpace,
-                    Wrap(
-                      spacing: 7.w,
-                      runSpacing: 7.h,
-                      children: [
-                        _FilterShimmerBlock(
-                          width: 62.w,
-                          height: 24.h,
-                          color: accentColor,
-                          borderRadius: 7.r,
-                        ),
-                        _FilterShimmerBlock(
-                          width: 78.w,
-                          height: 24.h,
-                          color: accentColor,
-                          borderRadius: 7.r,
-                        ),
-                        _FilterShimmerBlock(
-                          width: index.isEven ? 52.w : 66.w,
-                          height: 24.h,
-                          color: mutedColor.withValues(
-                            alpha: isDark ? 0.5 : 0.7,
-                          ),
-                          borderRadius: 7.r,
-                        ),
-                      ],
+                      width: 46.w,
+                      height: 18.h,
+                      borderRadius: 5.r,
                     ),
                   ],
                 ),
-              ),
+                8.verticalSpace,
+                Row(
+                  children: [
+                    AppShimmerPlaceholder(
+                      width: 14.w,
+                      height: 14.w,
+                      shape: BoxShape.circle,
+                    ),
+                    6.horizontalSpace,
+                    Expanded(
+                      child: AppShimmerPlaceholder(
+                        height: 12.h,
+                        borderRadius: 4.r,
+                      ),
+                    ),
+                  ],
+                ),
+                14.verticalSpace,
+                Wrap(
+                  spacing: 6.w,
+                  runSpacing: 6.h,
+                  children: [
+                    AppShimmerPlaceholder(
+                      width: 64.w,
+                      height: 24.h,
+                      borderRadius: 6.r,
+                    ),
+                    AppShimmerPlaceholder(
+                      width: 82.w,
+                      height: 24.h,
+                      borderRadius: 6.r,
+                    ),
+                    AppShimmerPlaceholder(
+                      width: index.isEven ? 58.w : 72.w,
+                      height: 24.h,
+                      borderRadius: 6.r,
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -980,20 +1042,15 @@ class _PaymentCardShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       height: 200.h,
       width: double.infinity,
       padding: EdgeInsets.all(24.w),
       decoration: BoxDecoration(
-        gradient: AppColors.primaryGradient,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(20.r),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).primaryColor.withValues(alpha: 0.18),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
-          ),
-        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1258,9 +1315,9 @@ class _ClinicHeaderShimmer extends StatelessWidget {
               ),
             ),
           ),
-          PositionedDirectional(
+          Positioned(
             bottom: 10.h,
-            end: 25.w,
+            right: 25.w,
             child: Container(
               padding: EdgeInsets.all(3.w),
               decoration: BoxDecoration(

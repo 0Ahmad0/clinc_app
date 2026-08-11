@@ -157,7 +157,7 @@ class LoginController extends GetxController {
     }
     await StorageService.instance.setGuestMode(false);
     await _saveLoginSession(session);
-    await NotificationService.instance.onLoginSuccess();
+     NotificationService.instance.onLoginSuccess();
     ResponseHelper.onSuccess(message: message);
     await FocusHelper.clearPrimaryFocusBeforeNavigation();
     Get.offAllNamed(AppRoutes.navbar);
