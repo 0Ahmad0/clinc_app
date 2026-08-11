@@ -3,6 +3,7 @@ import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_scaffold_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/section_shimmer_widgets.dart';
 import 'package:clinc_app_t1/app/extension/localization_extension.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
@@ -21,7 +22,6 @@ class MyAppointmentDetailsScreen
   const MyAppointmentDetailsScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Obx(
       () => AppScaffoldWidget(
         applyBodyPadding: false,
@@ -29,9 +29,7 @@ class MyAppointmentDetailsScreen
           title: tr(LocaleKeys.my_appointment_details_title),
         ),
         body: controller.isLoading.value
-            ? Center(
-                child: CircularProgressIndicator(color: theme.primaryColor),
-              )
+            ? const AppointmentDetailsShimmer()
             : SingleChildScrollView(
                 child: AppPaddingWidget(
                   child: Column(

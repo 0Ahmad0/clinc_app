@@ -1,10 +1,10 @@
+import 'package:clinc_app_t1/app/core/widgets/app_shimmer_placeholder.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
 import 'package:clinc_app_t1/modules/labs/presentation/controllers/lab_profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
 
 import 'circle_action_button.dart';
 
@@ -78,22 +78,10 @@ class _FavoriteShimmerIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Shimmer(
-      duration: const Duration(milliseconds: 1100),
-      interval: const Duration(milliseconds: 180),
-      color: Colors.white,
-      colorOpacity: isDark ? .18 : .55,
-      enabled: true,
-      direction: const ShimmerDirection.fromLTRB(),
-      child: Icon(
-        Iconsax.heart5,
-        color: isDark
-            ? Colors.white.withValues(alpha: .34)
-            : Colors.red.withValues(alpha: .28),
-        size: 20.sp,
-      ),
+    return AppShimmerPlaceholder(
+      width: 20.sp,
+      height: 20.sp,
+      shape: BoxShape.circle,
     );
   }
 }

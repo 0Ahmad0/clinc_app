@@ -59,8 +59,29 @@ class LabsController extends GetxController {
   }
 
   Future<void> loadFiltersAndLabs() async {
-    await loadFilters();
-    await loadLabs();
+    if (isFiltersLoading.value || isLoading.value) return;
+
+    isFiltersLoading(true);
+    isLoading(true);
+
+    final filtersFuture = _repository.getFilters();
+    final labsFuture = _repository.getLabs(
+      PaginationParams(filters: _activeFilters),
+    );
+
+    final filtersResult = await filtersFuture;
+    final labsResult = await labsFuture;
+
+    isFiltersLoading(false);
+    isLoading(false);
+
+    filtersResult.when(success: _handleFiltersResponse, failure: (_) {});
+    labsResult.when(
+      success: _handleLabsResponse,
+      failure: (exception) => ResponseHelper.onFailure(
+        message: NetworkExceptions.getErrorMessage(exception),
+      ),
+    );
   }
 
   Future<void> loadFilters() async {

@@ -38,7 +38,7 @@ class LabsScreen extends GetView<LabsController> {
           Expanded(
             child: Obx(() {
               if (controller.isFiltersLoading.value) {
-                return const SizedBox.shrink();
+                return const LabsListShimmer();
               }
               if (controller.isLoading.value) {
                 return const LabsListShimmer();

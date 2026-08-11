@@ -1,7 +1,6 @@
 import 'package:clinc_app_t1/app/core/widgets/app_shimmer_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
 
 import '../theme/app_colors.dart';
 
@@ -158,26 +157,12 @@ class _FilterShimmerBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Shimmer(
-      duration: const Duration(milliseconds: 1350),
-      interval: const Duration(milliseconds: 220),
-      color: AppColors.white,
-      colorOpacity: isDark ? .12 : .36,
-      enabled: true,
-      direction: const ShimmerDirection.fromLTRB(),
-      child: Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          color: color,
-          shape: shape,
-          borderRadius: shape == BoxShape.circle
-              ? null
-              : BorderRadius.circular(borderRadius),
-        ),
-      ),
+    return AppShimmerPlaceholder(
+      width: width,
+      height: height,
+      borderRadius: borderRadius,
+      shape: shape,
+      color: color,
     );
   }
 }
@@ -216,6 +201,203 @@ class SectionListShimmer extends StatelessWidget {
           child: const _CardRowShimmer(),
         ),
       ),
+    );
+  }
+}
+
+class NotificationListShimmer extends StatelessWidget {
+  const NotificationListShimmer({super.key, this.itemCount = 6});
+
+  final int itemCount;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+      itemCount: itemCount,
+      itemBuilder: (_, index) => Padding(
+        padding: EdgeInsets.only(bottom: 12.h),
+        child: _NotificationItemShimmer(index: index),
+      ),
+    );
+  }
+}
+
+class _NotificationItemShimmer extends StatelessWidget {
+  const _NotificationItemShimmer({required this.index});
+
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    return Container(
+      padding: EdgeInsets.all(14.sp),
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(14.r),
+        border: Border.all(
+          color: theme.dividerColor.withValues(alpha: isDark ? 0.24 : 0.10),
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppShimmerPlaceholder(
+            width: 46.sp,
+            height: 46.sp,
+            borderRadius: 12.r,
+          ),
+          14.horizontalSpace,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppShimmerPlaceholder(height: 15.h, borderRadius: 5.r),
+                8.verticalSpace,
+                AppShimmerPlaceholder(height: 11.h, borderRadius: 4.r),
+                6.verticalSpace,
+                AppShimmerPlaceholder(
+                  width: index.isEven ? 210.w : 170.w,
+                  height: 11.h,
+                  borderRadius: 4.r,
+                ),
+                10.verticalSpace,
+                AppShimmerPlaceholder(width: 62.w, height: 10.h),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AppointmentDetailsShimmer extends StatelessWidget {
+  const AppointmentDetailsShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: EdgeInsets.all(20.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _AppointmentDetailsDoctorCardShimmer(),
+          20.verticalSpace,
+          const _DetailsSectionShimmer(rowCount: 5),
+          20.verticalSpace,
+          const _DetailsSectionShimmer(rowCount: 3),
+          20.verticalSpace,
+          const _DetailsSectionShimmer(rowCount: 2),
+          120.verticalSpace,
+        ],
+      ),
+    );
+  }
+}
+
+class _AppointmentDetailsDoctorCardShimmer extends StatelessWidget {
+  const _AppointmentDetailsDoctorCardShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(20.r),
+      ),
+      child: Column(
+        children: [
+          AppShimmerPlaceholder(height: 200.h, borderRadius: 20.r),
+          Padding(
+            padding: EdgeInsets.all(16.w),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AppShimmerPlaceholder(width: 170.w, height: 18.h),
+                      8.verticalSpace,
+                      AppShimmerPlaceholder(width: 110.w, height: 13.h),
+                    ],
+                  ),
+                ),
+                AppShimmerPlaceholder(
+                  width: 92.w,
+                  height: 32.h,
+                  borderRadius: 8.r,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DetailsSectionShimmer extends StatelessWidget {
+  const _DetailsSectionShimmer({required this.rowCount});
+
+  final int rowCount;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppShimmerPlaceholder(width: 145.w, height: 16.h, borderRadius: 5.r),
+        10.verticalSpace,
+        Container(
+          padding: EdgeInsets.all(16.w),
+          decoration: BoxDecoration(
+            color: theme.cardColor,
+            borderRadius: BorderRadius.circular(15.r),
+          ),
+          child: Column(
+            children: List.generate(
+              rowCount,
+              (index) => Padding(
+                padding: EdgeInsets.only(
+                  bottom: index == rowCount - 1 ? 0 : 14.h,
+                ),
+                child: Row(
+                  children: [
+                    AppShimmerPlaceholder(
+                      width: 32.w,
+                      height: 32.w,
+                      borderRadius: 9.r,
+                    ),
+                    12.horizontalSpace,
+                    Expanded(
+                      child: AppShimmerPlaceholder(
+                        height: 14.h,
+                        borderRadius: 5.r,
+                      ),
+                    ),
+                    16.horizontalSpace,
+                    AppShimmerPlaceholder(
+                      width: index.isEven ? 92.w : 64.w,
+                      height: 14.h,
+                      borderRadius: 5.r,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

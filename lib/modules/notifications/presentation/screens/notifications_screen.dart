@@ -1,4 +1,5 @@
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/section_shimmer_widgets.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/notifications/presentation/controllers/notifications_controller.dart';
 import 'package:clinc_app_t1/modules/notifications/presentation/widgets/empty_notification_widget.dart';
@@ -33,9 +34,7 @@ class NotificationsScreen extends GetView<NotificationsController> {
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return Center(
-            child: CircularProgressIndicator(color: theme.primaryColor),
-          );
+          return const NotificationListShimmer();
         }
 
         final groupedData = controller.groupedNotifications;

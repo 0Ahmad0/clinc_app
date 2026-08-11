@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
+import 'package:clinc_app_t1/app/core/widgets/app_shimmer_placeholder.dart';
 import 'package:clinc_app_t1/app/extension/localization_extension.dart';
 import 'package:clinc_app_t1/app/extension/number_format_extension.dart';
 import 'package:clinc_app_t1/app/extension/opacity_extension.dart';
@@ -13,7 +14,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:readmore/readmore.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
 import '../../../../app/core/widgets/action_rating_card_widget.dart';
 import '../controllers/doctor_details_controller.dart';
 
@@ -306,21 +306,10 @@ class _FavoriteShimmerIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Shimmer(
-      duration: const Duration(milliseconds: 1100),
-      interval: const Duration(milliseconds: 180),
-      color: Colors.white,
-      colorOpacity: isDark ? .18 : .55,
-      enabled: true,
-      direction: const ShimmerDirection.fromLTRB(),
-      child: Icon(
-        Icons.favorite,
-        color: isDark
-            ? Colors.white.withValues(alpha: .34)
-            : Colors.red.withValues(alpha: .28),
-      ),
+    return AppShimmerPlaceholder(
+      width: 24.sp,
+      height: 24.sp,
+      shape: BoxShape.circle,
     );
   }
 }
