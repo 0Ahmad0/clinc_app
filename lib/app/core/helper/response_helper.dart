@@ -327,7 +327,7 @@ class _CoolerSnackbarContent extends StatelessWidget {
           borderRadius: BorderRadius.circular(14.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(.20),
+              color: Colors.black.withValues(alpha: .20),
               blurRadius: 22.r,
               offset: Offset(0, 10.h),
             ),
@@ -394,12 +394,11 @@ class _CoolerSnackbarText extends StatelessWidget {
           title,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: const Color(0xFF050505),
             fontSize: 16.sp,
             height: 1.15,
             fontWeight: FontWeight.w800,
-            fontFamily: 'Manrope',
           ),
         ),
         8.verticalSpace,
@@ -407,12 +406,11 @@ class _CoolerSnackbarText extends StatelessWidget {
           message,
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: const Color(0xFF666666),
             fontSize: 13.sp,
             height: 1.25,
             fontWeight: FontWeight.w500,
-            fontFamily: 'Manrope',
           ),
         ),
       ],

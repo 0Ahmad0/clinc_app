@@ -15,6 +15,7 @@ class StorageService extends GetxService {
 
   final GetStorage _box = GetStorage();
   String? _sessionAccessToken;
+  String? _sessionUser;
 
   // مفاتيح التخزين
 
@@ -60,6 +61,7 @@ class StorageService extends GetxService {
   }
 
   String? readData(String key) {
+    if (key == USER && _sessionUser != null) return _sessionUser;
     String? result;
     if (_box.hasData(key)) {
       result = _box.read(key);
@@ -75,6 +77,7 @@ class StorageService extends GetxService {
   Future<void> saveBool(String key, bool value) => _box.write(key, value);
 
   Future removeData(String key) async {
+    if (key == USER) _sessionUser = null;
     if (_box.hasData(key)) {
       await _box.remove(key);
     }
@@ -123,8 +126,16 @@ class StorageService extends GetxService {
     return _sessionAccessToken ?? readData(TOKEN) ?? '';
   }
 
-  Future cacheUserModel(Map<String, dynamic>? userInfo) async {
-    await writeData(USER, jsonEncode(userInfo));
+  Future cacheUserModel(
+    Map<String, dynamic>? userInfo, {
+    bool persist = true,
+  }) async {
+    _sessionUser = jsonEncode(userInfo);
+    if (persist) {
+      await writeData(USER, _sessionUser);
+    } else {
+      await _box.remove(USER);
+    }
   }
 
   Future cacheClinic(Map<String, dynamic> clinic) async {

@@ -134,6 +134,9 @@ class LoginController extends GetxController {
           ResponseHelper.onFailure(message: model.message);
           return;
         }
+        if (provider.startsWith('google|')) {
+          rememberMe.value = true;
+        }
         await _completeLogin(model.result!, model.message);
       },
       failure: _handleLoginFailure,
@@ -157,7 +160,7 @@ class LoginController extends GetxController {
     }
     await StorageService.instance.setGuestMode(false);
     await _saveLoginSession(session);
-     NotificationService.instance.onLoginSuccess();
+    NotificationService.instance.onLoginSuccess();
     ResponseHelper.onSuccess(message: message);
     await FocusHelper.clearPrimaryFocusBeforeNavigation();
     Get.offAllNamed(AppRoutes.navbar);
@@ -174,8 +177,11 @@ class LoginController extends GetxController {
       await Future.wait([
         StorageService.instance.removeData(StorageService.REFRESH_TOKEN),
         StorageService.instance.removeData(StorageService.LOGIN_TIME),
-        StorageService.instance.removeData(StorageService.USER),
       ]);
+      await StorageService.instance.cacheUserModel({
+        ...session.user.toJson(),
+        ...session.user.toUserModel().toJson(),
+      }, persist: false);
       return;
     }
 
@@ -183,9 +189,10 @@ class LoginController extends GetxController {
       StorageService.REFRESH_TOKEN,
       session.refreshToken,
     );
-    await StorageService.instance.cacheUserModel(
-      session.user.toUserModel().toJson(),
-    );
+    await StorageService.instance.cacheUserModel({
+      ...session.user.toJson(),
+      ...session.user.toUserModel().toJson(),
+    });
     await StorageService.instance.writeData(
       StorageService.LOGIN_TIME,
       DateTime.now().toIso8601String(),

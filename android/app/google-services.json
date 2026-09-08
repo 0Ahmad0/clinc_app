@@ -125,6 +125,14 @@
           }
         },
         {
+          "client_id": "815847296623-9o58n8a81mu4cn0qehlfj7u6qu8ldchf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.clinic.user",
+            "certificate_hash": "db4b6a9c6f05334970fce1eb12c2568c61536c6c"
+          }
+        },
+        {
           "client_id": "815847296623-bhv6bhq4a85t2691frdcug30kkj6c01e.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -138,6 +146,14 @@
           "android_info": {
             "package_name": "com.clinic.user",
             "certificate_hash": "804dbc17c19ffd556d1d975242ce7caaf34c5a39"
+          }
+        },
+        {
+          "client_id": "815847296623-jn7pkj7con4824us0u7bokd2fmf5qsl4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.clinic.user",
+            "certificate_hash": "fea3c4281850092b440701343bcb93a86c4c4c75"
           }
         },
         {

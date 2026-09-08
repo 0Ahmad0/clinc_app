@@ -17,7 +17,6 @@ import '../widgets/hospital_specialties_grid.dart';
 import '../widgets/hospital_info_section_widget.dart';
 import '../widgets/doctor_location_widget.dart';
 import '../widgets/hospital_about_section_widget.dart';
-import '../widgets/hospital_doctors_list_section.dart';
 
 class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
   const ClinicDetailsScreen({super.key});
@@ -140,9 +139,6 @@ class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
                           HospitalSpecialtiesList(
                             specialties: hospital.specialties,
                           ),
-
-                          25.verticalSpace,
-                          const HospitalDoctorsListSection(),
 
                           25.verticalSpace,
                           // الموقع الخريطة

@@ -69,15 +69,29 @@ class SettingsScreen extends GetView<SettingsController> {
                       icon: Iconsax.support,
                       route: AppRoutes.contact,
                     ),
-                    SettingsItemWidget(
-                      titleKey: LocaleKeys.setting_notifications,
-                      icon: Iconsax.notification,
-                      onTap: () {
-                        if (AuthRequiredHelper.ensureAuthenticated()) {
-                          Get.toNamed(AppRoutes.notifications);
-                        }
-                      },
-                    ),
+                    Obx(() {
+                      final settings = controller.notificationSettings.value;
+                      final isSaving = controller.isSavingNotifications.value;
+                      void toggleNotifications(bool value) {
+                        controller.updateNotificationSettings(
+                          settings.copyWith(appNotifications: value),
+                        );
+                      }
+
+                      return SettingsItemWidget(
+                        titleKey: LocaleKeys.setting_notifications,
+                        icon: Iconsax.notification,
+                        onTap: () {
+                          if (AuthRequiredHelper.ensureAuthenticated()) {
+                            Get.toNamed(AppRoutes.notifications);
+                          }
+                        },
+                        trailing: Switch.adaptive(
+                          value: settings.appNotifications,
+                          onChanged: isSaving ? null : toggleNotifications,
+                        ),
+                      );
+                    }),
                     SettingsItemWidget(
                       titleKey: LocaleKeys.setting_share_app,
                       icon: Iconsax.share,

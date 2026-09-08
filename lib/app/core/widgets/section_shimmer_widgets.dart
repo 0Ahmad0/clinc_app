@@ -47,7 +47,6 @@ class SearchFiltersShimmer extends StatelessWidget {
         itemCount: itemCount,
         separatorBuilder: (_, __) => 0.horizontalSpace,
         itemBuilder: (_, index) => _SearchFilterChipShimmer(
-          index: index,
           width: index == 0 ? 116.w : 140.w,
           labelWidth: _labelWidthFor(index),
         ),
@@ -63,109 +62,45 @@ class SearchFiltersShimmer extends StatelessWidget {
 
 class _SearchFilterChipShimmer extends StatelessWidget {
   const _SearchFilterChipShimmer({
-    required this.index,
     required this.width,
     required this.labelWidth,
   });
 
-  final int index;
   final double width;
   final double labelWidth;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final isFeatured = index == 0 || index == 2;
-    final primary = theme.primaryColor;
-    final chipColor = isFeatured
-        ? primary.withValues(alpha: isDark ? .18 : .08)
-        : theme.cardColor;
-    final borderColor = isFeatured
-        ? primary.withValues(alpha: isDark ? .42 : .24)
-        : theme.dividerColor.withValues(alpha: isDark ? .28 : .45);
-    final glowColor = isFeatured
-        ? primary.withValues(alpha: isDark ? .16 : .10)
-        : Colors.black.withValues(alpha: isDark ? 0 : .035);
-    final iconColor = isFeatured
-        ? primary.withValues(alpha: isDark ? .34 : .18)
-        : theme.dividerColor.withValues(alpha: isDark ? .22 : .42);
-    final lineColor = isFeatured
-        ? primary.withValues(alpha: isDark ? .28 : .16)
-        : theme.dividerColor.withValues(alpha: isDark ? .24 : .50);
-
     return Container(
       width: width,
       margin: EdgeInsets.symmetric(horizontal: 4.w),
       padding: EdgeInsets.symmetric(horizontal: 8.w),
       decoration: BoxDecoration(
-        color: chipColor,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: borderColor),
-        boxShadow: [
-          BoxShadow(
-            color: glowColor,
-            blurRadius: isFeatured ? 14 : 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
       ),
       child: Row(
         children: [
-          _FilterShimmerBlock(
+          AppShimmerPlaceholder(
             width: 16.sp,
             height: 16.sp,
             shape: BoxShape.circle,
-            color: iconColor,
           ),
           6.horizontalSpace,
           Expanded(
             child: Align(
               alignment: AlignmentDirectional.centerStart,
-              child: _FilterShimmerBlock(
+              child: AppShimmerPlaceholder(
                 width: labelWidth,
                 height: 10.h,
                 borderRadius: 4.r,
-                color: lineColor,
               ),
             ),
           ),
           6.horizontalSpace,
-          _FilterShimmerBlock(
-            width: 14.sp,
-            height: 14.sp,
-            borderRadius: 4.r,
-            color: lineColor.withValues(alpha: isDark ? .78 : .72),
-          ),
+          AppShimmerPlaceholder(width: 14.sp, height: 14.sp, borderRadius: 4.r),
         ],
       ),
-    );
-  }
-}
-
-class _FilterShimmerBlock extends StatelessWidget {
-  const _FilterShimmerBlock({
-    required this.width,
-    required this.height,
-    required this.color,
-    this.borderRadius = 12,
-    this.shape = BoxShape.rectangle,
-  });
-
-  final double width;
-  final double height;
-  final Color color;
-  final double borderRadius;
-  final BoxShape shape;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppShimmerPlaceholder(
-      width: width,
-      height: height,
-      borderRadius: borderRadius,
-      shape: shape,
-      color: color,
     );
   }
 }
@@ -440,10 +375,14 @@ class HomeShimmer extends StatelessWidget {
           const _HomeSectionTitleShimmer(),
           12.verticalSpace,
           const _HomeOfferShimmer(),
-          22.verticalSpace,
-          const _HomeSectionTitleShimmer(widthFactor: .64),
-          12.verticalSpace,
-          const _HomeAppointmentShimmer(),
+          // Temporarily hide the active appointment shimmer.
+          // ignore: dead_code
+          if (false) ...[
+            22.verticalSpace,
+            const _HomeSectionTitleShimmer(widthFactor: .64),
+            12.verticalSpace,
+            const _HomeAppointmentShimmer(),
+          ],
           22.verticalSpace,
           const _HomeSectionTitleShimmer(widthFactor: .56),
           16.verticalSpace,
@@ -464,8 +403,12 @@ class HomeApiDataShimmer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const HomeOffersSectionShimmer(),
-        22.verticalSpace,
-        const HomeActiveAppointmentSectionShimmer(),
+        // Temporarily hide the active appointment shimmer.
+        // ignore: dead_code
+        if (false) ...[
+          22.verticalSpace,
+          const HomeActiveAppointmentSectionShimmer(),
+        ],
       ],
     );
   }
@@ -479,7 +422,7 @@ class HomeOffersSectionShimmer extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        4.verticalSpace,
+        20.verticalSpace,
         const _HomeSectionTitleShimmer(),
         12.verticalSpace,
         const _HomeOfferShimmer(),

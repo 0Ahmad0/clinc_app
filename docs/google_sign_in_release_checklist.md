@@ -1,3 +1,32 @@
+# Verified Google Play configuration — 2026-09-09
+
+Current Android package: `com.clinic.user` in Firebase project `clinic-su`.
+Firebase Android app: `1:815847296623:android:e32a098b29d7c8dbfa879a`.
+
+Google Play Console key management was checked directly. The current classical
+SHA-1 (`a8fedd8fac7fb52b39c33993116e0b0f5e68cf19`) and post-quantum SHA-1
+(`fea3c4281850092b440701343bcb93a86c4c4c75`) were already registered.
+The previous app signing certificate was missing from Firebase:
+
+- SHA-1: `DB:4B:6A:9C:6F:05:33:49:70:FC:E1:EB:12:C2:56:8C:61:53:6C:6C`
+- SHA-256: `12:05:A9:61:0B:95:BB:E4:01:1F:8D:A7:61:69:82:F5:12:DC:EE:07:85:2C:2E:B3:BE:85:F0:6D:A8:B4:BF:7E`
+
+Both fingerprints were registered. A freshly downloaded Firebase configuration
+confirmed Android OAuth client
+`815847296623-9o58n8a81mu4cn0qehlfj7u6qu8ldchf.apps.googleusercontent.com`
+for that exact package and SHA-1. That client was added to the local config.
+The existing explicit serverClientId was preserved; changing the Web client
+would also require checking backend token audience validation.
+
+Validation still required: sign in on a physical device using the Google Play
+installed build. The connected emulator has a locally installed app, so it
+does not validate Play signing. No new release was uploaded during this fix.
+
+The checklist below is historical and refers to the former `com.clinic.app`
+package; do not use it as the current package configuration.
+
+---
+
 # Google Sign-In Release Checklist
 
 Firebase project: `clinic-su`

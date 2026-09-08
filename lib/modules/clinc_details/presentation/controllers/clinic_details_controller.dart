@@ -21,6 +21,7 @@ import '../../data/models/clinic_review_model.dart';
 import '../../../../app/services/snackbar_service.dart';
 import '../../../doctors/data/models/doctor_model.dart';
 import '../../../../app/extension/number_format_extension.dart';
+import '../screens/clinic_specialty_doctors_screen.dart';
 
 class ClinicDetailsController extends GetxController {
   late final ClinicDetailsRepository _repository;
@@ -31,10 +32,6 @@ class ClinicDetailsController extends GetxController {
   final Rxn<ClinicDetailsModel> clinicDetails = Rxn<ClinicDetailsModel>();
   var selectedRating = 0.0.obs;
   var commentController = TextEditingController();
-
-  // التخصص المختار (فارغ يعني عرض الكل)
-  var selectedSpecialty = ''.obs;
-  final doctorsSectionKey = GlobalKey();
 
   final PaginationState<DoctorModel> doctorsPagination = PaginationState(
     perPage: 10,
@@ -264,7 +261,6 @@ class ClinicDetailsController extends GetxController {
       ResponseHelper.onFailure(message: response.message);
       return;
     }
-    selectedSpecialty.value = '';
     clinicDetails.value = response.result;
     doctorsPagination.setPage(
       data: response.result!.doctors.result?.list ?? <DoctorModel>[],
@@ -279,41 +275,18 @@ class ClinicDetailsController extends GetxController {
     loadClinicReviews(refresh: true);
   }
 
-  // دالة لتغيير التخصص المختار
-  void toggleSpecialty(String specialty) {
-    if (selectedSpecialty.value == specialty) {
-      selectedSpecialty.value = ''; // إلغاء الاختيار عند الضغط مرة ثانية
-    } else {
-      selectedSpecialty.value = specialty;
-    }
-    _scrollToDoctorsSection();
+  void openSpecialtyDoctors(String specialty) {
+    Get.to(
+      () => ClinicSpecialtyDoctorsScreen(
+        specialty: specialty,
+        clinicController: this,
+      ),
+    );
   }
 
-  void showAllDoctors() {
-    selectedSpecialty.value = '';
-    _scrollToDoctorsSection();
-  }
-
-  void _scrollToDoctorsSection() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final context = doctorsSectionKey.currentContext;
-      if (context == null) return;
-      Scrollable.ensureVisible(
-        context,
-        duration: const Duration(milliseconds: 450),
-        curve: Curves.easeOutCubic,
-        alignment: 0.08,
-      );
-    });
-  }
-
-  // الحصول على الأطباء المفلترين بناءً على التخصص
-  List<DoctorModel> get filteredDoctors {
-    if (selectedSpecialty.value.isEmpty) {
-      return allDoctors.toList();
-    }
+  List<DoctorModel> doctorsForSpecialty(String specialty) {
     return allDoctors
-        .where((doc) => doc.specialty == selectedSpecialty.value)
+        .where((doctor) => doctor.specialty.trim() == specialty.trim())
         .toList();
   }
 
@@ -329,7 +302,7 @@ class ClinicDetailsController extends GetxController {
   }
 
   int doctorsCountForSpecialty(String specialty) {
-    return allDoctors.where((doctor) => doctor.specialty == specialty).length;
+    return doctorsForSpecialty(specialty).length;
   }
 
   void showRatingSheet(BuildContext context) {

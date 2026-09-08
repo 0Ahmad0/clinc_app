@@ -24,7 +24,7 @@ class HomeController extends GetxController {
   final Rxn<HomeModel> home = Rxn<HomeModel>();
   final RxList<MainHomeItemModel> mainSectionList = <MainHomeItemModel>[].obs;
   final RxList<AdModel> adsList = <AdModel>[].obs;
-  final RxString displayUserName = tr(LocaleKeys.core_guest).obs;
+  final RxString displayUserName = ''.obs;
   final RxString displayUserAvatar = ''.obs;
   final RxInt displayUserAvatarVersion = 0.obs;
   Worker? _profileWorker;
@@ -139,11 +139,8 @@ class HomeController extends GetxController {
 
     final fullName = profile.fullName.trim();
     final username = profile.username.trim();
-    displayUserName.value = fullName.isNotEmpty
-        ? fullName
-        : username.isNotEmpty
-        ? username
-        : tr(LocaleKeys.core_guest);
+    final name = fullName.isNotEmpty ? fullName : username;
+    if (name.isNotEmpty) displayUserName.value = name;
     final avatar = profile.avatar?.trim() ?? '';
     displayUserAvatar.value = avatar;
     displayUserAvatarVersion.value++;

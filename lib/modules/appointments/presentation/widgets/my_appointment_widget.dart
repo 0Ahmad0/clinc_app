@@ -257,12 +257,17 @@ class MyAppointmentWidget extends GetView<AppointmentsController> {
                   if ((appointment.status == AppointmentStatus.accepted ||
                           appointment.status == AppointmentStatus.pending) &&
                       !controller.canCancel(appointment))
-                    Text(
-                      tr(LocaleKeys.appointments_cancel_unavailable),
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 10.sp,
-                        fontStyle: FontStyle.italic,
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(8.w, 0, 8.w, 10.h),
+                        child: Text(
+                          tr(LocaleKeys.appointments_cancel_unavailable),
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 10.sp,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
                       ),
                     ),
                 ],

@@ -24,7 +24,6 @@ class HospitalSpecialtiesList extends GetView<ClinicDetailsController> {
           style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
         ),
         Obx(() {
-          final selectedSpecialty = controller.selectedSpecialty.value;
           final items = controller.availableSpecialties.isNotEmpty
               ? controller.availableSpecialties
               : specialties;
@@ -48,12 +47,11 @@ class HospitalSpecialtiesList extends GetView<ClinicDetailsController> {
               final doctorsCount = controller.doctorsCountForSpecialty(
                 specialty,
               );
-              final isSelected = selectedSpecialty == specialty;
 
               return FadeInUp(
                 delay: Duration(milliseconds: index * 50),
                 child: InkWell(
-                  onTap: () => controller.toggleSpecialty(specialty),
+                  onTap: () => controller.openSpecialtyDoctors(specialty),
                   borderRadius: BorderRadius.circular(20.r),
                   child: Container(
                     padding: EdgeInsets.symmetric(
@@ -61,18 +59,12 @@ class HospitalSpecialtiesList extends GetView<ClinicDetailsController> {
                       horizontal: 10.w,
                     ),
                     decoration: BoxDecoration(
-                      color: isSelected
-                          ? theme.primaryColor.withValues(
-                              alpha: isDark ? 0.16 : 0.08,
-                            )
-                          : theme.cardColor,
+                      color: theme.cardColor,
                       borderRadius: BorderRadius.circular(20.r),
                       border: Border.all(
-                        color: isSelected
-                            ? theme.primaryColor
-                            : theme.dividerColor.withValues(
-                                alpha: isDark ? 0.28 : 0.45,
-                              ),
+                        color: theme.dividerColor.withValues(
+                          alpha: isDark ? 0.28 : 0.45,
+                        ),
                       ),
                       boxShadow: [
                         BoxShadow(
@@ -100,10 +92,9 @@ class HospitalSpecialtiesList extends GetView<ClinicDetailsController> {
                       ),
 
                       trailing: Icon(
-                        isSelected
-                            ? Iconsax.tick_circle
-                            : Iconsax.arrow_circle_left,
-                        color: isSelected ? theme.primaryColor : null,
+                        Directionality.of(context) == TextDirection.rtl
+                            ? Iconsax.arrow_circle_left
+                            : Iconsax.arrow_circle_right,
                       ),
 
                       subtitle: Text(

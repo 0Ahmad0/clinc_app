@@ -31,10 +31,10 @@ class AppointmentsScreen extends GetView<AppointmentsController> {
                   slivers: [
                     SliverToBoxAdapter(child: 10.verticalSpace),
 
-                    // شريط الفلاتر
+
                     SliverToBoxAdapter(
                       child: SizedBox(
-                        height: 40.h, // ارتفاع مناسب
+                        height: 40.h,
                         child: ListView.separated(
                           padding: EdgeInsets.symmetric(horizontal: 14.w),
                           scrollDirection: Axis.horizontal,

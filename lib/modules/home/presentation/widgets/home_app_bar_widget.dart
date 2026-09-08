@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../app/core/theme/app_colors.dart';
+import '../../../../app/core/widgets/app_shimmer_placeholder.dart';
 
 class HomeAppBarWidget extends StatelessWidget {
   const HomeAppBarWidget({
@@ -48,14 +49,23 @@ class HomeAppBarWidget extends StatelessWidget {
                   color: Colors.white.withValues(alpha: 0.9),
                 ),
               ),
-              subtitle: Text(
-                userName,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontSize: 18.sp,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              subtitle: userName.trim().isEmpty
+                  ? Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: AppShimmerPlaceholder(
+                        width: 120.w,
+                        height: 20.h,
+                        borderRadius: 6.r,
+                      ),
+                    )
+                  : Text(
+                      userName,
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontSize: 18.sp,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
               trailing: IconButton(
                 onPressed: () => Get.toNamed(AppRoutes.notifications),
                 icon: notificationCount > 0

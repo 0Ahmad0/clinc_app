@@ -1,7 +1,7 @@
 class AppSettingsModel {
   const AppSettingsModel({
     this.allowGoogleLogin = true,
-    this.allowAppleLogin = true,
+    this.allowAppleLogin = false,
     this.androidVersion = '',
     this.iosVersion = '',
   });

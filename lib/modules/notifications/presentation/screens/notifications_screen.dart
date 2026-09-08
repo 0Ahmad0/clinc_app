@@ -3,7 +3,6 @@ import 'package:clinc_app_t1/app/core/widgets/section_shimmer_widgets.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/notifications/presentation/controllers/notifications_controller.dart';
 import 'package:clinc_app_t1/modules/notifications/presentation/widgets/empty_notification_widget.dart';
-import 'package:clinc_app_t1/modules/settings/presentation/controllers/settings_controller.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,7 +16,6 @@ class NotificationsScreen extends GetView<NotificationsController> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final settingsController = Get.find<SettingsController>();
     final groupTitleColor = theme.colorScheme.onSurface.withValues(
       alpha: theme.brightness == Brightness.dark ? 0.68 : 0.58,
     );
@@ -36,7 +34,6 @@ class NotificationsScreen extends GetView<NotificationsController> {
       ),
       body: Column(
         children: [
-          _AppNotificationsSwitch(controller: settingsController),
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
@@ -91,61 +88,5 @@ class NotificationsScreen extends GetView<NotificationsController> {
         ],
       ),
     );
-  }
-}
-
-class _AppNotificationsSwitch extends StatelessWidget {
-  const _AppNotificationsSwitch({required this.controller});
-
-  final SettingsController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    return Obx(() {
-      final settings = controller.notificationSettings.value;
-
-      return Padding(
-        padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 6.h),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-          decoration: BoxDecoration(
-            color: theme.cardColor,
-            borderRadius: BorderRadius.circular(14.r),
-            border: Border.all(
-              color: theme.dividerColor.withValues(alpha: isDark ? 0.28 : 0.45),
-            ),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  tr(LocaleKeys.setting_notification_app),
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15.sp,
-                  ),
-                ),
-              ),
-              if (controller.isSavingNotifications.value)
-                SizedBox(
-                  width: 18.w,
-                  height: 18.w,
-                  child: const CircularProgressIndicator(strokeWidth: 2),
-                )
-              else
-                Switch.adaptive(
-                  value: settings.appNotifications,
-                  onChanged: (value) => controller.updateNotificationSettings(
-                    settings.copyWith(appNotifications: value),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      );
-    });
   }
 }
