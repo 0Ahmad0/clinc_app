@@ -16,6 +16,13 @@ import '../../data/models/user_settings_model.dart';
 import '../../domain/settings_repository.dart';
 
 class SettingsController extends GetxController {
+  static SettingsController ensureRegistered() {
+    if (!Get.isRegistered<SettingsController>()) {
+      Get.lazyPut<SettingsController>(() => SettingsController(), fenix: true);
+    }
+    return Get.find<SettingsController>();
+  }
+
   static const bool loadProfileFromApi = false;
 
   late final SettingsRepository _repository;

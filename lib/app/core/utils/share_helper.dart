@@ -9,7 +9,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ShareHelper {
-  static const String appLink = "https://appName.com";
+  static const String appLink =
+      'https://play.google.com/store/apps/details?id=com.clinic.user';
 
   static Future<void> shareText({required String text, String? subject}) async {
     final params = ShareParams(text: text, subject: subject);

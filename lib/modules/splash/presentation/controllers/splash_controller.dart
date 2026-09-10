@@ -25,15 +25,13 @@ class SplashController extends GetxController {
     await Get.context?.setLocale(newLocale);
     Get.updateLocale(newLocale);
 
-     NotificationService.instance.init();
+    NotificationService.instance.init();
     if (StorageService.instance.isGuest) {
       Get.offNamed(AppRoutes.navbar);
       return;
     }
     if (StorageService.instance.getAccessToken().isNotEmpty) {
-      final settingsController = Get.isRegistered<SettingsController>()
-          ? Get.find<SettingsController>()
-          : Get.put(SettingsController());
+      final settingsController = SettingsController.ensureRegistered();
       await settingsController.getProfile();
     } else {
       await Future.delayed(const Duration(seconds: 3), () {
@@ -54,7 +52,7 @@ class SplashController extends GetxController {
 
   Future<void> initSplash() async {
     await _initSplash();
-     Get.find<AppSettingsController>().loadSettings();
+    Get.find<AppSettingsController>().loadSettings();
     await _loadSplash();
   }
 }

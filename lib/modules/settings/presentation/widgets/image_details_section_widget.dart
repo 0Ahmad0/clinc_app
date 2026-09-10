@@ -16,9 +16,7 @@ class ImageDetailsSectionWidget extends GetView<SettingsController> {
   const ImageDetailsSectionWidget({super.key});
 
   SettingsController get _settingsController =>
-      Get.isRegistered<SettingsController>()
-      ? Get.find<SettingsController>()
-      : Get.put(SettingsController());
+      SettingsController.ensureRegistered();
 
   @override
   Widget build(BuildContext context) {

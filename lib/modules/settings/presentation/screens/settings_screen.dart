@@ -21,6 +21,9 @@ class SettingsScreen extends GetView<SettingsController> {
   const SettingsScreen({super.key});
 
   @override
+  SettingsController get controller => SettingsController.ensureRegistered();
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(

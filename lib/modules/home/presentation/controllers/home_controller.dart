@@ -89,10 +89,7 @@ class HomeController extends GetxController {
         StorageService.instance.getAccessToken().isEmpty) {
       return null;
     }
-    if (Get.isRegistered<SettingsController>()) {
-      return Get.find<SettingsController>();
-    }
-    return Get.put(SettingsController());
+    return SettingsController.ensureRegistered();
   }
 
   void _bindCurrentUserProfile() {

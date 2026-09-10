@@ -18,9 +18,7 @@ class LogoutDialogWidget extends StatelessWidget {
       generalColor: AppColors.error,
       okOnTap: () {
         Get.back();
-        final controller = Get.isRegistered<SettingsController>()
-            ? Get.find<SettingsController>()
-            : Get.put(SettingsController());
+        final controller = SettingsController.ensureRegistered();
         controller.logout();
       },
       icon: Iconsax.logout,
