@@ -65,8 +65,7 @@ class NotificationService {
       // Initialize local notification tap handling
       await _localNotifications.initialize(
         settings: const InitializationSettings(
-          android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-          // android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+          android: AndroidInitializationSettings('ic_notification'),
           iOS: DarwinInitializationSettings(),
         ),
         onDidReceiveNotificationResponse: (NotificationResponse response) {
@@ -600,7 +599,7 @@ class NotificationService {
         _channelId,
         _channelName,
         channelDescription: _channelDesc,
-        icon: '@mipmap/ic_launcher',
+        icon: 'ic_notification',
         importance: Importance.max,
         priority: Priority.high,
         playSound: true,

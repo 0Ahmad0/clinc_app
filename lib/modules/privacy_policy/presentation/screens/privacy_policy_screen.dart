@@ -1,4 +1,5 @@
-import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:clinc_app_t1/app/core/widgets/info_page_header.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart'; // تأكد من المسار
 import 'package:clinc_app_t1/modules/privacy_policy/presentation/controllers/privacy_policy_controller.dart';
@@ -10,8 +11,6 @@ import 'package:get/get.dart';
 import '../widgets/privacy_contact_card_widget.dart';
 import '../widgets/privacy_disclaimer_card_widget.dart';
 import '../widgets/privacy_footer_widget.dart';
-import '../widgets/privacy_hero_header_widget.dart';
-import '../widgets/privacy_intro_card_widget.dart';
 import '../widgets/privacy_list_widget.dart';
 import '../widgets/privacy_section_label_widget.dart';
 
@@ -21,29 +20,23 @@ class PrivacyPolicyScreen extends GetView<PrivacyPolicyController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppAppBarWidget(title: tr(LocaleKeys.privacy_policy_title)),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.bottomCenter,
-              children: [
-                const PrivacyHeroHeader(),
-                Positioned(
-                  bottom: -120.h,
-                  right: 0,
-                  left: 0,
-                  child: const AppPaddingWidget(child: PrivacyIntroCard()),
-                ),
-              ],
+            InfoPageHeader(
+              title: tr(LocaleKeys.privacy_policy_title),
+              icon: Iconsax.flash,
+              heroTitle: tr(LocaleKeys.privacy_policy_hero_title),
+              subtitle: tr(LocaleKeys.privacy_policy_hero_subtitle),
+              introTitle: tr(LocaleKeys.privacy_policy_intro_title),
+              description: tr(LocaleKeys.privacy_policy_intro_desc),
             ),
             AppPaddingWidget(
               padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  120.verticalSpace,
+                  16.verticalSpace,
 
                   // أولاً: سياسة الخصوصية
                   PrivacySectionLabel(

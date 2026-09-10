@@ -1,4 +1,5 @@
-import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:clinc_app_t1/app/core/widgets/info_page_header.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/modules/about_app/presentation/controllers/about_app_controller.dart';
@@ -9,8 +10,6 @@ import 'package:get/get.dart';
 
 import '../widgets/about_features_grid_widget.dart';
 import '../widgets/about_footer_slogan_widget.dart';
-import '../widgets/about_hero_header_widget.dart';
-import '../widgets/about_intro_card_widget.dart';
 import '../widgets/about_section_title_widget.dart';
 
 class AboutAppScreen extends GetView<AboutAppController> {
@@ -19,27 +18,21 @@ class AboutAppScreen extends GetView<AboutAppController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppAppBarWidget(title: tr(LocaleKeys.about_app_title)),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.bottomCenter,
-              children: [
-                const AboutHeroHeader(),
-                Positioned(
-                  bottom: -180.h,
-                  right: 0,
-                  left: 0,
-                  child: const AppPaddingWidget(child: AboutIntroCard()),
-                ),
-              ],
+            InfoPageHeader(
+              title: tr(LocaleKeys.about_app_title),
+              icon: Iconsax.flash,
+              heroTitle: tr(LocaleKeys.about_app_hero_title),
+              subtitle: tr(LocaleKeys.about_app_hero_subtitle),
+              introTitle: tr(LocaleKeys.about_app_intro_title),
+              description: tr(LocaleKeys.about_app_intro_desc),
             ),
             AppPaddingWidget(
               child: Column(
                 children: [
-                  180.verticalSpace,
+                  16.verticalSpace,
 
                   // عنوان القسم
                   Align(
@@ -67,4 +60,3 @@ class AboutAppScreen extends GetView<AboutAppController> {
     );
   }
 }
-

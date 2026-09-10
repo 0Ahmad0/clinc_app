@@ -2,9 +2,11 @@ import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../controllers/about_app_controller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AboutFooterSlogan extends StatelessWidget {
+class AboutFooterSlogan extends GetView<AboutAppController> {
   const AboutFooterSlogan({super.key});
 
   @override
@@ -20,18 +22,22 @@ class AboutFooterSlogan extends StatelessWidget {
         Text(
           tr(LocaleKeys.about_app_slogan),
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-              ),
+            fontSize: 16.sp,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         6.verticalSpace,
-        Text(
-          tr(LocaleKeys.about_app_version),
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontSize: 10.sp,
-                color: AppColors.grey,
-              ),
-        ),
+        Obx(() {
+          final version = controller.appVersion.value;
+          if (version.isEmpty) return const SizedBox.shrink();
+          return Text(
+            tr(LocaleKeys.about_app_version, args: [version]),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              fontSize: 10.sp,
+              color: AppColors.grey,
+            ),
+          );
+        }),
       ],
     );
   }

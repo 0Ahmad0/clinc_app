@@ -227,7 +227,7 @@
     "feature_simplicity": "Simplicity",
     "feature_simplicity_desc": "An easy-to-use interface that puts your health at your fingertips.",
     "slogan": "Your time matters... Your health is our goal",
-    "version": "Version 1.0.0"
+    "version": "Version {}"
   },
   "contact_us": {
     "title": "Help & Support",

@@ -228,7 +228,7 @@ class CodegenLoader extends AssetLoader{
     "feature_simplicity": "Simplicity",
     "feature_simplicity_desc": "An easy-to-use interface that puts your health at your fingertips.",
     "slogan": "Your time matters... Your health is our goal",
-    "version": "Version 1.0.0"
+    "version": "Version {}"
   },
   "contact_us": {
     "title": "Help & Support",
@@ -925,7 +925,7 @@ static const Map<String,dynamic> _ar = {
     "feature_simplicity": "بساطة",
     "feature_simplicity_desc": "واجهة سهلة تجعل صحتك في متناول يدك.",
     "slogan": "وقتك يهمنا.. وصحتك غايتنا",
-    "version": "الإصدار 1.0.0"
+    "version": "الإصدار {}"
   },
   "contact_us": {
     "title": "المساعدة والدعم",
