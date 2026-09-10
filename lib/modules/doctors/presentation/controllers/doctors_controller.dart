@@ -21,6 +21,7 @@ class DoctorsController extends GetxController {
   final ScrollController scrollController = ScrollController();
   Worker? _searchWorker;
   String? _pendingSpecialtyName;
+  bool _refreshQueued = false;
 
   // 2. متغيرات الواجهة والبحث
   var currentSearchQuery = ''.obs;
@@ -152,7 +153,13 @@ class DoctorsController extends GetxController {
 
   Future<void> loadFilters() async {
     isFiltersLoading(true);
+    final language = Get.locale?.languageCode;
     final result = await _repository.getFilters();
+    if (isClosed) return;
+    if (language != Get.locale?.languageCode) {
+      await loadFilters();
+      return;
+    }
     isFiltersLoading(false);
     result.when(success: _handleFiltersResponse, failure: (_) {});
   }
@@ -160,7 +167,11 @@ class DoctorsController extends GetxController {
   Future<void> reloadDoctors() => loadDoctors(refresh: true);
 
   Future<void> loadDoctors({bool refresh = false}) async {
-    if (doctorsPagination.isBusy) return;
+    if (doctorsPagination.isBusy) {
+      if (refresh) _refreshQueued = true;
+      return;
+    }
+    final language = Get.locale?.languageCode;
     if (!refresh && !doctorsPagination.hasMore) return;
 
     final page = refresh ? 1 : doctorsPagination.currentPage + 1;
@@ -179,8 +190,14 @@ class DoctorsController extends GetxController {
       ),
     );
 
+    if (isClosed) return;
     doctorsPagination.isInitialLoading(false);
     doctorsPagination.isLoadingMore(false);
+    if (_refreshQueued || language != Get.locale?.languageCode) {
+      _refreshQueued = false;
+      await loadDoctors(refresh: true);
+      return;
+    }
 
     result.when(
       success: (response) => _handleDoctorsResponse(response, page),

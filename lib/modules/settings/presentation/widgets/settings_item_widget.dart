@@ -27,7 +27,6 @@ class SettingsItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final effectiveColor = color ?? Theme.of(context).colorScheme.onSurface;
-
     return ListTile(
       contentPadding: removePadding
           ? EdgeInsetsDirectional.only(end: 6.w, start: 14.w)

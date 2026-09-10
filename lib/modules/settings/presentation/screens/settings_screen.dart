@@ -79,6 +79,7 @@ class SettingsScreen extends GetView<SettingsController> {
                       }
 
                       return SettingsItemWidget(
+                        removePadding: true,
                         titleKey: LocaleKeys.setting_notifications,
                         icon: Iconsax.notification,
                         onTap: () {

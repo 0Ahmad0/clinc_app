@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../services/storage_service.dart';
+import '../../modules/doctors/presentation/controllers/doctors_controller.dart';
 
 class SettingsAppController extends GetxController {
   static SettingsAppController get instance => Get.find();
@@ -45,8 +46,12 @@ class SettingsAppController extends GetxController {
     if (context.locale.languageCode == langCode) return;
 
     final newLocale = Locale(langCode);
+    StorageService.instance.saveLanguage(langCode);
     await context.setLocale(newLocale);
-    Get.updateLocale(newLocale);
+    await Get.updateLocale(newLocale);
+    if (Get.isRegistered<DoctorsController>()) {
+      await Get.find<DoctorsController>().loadFiltersAndDoctors();
+    }
   }
 
   Future<void> toggleLanguage(BuildContext context) async {
@@ -56,9 +61,6 @@ class SettingsAppController extends GetxController {
         ? const Locale(AppConstants.enLang)
         : const Locale(AppConstants.arLang);
 
-    StorageService.instance.saveLanguage(newLocale.languageCode);
-    await context.setLocale(newLocale);
-
-    Get.updateLocale(newLocale);
+    await changeLanguage(context, newLocale.languageCode);
   }
 }

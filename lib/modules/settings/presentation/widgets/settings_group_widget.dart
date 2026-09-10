@@ -9,11 +9,10 @@ class SettingsGroupWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface.myOpacity(.8),
-        borderRadius: BorderRadius.circular(12.r),
-      ),
+    return Material(
+      color: Theme.of(context).colorScheme.surface.myOpacity(.8),
+      borderRadius: BorderRadius.circular(12.r),
+      clipBehavior: Clip.antiAlias,
       child: Column(children: items),
     );
   }

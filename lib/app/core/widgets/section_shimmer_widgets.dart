@@ -177,9 +177,7 @@ class _NotificationItemShimmer extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(
-          color: theme.dividerColor.withValues(alpha: isDark ? 0.24 : 0.10),
-        ),
+
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
