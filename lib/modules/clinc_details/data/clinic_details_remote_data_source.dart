@@ -17,7 +17,7 @@ class ClinicDetailsRemoteDataSource implements ClinicDetailsDataSource {
   ) async {
     final response = await _apiServices.get(
       AppUrl.userClinicDetails(clinicId),
-      hasToken: false,
+      hasToken: true,
     );
     return BaseModel.fromJson(
       Map<String, dynamic>.from(response as Map),

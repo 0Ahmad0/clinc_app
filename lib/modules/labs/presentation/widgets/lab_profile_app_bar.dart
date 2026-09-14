@@ -32,7 +32,9 @@ class LabProfileAppBar extends GetView<LabProfileController> {
         Obx(
           () => CircleActionButton(
             icon: controller.isFavorite.value ? Iconsax.heart5 : Iconsax.heart,
-            color: controller.isFavorite.value ? Colors.red : null,
+            color: controller.isFavorite.value
+                ? Colors.red
+                : theme.colorScheme.primary,
             onTap: controller.isFavoriteLoading.value
                 ? () {}
                 : controller.toggleFavorite,

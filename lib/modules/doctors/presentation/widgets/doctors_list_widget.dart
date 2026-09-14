@@ -17,11 +17,7 @@ class DoctorsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (controller.isFiltersLoading.value) {
-        return const SizedBox.shrink();
-      }
-
-      if (controller.isInitialLoading) {
+      if (controller.isFiltersLoading.value || controller.isInitialLoading) {
         return const DoctorsListShimmer();
       }
 

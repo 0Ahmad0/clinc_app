@@ -1,3 +1,4 @@
+import 'package:clinc_app_t1/app/data/review_eligibility.dart';
 import 'package:clinc_app_t1/app/core/configuration/locator.dart';
 import 'package:clinc_app_t1/app/core/helper/auth_required_helper.dart';
 import 'package:clinc_app_t1/app/core/helper/response_helper.dart';
@@ -243,7 +244,10 @@ class DoctorDetailsController extends GetxController {
     );
   }
 
+  ReviewEligibility? get ratingEligibility => details.value?.reviewEligibility;
+
   void showRatingSheet(BuildContext context) {
+    if (ratingEligibility?.canReview != true) return;
     if (!AuthRequiredHelper.ensureAuthenticated()) return;
     BottomSheetService.show(
       context: context,

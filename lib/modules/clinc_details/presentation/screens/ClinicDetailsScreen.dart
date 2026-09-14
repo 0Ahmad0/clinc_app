@@ -118,6 +118,10 @@ class ClinicDetailsScreen extends GetView<ClinicDetailsController> {
 
                           20.verticalSpace,
                           ActionRatingCardWidget(
+                            enabled:
+                                controller.ratingEligibility?.canReview == true,
+                            disabledMessage:
+                                controller.ratingEligibility?.message,
                             title: tr(
                               LocaleKeys.clinic_app_details_rate_clinic,
                             ),

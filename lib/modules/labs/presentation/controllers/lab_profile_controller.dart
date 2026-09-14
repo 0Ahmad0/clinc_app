@@ -1,3 +1,6 @@
+import 'package:clinc_app_t1/app/domain/services/api_service.dart';
+import 'package:clinc_app_t1/app/data/review_eligibility.dart';
+import 'package:clinc_app_t1/app/core/utils/app_url.dart';
 import 'package:clinc_app_t1/app/core/configuration/locator.dart';
 import 'package:clinc_app_t1/app/core/helper/auth_required_helper.dart';
 import 'package:clinc_app_t1/app/core/helper/response_helper.dart';
@@ -24,6 +27,7 @@ import '../../../../app/services/snackbar_service.dart';
 class LabProfileController extends GetxController {
   late final LabsRepository _repository;
   late LabModel lab;
+  final reviewEligibility = Rxn<ReviewEligibility>();
 
   // المتغيرات المراقبة
   var isFavorite = false.obs;
@@ -50,7 +54,27 @@ class LabProfileController extends GetxController {
     }
     isFavorite.value = lab.isFavorite;
     reviewsPagination.setPage(data: lab.reviews, page: 1);
+    loadReviewEligibility();
     loadLabReviews(refresh: true);
+  }
+
+  Future<void> loadReviewEligibility() async {
+    try {
+      final response = await locator<ApiServices>().get(
+        '${AppUrl.userLabs}/${lab.id}',
+        hasToken: true,
+      );
+      if (isClosed) return;
+      final data = response is Map ? response['data'] : null;
+      final entity = data is Map ? data['lab'] : null;
+      reviewEligibility.value = ReviewEligibility.fromJson(
+        entity is Map ? entity : {},
+      );
+    } catch (_) {
+      if (!isClosed) {
+        reviewEligibility.value = const ReviewEligibility(canReview: false);
+      }
+    }
   }
 
   Future<void> toggleFavorite() async {
@@ -169,7 +193,10 @@ class LabProfileController extends GetxController {
     }
   }
 
+  ReviewEligibility? get ratingEligibility => reviewEligibility.value;
+
   void showRatingSheet(BuildContext context) {
+    if (ratingEligibility?.canReview != true) return;
     if (!AuthRequiredHelper.ensureAuthenticated()) return;
     BottomSheetService.show(
       context: context,

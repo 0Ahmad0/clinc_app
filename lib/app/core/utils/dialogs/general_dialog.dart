@@ -1,4 +1,6 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:clinc_app_t1/generated/locale_keys.g.dart';
 import 'package:clinc_app_t1/app/core/constants/app_assets.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_svg_widget.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +14,8 @@ class GeneralAppDialog extends StatelessWidget {
   const GeneralAppDialog({
     super.key,
     required this.title,
-    this.okText = 'نعم',
-    this.cancelText = 'إلغاء',
+    this.okText,
+    this.cancelText,
     this.cancelOnTap,
     this.okOnTap,
     this.generalColor = AppColors.primary,
@@ -66,13 +68,15 @@ class GeneralAppDialog extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
             decoration: BoxDecoration(
               color: dialogColor,
-              borderRadius: BorderRadius.circular(6.r),
+              borderRadius: BorderRadius.circular(24.r),
               border: Border.all(
                 color: theme.dividerColor.withValues(alpha: isDark ? 0.22 : 0),
                 width: isDark ? 0.7 : 0,
               ),
             ),
+            padding: EdgeInsets.all(24.w),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 10.verticalSpace,
                 Tada(
@@ -108,36 +112,73 @@ class GeneralAppDialog extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                6.verticalSpace,
-                Row(
-                  children: [
-                    TextButton(
-                      onPressed: okOnTap ?? () => Get.back(),
-                      child: Text(
-                        okText ?? '',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: generalColor ?? okColor!,
-                          fontSize: 12.sp,
-                        ),
-                      ),
-                    ),
-                    TextButton(
+                24.verticalSpace,
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final shape = RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14.r),
+                    );
+                    final buttonStyle = TextStyle(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w700,
+                    );
+                    final cancelButton = OutlinedButton(
                       onPressed: cancelOnTap ?? () => Get.back(),
-                      child: Text(
-                        cancelText ?? '',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color:
-                              cancelColor ??
-                              theme.textTheme.bodySmall?.color?.withValues(
-                                alpha: 0.72,
-                              ),
-                          fontSize: 12.sp,
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor:
+                            cancelColor ?? theme.colorScheme.onSurface,
+                        minimumSize: const Size.fromHeight(50),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.w,
+                          vertical: 14.h,
                         ),
+                        side: BorderSide(color: theme.dividerColor),
+                        shape: shape,
+                        textStyle: buttonStyle,
                       ),
-                    ),
-                  ],
+                      child: Text(
+                        cancelText ?? context.tr(LocaleKeys.core_cancel),
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                    final confirmButton = FilledButton(
+                      onPressed: okOnTap ?? () => Get.back(),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: generalColor ?? okColor,
+                        foregroundColor: AppColors.white,
+                        minimumSize: const Size.fromHeight(50),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.w,
+                          vertical: 14.h,
+                        ),
+                        shape: shape,
+                        textStyle: buttonStyle,
+                      ),
+                      child: Text(
+                        okText ?? context.tr(LocaleKeys.core_yes),
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                    if (constraints.maxWidth < 260 ||
+                        MediaQuery.textScalerOf(context).scale(15) > 20) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          confirmButton,
+                          12.verticalSpace,
+                          cancelButton,
+                        ],
+                      );
+                    }
+                    return Row(
+                      children: [
+                        Expanded(child: cancelButton),
+                        12.horizontalSpace,
+                        Expanded(child: confirmButton),
+                      ],
+                    );
+                  },
                 ),
-                4.verticalSpace,
               ],
             ),
           ),

@@ -1,3 +1,4 @@
+import 'package:clinc_app_t1/app/core/widgets/action_rating_card_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_padding_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/section_shimmer_widgets.dart';
 import 'package:clinc_app_t1/app/core/widgets/shared_empty_widget.dart';
@@ -28,12 +29,18 @@ class LabReviewsWidget extends GetView<LabProfileController> {
                   context,
                 ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
-              TextButton.icon(
-                onPressed: () => controller.showRatingSheet(context),
-                icon: const Icon(Iconsax.add_square),
-                label: Text(tr(LocaleKeys.labs_profile_add_review)),
-              ),
             ],
+          ),
+          10.verticalSpace,
+          Obx(
+            () => ActionRatingCardWidget(
+              title: tr(LocaleKeys.labs_profile_add_review),
+              subtitle: tr(LocaleKeys.labs_profile_reviews_title),
+              enabled: controller.ratingEligibility?.canReview == true,
+              disabledMessage: controller.ratingEligibility?.message,
+              disabledReason: controller.ratingEligibility?.reason,
+              onTap: () => controller.showRatingSheet(context),
+            ),
           ),
           10.verticalSpace,
           Obx(

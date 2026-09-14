@@ -1,7 +1,9 @@
+import '../../../../app/data/review_eligibility.dart';
 import 'doctor_model.dart';
 import 'doctor_review_model.dart';
 
 class DoctorDetailsModel {
+  final ReviewEligibility? reviewEligibility;
   final DoctorModel doctor;
   final List<DoctorReviewModel> reviews;
   final bool isFavorite;
@@ -10,6 +12,7 @@ class DoctorDetailsModel {
   final String about;
 
   const DoctorDetailsModel({
+    this.reviewEligibility,
     required this.doctor,
     required this.reviews,
     required this.isFavorite,
@@ -21,6 +24,7 @@ class DoctorDetailsModel {
   factory DoctorDetailsModel.fromJson(Map<String, dynamic> json) {
     final doctorJson = json['doctor'] is Map ? json['doctor'] : json;
     return DoctorDetailsModel(
+      reviewEligibility: ReviewEligibility.fromJson(doctorJson),
       doctor: DoctorModel.fromJson(
         Map<String, dynamic>.from(doctorJson as Map),
       ),

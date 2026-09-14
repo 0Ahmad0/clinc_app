@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:clinc_app_t1/app/core/theme/app_colors.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_app_bar_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_button_widget.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_network_image_widget.dart';
@@ -22,24 +23,41 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final favoriteBackground = isDark ? theme.cardColor : AppColors.white;
+
     return Scaffold(
       appBar: AppAppBarWidget(
         title: tr(LocaleKeys.doctor_details_details_title),
         actions: [
           Obx(() {
             final isLoading = controller.isFavoriteLoading;
-            return IconButton(
-              icon: isLoading
-                  ? const _FavoriteShimmerIcon()
-                  : Icon(
-                      controller.isFavorite.value
-                          ? Icons.favorite
-                          : Icons.favorite_border,
-                      color: controller.isFavorite.value
-                          ? Colors.red
-                          : Theme.of(context).iconTheme.color,
-                    ),
-              onPressed: isLoading ? null : () => controller.toggleFavorite(),
+            return Padding(
+              padding: EdgeInsetsDirectional.only(end: 8.w),
+              child: IconButton(
+                style: IconButton.styleFrom(
+                  backgroundColor: favoriteBackground,
+                  disabledBackgroundColor: favoriteBackground,
+                  minimumSize: const Size(44, 44),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                ),
+                icon: isLoading
+                    ? const _FavoriteShimmerIcon()
+                    : Icon(
+                        controller.isFavorite.value
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color: controller.isFavorite.value
+                            ? (isDark ? Colors.redAccent.shade100 : Colors.red)
+                            : (isDark
+                                  ? AppColors.emeraldGreen
+                                  : AppColors.primary),
+                      ),
+                onPressed: isLoading ? null : () => controller.toggleFavorite(),
+              ),
             );
           }),
         ],
@@ -85,6 +103,9 @@ class DoctorDetailsScreen extends GetView<DoctorDetailsController> {
 
               25.verticalSpace,
               ActionRatingCardWidget(
+                enabled: controller.ratingEligibility?.canReview == true,
+                disabledMessage: controller.ratingEligibility?.message,
+                disabledReason: controller.ratingEligibility?.reason,
                 title: tr(LocaleKeys.doctor_details_rate_doctor),
                 subtitle: tr(LocaleKeys.doctor_details_rate_doctor_subtitle),
                 onTap: () => controller.showRatingSheet(context),

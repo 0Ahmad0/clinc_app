@@ -235,7 +235,7 @@ class ResponseHelper {
 
   static void onWarning({String? message, String? title}) {
     _showCoolerSnackbar(
-      title: title ?? 'Warning',
+      title: title ?? tr(LocaleKeys.toast_warning),
       message: MessageApi.findTextToast(message ?? ''),
       assetPath: AppAssets.snackbarWarning,
       lineColor: const Color(0xFFF5BF24),

@@ -1,3 +1,4 @@
+import 'package:clinc_app_t1/app/data/review_eligibility.dart';
 import 'package:clinc_app_t1/app/core/widgets/app_rating_widget.dart';
 import 'package:clinc_app_t1/app/services/bottom_sheet_service.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -305,7 +306,11 @@ class ClinicDetailsController extends GetxController {
     return doctorsForSpecialty(specialty).length;
   }
 
+  ReviewEligibility? get ratingEligibility =>
+      clinicDetails.value?.reviewEligibility;
+
   void showRatingSheet(BuildContext context) {
+    if (ratingEligibility?.canReview != true) return;
     if (!AuthRequiredHelper.ensureAuthenticated()) return;
     BottomSheetService.show(
       context: context,

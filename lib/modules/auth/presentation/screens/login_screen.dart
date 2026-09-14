@@ -179,7 +179,6 @@ class LoginScreen extends GetView<LoginController> {
                         onPressed: () => controller.loginWithProvider('guest'),
                         text: tr(LocaleKeys.login_visitor_login),
                       ).fadeIn(),
-
                       Obx(() {
                         final showGoogle =
                             appSettingsController.allowGoogleLogin;
@@ -239,6 +238,7 @@ class LoginScreen extends GetView<LoginController> {
                           ],
                         );
                       }),
+
                     ],
                   ),
                 ),

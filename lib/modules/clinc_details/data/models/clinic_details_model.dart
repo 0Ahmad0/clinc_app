@@ -1,9 +1,12 @@
+import '../../../../app/data/review_eligibility.dart';
 import '../../../../app/data/base_model.dart';
 import '../../../doctors/data/models/doctor_model.dart';
 import 'clinic_review_model.dart';
 
 class ClinicDetailsModel {
+  final ReviewEligibility? reviewEligibility;
   const ClinicDetailsModel({
+    this.reviewEligibility,
     required this.doctors,
     required this.reviews,
     this.id = '',
@@ -42,6 +45,9 @@ class ClinicDetailsModel {
     );
 
     return ClinicDetailsModel(
+      reviewEligibility: ReviewEligibility.fromJson(
+        (json['clinic'] is Map ? json['clinic'] : json),
+      ),
       id: json['id']?.toString() ?? '',
       name: json['name']?.toString() ?? '',
       coverImage:

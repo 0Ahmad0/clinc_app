@@ -58,10 +58,29 @@ class CodegenLoader extends AssetLoader{
     "password_matches": "Password meets the requirements"
   },
   "toast": {
+    "review_booking_required": "You can review after completing an appointment with this provider",
+    "review_login_required": "Sign in to check review eligibility",
+    "review_unavailable": "Reviews are currently unavailable",
+    "warning": "Warning",
     "success": "Success",
     "error": "Failure",
     "failure": "Failure",
     "otp_sent_success": "OTP sent successfully"
+  },
+  "network": {
+    "not_implemented": "This feature is not available right now",
+    "request_cancelled": "The request was cancelled",
+    "unauthorized_request": "Please log in to continue",
+    "service_unavailable": "Service is currently unavailable",
+    "method_not_allowed": "This action is not allowed",
+    "bad_request": "Invalid request",
+    "unexpected_error": "An unexpected error occurred",
+    "request_timeout": "The request timed out. Please try again",
+    "no_internet_connection": "No internet connection",
+    "conflict": "A conflict occurred while processing the request",
+    "send_timeout": "The request took too long to send",
+    "unable_to_process": "Unable to process the data",
+    "not_acceptable": "The request is not acceptable"
   },
   "core": {
     "yes": "Yes",
@@ -573,7 +592,12 @@ class CodegenLoader extends AssetLoader{
     "empty_subtitle": "Adjust filters or try searching for another lab name.",
     "chat": "Chat",
     "no_services_title": "No services available",
-    "no_services_subtitle": "This lab has not added services yet."
+    "no_services_subtitle": "This lab has not added services yet.",
+    "included_tests": "Included tests:",
+    "instructions": "Instructions:",
+    "bring_national_id": "Please bring your national ID",
+    "fasting_8_hours": "Fast for 8 hours before the test",
+    "no_fasting_required": "No fasting required"
   },
   "labs_profile": {
     "location_title": "Laboratory Location",
@@ -755,10 +779,29 @@ static const Map<String,dynamic> _ar = {
     "password_matches": "كلمة المرور مطابقة للمواصفات"
   },
   "toast": {
+    "review_booking_required": "يمكنك التقييم بعد إتمام موعد لدى هذه الجهة",
+    "review_login_required": "سجّل الدخول لمعرفة إمكانية التقييم",
+    "review_unavailable": "التقييم غير متاح حاليًا",
+    "warning": "تحذير",
     "success": "نجاح",
     "error": "فشل",
     "failure": "فشل",
     "otp_sent_success": "تم إرسال رمز التحقق بنجاح"
+  },
+  "network": {
+    "not_implemented": "هذه الميزة غير متاحة حالياً",
+    "request_cancelled": "تم إلغاء الطلب",
+    "unauthorized_request": "يرجى تسجيل الدخول للمتابعة",
+    "service_unavailable": "الخدمة غير متاحة حالياً",
+    "method_not_allowed": "هذا الإجراء غير مسموح",
+    "bad_request": "الطلب غير صحيح",
+    "unexpected_error": "حدث خطأ غير متوقع",
+    "request_timeout": "انتهت مهلة الطلب، حاول مرة أخرى",
+    "no_internet_connection": "لا يوجد اتصال بالإنترنت",
+    "conflict": "حدث تعارض أثناء تنفيذ الطلب",
+    "send_timeout": "انتهت مهلة إرسال الطلب",
+    "unable_to_process": "تعذر معالجة البيانات",
+    "not_acceptable": "الطلب غير مقبول"
   },
   "core": {
     "yes": "نعم",
@@ -1270,7 +1313,12 @@ static const Map<String,dynamic> _ar = {
     "empty_subtitle": "عدّل الفلاتر أو جرّب البحث باسم مختبر آخر.",
     "chat": "دردشة",
     "no_services_title": "لا توجد خدمات متاحة",
-    "no_services_subtitle": "لم يضف المختبر خدماته بعد."
+    "no_services_subtitle": "لم يضف المختبر خدماته بعد.",
+    "included_tests": "الفحوصات المضمنة:",
+    "instructions": "التعليمات:",
+    "bring_national_id": "يرجى إحضار الهوية الوطنية",
+    "fasting_8_hours": "الصيام لمدة 8 ساعات قبل الفحص",
+    "no_fasting_required": "لا يتطلب صيام"
   },
   "labs_profile": {
     "location_title": "موقع المختبر",

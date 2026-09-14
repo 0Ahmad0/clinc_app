@@ -42,6 +42,10 @@
     "password_matches": "Password meets the requirements"
   },
   "toast": {
+    "review_booking_required": "You can review after completing an appointment with this provider",
+    "review_login_required": "Sign in to check review eligibility",
+    "review_unavailable": "Reviews are currently unavailable",
+    "warning": "Warning",
     "success": "Success",
     "error": "Failure",
     "failure": "Failure",
