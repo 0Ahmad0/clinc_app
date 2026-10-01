@@ -65,6 +65,12 @@ abstract class  LocaleKeys {
   static const network_send_timeout = 'network.send_timeout';
   static const network_unable_to_process = 'network.unable_to_process';
   static const network_not_acceptable = 'network.not_acceptable';
+  static const network_internal_server_error = 'network.internal_server_error';
+  static const network_not_found = 'network.not_found';
+  static const network_invalid_credentials = 'network.invalid_credentials';
+  static const network_too_many_requests = 'network.too_many_requests';
+  static const network_retry = 'network.retry';
+  static const network_check_connection = 'network.check_connection';
   static const network = 'network';
   static const core_yes = 'core.yes';
   static const core_no = 'core.no';

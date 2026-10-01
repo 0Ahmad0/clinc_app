@@ -14,6 +14,7 @@ import '../../data/models/doctor_model.dart';
 import '../../domain/doctors_repository.dart';
 
 class DoctorsController extends GetxController {
+  final Rxn<NetworkExceptions> loadError = Rxn<NetworkExceptions>();
   late final DoctorsRepository _repository;
   final PaginationState<DoctorModel> doctorsPagination = PaginationState(
     perPage: 5,
@@ -201,9 +202,12 @@ class DoctorsController extends GetxController {
 
     result.when(
       success: (response) => _handleDoctorsResponse(response, page),
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        loadError.value = exception;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
@@ -216,9 +220,11 @@ class DoctorsController extends GetxController {
     int page,
   ) {
     if (!response.isSuccess || response.result == null) {
+      loadError.value = NetworkExceptions.defaultError(response.message ?? '');
       ResponseHelper.onFailure(message: response.message);
       return;
     }
+    loadError.value = null;
     doctorsPagination.setPage(
       data: response.result!.list,
       page: page,

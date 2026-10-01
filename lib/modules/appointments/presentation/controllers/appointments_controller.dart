@@ -15,6 +15,7 @@ import 'package:get/get.dart';
 import '../../domain/appointments_repository.dart';
 
 class AppointmentsController extends GetxController {
+  final Rxn<NetworkExceptions> loadError = Rxn<NetworkExceptions>();
   late final AppointmentsRepository _repository;
 
   // قائمة الفلاتر باستخدام مفاتيح الترجمة
@@ -128,6 +129,7 @@ class AppointmentsController extends GetxController {
     result.when(
       success: _handleAppointmentsResponse,
       failure: (exception) {
+        loadError.value = exception;
         if (AuthRequiredHelper.handleFailure(
           exception,
           onAuthenticated: loadAppointments,
@@ -174,9 +176,11 @@ class AppointmentsController extends GetxController {
 
   void _handleAppointmentsResponse(BaseModel<List<AppointmentModel>> response) {
     if (!response.isSuccess || response.result == null) {
+      loadError.value = NetworkExceptions.defaultError(response.message ?? '');
       ResponseHelper.onFailure(message: response.message);
       return;
     }
+    loadError.value = null;
     allOrders.assignAll(response.result!);
   }
 

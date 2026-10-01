@@ -18,6 +18,7 @@ import '../../../../app/services/storage_service.dart';
 import '../../../../generated/locale_keys.g.dart';
 
 class HomeController extends GetxController {
+  final Rxn<NetworkExceptions> loadError = Rxn<NetworkExceptions>();
   late final HomeRepository _repository;
 
   final RxBool isLoading = false.obs;
@@ -65,17 +66,22 @@ class HomeController extends GetxController {
     isLoading(false);
     result.when(
       success: _handleHomeResponse,
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        loadError.value = exception;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
   void _handleHomeResponse(BaseModel<HomeModel> response) {
     if (!response.isSuccess || response.result == null) {
+      loadError.value = NetworkExceptions.defaultError(response.message ?? '');
       ResponseHelper.onFailure(message: response.message);
       return;
     }
+    loadError.value = null;
     home.value = response.result;
     if (response.result!.mainServices.isNotEmpty) {
       mainSectionList.assignAll(response.result!.mainServices);

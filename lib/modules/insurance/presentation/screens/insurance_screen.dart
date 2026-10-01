@@ -21,6 +21,8 @@ class InsuranceScreen extends GetView<InsuranceController> {
             ? const InsuranceGridShimmer()
             : controller.insurances.isEmpty
             ? SharedEmptyWidget(
+                error: controller.loadError.value,
+                onRetry: controller.loadInsurances,
                 icon: Icons.credit_card_off_outlined,
                 title: tr(LocaleKeys.insurance_empty_title),
                 subtitle: tr(LocaleKeys.insurance_empty_subtitle),

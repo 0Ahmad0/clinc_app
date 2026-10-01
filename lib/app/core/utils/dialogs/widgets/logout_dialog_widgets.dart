@@ -14,7 +14,8 @@ class LogoutDialogWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GeneralAppDialog(
-      title: tr(LocaleKeys.logout_title),
+      title: context.tr(LocaleKeys.logout_title),
+      okText: context.tr(LocaleKeys.setting_logout),
       generalColor: AppColors.error,
       okOnTap: () {
         Get.back();

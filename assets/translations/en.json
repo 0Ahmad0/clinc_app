@@ -64,7 +64,13 @@
     "conflict": "A conflict occurred while processing the request",
     "send_timeout": "The request took too long to send",
     "unable_to_process": "Unable to process the data",
-    "not_acceptable": "The request is not acceptable"
+    "not_acceptable": "The request is not acceptable",
+    "internal_server_error": "A server error occurred. Please try again later.",
+    "not_found": "The requested content was not found.",
+    "invalid_credentials": "The email or password is incorrect.",
+    "too_many_requests": "Too many requests. Please try again later.",
+    "retry": "Retry",
+    "check_connection": "Check your internet connection and try again."
   },
   "core": {
     "yes": "Yes",
@@ -194,8 +200,8 @@
     "settings_text": "Settings",
     "back_exit_title": "Press again to exit",
     "back_exit_message": "Press back again to exit the app",
-    "exit_dialog_title": "Are you sure you want to exit?",
-    "exit_dialog_message": "The app will close completely. Make sure all your data is saved before exiting.",
+    "exit_dialog_title": "Exit the app?",
+    "exit_dialog_message": "Do you want to close the app?",
     "exit_dialog_cancel": "Cancel",
     "exit_dialog_confirm": "Exit"
   },
@@ -712,7 +718,7 @@
     "mock_payment_method": "Credit card"
   },
   "logout": {
-    "title": "Do you really want to log out?"
+    "title": "Are you sure you want to log out?"
   },
   "share": {
     "app_text": "Download Hajz Saree now and enjoy an easier healthcare experience\n{}",

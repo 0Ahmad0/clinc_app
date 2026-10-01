@@ -11,6 +11,7 @@ import '../../data/models/lab_model.dart';
 import '../../domain/labs_repository.dart';
 
 class LabsController extends GetxController {
+  final Rxn<NetworkExceptions> loadError = Rxn<NetworkExceptions>();
   late final LabsRepository _repository;
   final RxBool isLoading = false.obs;
   final RxBool isFiltersLoading = false.obs;
@@ -78,9 +79,12 @@ class LabsController extends GetxController {
     filtersResult.when(success: _handleFiltersResponse, failure: (_) {});
     labsResult.when(
       success: _handleLabsResponse,
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        loadError.value = exception;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
@@ -100,17 +104,22 @@ class LabsController extends GetxController {
     isLoading(false);
     result.when(
       success: _handleLabsResponse,
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        loadError.value = exception;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
   void _handleLabsResponse(BaseModel<BaseModels<LabModel>> response) {
     if (!response.isSuccess || response.result == null) {
+      loadError.value = NetworkExceptions.defaultError(response.message ?? '');
       ResponseHelper.onFailure(message: response.message);
       return;
     }
+    loadError.value = null;
     allLabs.assignAll(response.result!.list);
     filterLabs();
   }

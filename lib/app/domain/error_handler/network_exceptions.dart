@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'email_verification_challenge.dart';
+import 'message.dart';
 
 part 'network_exceptions.freezed.dart';
 
@@ -280,6 +281,7 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
   }
 
   static NetworkExceptions getException(error) {
+    if (error is NetworkExceptions) return error;
     if (error is Exception) {
       try {
         NetworkExceptions networkExceptions;
@@ -296,8 +298,9 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
               networkExceptions = const NetworkExceptions.requestTimeout();
               break;
             case DioExceptionType.unknown:
-              networkExceptions =
-                  const NetworkExceptions.noInternetConnection();
+              networkExceptions = error.error is SocketException
+                  ? const NetworkExceptions.noInternetConnection()
+                  : const NetworkExceptions.unexpectedError(null);
               break;
             case DioExceptionType.receiveTimeout:
               networkExceptions = const NetworkExceptions.sendTimeout();
@@ -362,11 +365,16 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
             // errorMessage = "Log in First";
           },
           internalServerError: (String reason) {
-            errorMessage = reason;
-            // errorMessage = "Internal Server Error";
+            errorMessage = MessageApi.localizeError(
+              reason,
+              fallbackKey: 'network.internal_server_error',
+            );
           },
           notFound: (String reason) {
-            errorMessage = reason;
+            errorMessage = MessageApi.localizeError(
+              reason,
+              fallbackKey: 'network.not_found',
+            );
           },
           serviceUnavailable: () {
             errorMessage = tr('network.service_unavailable');
@@ -418,7 +426,7 @@ abstract class NetworkExceptions with _$NetworkExceptions implements Exception {
           // },
         ) ??
         '';
-    return errorMessage;
+    return MessageApi.localizeError(errorMessage);
   }
 
   //

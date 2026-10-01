@@ -8,6 +8,7 @@ import '../../data/models/insurance_company_model.dart';
 import '../../domain/insurance_repository.dart';
 
 class InsuranceController extends GetxController {
+  final Rxn<NetworkExceptions> loadError = Rxn<NetworkExceptions>();
   late final InsuranceRepository _repository;
   final RxBool isLoading = false.obs;
   final RxList<InsuranceCompanyModel> insurances =
@@ -27,9 +28,12 @@ class InsuranceController extends GetxController {
     isLoading(false);
     result.when(
       success: _handleInsurancesResponse,
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        loadError.value = exception;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
@@ -37,9 +41,11 @@ class InsuranceController extends GetxController {
     BaseModel<BaseModels<InsuranceCompanyModel>> response,
   ) {
     if (!response.isSuccess || response.result == null) {
+      loadError.value = NetworkExceptions.defaultError(response.message ?? '');
       ResponseHelper.onFailure(message: response.message);
       return;
     }
+    loadError.value = null;
     insurances.assignAll(response.result!.list);
   }
 }

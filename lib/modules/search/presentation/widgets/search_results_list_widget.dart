@@ -27,6 +27,8 @@ class SearchResultsList extends StatelessWidget {
 
       if (controller.filteredHospitals.isEmpty) {
         return SharedEmptyWidget(
+          error: controller.loadError.value,
+          onRetry: controller.reloadClinics,
           icon: Icons.local_hospital_outlined,
           title: tr(LocaleKeys.search_no_results),
           subtitle: tr(LocaleKeys.search_empty_subtitle),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,8 +35,10 @@ class ApiServicesImp implements ApiServices {
       "accept-timezone": DateTime.now().timeZoneName,
       if (shouldSendToken) "Authorization": "Bearer $token",
       // "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhaG1hZDEiLCJleHAiOjE2NzE4Nzc2MTMsImlhdCI6MTY3MTUxNzYxM30.ipa9KNJP2QhloBMtC0g0P0lwfGZlhGw9aWXQTC02G74":null,
-      "Accept-Language": "${gett.Get.locale?.languageCode}",
-      "accept-language": "${gett.Get.locale?.languageCode}",
+      "Accept-Language":
+          gett.Get.context?.locale.languageCode ??
+          gett.Get.locale?.languageCode ??
+          'ar',
     };
   }
 

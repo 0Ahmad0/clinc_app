@@ -62,12 +62,15 @@ class HomeScreen extends GetView<HomeController> {
               if (controller.mainSectionList.isNotEmpty)
                 const SliverToBoxAdapter(child: MainSectionWidget()),
               if (!isInitialLoading &&
-                  controller.adsList.isEmpty &&
-                  appointment == null &&
-                  controller.mainSectionList.isEmpty)
+                  (controller.loadError.value != null ||
+                      (controller.adsList.isEmpty &&
+                          appointment == null &&
+                          controller.mainSectionList.isEmpty)))
                 SliverFillRemaining(
                   hasScrollBody: false,
                   child: SharedEmptyWidget(
+                    error: controller.loadError.value,
+                    onRetry: controller.loadHome,
                     icon: Icons.home_work_outlined,
                     title: tr(LocaleKeys.home_empty_title),
                     subtitle: tr(LocaleKeys.home_empty_subtitle),

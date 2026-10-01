@@ -142,7 +142,7 @@ class NavbarScreen extends GetView<NavbarController> {
                   ),
                   SizedBox(height: 10.h),
                   Text(
-                    tr(LocaleKeys.navbar_exit_dialog_title),
+                    context.tr(LocaleKeys.navbar_exit_dialog_title),
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
@@ -153,7 +153,7 @@ class NavbarScreen extends GetView<NavbarController> {
                 ],
               ),
               content: Text(
-                tr(LocaleKeys.navbar_exit_dialog_message),
+                context.tr(LocaleKeys.navbar_exit_dialog_message),
                 style: TextStyle(
                   fontSize: 14.sp,
                   color: Colors.grey[700],
@@ -173,7 +173,7 @@ class NavbarScreen extends GetView<NavbarController> {
                     ),
                   ),
                   child: Text(
-                    tr(LocaleKeys.navbar_exit_dialog_cancel),
+                    context.tr(LocaleKeys.navbar_exit_dialog_cancel),
                     style: TextStyle(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w600,
@@ -200,7 +200,7 @@ class NavbarScreen extends GetView<NavbarController> {
                     elevation: 0,
                   ),
                   child: Text(
-                    tr(LocaleKeys.navbar_exit_dialog_confirm),
+                    context.tr(LocaleKeys.navbar_exit_dialog_confirm),
                     style: TextStyle(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w600,

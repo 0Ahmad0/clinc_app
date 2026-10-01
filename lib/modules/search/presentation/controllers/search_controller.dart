@@ -14,6 +14,7 @@ import '../../data/models/property_model.dart';
 import '../../domain/search_repository.dart';
 
 class SearchAndFilterController extends GetxController {
+  final Rxn<NetworkExceptions> loadError = Rxn<NetworkExceptions>();
   late final SearchRepository _repository;
   final PaginationState<Hospital> clinicsPagination = PaginationState(
     perPage: 6,
@@ -207,9 +208,12 @@ class SearchAndFilterController extends GetxController {
     filtersResult.when(success: _handleFiltersResponse, failure: (_) {});
     clinicsResult.when(
       success: (response) => _handleClinicsResponse(response, 1),
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        loadError.value = exception;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
@@ -247,9 +251,12 @@ class SearchAndFilterController extends GetxController {
 
     result.when(
       success: (response) => _handleClinicsResponse(response, page),
-      failure: (exception) => ResponseHelper.onFailure(
-        message: NetworkExceptions.getErrorMessage(exception),
-      ),
+      failure: (exception) {
+        loadError.value = exception;
+        ResponseHelper.onFailure(
+          message: NetworkExceptions.getErrorMessage(exception),
+        );
+      },
     );
   }
 
@@ -262,9 +269,11 @@ class SearchAndFilterController extends GetxController {
     int page,
   ) {
     if (!response.isSuccess || response.result == null) {
+      loadError.value = NetworkExceptions.defaultError(response.message ?? '');
       ResponseHelper.onFailure(message: response.message);
       return;
     }
+    loadError.value = null;
 
     clinicsPagination.setPage(
       data: response.result!.list,

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../domain/error_handler/network_exceptions.dart';
 import '../../constants/app_assets.dart';
 import '../../theme/app_colors.dart';
-
 
 class ErrorView extends StatelessWidget {
   const ErrorView({
@@ -14,24 +13,26 @@ class ErrorView extends StatelessWidget {
     this.networkExceptions,
     this.pathImage,
     this.height,
-     this.isEmptyState = false,
+    this.isEmptyState = false,
   });
 
   final NetworkExceptions? networkExceptions;
   final String? pathImage;
   final double? height;
-final bool isEmptyState;
+  final bool isEmptyState;
   @override
   Widget build(BuildContext context) {
-     if (isEmptyState) {
-    return ErrorViewBase(
-       value: 'no_results_found'.tr, // بدلاً من "لا توجد نتائج" الثابتة
-    assetPath: AppAssets.errorData,
-    height: height,
-    );
-  }
+    if (isEmptyState && networkExceptions == null) {
+      return ErrorViewBase(
+        value: context.tr(
+          'search.no_results',
+        ), // بدلاً من "لا توجد نتائج" الثابتة
+        assetPath: AppAssets.errorData,
+        height: height,
+      );
+    }
     Widget errorView = ErrorViewBase(
-      value: "Error!",
+      value: context.tr('network.unexpected_error'),
       assetPath: pathImage ?? AppAssets.errorData,
       height: height,
     );
@@ -139,11 +140,7 @@ class ErrorViewBase extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (icon != null)
-            Icon(
-              icon,
-              size: 90.w,
-              color: AppColors.grey,
-            )
+            Icon(icon, size: 90.w, color: AppColors.grey)
           else
             _InformativeAssetView(
               assetPath: assetPath ?? AppAssets.errorData,

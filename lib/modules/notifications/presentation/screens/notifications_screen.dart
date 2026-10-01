@@ -5,6 +5,7 @@ import 'package:clinc_app_t1/modules/notifications/presentation/controllers/noti
 import 'package:clinc_app_t1/modules/notifications/presentation/widgets/empty_notification_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:clinc_app_t1/app/core/widgets/shared_empty_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -43,6 +44,13 @@ class NotificationsScreen extends GetView<NotificationsController> {
               final groupedData = controller.groupedNotifications;
 
               if (groupedData.isEmpty) {
+                if (controller.loadError.value != null) {
+                  return SharedEmptyWidget(
+                    title: '',
+                    error: controller.loadError.value,
+                    onRetry: controller.loadNotifications,
+                  );
+                }
                 return const EmptyNotificationWidget();
               }
 

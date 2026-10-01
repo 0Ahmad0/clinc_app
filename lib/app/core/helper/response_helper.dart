@@ -226,8 +226,10 @@ class ResponseHelper {
 
   static void onFailure({String? message, String? title}) {
     _showCoolerSnackbar(
-      title: title ?? tr(LocaleKeys.toast_failure),
-      message: MessageApi.findTextToast(message ?? ''),
+      title: title == null
+          ? tr(LocaleKeys.toast_failure)
+          : MessageApi.localizeError(title),
+      message: MessageApi.localizeError(message),
       assetPath: AppAssets.snackbarFailure,
       lineColor: Colors.red,
     );

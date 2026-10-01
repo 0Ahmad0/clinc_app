@@ -45,6 +45,8 @@ class LabsScreen extends GetView<LabsController> {
               }
               if (controller.filteredLabs.isEmpty) {
                 return SharedEmptyWidget(
+                  error: controller.loadError.value,
+                  onRetry: controller.loadLabs,
                   icon: Icons.science_outlined,
                   title: tr(LocaleKeys.labs_page_empty_title),
                   subtitle: tr(LocaleKeys.labs_page_empty_subtitle),

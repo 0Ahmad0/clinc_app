@@ -31,7 +31,6 @@ class AppointmentsScreen extends GetView<AppointmentsController> {
                   slivers: [
                     SliverToBoxAdapter(child: 10.verticalSpace),
 
-
                     SliverToBoxAdapter(
                       child: SizedBox(
                         height: 40.h,
@@ -56,6 +55,8 @@ class AppointmentsScreen extends GetView<AppointmentsController> {
                       SliverFillRemaining(
                         hasScrollBody: false,
                         child: SharedEmptyWidget(
+                          error: controller.loadError.value,
+                          onRetry: controller.refreshAppointments,
                           icon: Icons.event_busy_outlined,
                           title: tr(LocaleKeys.appointments_empty_title),
                           subtitle: controller.currentFilterIndex.value == 0

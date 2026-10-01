@@ -1,6 +1,71 @@
 import 'package:easy_localization/easy_localization.dart';
+import '../../../generated/codegen_loader.g.dart';
 
 class MessageApi {
+  /// Translate known backend messages and avoid exposing untranslated errors.
+  static String localizeError(
+    String? message, {
+    String fallbackKey = 'network.unexpected_error',
+  }) {
+    final text = message?.trim() ?? '';
+    if (text.isEmpty) return tr(fallbackKey);
+    final normalized = text.toLowerCase().replaceAll(RegExp(r'[.!]+$'), '');
+    final key = _errorAliases[normalized] ?? _messageKeys[normalized];
+    if (key != null) return tr(key);
+    final translated = _translatedMessage(text);
+    if (translated != null) return translated;
+
+    // Keep backend detail when it is already in the selected language.
+    final arabic = RegExp(r'[\u0600-\u06ff]');
+    if (arabic.hasMatch(text) == arabic.hasMatch(tr(fallbackKey))) {
+      return text;
+    }
+    return tr(fallbackKey);
+  }
+
+  static final Map<String, String> _messageKeys = _buildMessageKeys();
+
+  static Map<String, String> _buildMessageKeys() {
+    final result = <String, String>{};
+    void visit(Map<String, dynamic> values, String prefix) {
+      for (final entry in values.entries) {
+        final key = prefix.isEmpty ? entry.key : '$prefix.${entry.key}';
+        if (entry.value is Map<String, dynamic>) {
+          visit(entry.value as Map<String, dynamic>, key);
+        } else if (entry.value is String) {
+          final text = entry.value as String;
+          if (!text.contains('{}')) {
+            result[text.toLowerCase().replaceAll(RegExp(r'[.!]+$'), '')] = key;
+            result[key.toLowerCase()] = key;
+          }
+        }
+      }
+    }
+
+    for (final locale in CodegenLoader.mapLocales.values) {
+      for (final section in ['network', 'validation', 'toast', 'auth']) {
+        final values = locale[section];
+        if (values is Map<String, dynamic>) visit(values, section);
+      }
+    }
+    return result;
+  }
+
+  static const _errorAliases = {
+    'un authorized request': 'network.unauthorized_request',
+    'unauthenticated': 'network.unauthorized_request',
+    'unauthorized': 'network.unauthorized_request',
+    'login_required': 'network.unauthorized_request',
+    'un processable entity': 'network.unable_to_process',
+    'internal server error': 'network.internal_server_error',
+    'not found': 'network.not_found',
+    'invalid credentials': 'network.invalid_credentials',
+    'invalid email or password': 'network.invalid_credentials',
+    'these credentials do not match our records': 'network.invalid_credentials',
+    'too many requests': 'network.too_many_requests',
+    'network request failed': 'network.no_internet_connection',
+  };
+
   static String findTextToast(String text) {
     final normalized = text.trim();
     final translatedMessage = _translatedMessage(normalized);

@@ -80,7 +80,13 @@ class CodegenLoader extends AssetLoader{
     "conflict": "A conflict occurred while processing the request",
     "send_timeout": "The request took too long to send",
     "unable_to_process": "Unable to process the data",
-    "not_acceptable": "The request is not acceptable"
+    "not_acceptable": "The request is not acceptable",
+    "internal_server_error": "A server error occurred. Please try again later.",
+    "not_found": "The requested content was not found.",
+    "invalid_credentials": "The email or password is incorrect.",
+    "too_many_requests": "Too many requests. Please try again later.",
+    "retry": "Retry",
+    "check_connection": "Check your internet connection and try again."
   },
   "core": {
     "yes": "Yes",
@@ -210,8 +216,8 @@ class CodegenLoader extends AssetLoader{
     "settings_text": "Settings",
     "back_exit_title": "Press again to exit",
     "back_exit_message": "Press back again to exit the app",
-    "exit_dialog_title": "Are you sure you want to exit?",
-    "exit_dialog_message": "The app will close completely. Make sure all your data is saved before exiting.",
+    "exit_dialog_title": "Exit the app?",
+    "exit_dialog_message": "Do you want to close the app?",
     "exit_dialog_cancel": "Cancel",
     "exit_dialog_confirm": "Exit"
   },
@@ -728,7 +734,7 @@ class CodegenLoader extends AssetLoader{
     "mock_payment_method": "Credit card"
   },
   "logout": {
-    "title": "Do you really want to log out?"
+    "title": "Are you sure you want to log out?"
   },
   "share": {
     "app_text": "Download Hajz Saree now and enjoy an easier healthcare experience\n{}",
@@ -801,7 +807,13 @@ static const Map<String,dynamic> _ar = {
     "conflict": "حدث تعارض أثناء تنفيذ الطلب",
     "send_timeout": "انتهت مهلة إرسال الطلب",
     "unable_to_process": "تعذر معالجة البيانات",
-    "not_acceptable": "الطلب غير مقبول"
+    "not_acceptable": "الطلب غير مقبول",
+    "internal_server_error": "حدث خطأ في الخادم، حاول مرة أخرى لاحقًا",
+    "not_found": "المحتوى المطلوب غير موجود",
+    "invalid_credentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+    "too_many_requests": "طلبات كثيرة، يرجى المحاولة لاحقًا",
+    "retry": "إعادة المحاولة",
+    "check_connection": "تحقق من اتصالك بالإنترنت ثم أعد المحاولة"
   },
   "core": {
     "yes": "نعم",
@@ -931,8 +943,8 @@ static const Map<String,dynamic> _ar = {
     "settings_text": "الإعدادات",
     "back_exit_title": "اضغط مرة أخرى للخروج",
     "back_exit_message": "اضغط زر الرجوع مرة أخرى للخروج من التطبيق",
-    "exit_dialog_title": "هل أنت متأكد من الخروج؟",
-    "exit_dialog_message": "سيتم إغلاق التطبيق بالكامل. تأكد من حفظ جميع بياناتك قبل الخروج.",
+    "exit_dialog_title": "الخروج من التطبيق؟",
+    "exit_dialog_message": "هل تريد إغلاق التطبيق؟",
     "exit_dialog_cancel": "إلغاء",
     "exit_dialog_confirm": "خروج"
   },
@@ -1449,7 +1461,7 @@ static const Map<String,dynamic> _ar = {
     "mock_payment_method": "بطاقة ائتمان"
   },
   "logout": {
-    "title": "هل تريد بالفعل تسجيل الخروج ؟"
+    "title": "هل أنت متأكد من تسجيل الخروج؟"
   },
   "share": {
     "app_text": "حمّل تطبيق حجز سريع الآن واستمتع بتجربة صحية أسهل\n{}",

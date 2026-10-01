@@ -11,6 +11,7 @@ import '../../../../app/domain/error_handler/network_exceptions.dart';
 import '../../domain/notifications_repository.dart';
 
 class NotificationsController extends GetxController {
+  final Rxn<NetworkExceptions> loadError = Rxn<NetworkExceptions>();
   late final NotificationsRepository _repository;
 
   final RxBool isLoading = false.obs;
@@ -66,6 +67,7 @@ class NotificationsController extends GetxController {
     result.when(
       success: _handleNotificationsResponse,
       failure: (exception) {
+        loadError.value = exception;
         if (AuthRequiredHelper.handleFailure(
           exception,
           onAuthenticated: loadNotifications,
@@ -118,9 +120,11 @@ class NotificationsController extends GetxController {
     BaseModel<List<NotificationModel>> response,
   ) {
     if (!response.isSuccess || response.result == null) {
+      loadError.value = NetworkExceptions.defaultError(response.message ?? '');
       ResponseHelper.onFailure(message: response.message);
       return;
     }
+    loadError.value = null;
     notifications.assignAll(response.result!);
   }
 }

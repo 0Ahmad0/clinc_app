@@ -30,6 +30,8 @@ class DoctorsList extends StatelessWidget {
             children: [
               SizedBox(height: 80.h),
               SharedEmptyWidget(
+                error: controller.loadError.value,
+                onRetry: controller.reloadDoctors,
                 icon: Icons.person_search_outlined,
                 title: tr(LocaleKeys.doctors_no_results),
                 subtitle: tr(LocaleKeys.doctors_empty_subtitle),
